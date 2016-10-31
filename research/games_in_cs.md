@@ -15,14 +15,14 @@ Players use a moving crane to shift boxes around a factory. In doing so, they us
 
 “I wanted it to be a game about moving blocks around with a claw and make you forget that you are in fact programming,” developer Rui Viana told Fast Company.
 
-![](/Users/luisarojas/Desktop/cargo-bot1.png)
+![](/Users/luisarojas/Documents/UOIT/Thesis/research/games_screenshots/cargo-bot1.png)
 
 ##Cato's Hike
 ---
 
 Essentially, ‘Cato’s Hike’ is a universal game for the iPhone/iPad/iPod Touch to teach kids and young children basic programming skills. The younger ones will obviously enjoy solving levels using simpler coding techniques but the hope is the older ones will pick up more advanced concepts like loops and branching as well as even more advanced concepts like a basic stack or memory.
 
-![](/Users/luisarojas/Desktop/catos-hike1.jpg)
+![](/Users/luisarojas/Documents/UOIT/Thesis/research/games_screenshots/catos-hike1.jpg)
 
 ##Code Combat
 ---
@@ -31,8 +31,8 @@ Essentially, ‘Cato’s Hike’ is a universal game for the iPhone/iPad/iPod To
 
 Multiplayer programming game; one of the twoo on the list that uses actual code on the screen. You can play Code Combat in multiple programming languages like JavaScript and Python.
 
-![](/Users/luisarojas/Desktop/codecombat(1)1.png)
-![](/Users/luisarojas/Desktop/codecombat1.png)
+![](/Users/luisarojas/Documents/UOIT/Thesis/research/games_screenshots/codecombat(1)1.png)
+![](/Users/luisarojas/Documents/UOIT/Thesis/research/games_screenshots/codecombat1.png)
 
 ##Codemancer
 ---
@@ -49,12 +49,12 @@ Players will use magical runes to direct the action when this successfully Kicks
 
 “Codemancer’s language is designed to be accessible,” Lockhart says on his Kickstarter page, “but also translates easily to a variety of popular real-world programming languages. More complex programs are made when we introduce programming concepts like variables, conditionals, and functions.”
 
-![](/Users/luisarojas/Desktop/codemancer1.png)
+![](/Users/luisarojas/Documents/UOIT/Thesis/research/games_screenshots/codemancer1.png)
 
 ##Hopscotch
 ---
 
-![](/Users/luisarojas/Desktop/hopscotch1.png)
+![](/Users/luisarojas/Documents/UOIT/Thesis/research/games_screenshots/hopscotch1.png)
 
 
 ##<font color='green'>Human Resource Machine*</font>
@@ -64,7 +64,7 @@ Your office is a simple computer. You have an inbox and an outbox (inputs and ou
 
 In each level, your boss gives you a task, like "Take everything from the INBOX, and put it in the OUTBOX!" Automate it by programming your little office worker with simple drag n' drop commands. You start the game with just 2 commands, and gradually earn more as you're promoted. The entire language contains only 11 total commands - but they're enough to simulate almost any computer algorithm in the world!
 
-![](/Users/luisarojas/Desktop/humanresourcemachine1.png)
+![](/Users/luisarojas/Documents/UOIT/Thesis/research/games_screenshots/humanresourcemachine1.png)
 
 ##Lightbot
 ---
@@ -81,7 +81,7 @@ Yaroslavski says that Lightbot teaches concepts like planning, testing, debuggin
 
 You can play a free version, suitable for an hour of gameplay, on your mobile device or through your browser. Two full versions of Lightbot, for different age groups, are on sale on iTunes and Google Play.
 
-![](/Users/luisarojas/Desktop/lightbot1.png)
+![](/Users/luisarojas/Documents/UOIT/Thesis/research/games_screenshots/lightbot1.png)
 
 ##Machineers
 ---
@@ -100,17 +100,17 @@ Henrike Lode, a member of the Danish Lohika Games team behind Machineers, decide
 
 Currently still in development, the PC and Mac demo of Machineers is free to download and play. Lohika Games is targeting an iPad release for the full game.
 
-![](/Users/luisarojas/Desktop/machineers1.png)
+![](/Users/luisarojas/Documents/UOIT/Thesis/research/games_screenshots/machineers1.png)
 
 ##My Robot Friend
 ---
 
-![](/Users/luisarojas/Desktop/myrobotfriend1.png)
+![](/Users/luisarojas/Documents/UOIT/Thesis/research/games_screenshots/myrobotfriend1.png)
 
-##Robomind====
+##Robomind
 ---
 
-![](/Users/luisarojas/Desktop/robomind1.jpg)
+![](/Users/luisarojas/Documents/UOIT/Thesis/research/games_screenshots/robomind1.jpg)
 
 ##Robozzle
 ---
@@ -127,7 +127,7 @@ Robozzle tasks you with guiding a robot through a series of mazes using limited 
 
 It’s free to play through browsers (using Silverlight), and community support enables players to create, vote, and comment on new levels.
 
-![](/Users/luisarojas/Desktop/robozzle1.png)
+![](/Users/luisarojas/Documents/UOIT/Thesis/research/games_screenshots/robozzle1.png)
 
 
 ##<font color='green'>SpaceChem*</font>
@@ -146,7 +146,7 @@ Tough enough to challenge high-school students and beyond, SpaceChem tasks playe
 
 “SpaceChem is the game I wish I could give to my 12-year-old self and let him go crazy,” according to educational blog Gaming to Learn. “When you hear people talking about how important it is to learn to write code, this is what they are talking about. Games like this teach the gamer how to think.”
 
-![](/Users/luisarojas/Desktop/spacechem1.jpg)
+![](/Users/luisarojas/Documents/UOIT/Thesis/research/games_screenshots/spacechem1.jpg)
 
 ##Scratch
 ---
@@ -157,4 +157,4 @@ Scratch helps young people learn to think creatively, reason systematically, and
 
 Scratch is a project of the Lifelong Kindergarten Group at the MIT Media Lab. It is provided free of charge.
 
-![](/Users/luisarojas/Desktop/scratch1.png)
+![](/Users/luisarojas/Documents/UOIT/Thesis/research/games_screenshots/scratch1.png)
