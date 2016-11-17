@@ -1,0 +1,15 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/Slot.cs">
+    <Files>
+      <File FileName="Assets/scripts/Slot.cs" Line="65" Column="23" />
+      <File FileName="Assets/scripts/Inventory.cs" Line="33" Column="22" />
+      <File FileName="Assets/scripts/FixCanvasResolution.cs" Line="8" Column="2" />
+      <File FileName="Assets/scripts/Item.cs" Line="28" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

@@ -10,9 +10,10 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	GameObject placeholder = null;
 	// keep track of this in order to bounce back in case of illegal area
 	public Transform placeholderParent = null;
+	GameObject threadArea;
 
-	public enum Slot {IFNEEDED, LOOP, ACTION, ALL};
-	public Slot typeOfItem = Slot.ALL; //default
+	public enum Type {IFNEEDED, LOOPIF , ACTION, ALL, INVENTORY};
+	public Type typeOfItem = Type.ALL; //default
 
 	public void OnBeginDrag(PointerEventData eventData) {
 		//Debug.Log ("OnBeginDrag");
@@ -44,10 +45,46 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		//find all "legal" drop zones in the game for this item and highlight them
 		//DropZone[] zones = GameObject.FindObjectsOfType<DropZone>();
 		//TODO: iterate through corresponding zones and highlight
+		/*
+		for (int i = 0; i < zones.Length; i++) {
+
+			if (zones [i].typeOfArea == Type.ALL || zones [i].typeOfArea == this.typeOfItem) {
+				Debug.Log (zones [i].name); //"legal" areas
+				 
+				Debug.Log (threadArea.transform.childCount);
+
+				threadArea.GetComponent<Button> ();
+			}
+
+			if ( || zones [i].typeOfArea == Type.ALL) {
+				//highlight
+				zones[i].GetComponent<Button>().Select();
+			}
+		*/
+
+		//TODO: highlight threadArea
+		threadArea.transform.GetComponent<Image> ().color = Color.cyan;
+		//TODO: highlight corresponding children
+		Transform[] threadChildren = new Transform[threadArea.transform.childCount];
+
+		//Debug.Log ("childCount: " + threadChildren.Length);
+
+		for (int i = 0; i < threadChildren.Length; i++) {
+			//threadChildren [i] = this.transform.Find("DropAreaThread").GetChild (i).gameObject;
+			threadChildren [i] = threadArea.transform.GetChild (i);
+			Debug.Log (threadChildren [i].name);
+			//Debug.Log ( timer.GetCurrentTime() + " -> " + threadChildren [i]);
+			if (threadChildren [i].gameObject.GetComponentInChildren<DropZone>()) {
+				string zoneName = threadChildren [i].gameObject.GetComponentInChildren<DropZone> ().name;
+				Debug.Log("Theres a dropzone!: " + zoneName);
+				threadChildren [i].Find(zoneName).GetComponent<Image>().color = Color.cyan;
+			}
+		}
 	}
 
 	public void OnDrag(PointerEventData eventData) {
 		//Debug.Log ("OnDrag");
+
 
 		//physically move the card
 		this.transform.position = eventData.position;
@@ -95,9 +132,30 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		GetComponent<CanvasGroup> ().blocksRaycasts = true;
 
 		//TODO: iterate through corresponding zones and remove highlights, if any
+		threadArea.transform.GetComponent<Image>().color = Color.white;
+		Transform[] threadChildren = new Transform[threadArea.transform.childCount];
+
+		//Debug.Log ("childCount: " + threadChildren.Length);
+
+		for (int i = 0; i < threadChildren.Length; i++) {
+			//threadChildren [i] = this.transform.Find("DropAreaThread").GetChild (i).gameObject;
+			threadChildren [i] = threadArea.transform.GetChild (i);
+			Debug.Log (threadChildren [i].name);
+			//Debug.Log ( timer.GetCurrentTime() + " -> " + threadChildren [i]);
+			if (threadChildren [i].gameObject.GetComponentInChildren<DropZone>()) {
+				string zoneName = threadChildren [i].gameObject.GetComponentInChildren<DropZone> ().name;
+				Debug.Log("Theres a dropzone!: " + zoneName);
+				threadChildren [i].Find(zoneName).GetComponent<Image>().color = Color.white;
+			}
+		}
 
 		//TODO: apply "logic" here (e.g. add +2 health)
 
 		Destroy (placeholder);
+	}
+
+	void Start() {
+		threadArea = GameObject.Find("DropAreaThread");
+
 	}
 }

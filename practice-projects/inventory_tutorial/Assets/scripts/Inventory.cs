@@ -24,9 +24,13 @@ public class Inventory : MonoBehaviour {
 	//collection to contain all the objects.
 	private List<GameObject> allSlots;
 
+	//keep track of how many empty fields there are
+	private int emptySlots;
+
 	// Use this for initialization
 	void Start () {
 		CreateLayout ();
+		emptySlots = slots;
 	}
 	
 	// Update is called once per frame

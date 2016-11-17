@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
 
-	public Draggable.Slot typeOfItem = Draggable.Slot.ALL;
+	public Draggable.Type typeOfArea = Draggable.Type.INVENTORY;
 
 	//usually only triggered for the mouse pointer only
 	public void OnPointerEnter(PointerEventData eventData) {
@@ -15,11 +15,10 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
 		Draggable d = eventData.pointerDrag.GetComponent<Draggable> ();
 		if (d != null) {
-			if (typeOfItem == d.typeOfItem || typeOfItem == Draggable.Slot.ALL) {
+			if (typeOfArea == d.typeOfItem || typeOfArea == Draggable.Type.ALL || typeOfArea == Draggable.Type.INVENTORY) {
 				d.placeholderParent = this.transform;
 			}
 		}
-
 	}
 
 	//usually only triggered for the mouse pointer only
@@ -32,7 +31,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 		Draggable d = eventData.pointerDrag.GetComponent<Draggable> ();
 		//if placeholderParent is equal to us - otherwise, someones already taken the placeholder parent
 		if (d != null && d.placeholderParent == this.transform) {
-			if (typeOfItem == d.typeOfItem || typeOfItem == Draggable.Slot.ALL) {
+			if (typeOfArea == d.typeOfItem || typeOfArea == Draggable.Type.ALL || typeOfArea == Draggable.Type.INVENTORY) {
 				d.placeholderParent = d.parentToReturnTo;
 			}
 		}
@@ -44,7 +43,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 		//to know the name of what was dropped on it: eventData.pointerDrag.name
 		Draggable d = eventData.pointerDrag.GetComponent<Draggable>();
 		if (d != null) {
-			if (typeOfItem == d.typeOfItem || typeOfItem == Draggable.Slot.ALL) {
+			if (typeOfArea == d.typeOfItem || typeOfArea == Draggable.Type.ALL || typeOfArea == Draggable.Type.INVENTORY) {
 				d.parentToReturnTo = this.transform;
 			}
 		}
