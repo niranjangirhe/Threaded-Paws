@@ -1,0 +1,104 @@
+﻿using UnityEngine;
+using System.Collections;
+using UnityEngine.UI;
+
+public class Timer : MonoBehaviour {
+
+	// ----------- TIMER 1 -----------
+	/*
+	public Text timerText;
+	private float startTime;
+	private bool stopped = false;
+
+	void Start() {
+		startTime = Time.time;
+	}
+	
+	// Update is called once per frame
+	void Update () {
+
+		if (stopped)
+			return;
+
+		float t = Time.time - startTime;
+
+		string minutes = ((int)t / 60).ToString ("f1");
+		string seconds = (t % 60).ToString ("f1"); //only 2 decimals in float
+
+		timerText.text = minutes + ":" + seconds;
+	}
+
+	public void PauseTimer() {
+
+		stopped = true;
+	}
+
+	public void StartTimer() {
+		stopped = false;
+	}
+
+	public void RestartTimer () {
+		startTime = 0f;
+		stopped = false;
+	}*/
+
+	/* ----------- TIMER 2 ----------- */
+
+	public int timePassed; //will manipulate everything.
+	private int seconds;
+	private int minutes;
+	public Text textTimer;
+	private bool stopped;
+
+	public Transform startButton;
+	public Transform stopButton;
+
+	public void StartTimer() {
+
+		Debug.Log ("Started timer");
+		
+		timePassed = 0;
+		seconds = 0;
+		minutes = 0;
+		stopped = false;
+
+		StartCoroutine ("Begin");
+
+		startButton.GetComponent<Button>().interactable = false;
+		stopButton.GetComponent<Button>().interactable = true;
+	}
+
+	public void StopTimer() {
+
+		Debug.Log ("Stopped timer");
+		stopped = true;
+
+		textTimer.text = "00:00";
+
+		startButton.GetComponent<Button>().interactable = true;
+		stopButton.GetComponent<Button>().interactable = false;
+	}
+
+	private IEnumerator Begin() {
+
+		while (true) {
+
+			if (stopped) {
+				textTimer.text = "00:00";
+				break;
+			}
+				
+
+			yield return new WaitForSeconds (1);
+			timePassed++; //increased by 1 every second
+			seconds = (timePassed % 60);
+			minutes = (timePassed / 60) % 60;
+
+			textTimer.text = minutes.ToString("00") + ":" + seconds.ToString("00");
+		}
+	}
+		
+	public string GetCurrentTime() {
+		return minutes.ToString("00") + ":" + seconds.ToString("00");
+	}
+}
