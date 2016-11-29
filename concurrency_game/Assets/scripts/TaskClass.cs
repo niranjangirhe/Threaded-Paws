@@ -21,8 +21,6 @@ public class TaskClass : MonoBehaviour {
 
 	void Start() {
 
-
-
 	}
 
 }

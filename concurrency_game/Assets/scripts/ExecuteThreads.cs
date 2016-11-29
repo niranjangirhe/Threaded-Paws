@@ -116,14 +116,11 @@ public class ExecuteThreads : MonoBehaviour {
 			foreach (string block in blocks)
 				Debug.Log (block);
 
-
-
 			for (int i = 0; i < genTasks.tasks.Count; i++) {
 
 				//Debug.Log ("From ExecuteTask(): Value of A1: " + genTasks.tasks [i].GetA1 ());
 				//Debug.Log ("From ExecuteTask(): Value of A2: " + genTasks.tasks [i].GetA2 ());
 				//Debug.Log ("From ExecuteTask(): Value of A3: " + genTasks.tasks [i].GetA3 ());
-
 
 				for (int j = 0; j < blocks.Length; j++) {	
 					

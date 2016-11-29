@@ -4,46 +4,6 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour {
 
-	// ----------- TIMER 1 -----------
-	/*
-	public Text timerText;
-	private float startTime;
-	private bool stopped = false;
-
-	void Start() {
-		startTime = Time.time;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
-		if (stopped)
-			return;
-
-		float t = Time.time - startTime;
-
-		string minutes = ((int)t / 60).ToString ("f1");
-		string seconds = (t % 60).ToString ("f1"); //only 2 decimals in float
-
-		timerText.text = minutes + ":" + seconds;
-	}
-
-	public void PauseTimer() {
-
-		stopped = true;
-	}
-
-	public void StartTimer() {
-		stopped = false;
-	}
-
-	public void RestartTimer () {
-		startTime = 0f;
-		stopped = false;
-	}*/
-
-	/* ----------- TIMER 2 ----------- */
-
 	public int timePassed; //will manipulate everything.
 	private int seconds;
 	private int minutes;

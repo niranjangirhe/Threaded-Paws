@@ -42,29 +42,9 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 		GetComponent<CanvasGroup> ().blocksRaycasts = false;
 
-		//find all "legal" drop zones in the game for this item and highlight them
-		//DropZone[] zones = GameObject.FindObjectsOfType<DropZone>();
-		//TODO: iterate through corresponding zones and highlight
-		/*
-		for (int i = 0; i < zones.Length; i++) {
-
-			if (zones [i].typeOfArea == Type.ALL || zones [i].typeOfArea == this.typeOfItem) {
-				Debug.Log (zones [i].name); //"legal" areas
-				 
-				Debug.Log (threadArea.transform.childCount);
-
-				threadArea.GetComponent<Button> ();
-			}
-
-			if ( || zones [i].typeOfArea == Type.ALL) {
-				//highlight
-				zones[i].GetComponent<Button>().Select();
-			}
-		*/
-
-		//TODO: highlight threadArea
+		//highlight threadArea
 		threadArea.transform.GetComponent<Image> ().color = Color.cyan;
-		//TODO: highlight corresponding children
+		//highlight corresponding children
 		Transform[] threadChildren = new Transform[threadArea.transform.childCount];
 
 		//Debug.Log ("childCount: " + threadChildren.Length);
@@ -84,7 +64,6 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 	public void OnDrag(PointerEventData eventData) {
 		//Debug.Log ("OnDrag");
-
 
 		//physically move the card
 		this.transform.position = eventData.position;
@@ -131,7 +110,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 		GetComponent<CanvasGroup> ().blocksRaycasts = true;
 
-		//TODO: iterate through corresponding zones and remove highlights, if any
+		//iterate through corresponding zones and remove highlights, if any
 		threadArea.transform.GetComponent<Image>().color = Color.white;
 		Transform[] threadChildren = new Transform[threadArea.transform.childCount];
 
@@ -149,13 +128,12 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			}
 		}
 
-		//TODO: apply "logic" here (e.g. add +2 health)
+		//TODO: apply "logic" here (e.g. add or remove from stack)
 
 		Destroy (placeholder);
 	}
 
 	void Start() {
 		threadArea = GameObject.Find("DropAreaThread");
-
 	}
 }
