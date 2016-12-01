@@ -12,13 +12,14 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	public Transform placeholderParent = null;
 	GameObject threadArea;
 
-	public enum Type {IFNEEDED, LOOPIF , ACTION, ALL, INVENTORY};
+	public enum Type {IFNEEDED, WHILELOOP, IFSTAT , ACTION, ALL, INVENTORY};
 	public Type typeOfItem = Type.ALL; //default
 
 	public void OnBeginDrag(PointerEventData eventData) {
 		//Debug.Log ("OnBeginDrag");
 
 		//create new placeholder object and paret it to the draggable object's parent
+
 		placeholder = new GameObject ();
 		placeholder.transform.SetParent (this.transform.parent); //places it at the end of the list by default
 		//want the placeholder to have the same dimensions as the draggable object removed
@@ -30,7 +31,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 		//want the placeholder to also be in the same spot as the object we just removed
 		placeholder.transform.SetSiblingIndex(this.transform.GetSiblingIndex());
-	
+
 		//save old parent
 		parentToReturnTo = this.transform.parent;
 
@@ -97,6 +98,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		} catch (Exception e) {
 			//Debug.Log ("An exception occured: " + e.GetBaseException());
 		}
+
 	}
 
 	public void OnEndDrag(PointerEventData eventData) {
@@ -106,7 +108,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		this.transform.SetParent(parentToReturnTo);
 
 		//bounce back the object to where the placeholder is
-		this.transform.SetSiblingIndex(placeholder.transform.GetSiblingIndex());
+		this.transform.SetSiblingIndex (placeholder.transform.GetSiblingIndex ());
 
 		GetComponent<CanvasGroup> ().blocksRaycasts = true;
 
@@ -114,12 +116,10 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		threadArea.transform.GetComponent<Image>().color = Color.white;
 		Transform[] threadChildren = new Transform[threadArea.transform.childCount];
 
-		//Debug.Log ("childCount: " + threadChildren.Length);
-
 		for (int i = 0; i < threadChildren.Length; i++) {
 			//threadChildren [i] = this.transform.Find("DropAreaThread").GetChild (i).gameObject;
 			threadChildren [i] = threadArea.transform.GetChild (i);
-			Debug.Log (threadChildren [i].name);
+			Debug.Log ("Child: "+ threadChildren [i].name);
 			//Debug.Log ( timer.GetCurrentTime() + " -> " + threadChildren [i]);
 			if (threadChildren [i].gameObject.GetComponentInChildren<DropZone>()) {
 				string zoneName = threadChildren [i].gameObject.GetComponentInChildren<DropZone> ().name;
@@ -128,7 +128,45 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			}
 		}
 
-		//TODO: apply "logic" here (e.g. add or remove from stack)
+		if (this.transform.parent.name == "DropAreaTools") {
+			Debug.Log ("Dropped in the toolbox");
+
+			//TODO: must add to the quantities left
+
+			if (this.typeOfItem == Type.ACTION) {
+				//TODO: add to the action field
+				Debug.Log ("An action was dropped in the toolbox");
+			} else if (this.typeOfItem == Type.WHILELOOP) {
+				//TODO: add from the loop field
+				Debug.Log ("A loop was dropped in the toolbox");
+			} else if (this.typeOfItem == Type.IFSTAT) {
+				//TODO: add to if statement field
+				Debug.Log ("An if statement was dropped in the toolbox");
+			} else if (this.typeOfItem == Type.IFNEEDED) {
+				//TODO: add to "if needed" field
+				Debug.Log ("An \"if needed\" tool was dropped in the toolbox");
+			}
+
+		} else if (this.transform.parent.name == "DropAreaThread") {
+			//TODO: must substract from quantities left
+			Debug.Log ("Dropped in thread box");
+
+			if (this.typeOfItem == Type.ACTION) {
+				//TODO: add to the action field
+				Debug.Log ("An action was dropped in the thread box");
+			} else if (this.typeOfItem == Type.WHILELOOP) {
+				//TODO: add from the loop field
+				Debug.Log ("A loop was dropped in the thread box");
+			} else if (this.typeOfItem == Type.IFSTAT) {
+				//TODO: add to if statement field
+				Debug.Log ("An if statement was dropped in the thread box");
+			} else if (this.typeOfItem == Type.IFNEEDED) {
+				Debug.Log ("An \"if needed\" tool was dropped in the thread box");
+				//TODO: add to "if needed" field
+			}
+		} else {
+			Debug.Log ("Dropped within another box... probably");
+		}
 
 		Destroy (placeholder);
 	}
