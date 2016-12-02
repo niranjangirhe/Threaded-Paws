@@ -4,7 +4,8 @@ using UnityEngine.EventSystems;
 
 public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
 
-	public Draggable.Type typeOfArea = Draggable.Type.INVENTORY;
+	public Draggable.Type typeOfArea;
+	public bool isInventory;
 
 	//usually only triggered for the mouse pointer only
 	public void OnPointerEnter(PointerEventData eventData) {

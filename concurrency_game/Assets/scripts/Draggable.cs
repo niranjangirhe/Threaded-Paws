@@ -14,6 +14,10 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	GameObject canvas;
 	GameObject toolbox;
 
+	Text actionsCount;
+	Text loopsCount;
+	Text statsCount;
+
 	public enum Type {IFNEEDED, WHILELOOP, IFSTAT , ACTION, ALL, INVENTORY};
 	public Type typeOfItem = Type.ALL; //default
 
@@ -36,7 +40,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 		//save old parent
 		//parentToReturnTo = this.transform.parent;
-		parentToReturnTo = GameObject.Find("DropAreaTools").transform;
+		parentToReturnTo = toolbox.transform;
 
 		//make sure it defaults to old parent
 		placeholderParent = parentToReturnTo;
@@ -100,7 +104,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 		} catch (Exception e) {
 			//Debug.Log ("An exception occured: " + e.GetBaseException());
-			Debug.Log(e.Message);
+			Debug.Log (e.Message);
 		}
 
 	}
@@ -180,5 +184,6 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	void Start() {
 		threadArea = GameObject.Find("DropAreaThread");
 		canvas = GameObject.Find("Canvas");
+		toolbox = GameObject.Find ("DropAreaTools");
 	}
 }
