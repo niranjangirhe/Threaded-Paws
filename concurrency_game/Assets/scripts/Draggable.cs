@@ -97,6 +97,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 		} catch (Exception e) {
 			//Debug.Log ("An exception occured: " + e.GetBaseException());
+			Debug.Log(e.Message);
 		}
 
 	}
