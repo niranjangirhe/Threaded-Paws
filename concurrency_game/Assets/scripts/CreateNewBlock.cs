@@ -11,13 +11,12 @@ public class CreateNewBlock : MonoBehaviour {
 
 		Debug.Log ("Action block was clicked");
 
-		Vector3 position = GameObject.Find ("MainActionBox").transform.position;
-
 		//Transform newActionBox = (Instantiate(prefab) as GameObject).transform;
 
 		//prefab = (GameObject)Instantiate (Resources.Load ("ActionBox")); //doesnt work
-		GameObject newActionBox = (GameObject) Instantiate(prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-		newActionBox.transform.SetParent(canvas.GetComponent<Canvas>().transform);
+		GameObject newActionBox = (GameObject) Instantiate(prefab, GameObject.Find("MainActionBox").transform.position, GameObject.Find("MainActionBox").transform.rotation); //typically returns an Object (not GameObject)
+		Debug.Log("Created new action box");
+		newActionBox.transform.SetParent(canvas.GetComponent<Canvas>().transform, true);
 		newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
 		newActionBox.AddComponent<Draggable>();
 	}
@@ -33,7 +32,7 @@ public class CreateNewBlock : MonoBehaviour {
 		GameObject newActionBox = (GameObject) Instantiate(prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
 		newActionBox.transform.SetParent(canvas.GetComponent<Canvas>().transform);
 		newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (105, 85); //width, height
-		newActionBox.AddComponent<Draggable>();
+		//newActionBox.GetComponent<Draggable>().typeOfItem = Draggable.Type.ACTION;
 	}
 
 	public void NewIfStatementBlock() {

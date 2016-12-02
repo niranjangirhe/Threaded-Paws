@@ -11,14 +11,16 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	// keep track of this in order to bounce back in case of illegal area
 	public Transform placeholderParent = null;
 	GameObject threadArea;
+	GameObject canvas;
+	GameObject toolbox;
 
 	public enum Type {IFNEEDED, WHILELOOP, IFSTAT , ACTION, ALL, INVENTORY};
 	public Type typeOfItem = Type.ALL; //default
 
 	public void OnBeginDrag(PointerEventData eventData) {
-		//Debug.Log ("OnBeginDrag");
+		Debug.Log ("OnBeginDrag called: " + eventData.pointerDrag.name);
 
-		//create new placeholder object and paret it to the draggable object's parent
+		//create new placeholder object and parent it to the draggable object's parent
 
 		placeholder = new GameObject ();
 		placeholder.transform.SetParent (this.transform.parent); //places it at the end of the list by default
@@ -33,13 +35,14 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		placeholder.transform.SetSiblingIndex(this.transform.GetSiblingIndex());
 
 		//save old parent
-		parentToReturnTo = this.transform.parent;
+		//parentToReturnTo = this.transform.parent;
+		parentToReturnTo = GameObject.Find("DropAreaTools").transform;
 
 		//make sure it defaults to old parent
 		placeholderParent = parentToReturnTo;
 
 		//instead of the toolbox, wanna set parent to canvas
-		this.transform.SetParent(this.transform.parent.parent.parent.parent);
+		this.transform.SetParent(canvas.transform);
 
 		GetComponent<CanvasGroup> ().blocksRaycasts = false;
 
@@ -53,18 +56,18 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		for (int i = 0; i < threadChildren.Length; i++) {
 			//threadChildren [i] = this.transform.Find("DropAreaThread").GetChild (i).gameObject;
 			threadChildren [i] = threadArea.transform.GetChild (i);
-			Debug.Log (threadChildren [i].name);
+			//Debug.Log (threadChildren [i].name);
 			//Debug.Log ( timer.GetCurrentTime() + " -> " + threadChildren [i]);
 			if (threadChildren [i].gameObject.GetComponentInChildren<DropZone>()) {
 				string zoneName = threadChildren [i].gameObject.GetComponentInChildren<DropZone> ().name;
-				Debug.Log("Theres a dropzone!: " + zoneName);
+				//Debug.Log("Theres a dropzone!: " + zoneName);
 				threadChildren [i].Find(zoneName).GetComponent<Image>().color = Color.cyan;
 			}
 		}
 	}
 
 	public void OnDrag(PointerEventData eventData) {
-		//Debug.Log ("OnDrag");
+		//Debug.Log ("OnDrag called");
 
 		//physically move the card
 		this.transform.position = eventData.position;
@@ -103,7 +106,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	}
 
 	public void OnEndDrag(PointerEventData eventData) {
-		//Debug.Log ("OnEndDrag");
+
+		Debug.Log ("OnEndDrag called");
 
 		//set parent back to where we came from (at the end of the list)
 		this.transform.SetParent(parentToReturnTo);
@@ -120,11 +124,11 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		for (int i = 0; i < threadChildren.Length; i++) {
 			//threadChildren [i] = this.transform.Find("DropAreaThread").GetChild (i).gameObject;
 			threadChildren [i] = threadArea.transform.GetChild (i);
-			Debug.Log ("Child: "+ threadChildren [i].name);
+			//Debug.Log ("Child: "+ threadChildren [i].name);
 			//Debug.Log ( timer.GetCurrentTime() + " -> " + threadChildren [i]);
 			if (threadChildren [i].gameObject.GetComponentInChildren<DropZone>()) {
 				string zoneName = threadChildren [i].gameObject.GetComponentInChildren<DropZone> ().name;
-				Debug.Log("Theres a dropzone!: " + zoneName);
+				//Debug.Log("Theres a dropzone!: " + zoneName);
 				threadChildren [i].Find(zoneName).GetComponent<Image>().color = Color.white;
 			}
 		}
@@ -166,7 +170,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 				//TODO: add to "if needed" field
 			}
 		} else {
-			Debug.Log ("Dropped within another box... probably");
+			//Debug.Log ("Dropped within another box... probably");
+			Debug.Log ("Parent: " + this.transform.parent.name);
 		}
 
 		Destroy (placeholder);
@@ -174,5 +179,6 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 	void Start() {
 		threadArea = GameObject.Find("DropAreaThread");
+		canvas = GameObject.Find("Canvas");
 	}
 }

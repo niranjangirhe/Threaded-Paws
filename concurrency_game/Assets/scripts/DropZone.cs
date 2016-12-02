@@ -17,6 +17,9 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 		if (d != null) {
 			if (typeOfArea == d.typeOfItem || typeOfArea == Draggable.Type.ALL || typeOfArea == Draggable.Type.INVENTORY) {
 				d.placeholderParent = this.transform;
+				d.parentToReturnTo = this.transform;
+
+				Debug.Log ("[OnPointerEnter] Parent to return to: " + d.parentToReturnTo.transform.name);
 			}
 		}
 	}
@@ -33,6 +36,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 		if (d != null && d.placeholderParent == this.transform) {
 			if (typeOfArea == d.typeOfItem || typeOfArea == Draggable.Type.ALL || typeOfArea == Draggable.Type.INVENTORY) {
 				d.placeholderParent = d.parentToReturnTo;
+				Debug.Log ("[OnPointerExit] Placeholder parent: " + d.parentToReturnTo.transform.name);
 			}
 		}
 	}
@@ -45,7 +49,12 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 		if (d != null) {
 			if (typeOfArea == d.typeOfItem || typeOfArea == Draggable.Type.ALL || typeOfArea == Draggable.Type.INVENTORY) {
 				d.parentToReturnTo = this.transform;
+				Debug.Log ("[OnDrop] Parent to return to: " + d.parentToReturnTo.transform.name);
 			}
 		}
+	}
+
+	void Start() {
+		
 	}
 }
