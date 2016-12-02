@@ -191,6 +191,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			Debug.Log ("Parent: " + this.transform.parent.name);
 		}
 
+		this.GetComponent<Image> ().color = Color.white;
+
 		Destroy (placeholder);
 	}
 

@@ -27,11 +27,13 @@ public class CreateNewBlock : MonoBehaviour {
 			//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
 			//newActionBox.AddComponent<Draggable>();
 
+			newActionBox.GetComponent<Image>().color = Color.cyan;
+
 			manager.actionsLeft -= 1;
 			manager.updateValues ();
 
 		} else {
-			//TODO: display message to user
+			//display message to user
 			manager.showError();
 		}
 	}
