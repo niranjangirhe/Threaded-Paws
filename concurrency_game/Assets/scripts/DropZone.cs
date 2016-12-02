@@ -7,6 +7,9 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 	public Draggable.Type typeOfArea;
 	public bool isInventory;
 
+	ToolboxManager manager;
+	GameObject toolbox;
+
 	//usually only triggered for the mouse pointer only
 	public void OnPointerEnter(PointerEventData eventData) {
 		//Debug.Log ("OnPointerEnter to " + gameObject.name);
@@ -56,6 +59,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 	}
 
 	void Start() {
-		
+		manager = GameObject.Find ("_SCRIPTS_").GetComponent<ToolboxManager> ();
+		toolbox = GameObject.Find ("DropAreaTools");
 	}
 }

@@ -18,6 +18,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	Text loopsCount;
 	Text statsCount;
 
+	ToolboxManager manager;
+
 	public enum Type {IFNEEDED, WHILELOOP, IFSTAT , ACTION, ALL, INVENTORY};
 	public Type typeOfItem = Type.ALL; //default
 
@@ -29,14 +31,14 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		placeholder = new GameObject ();
 		placeholder.transform.SetParent (this.transform.parent); //places it at the end of the list by default
 		//want the placeholder to have the same dimensions as the draggable object removed
-		LayoutElement le = placeholder.AddComponent<LayoutElement>();
+		LayoutElement le = placeholder.AddComponent<LayoutElement> ();
 		le.preferredWidth = this.GetComponent<LayoutElement> ().preferredWidth;
 		le.preferredHeight = this.GetComponent<LayoutElement> ().preferredHeight;
 		le.flexibleWidth = 0; //not flexible
 		le.flexibleHeight = 0;
 
 		//want the placeholder to also be in the same spot as the object we just removed
-		placeholder.transform.SetSiblingIndex(this.transform.GetSiblingIndex());
+		placeholder.transform.SetSiblingIndex (this.transform.GetSiblingIndex ());
 
 		//save old parent
 		//parentToReturnTo = this.transform.parent;
@@ -44,6 +46,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 		//make sure it defaults to old parent
 		placeholderParent = parentToReturnTo;
+
 
 		//instead of the toolbox, wanna set parent to canvas
 		this.transform.SetParent(canvas.transform);
@@ -144,19 +147,27 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 			if (this.typeOfItem == Type.ACTION) {
 				//TODO: add to the action field
+				manager.actionsLeft += 1;
 				Debug.Log ("An action was dropped in the toolbox");
 			} else if (this.typeOfItem == Type.WHILELOOP) {
 				//TODO: add from the loop field
+				manager.loopsLeft += 1;
 				Debug.Log ("A loop was dropped in the toolbox");
 			} else if (this.typeOfItem == Type.IFSTAT) {
 				//TODO: add to if statement field
+				manager.ifsLeft += 1;
 				Debug.Log ("An if statement was dropped in the toolbox");
 			} else if (this.typeOfItem == Type.IFNEEDED) {
 				//TODO: add to "if needed" field
 				Debug.Log ("An \"if needed\" tool was dropped in the toolbox");
 			}
 
-		} else if (this.transform.parent.name == "DropAreaThread") {
+			manager.updateValues ();
+			//self-destroy
+			Destroy(this.gameObject);
+
+		} /* doing this in the CreateNewBlock script
+		else if (this.transform.parent.name == "DropAreaThread") {
 			//TODO: must substract from quantities left
 			Debug.Log ("Dropped in thread box");
 
@@ -173,7 +184,9 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 				Debug.Log ("An \"if needed\" tool was dropped in the thread box");
 				//TODO: add to "if needed" field
 			}
-		} else {
+		} */
+
+		else {
 			//Debug.Log ("Dropped within another box... probably");
 			Debug.Log ("Parent: " + this.transform.parent.name);
 		}
@@ -185,5 +198,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		threadArea = GameObject.Find("DropAreaThread");
 		canvas = GameObject.Find("Canvas");
 		toolbox = GameObject.Find ("DropAreaTools");
+
+		manager = GameObject.Find ("_SCRIPTS_").GetComponent<ToolboxManager> ();
 	}
 }

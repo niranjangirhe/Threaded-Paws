@@ -9,6 +9,8 @@ public class CreateNewBlock : MonoBehaviour {
 
 	ToolboxManager manager;
 
+	GameObject toolbox;
+
 	public void NewActionBlock() {
 
 		if (manager.actionsLeft > 0) {
@@ -16,11 +18,13 @@ public class CreateNewBlock : MonoBehaviour {
 			Debug.Log ("Action block was clicked");
 
 			//Transform newActionBox = (Instantiate(prefab) as GameObject).transform;
+			Vector3 position = new Vector3(82.5f, -100f, 0f);
 
 			//prefab = (GameObject)Instantiate (Resources.Load ("ActionBox")); //doesnt work
-			GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-			newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-			newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
+			GameObject newActionBox = (GameObject)Instantiate (prefab, position, Quaternion.identity); //typically returns an Object (not GameObject)
+
+			newActionBox.transform.SetParent (canvas.transform, false); //invisible otherwise
+			//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
 			//newActionBox.AddComponent<Draggable>();
 
 			manager.actionsLeft -= 1;
@@ -77,6 +81,7 @@ public class CreateNewBlock : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		manager = GameObject.Find ("_SCRIPTS_").GetComponent<ToolboxManager> ();
+		toolbox = GameObject.Find ("DropAreaTools");
 	}
 
 	// Update is called once per frame
