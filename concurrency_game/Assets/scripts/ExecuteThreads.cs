@@ -199,26 +199,40 @@ public class ExecuteThreads : MonoBehaviour {
 
 				//Debug.Log ("TYPE IFSTAT");
 
-				string condition, actionText;
-				actionText = "";
-
-				condition = blocks [i].GetComponentInChildren<Text> ().text;
-				actionText = blocks [i].FindChild ("DropArea").GetComponentInChildren<Text> ().text;
+				string condition, actionText, line;
+				try {
 					
-				blocks_names [i] = "if ( " + condition + " )\n    " + actionText;
+					condition = blocks [i].GetComponentInChildren<Text> ().text;
+					actionText = blocks [i].FindChild ("DropArea").GetComponentInChildren<Text> ().text;
+
+					line = "if ( " + condition + " )\n    " + actionText;
+
+				} catch (Exception e) {
+					manager.showError ("At least one if statement is empty.");
+					line = ">> ERROR: Empty if statement";
+				}
+					
+				blocks_names [i] = line;
 
 				//blocks_names [i] = blocks[i].transform.GetComponentInChildren<Text> ().text;
 				i++;
+
 			} else if (child.GetComponent<Draggable> ().typeOfItem == Draggable.Type.WHILELOOP) {
 
 				//Debug.Log ("TYPE WHILE");
 
-				string condition, actionText;
+				string condition, actionText, line;
 
-				condition = blocks [i].GetComponentInChildren<Text> ().text;
-				actionText = blocks [i].FindChild ("DropArea").GetComponentInChildren<Text> ().text;
+				try {
+					condition = blocks [i].GetComponentInChildren<Text> ().text;
+					actionText = blocks [i].FindChild ("DropArea").GetComponentInChildren<Text> ().text;
+					line = "while ( " + condition + " )\n    " + actionText;
+				} catch (Exception e) {
+					manager.showError ("At least one while loop is empty.");
+					line = ">> ERROR: Empty while loop";
+				}
 
-				blocks_names [i] = "while ( " + condition + " )\n    " + actionText;
+				blocks_names [i] = line;
 
 				i++;
 			}

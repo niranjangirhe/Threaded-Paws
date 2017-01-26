@@ -140,7 +140,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		}
 
 		if (this.transform.parent.name == "DropAreaTools") {
-			Debug.Log ("Dropped in the toolbox");
+			//Debug.Log ("Dropped in the toolbox");
 
 			//TODO: must add to the quantities left
 
@@ -213,6 +213,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		this.GetComponent<Image> ().color = Color.white;
 
 		Destroy (placeholder);
+
+		CreateNewBlock.canCreate = true;
 	}
 
 	void Start() {
