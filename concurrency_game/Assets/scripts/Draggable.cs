@@ -47,14 +47,13 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		//make sure it defaults to old parent
 		placeholderParent = parentToReturnTo;
 
-
 		//instead of the toolbox, wanna set parent to canvas
 		this.transform.SetParent(canvas.transform);
 
 		GetComponent<CanvasGroup> ().blocksRaycasts = false;
 
 		//highlight threadArea
-		threadArea.transform.GetComponent<Image> ().color = Color.cyan;
+		threadArea.transform.GetComponent<Image> ().color = Color.green;
 		//highlight corresponding children
 		Transform[] threadChildren = new Transform[threadArea.transform.childCount];
 
@@ -68,7 +67,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			if (threadChildren [i].gameObject.GetComponentInChildren<DropZone>()) {
 				string zoneName = threadChildren [i].gameObject.GetComponentInChildren<DropZone> ().name;
 				//Debug.Log("Theres a dropzone!: " + zoneName);
-				threadChildren [i].Find(zoneName).GetComponent<Image>().color = Color.cyan;
+				threadChildren [i].Find(zoneName).GetComponent<Image>().color = Color.green;
 			}
 		}
 	}
@@ -114,7 +113,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 	public void OnEndDrag(PointerEventData eventData) {
 
-		Debug.Log ("OnEndDrag called");
+		//Debug.Log ("OnEndDrag called");
 
 		//set parent back to where we came from (at the end of the list)
 		this.transform.SetParent(parentToReturnTo);
@@ -147,7 +146,20 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 			if (this.typeOfItem == Type.ACTION) {
 				//TODO: add to the action field
-				manager.actionsLeft += 1;
+
+				if (this.transform.GetChild (0).GetComponentInChildren<Text>().text == "check in") {
+					manager.checkInsLeft += 1;
+
+				} else if (this.transform.GetChild (0).GetComponentInChildren<Text>().text == "wash") {
+					manager.washesLeft += 1;
+
+				} else if (this.transform.GetChild (0).GetComponentInChildren<Text>().text == "cut") {
+					manager.cutsLeft += 1;
+
+				} else if (this.transform.GetChild (0).GetComponentInChildren<Text>().text == "dry") {
+					manager.driesLeft += 1;
+				}
+
 				Debug.Log ("An action was dropped in the toolbox");
 			} else if (this.typeOfItem == Type.WHILELOOP) {
 				//TODO: add from the loop field
@@ -189,6 +201,13 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		else {
 			//Debug.Log ("Dropped within another box... probably");
 			Debug.Log ("Parent: " + this.transform.parent.name);
+
+			//new parent is inside an if statement or a look
+			if (this.transform.parent.name == "DropArea") {
+				//this.transform.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (this.GetComponent<RectTransform> ().sizeDelta.x, this.GetComponent<RectTransform> ().sizeDelta.y + 45);
+
+				//this.transform.parent.transform.
+			}
 		}
 
 		this.GetComponent<Image> ().color = Color.white;

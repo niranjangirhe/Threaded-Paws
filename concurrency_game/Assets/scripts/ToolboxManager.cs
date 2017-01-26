@@ -4,11 +4,19 @@ using UnityEngine.UI;
 
 public class ToolboxManager : MonoBehaviour {
 
-	public int actionsLeft;
+	public int checkInsLeft;
+	public int cutsLeft;
+	public int driesLeft;
+	public int washesLeft;
+
 	public int loopsLeft;
 	public int ifsLeft;
 
-	public Text txtActionsLeft;
+	public Text txtCheckInsLeft;
+	public Text txtCutsLeft;
+	public Text txtDriesLeft;
+	public Text txtWashesLeft;
+
 	public Text txtLoopsLeft;
 	public Text txtIfsLeft;
 
@@ -29,21 +37,24 @@ public class ToolboxManager : MonoBehaviour {
 	}
 
 	public void updateValues() {
-		txtActionsLeft.text = "x " + actionsLeft;
+		txtCheckInsLeft.text = "x " + checkInsLeft;
+		txtCutsLeft.text = "x " + cutsLeft;
+		txtWashesLeft.text = "x " + washesLeft;
+		txtDriesLeft.text = "x " + driesLeft;
 		txtLoopsLeft.text = "x " + loopsLeft;
 		txtIfsLeft.text = "x " + ifsLeft;
 	}
 
-	public void showError() {
+	public void showError(string msg) {
 
-		StartCoroutine (ErrorMsg ());
+		StartCoroutine (ErrorMsg (msg));
 		
 	}
 
-	IEnumerator ErrorMsg() {
+	IEnumerator ErrorMsg(string msg) {
 
 		txtErrorMsg.enabled = true;
-		txtErrorMsg.text = "You don't have any more of those left!";
+		txtErrorMsg.text = msg;
 		yield return new WaitForSeconds(2.0f);
 		txtErrorMsg.enabled = false;
 	}

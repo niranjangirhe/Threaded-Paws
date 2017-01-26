@@ -8,6 +8,8 @@ public class ExecuteThreads : MonoBehaviour {
 
 	//TODO: save original threadchildren positions (in case order is incorrect)
 
+	ToolboxManager manager;
+
 	public Transform runButton;
 	private Timer timer;
 	private int numActions;
@@ -18,15 +20,15 @@ public class ExecuteThreads : MonoBehaviour {
 	public GenerateTasks genTasks;
 	//Task t; //"playerTank"
 
-	string[] blocks;
+	Transform[] blocks;
 
 	void Start() {
 
-		//blocks = GetActionBlocks ();
+		manager = GameObject.Find ("_SCRIPTS_").GetComponent<ToolboxManager> ();
 		timer = GameObject.FindObjectOfType<Timer> ();
-		//toPrint = "";
 	}
 
+	/*
 	public void Test() {
 
 		if (!genTasks)
@@ -46,21 +48,28 @@ public class ExecuteThreads : MonoBehaviour {
 
 		runButton.GetComponent<Button> ().interactable = true;
 	}
+	*/
 
-	private string[] GetActionBlocks() {
+	private Transform[] GetActionBlocks() {
 
 		//get children in drop area for thread
 		//threadChildren = new GameObject[this.transform.Find("DropAreaThread").childCount];
-		string[] threadChildren = new string[this.transform.Find("DropAreaThread").childCount];
+		Transform[] threadChildren = new Transform[this.transform.Find("DropAreaThread").childCount];
+		int childCount = threadChildren.Length;
 
-		//Debug.Log ("childCount: " + threadChildren.Length);
+		Debug.Log ("childCount: " + childCount);
 
-		for (int i = 0; i < threadChildren.Length; i++) {
+		for (int i = 0; i < childCount; i++) {
 			//threadChildren [i] = this.transform.Find("DropAreaThread").GetChild (i).gameObject;
-			threadChildren [i] = this.transform.Find("DropAreaThread").GetChild (i).name;
+		
+			threadChildren [i] = this.transform.Find ("DropAreaThread").GetChild(i);
+			//threadChildren [i] = this.transform.Find ("DropAreaThread").GetChild (i).GetComponentInChildren<Text>().text;
 			//Debug.Log ( timer.GetCurrentTime() + " -> " + threadChildren [i]);
 		}
 
+		return threadChildren;
+
+		/*
 		if (threadChildren.Length > 0) {
 
 			//if (threadChildren[0] == "CheckIn" && threadChildren[threadChildren.Length] == "Return")
@@ -75,17 +84,18 @@ public class ExecuteThreads : MonoBehaviour {
 			//Debug.Log ("There are no children in the thread drop area");
 			return null;
 		}
+		*/
 	}
 
-	private void Simulate() {
+	//private void Simulate() {
 
 		//Debug.Log ("actions.Length: " + actions.Length);
 
 		//if there are blocks and there are tasks to be completed
 		//try{
-			if (genTasks.tasks.Count > 0) {
+			//if (genTasks.tasks.Count > 0) {
 
-				ExecuteTasks();
+				//ExecuteTasks();
 
 				/*
 				for (int i = 0; i < blocks.Length; i++) {
@@ -95,20 +105,20 @@ public class ExecuteThreads : MonoBehaviour {
 				}
 				*/
 
-			} else {
-				Debug.Log ("There are no tasks to be completed.");
-			}
+			//}
+
 		//}catch(Exception e) {
 		//	Debug.Log ("There are no blocks to be executed");
 		//}
-	}
+	//}
 
 	// ---------- sample actions --------------
 
 	//TODO: execute each action (or not, depending on the task)
+	/*
 	public void ExecuteTasks() {
 		
-		toPrint += "\n";
+		//toPrint += "\n";
 
 		if (blocks.Length > 0) {
 
@@ -130,10 +140,10 @@ public class ExecuteThreads : MonoBehaviour {
 					} else if (blocks [j] == "Wash" && genTasks.tasks [i].GetA1 ()) {
 						ExecuteA1 (genTasks.tasks [i].GetName ());
 						//toPrint += "\n (" + timer.GetCurrentTime() + ") " + genTasks.tasks [i].GetName() + " is being washed.";
-					} else if (blocks [j] == "Cut" && genTasks.tasks[i].GetA2()) {
+					} else if (blocks [j] == "Cut" && genTasks.tasks [i].GetA2 ()) {
 						ExecuteA2 (genTasks.tasks [i].GetName ());
 						//toPrint +=  "\n (" + timer.GetCurrentTime() + ") " + genTasks.tasks [i].GetName() + "'s fur is being cut.";
-					} else if (blocks [j] == "Dry" && genTasks.tasks[i].GetA3()){
+					} else if (blocks [j] == "Dry" && genTasks.tasks [i].GetA3 ()) {
 						ExecuteA3 (genTasks.tasks [i].GetName ());
 						//toPrint +=  "\n (" + timer.GetCurrentTime() + ") " + genTasks.tasks [i].GetName() + " is being dryed.";
 					} else if (blocks [j] == "Return") {
@@ -144,13 +154,12 @@ public class ExecuteThreads : MonoBehaviour {
 				genTasks.tasks.RemoveAt (i);
 
 			}
-		} else {
-			Debug.Log ("There are no blocks to execute!");
 		}
 
 		simulationTextArea.text = toPrint;
 		//Debug.Log ("toPrint: " + toPrint);
 	}
+	*/
 
 	private void CheckIn(string name) {
 		toPrint += "\n (" + timer.GetCurrentTime() + ") " + name + " is being checked in";
@@ -172,4 +181,65 @@ public class ExecuteThreads : MonoBehaviour {
 		toPrint +=  "\n (" + timer.GetCurrentTime() + ") " + name + " was returned.";
 	}
 
+
+	public void Execute() {
+
+		blocks = GetActionBlocks ();
+		string[] blocks_names = new string[blocks.Length];
+		int i = 0;
+
+		foreach (Transform child in blocks) {
+			if (child.GetComponent<Draggable> ().typeOfItem == Draggable.Type.ACTION) {
+
+				//Debug.Log ("TYPE ACTION");
+
+				blocks_names [i] = blocks [i].transform.GetComponentInChildren<Text> ().text;
+				i++;
+			} else if (child.GetComponent<Draggable> ().typeOfItem == Draggable.Type.IFSTAT) {
+
+				//Debug.Log ("TYPE IFSTAT");
+
+				string condition, actionText;
+				actionText = "";
+
+				condition = blocks [i].GetComponentInChildren<Text> ().text;
+				actionText = blocks [i].FindChild ("DropArea").GetComponentInChildren<Text> ().text;
+					
+				blocks_names [i] = "if ( " + condition + " )\n    " + actionText;
+
+				//blocks_names [i] = blocks[i].transform.GetComponentInChildren<Text> ().text;
+				i++;
+			} else if (child.GetComponent<Draggable> ().typeOfItem == Draggable.Type.WHILELOOP) {
+
+				//Debug.Log ("TYPE WHILE");
+
+				string condition, actionText;
+
+				condition = blocks [i].GetComponentInChildren<Text> ().text;
+				actionText = blocks [i].FindChild ("DropArea").GetComponentInChildren<Text> ().text;
+
+				blocks_names [i] = "while ( " + condition + " )\n    " + actionText;
+
+				i++;
+			}
+		}
+			
+		toPrint = "";
+
+		try {
+			if (blocks.Length > 0) {
+				foreach (string line in blocks_names) {
+					//Debug.Log (block);
+					//toPrint += "\n (" + timer.GetCurrentTime() + ") " + name + "ing";
+					toPrint += "\n" + line;
+				}
+
+				simulationTextArea.text = toPrint;
+			} else {
+				manager.showError ("There are no actions to run.");
+			}
+		} catch (Exception e) {
+			manager.showError ("There are no actions to run");
+		}
+	}
 }
