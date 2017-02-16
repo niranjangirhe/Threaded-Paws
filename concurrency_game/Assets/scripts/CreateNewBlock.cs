@@ -28,7 +28,7 @@ public class CreateNewBlock : MonoBehaviour {
 					//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
 					//newActionBox.AddComponent<Draggable>();
 					newActionBox.transform.localScale = Vector3.one;
-					newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = "wash";
+					newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text>().text;
 					newActionBox.GetComponent<Image> ().color = Color.green;
 
 					manager.washesLeft -= 1;
@@ -55,7 +55,7 @@ public class CreateNewBlock : MonoBehaviour {
 					//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
 					//newActionBox.AddComponent<Draggable>();
 					newActionBox.transform.localScale = Vector3.one;
-					newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = "check in";
+					newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text>().text;
 					newActionBox.GetComponent<Image> ().color = Color.green;
 
 					manager.checkInsLeft -= 1;
@@ -83,7 +83,7 @@ public class CreateNewBlock : MonoBehaviour {
 					//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
 					//newActionBox.AddComponent<Draggable>();
 					newActionBox.transform.localScale = Vector3.one;
-					newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = "cut";
+					newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text>().text;
 					newActionBox.GetComponent<Image> ().color = Color.green;
 
 					manager.cutsLeft -= 1;
@@ -112,7 +112,7 @@ public class CreateNewBlock : MonoBehaviour {
 					//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
 					//newActionBox.AddComponent<Draggable>();
 					newActionBox.transform.localScale = Vector3.one;
-					newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = "dry";
+					newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text>().text;
 					newActionBox.GetComponent<Image> ().color = Color.green;
 
 					manager.driesLeft -= 1;

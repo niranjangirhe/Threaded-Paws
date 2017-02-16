@@ -147,7 +147,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			if (this.typeOfItem == Type.ACTION) {
 				//TODO: add to the action field
 
-				if (this.transform.GetChild (0).GetComponentInChildren<Text>().text == "check in") {
+				if (this.transform.GetChild (0).GetComponentInChildren<Text>().text == "checkin") {
 					manager.checkInsLeft += 1;
 
 				} else if (this.transform.GetChild (0).GetComponentInChildren<Text>().text == "wash") {
@@ -161,6 +161,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 				}
 
 				Debug.Log ("An action was dropped in the toolbox");
+
 			} else if (this.typeOfItem == Type.WHILELOOP) {
 				//TODO: add from the loop field
 				manager.loopsLeft += 1;

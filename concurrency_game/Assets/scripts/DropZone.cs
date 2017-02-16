@@ -57,6 +57,28 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 				Debug.Log ("[OnDrop] Parent to return to: " + d.parentToReturnTo.transform.name);
 			
 			}
+
+			//if (d.parentToReturnTo.parent.GetComponent<Draggable>().typeOfItem == Draggable.Type.IFSTAT) {
+				//TODO: return to toolbox
+			//}
+
+			if (d.parentToReturnTo.transform.name == "DropArea" && (d.parentToReturnTo.parent.GetComponent<Draggable>().typeOfItem == Draggable.Type.WHILELOOP)) {
+				//resize
+
+				float action_height = 30;
+
+				float new_height = d.parentToReturnTo.transform.GetComponent<RectTransform> ().sizeDelta.y + action_height;
+				float curr_width = d.parentToReturnTo.transform.GetComponent<RectTransform> ().sizeDelta.x;
+				d.parentToReturnTo.transform.GetComponent<RectTransform> ().sizeDelta = new Vector2 (curr_width, new_height);
+				//Debug.Log("Curr height: " + curr_height);
+
+				Debug.Log("Parent Name: " + d.parentToReturnTo.parent.name);
+				//float parent_new_height = d.parentToReturnTo.parent.GetComponent<RectTransform> ().sizeDelta.y;
+
+				float parent_new_height = d.parentToReturnTo.parent.GetComponent<RectTransform> ().sizeDelta.y + action_height;
+				float parent_curr_width = d.parentToReturnTo.parent.GetComponent<RectTransform> ().sizeDelta.x;
+				d.parentToReturnTo.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (parent_curr_width, parent_new_height);
+			}
 		}
 	}
 

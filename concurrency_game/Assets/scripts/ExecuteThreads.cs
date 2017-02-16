@@ -57,7 +57,7 @@ public class ExecuteThreads : MonoBehaviour {
 		Transform[] threadChildren = new Transform[this.transform.Find("DropAreaThread").childCount];
 		int childCount = threadChildren.Length;
 
-		Debug.Log ("childCount: " + childCount);
+		Debug.Log ("thread childCount: " + childCount);
 
 		for (int i = 0; i < childCount; i++) {
 			//threadChildren [i] = this.transform.Find("DropAreaThread").GetChild (i).gameObject;
@@ -187,13 +187,14 @@ public class ExecuteThreads : MonoBehaviour {
 		blocks = GetActionBlocks ();
 		string[] blocks_names = new string[blocks.Length];
 		int i = 0;
+		bool isError = false; //unused, for now
 
 		foreach (Transform child in blocks) {
 			if (child.GetComponent<Draggable> ().typeOfItem == Draggable.Type.ACTION) {
 
 				//Debug.Log ("TYPE ACTION");
 
-				blocks_names [i] = blocks [i].transform.GetComponentInChildren<Text> ().text;
+				blocks_names [i] = blocks [i].transform.GetComponentInChildren<Text> ().text + ";";
 				i++;
 			} else if (child.GetComponent<Draggable> ().typeOfItem == Draggable.Type.IFSTAT) {
 
@@ -203,13 +204,15 @@ public class ExecuteThreads : MonoBehaviour {
 				try {
 					
 					condition = blocks [i].GetComponentInChildren<Text> ().text;
-					actionText = blocks [i].FindChild ("DropArea").GetComponentInChildren<Text> ().text;
+					actionText = blocks [i].FindChild ("DropArea").GetComponentInChildren<Text> ().text + ";";
 
-					line = "if ( " + condition + " )\n    " + actionText;
+					line = "\nif ( " + condition + " ) {\n    " + actionText + "\n}\n";
 
 				} catch (Exception e) {
-					manager.showError ("At least one if statement is empty.");
-					line = ">> ERROR: Empty if statement";
+					//manager.showError ("At least one if statement is empty.");
+					//line = ">> ERROR: Empty if statement";
+					simulationTextArea.text = ">>> ERROR: There is at least one empty for statement";
+					return;
 				}
 					
 				blocks_names [i] = line;
@@ -219,17 +222,45 @@ public class ExecuteThreads : MonoBehaviour {
 
 			} else if (child.GetComponent<Draggable> ().typeOfItem == Draggable.Type.WHILELOOP) {
 
-				//Debug.Log ("TYPE WHILE");
+				string condition, line;
+				string actionText = "";
 
-				string condition, actionText, line;
+				int whileChildrenCount = child.Find ("DropArea").childCount;
+				Debug.Log ("child " + child.name + ", child count: " + whileChildrenCount);
 
+				if (whileChildrenCount < 1) {
+					Debug.Log(">>> ERROR: There is at least one empty while loop");
+					simulationTextArea.text = ">>> ERROR: There is at least one empty while loop";
+					return;
+				}
+
+				Transform[] whileChildren = new Transform[whileChildrenCount];
+
+				for (int k = 0; k < whileChildrenCount; k++) {
+					//threadChildren [i] = this.transform.Find("DropAreaThread").GetChild (i).gameObject;
+
+					whileChildren [k] = child.Find ("DropArea").GetChild (k);
+					//threadChildren [i] = this.transform.Find ("DropAreaThread").GetChild (i).GetComponentInChildren<Text>().text;
+					//Debug.Log ( timer.GetCurrentTime() + " -> " + threadChildren [i]);
+
+					//Debug.Log ("actions: " + whileChildren [k]);
+				}
+
+				foreach (Transform whileChild in whileChildren) {
+					actionText += "\t" + whileChild.GetComponentInChildren<Text>().text + ";\n";
+				}
+		
 				try {
-					condition = blocks [i].GetComponentInChildren<Text> ().text;
-					actionText = blocks [i].FindChild ("DropArea").GetComponentInChildren<Text> ().text;
-					line = "while ( " + condition + " )\n    " + actionText;
+						condition = blocks [i].GetComponentInChildren<Text> ().text;
+						
+						//TODO: Need to get ALL children
+						//actionText = blocks [i].FindChild ("DropArea").GetComponentInChildren<Text> ().text;
+
+					line = "\nwhile ( " + condition + " ) {\n" + actionText + "}\n";
+
 				} catch (Exception e) {
-					manager.showError ("At least one while loop is empty.");
-					line = ">> ERROR: Empty while loop";
+					manager.showError ("Exception caught.");
+					line = ">>> Exception caught.";
 				}
 
 				blocks_names [i] = line;
