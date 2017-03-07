@@ -52,11 +52,13 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 		GetComponent<CanvasGroup> ().blocksRaycasts = false;
 
+		/*
 		//highlight threadArea
 		threadArea.transform.GetComponent<Image> ().color = Color.green;
 		//highlight corresponding children
 		Transform[] threadChildren = new Transform[threadArea.transform.childCount];
 
+		Debug.Log ("HIGHLIGHTING AREA");
 		//Debug.Log ("childCount: " + threadChildren.Length);
 
 		for (int i = 0; i < threadChildren.Length; i++) {
@@ -70,6 +72,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 				threadChildren [i].Find(zoneName).GetComponent<Image>().color = Color.green;
 			}
 		}
+		*/
 	}
 
 	public void OnDrag(PointerEventData eventData) {
@@ -123,6 +126,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 		GetComponent<CanvasGroup> ().blocksRaycasts = true;
 
+		/*
 		//iterate through corresponding zones and remove highlights, if any
 		threadArea.transform.GetComponent<Image>().color = Color.white;
 		Transform[] threadChildren = new Transform[threadArea.transform.childCount];
@@ -138,6 +142,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 				threadChildren [i].Find(zoneName).GetComponent<Image>().color = Color.white;
 			}
 		}
+		*/
 
 		if (this.transform.parent.name == "DropAreaTools") {
 			//Debug.Log ("Dropped in the toolbox");

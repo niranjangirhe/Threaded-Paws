@@ -1,0 +1,15 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/ToolboxManager.cs">
+    <Files>
+      <File FileName="Assets/scripts/ToolboxManager.cs" Line="6" Column="2" />
+      <File FileName="Assets/scripts/ExecuteThreads.cs" Line="288" Column="7" />
+      <File FileName="Assets/scripts/Draggable.cs" Line="44" Column="21" />
+      <File FileName="Assets/scripts/DropZone.cs" Line="81" Column="5" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
