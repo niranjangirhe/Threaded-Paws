@@ -1,5 +1,0 @@
-Intro: Why concurrency is challenging, using games to teach concurrency, motivatin
-Background: 1. Concurrency and multithreaded programming (data-races, deadlocks) 2. Unity game programming (game dev with unity).
-Related work: Mention mike's work. Check for other concurrency games; if none, say this is the first.
-Main section: cover game. 1. Game design (what the game play is, how it works. overview) 2. how it was built, technologies used, architecture, functions in each file, which files
-conclusions: 1. summary of work done 2. what i learnt. is gaming good for learning concurrecy? can't say definitevy, but intuitively (no study). 3. limitations: 2 threads. are there any limitations to what i've done? 4. future work.
