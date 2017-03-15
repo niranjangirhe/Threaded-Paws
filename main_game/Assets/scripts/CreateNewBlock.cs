@@ -13,6 +13,8 @@ public class CreateNewBlock : MonoBehaviour {
 
 	public void NewActionBlock() {
 
+		Debug.Log ("Generating new block");
+
 		// if tab 1 is the active panel
 		if (GameObject.Find ("Tab1").transform.GetSiblingIndex () > GameObject.Find ("Tab2").transform.GetSiblingIndex ()) {
 
@@ -30,7 +32,7 @@ public class CreateNewBlock : MonoBehaviour {
 						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text>().text;
+						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
 						newActionBox.GetComponent<Image> ().color = Color.magenta;
 
 						manager.washLeft_thread1 -= 1;
@@ -53,11 +55,12 @@ public class CreateNewBlock : MonoBehaviour {
 					if (canCreate) {
 						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
 
-						newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
+						newActionBox.transform.SetParent (this.transform);
+						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
 						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text>().text;
+						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
 						newActionBox.GetComponent<Image> ().color = Color.magenta;
 
 						manager.checkinLeft_thread1 -= 1;
@@ -81,11 +84,12 @@ public class CreateNewBlock : MonoBehaviour {
 
 						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
 
-						newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
+						newActionBox.transform.SetParent (this.transform);
+						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
 						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text>().text;
+						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
 						newActionBox.GetComponent<Image> ().color = Color.magenta;
 
 						manager.cutLeft_thread1 -= 1;
@@ -110,11 +114,12 @@ public class CreateNewBlock : MonoBehaviour {
 
 						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
 
-						newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
+						newActionBox.transform.SetParent (this.transform);
+						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
 						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text>().text;
+						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
 						newActionBox.GetComponent<Image> ().color = Color.magenta;
 
 						manager.dryLeft_thread1 -= 1;
@@ -130,6 +135,35 @@ public class CreateNewBlock : MonoBehaviour {
 					manager.showError ("You don\'t have any more of those left!");
 				}
 
+			} else if (this.transform.name == "ResourceBox") {
+
+				if (manager.resourcesLeft_thread1 > 0) {
+
+					if (canCreate) {
+
+						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
+
+						newActionBox.transform.SetParent (this.transform);
+						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
+						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
+						//newActionBox.AddComponent<Draggable>();
+						newActionBox.transform.localScale = Vector3.one;
+						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
+						newActionBox.GetComponent<Image> ().color = Color.magenta;
+
+						manager.resourcesLeft_thread1 -= 1;
+						manager.updateValues ();
+
+						canCreate = false;
+					} else {
+						manager.showError ("Use or discard your current object first");
+					}
+
+				} else {
+					//display error message to user
+					manager.showError ("You don\'t have any more of those left!");
+				}
+			
 			}
 
 		// tab 2 is the active panel
@@ -144,11 +178,12 @@ public class CreateNewBlock : MonoBehaviour {
 						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
 
 						newActionBox.transform.SetParent (this.transform);
+						//newActionBox.transform.SetParent (this.transform);
 						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
 						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text>().text;
+						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
 						newActionBox.GetComponent<Image> ().color = Color.cyan;
 
 						manager.washLeft_thread2 -= 1;
@@ -171,11 +206,12 @@ public class CreateNewBlock : MonoBehaviour {
 					if (canCreate) {
 						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
 
-						newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
+						newActionBox.transform.SetParent (this.transform);
+						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
 						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text>().text;
+						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
 						newActionBox.GetComponent<Image> ().color = Color.cyan;
 
 						manager.checkinLeft_thread2 -= 1;
@@ -199,11 +235,12 @@ public class CreateNewBlock : MonoBehaviour {
 
 						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
 
-						newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
+						newActionBox.transform.SetParent (this.transform);
+						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
 						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text>().text;
+						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
 						newActionBox.GetComponent<Image> ().color = Color.cyan;
 
 						manager.cutLeft_thread2 -= 1;
@@ -228,14 +265,44 @@ public class CreateNewBlock : MonoBehaviour {
 
 						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
 
-						newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
+						newActionBox.transform.SetParent (this.transform);
+						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
 						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text>().text;
+						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
 						newActionBox.GetComponent<Image> ().color = Color.cyan;
 
 						manager.dryLeft_thread2 -= 1;
+						manager.updateValues ();
+
+						canCreate = false;
+					} else {
+						manager.showError ("Use or discard your current object first");
+					}
+
+				} else {
+					//display error message to user
+					manager.showError ("You don\'t have any more of those left!");
+				}
+
+			} else if (this.transform.name == "ResourceBox") {
+
+				if (manager.resourcesLeft_thread2 > 0) {
+
+					if (canCreate) {
+
+						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
+
+						newActionBox.transform.SetParent (this.transform);
+						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
+						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
+						//newActionBox.AddComponent<Draggable>();
+						newActionBox.transform.localScale = Vector3.one;
+						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
+						newActionBox.GetComponent<Image> ().color = Color.cyan;
+
+						manager.resourcesLeft_thread2 -= 1;
 						manager.updateValues ();
 
 						canCreate = false;
@@ -266,7 +333,9 @@ public class CreateNewBlock : MonoBehaviour {
 
 					//prefab = (GameObject)Instantiate (Resources.Load ("ActionBox")); //doesnt work
 					GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-					newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform);
+
+					newActionBox.transform.SetParent (this.transform);
+					//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform);
 					//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (105, 85); //width, height
 					//newActionBox.GetComponent<Draggable>().typeOfItem = Draggable.Type.ACTION;
 					newActionBox.transform.localScale = Vector3.one;
@@ -294,7 +363,9 @@ public class CreateNewBlock : MonoBehaviour {
 
 					//prefab = (GameObject)Instantiate (Resources.Load ("ActionBox")); //doesnt work
 					GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-					newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform);
+
+					newActionBox.transform.SetParent (this.transform);
+					//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform);
 					//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (105, 85); //width, height
 					//newActionBox.GetComponent<Draggable>().typeOfItem = Draggable.Type.ACTION;
 					newActionBox.transform.localScale = Vector3.one;
@@ -332,7 +403,8 @@ public class CreateNewBlock : MonoBehaviour {
 
 					//prefab = (GameObject)Instantiate (Resources.Load ("ActionBox")); //doesnt work
 					GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-					newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform);
+					//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform);
+					newActionBox.transform.SetParent (this.transform);
 					newActionBox.transform.localScale = Vector3.one;
 
 					//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (105, 85); //width, height
@@ -362,7 +434,8 @@ public class CreateNewBlock : MonoBehaviour {
 
 					//prefab = (GameObject)Instantiate (Resources.Load ("ActionBox")); //doesnt work
 					GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-					newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform);
+					//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform);
+					newActionBox.transform.SetParent (this.transform);
 					newActionBox.transform.localScale = Vector3.one;
 
 					//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (105, 85); //width, height

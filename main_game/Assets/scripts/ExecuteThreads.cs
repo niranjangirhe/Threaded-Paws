@@ -6,8 +6,6 @@ using System;
 
 public class ExecuteThreads : MonoBehaviour {
 
-	//TODO: save original threadchildren positions (in case order is incorrect)
-
 	ToolboxManager manager;
 	GameObject disablePanel;
 
@@ -33,7 +31,11 @@ public class ExecuteThreads : MonoBehaviour {
 		timer = GameObject.FindObjectOfType<Timer> ();
 		disablePanel = GameObject.Find ("DisablePanel");
 
-		disablePanel.SetActive (false);
+		try { 
+			disablePanel.SetActive (false);
+		} catch {
+			Debug.Log ("Panel is disabled.");
+		}
 	}
 
 	/*
@@ -84,8 +86,13 @@ public class ExecuteThreads : MonoBehaviour {
 		simulationTextArea.text = "";
 		stop = false;
 
-		// disable all other functionalities
-		disablePanel.SetActive (true);
+
+		try {
+			// disable all other functionalities
+			disablePanel.SetActive (true);
+		} catch {
+			Debug.Log ("Cannot enable DisablePanel");
+		}
 
 		// switch to stop button
 		GameObject.Find ("RunButton").transform.SetAsFirstSibling ();
@@ -604,7 +611,11 @@ public class ExecuteThreads : MonoBehaviour {
 
 		//yield return new WaitForSeconds(5);
 
-		disablePanel.SetActive (false);
+		try {
+			disablePanel.SetActive (false);
+		} catch {
+			Debug.Log ("Cannot disable DisablePanel");
+		}
 		//simulationTextArea.text = "";
 
 		GameObject.Find ("RunButton").transform.SetAsLastSibling ();
@@ -855,7 +866,12 @@ public class ExecuteThreads : MonoBehaviour {
 	public void terminateSimulation() {
 	
 		stop = true;
-		disablePanel.SetActive (false);
+
+		try {
+			disablePanel.SetActive (false);
+		} catch {
+			Debug.Log ("Cannot disable DisablePanel.");
+		}
 		simulationTextArea.text = "";
 
 		GameObject.Find ("RunButton").transform.SetAsLastSibling ();

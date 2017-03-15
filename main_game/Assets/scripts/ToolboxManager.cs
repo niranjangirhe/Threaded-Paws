@@ -4,37 +4,42 @@ using UnityEngine.UI;
 
 public class ToolboxManager : MonoBehaviour {
 
+	//	THREAD 1
+
 	public int checkinLeft_thread1;
 	public int cutLeft_thread1;
 	public int dryLeft_thread1;
 	public int washLeft_thread1;
-
 	public int whileLeft_thread1;
 	public int ifLeft_thread1;
+	public int resourcesLeft_thread1;
 
 	public Text txt_checkinLeft_thread1;
 	public Text txt_cutLeft_thread1;
 	public Text txt_dryLeft_thread1;
 	public Text txt_washLeft_thread1;
-
 	public Text txt_whileLeft_thread1;
 	public Text txt_ifLeft_thread1;
+	public Text txt_resourcesLeft_thread1;
+
+
+	//	THREAD 2
 
 	public int checkinLeft_thread2;
 	public int cutLeft_thread2;
 	public int dryLeft_thread2;
 	public int washLeft_thread2;
-
 	public int whileLeft_thread2;
 	public int ifLeft_thread2;
+	public int resourcesLeft_thread2;
 
 	public Text txt_checkinLeft_thread2;
 	public Text txt_cutLeft_thread2;
 	public Text txt_dryLeft_thread2;
 	public Text txt_washLeft_thread2;
-
 	public Text txt_whileLeft_thread2;
 	public Text txt_ifLeft_thread2;
+	public Text txt_resourcesLeft_thread2;
 
 	public Text txtErrorMsg;
 
@@ -60,6 +65,7 @@ public class ToolboxManager : MonoBehaviour {
 		txt_dryLeft_thread1.text = "x " + dryLeft_thread1;
 		txt_whileLeft_thread1.text = "x " + whileLeft_thread1;
 		txt_ifLeft_thread1.text = "x " + ifLeft_thread1;
+		txt_resourcesLeft_thread1.text = "x " + resourcesLeft_thread1;
 
 		txt_checkinLeft_thread2.text = "x " + checkinLeft_thread2;
 		txt_cutLeft_thread2.text = "x " + cutLeft_thread2;
@@ -67,6 +73,7 @@ public class ToolboxManager : MonoBehaviour {
 		txt_dryLeft_thread2.text = "x " + dryLeft_thread2;
 		txt_whileLeft_thread2.text = "x " + whileLeft_thread2;
 		txt_ifLeft_thread2.text = "x " + ifLeft_thread2;
+		txt_resourcesLeft_thread2.text = "x " + resourcesLeft_thread2;
 	}
 
 	public void showError(string msg) {

@@ -26,7 +26,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 				int num_children = this.transform.childCount;
 				float curr_width = this.transform.GetComponent<RectTransform> ().sizeDelta.x;
 				float curr_height = this.transform.GetComponent<RectTransform> ().sizeDelta.y;
-				float new_height = curr_height + 30;
+				float new_height = curr_height + 25;
 
 				//Debug.Log("num_children: " + num_children);
 
@@ -81,7 +81,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 				int num_children = this.transform.childCount;
 				float curr_width = this.transform.GetComponent<RectTransform> ().sizeDelta.x;
 				float curr_height = this.transform.GetComponent<RectTransform> ().sizeDelta.y;
-				float new_height = curr_height - 30;
+				float new_height = curr_height - 25;
 
 				//Debug.Log("num_children: " + num_children);
 
@@ -116,7 +116,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 			if (d.parentToReturnTo.transform.name == "DropArea" && (d.parentToReturnTo.parent.GetComponent<Draggable>().typeOfItem == Draggable.Type.WHILELOOP)) {
 				//resize
 
-				float action_height = 30;
+				float action_height = 25;
 
 				float new_height = d.parentToReturnTo.transform.GetComponent<RectTransform> ().sizeDelta.y + action_height;
 				float curr_width = d.parentToReturnTo.transform.GetComponent<RectTransform> ().sizeDelta.x;

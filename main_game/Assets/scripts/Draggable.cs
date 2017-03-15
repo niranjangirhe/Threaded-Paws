@@ -37,7 +37,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 				int num_children = eventData.pointerDrag.transform.parent.childCount;
 				float curr_width = eventData.pointerDrag.transform.parent.GetComponent<RectTransform> ().sizeDelta.x;
 				float curr_height = eventData.pointerDrag.transform.parent.GetComponent<RectTransform> ().sizeDelta.y;
-				float new_height = (num_children * 30);
+				float new_height = (num_children * 25);
 
 				//Debug.Log("num_children: " + num_children);
 
@@ -60,7 +60,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		placeholder.transform.SetParent (this.transform.parent); //places it at the end of the list by default
 		//want the placeholder to have the same dimensions as the draggable object removed
 		LayoutElement le = placeholder.AddComponent<LayoutElement> ();
-		placeholder.GetComponent<RectTransform> ().sizeDelta = new Vector2 (105, 30); //width, height
+		placeholder.GetComponent<RectTransform> ().sizeDelta = new Vector2 (105, 25); //width, height
 		//le.preferredWidth = this.GetComponent<LayoutElement> ().preferredWidth;
 		//le.preferredHeight = this.GetComponent<LayoutElement> ().preferredHeight;
 		//le.preferredHeight = 5;
