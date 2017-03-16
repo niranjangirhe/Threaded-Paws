@@ -8,6 +8,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 	ToolboxManager manager;
 	GameObject disablePanel;
+	ProgressBar bar;
 
 	public Transform runButton;
 	private Timer timer;
@@ -25,11 +26,40 @@ public class ExecuteThreads : MonoBehaviour {
 
 	bool stop = false;
 
+	bool t1_has_scissors;
+	bool t1_has_soap;
+	bool t1_has_dryer;
+	bool t1_has_brush;
+	bool t1_has_towel;
+	bool t1_has_station;
+
+	bool t2_has_scissors;
+	bool t2_has_soap;
+	bool t2_has_dryer;
+	bool t2_has_brush;
+	bool t2_has_towel;
+	bool t2_has_station;
+
 	void Start() {
+
+		t1_has_scissors = false;
+		t1_has_soap = false;
+		t1_has_dryer = false;
+		t1_has_brush = false;
+		t1_has_towel = false;
+		t1_has_station = false;
+
+		t2_has_scissors = false;
+		t2_has_soap = false;
+		t2_has_dryer = false;
+		t2_has_brush = false;
+		t2_has_towel = false;
+		t2_has_station = false;
 
 		manager = GameObject.Find ("_SCRIPTS_").GetComponent<ToolboxManager> ();
 		timer = GameObject.FindObjectOfType<Timer> ();
 		disablePanel = GameObject.Find ("DisablePanel");
+		bar = GameObject.Find ("RadialProgressBar").GetComponent<ProgressBar>();
 
 		try { 
 			disablePanel.SetActive (false);
@@ -86,7 +116,6 @@ public class ExecuteThreads : MonoBehaviour {
 		simulationTextArea.text = "";
 		stop = false;
 
-
 		try {
 			// disable all other functionalities
 			disablePanel.SetActive (true);
@@ -122,15 +151,100 @@ public class ExecuteThreads : MonoBehaviour {
 
 				//Debug.Log ("TYPE ACTION");
 
-				//blocks_names_t1 [i] = "[thread 1] " + blocks_t1 [i].transform.GetComponentInChildren<Text> ().text + ";";
-				blocks_names_t1.Add ("[thread 1] " + blocks_t1 [i].transform.GetComponentInChildren<Text> ().text + ";\n");
 
-				/*
-				foreach(string name in blocks_names_t1)
-					Debug.Log (name);
-				*/
+				if (blocks_t1 [i].transform.GetComponentInChildren<Text> ().text == "get") {
 
-				i++;
+					string resource = blocks_t1 [i].transform.Find ("Dropdown").Find ("Label").GetComponent<Text> ().text;
+
+					if (resource == "[null]") {
+						terminateSimulation ();
+						manager.showError ("Please select a resource to acquire in thread 1.");
+					} else {
+
+						switch (resource) {
+
+						case "scissors":
+							t1_has_scissors = true;
+							break;
+						
+						case "soap":
+							t1_has_soap = true;
+							break;
+
+						case "dryer":
+							t1_has_dryer = true;
+							break;
+						
+						case "brush":
+							t1_has_brush = true;
+							break;
+						
+						case "towel":
+							t1_has_towel = true;
+							break;
+						
+						case "station":
+							t1_has_station = true;
+							break;
+						}
+
+
+						blocks_names_t1.Add ("[thread 1] acquire ( " + resource + " );\n");
+						i++;
+					}
+
+				} else if(blocks_t1 [i].transform.GetComponentInChildren<Text> ().text == "ret") {
+
+					string resource = blocks_t1 [i].transform.Find ("Dropdown").Find ("Label").GetComponent<Text> ().text;
+
+					if (resource == "[null]") {
+						terminateSimulation ();
+						manager.showError ("Please select a resource to return in thread 1.");
+					} else {
+
+						switch (resource) {
+
+						case "scissors":
+							t1_has_scissors = false;
+							break;
+
+						case "soap":
+							t1_has_soap = false;
+							break;
+
+						case "dryer":
+							t1_has_dryer = false;
+							break;
+
+						case "brush":
+							t1_has_brush = false;
+							break;
+
+						case "towel":
+							t1_has_towel = false;
+							break;
+
+						case "station":
+							t1_has_station = false;
+							break;
+						}
+
+						blocks_names_t1.Add ("[thread 1] return ( " + resource + " );\n");
+						i++;
+					}
+
+				} else {
+
+					//blocks_names_t1 [i] = "[thread 1] " + blocks_t1 [i].transform.GetComponentInChildren<Text> ().text + ";";
+					blocks_names_t1.Add ("[thread 1] " + blocks_t1 [i].transform.GetComponentInChildren<Text> ().text + ";\n");
+
+					/*
+					foreach(string name in blocks_names_t1)
+						Debug.Log (name);
+					*/
+
+					i++;
+				}
 
 			} else if (child.GetComponent<Draggable> ().typeOfItem == Draggable.Type.IFSTAT) {
 
@@ -298,6 +412,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 
 		blocks_t2 = GetActionBlocks_MultiThreads ("2");
+
 		int thread2_whilesChildren = 0;
 
 		//string[] blocks_names_t2 = new string[blocks_t2.Length];
@@ -309,13 +424,92 @@ public class ExecuteThreads : MonoBehaviour {
 
 			if (child.GetComponent<Draggable> ().typeOfItem == Draggable.Type.ACTION) {
 
-				//Debug.Log ("TYPE ACTION");
+				if (blocks_t2 [i].transform.GetComponentInChildren<Text> ().text == "get") {
 
-				//blocks_names_t2 [i] = "[thread 2] " + blocks_t2 [i].transform.GetComponentInChildren<Text> ().text + ";";
-				blocks_names_t2.Add ("[thread 2] " + blocks_t2 [i].transform.GetComponentInChildren<Text> ().text + ";\n");
+					string resource = blocks_t2 [i].transform.Find ("Dropdown").Find("Label").GetComponent<Text> ().text;
 
-				i++;
+					if (resource == "[null]") {
+						terminateSimulation ();
+						manager.showError ("Please select a resource to acquire in thread 2.");
+					} else {
 
+						switch (resource) {
+
+						case "scissors":
+							t2_has_scissors = true;
+							break;
+
+						case "soap":
+							t2_has_soap = true;
+							break;
+
+						case "dryer":
+							t2_has_dryer = true;
+							break;
+
+						case "brush":
+							t2_has_brush = true;
+							break;
+
+						case "towel":
+							t2_has_towel = true;
+							break;
+
+						case "station":
+							t2_has_station = true;
+							break;
+						}
+
+						blocks_names_t2.Add ("[thread 2] acquire ( " + resource + " );\n");
+						i++;
+					}
+				} else if(blocks_t2 [i].transform.GetComponentInChildren<Text> ().text == "ret") {
+					
+					string resource = blocks_t2 [i].transform.Find ("Dropdown").Find("Label").GetComponent<Text> ().text;
+
+					if (resource == "[null]") {
+						terminateSimulation ();
+						manager.showError ("Please select a resource to return in thread 2.");
+
+					} else {
+
+						switch (resource) {
+
+						case "scissors":
+							t2_has_scissors = false;
+							break;
+
+						case "soap":
+							t2_has_soap = false;
+							break;
+
+						case "dryer":
+							t2_has_dryer = false;
+							break;
+
+						case "brush":
+							t2_has_brush = false;
+							break;
+
+						case "towel":
+							t2_has_towel = false;
+							break;
+
+						case "station":
+							t2_has_station = false;
+							break;
+						}
+
+						blocks_names_t2.Add ("[thread 2] return ( " + resource + " );\n");
+						i++;
+					}
+
+				} else {
+
+					blocks_names_t2.Add ("[thread 2] " + blocks_t2 [i].transform.GetComponentInChildren<Text> ().text + ";\n");
+					i++;
+				}
+					
 			} else if (child.GetComponent<Draggable> ().typeOfItem == Draggable.Type.IFSTAT) {
 
 				//Debug.Log ("TYPE IFSTAT");
@@ -448,6 +642,16 @@ public class ExecuteThreads : MonoBehaviour {
 			return;
 		}
 
+		if (blocks_t1 [0].transform.GetComponentInChildren<Text> ().text != "checkin" || blocks_t2 [0].transform.GetComponentInChildren<Text> ().text != "checkin") {
+
+			manager.showError ("Remember to always check-in your costumer first!");
+			terminateSimulation();
+
+		} else if (blocks_t1 [blocks_t1.Length - 1].transform.GetComponentInChildren<Text> ().text != "checkout" || blocks_t2 [blocks_t2.Length - 1].transform.GetComponentInChildren<Text> ().text != "checkout") {
+			manager.showError ("Remember to always check-out your costumer when you're done!");
+			terminateSimulation();
+		}
+
 		int all_blocks_names_length = 0;
 		if (blocks_t1.Length > blocks_t2.Length)
 			all_blocks_names_length = (blocks_t1.Length * 2) + thread1_whilesChildren + thread2_whilesChildren;
@@ -560,37 +764,84 @@ public class ExecuteThreads : MonoBehaviour {
 		*/
 	}
 
+	public void terminateSimulation() {
+	
+		stop = true;
+
+		try {
+			disablePanel.SetActive (false);
+		} catch {
+			Debug.Log ("Cannot disable DisablePanel.");
+		}
+		simulationTextArea.text = "";
+
+		GameObject.Find ("RunButton").transform.SetAsLastSibling ();
+	}
+
 	IEnumerator printThreads(List<string> b1, List<string> b2) {
+
+		bar.currentAmount = 0;
 
 		int step_counter = 1;
 		int limit = 0;
+		bool paused = false;
 
 		if (b1.Count > b2.Count)
 			limit = b1.Count;
 		else
 			limit = b2.Count;
 
-		Debug.Log ("limit = " + limit);
+		// Debug.Log ("limit = " + limit);
 
 		//Debug.Log ("[IN COROUTINE]: (b1.Count = " + b1.Count);
 		//foreach(string line in b1)
 		//	Debug.Log (line);
 
-		Debug.Log ("[IN COROUTINE]: (b2.Count = " + b2.Count);
-		foreach(string line in b2)
-			Debug.Log (line);
-		
+		//		Debug.Log ("[IN COROUTINE]: (b2.Count = " + b2.Count);
+		//		foreach(string line in b2)
+		//			Debug.Log (line);
+
 
 		for (int j = 0; j < limit; j++) {
 
+			if (bar.currentAmount < 100) {
+				bar.currentAmount += 50;
+				bar.LoadingBar.GetComponent<Image>().fillAmount = bar.currentAmount / 100;
+
+			} else {
+
+				manager.simShowError ("Time is up! The day is over.");
+				stop = true;
+				paused = true;
+				try {
+					disablePanel.SetActive (true);
+				} catch {
+					Debug.Log ("Cannot disable DisablePanel");
+				}
+				GameObject.Find ("StopButton").transform.GetComponent<Button> ().interactable = false;
+			}
+
 			if (stop) {
-				
+
 				break;
 				yield break;
+
+				if (!paused) {
+
+					try {
+						disablePanel.SetActive (false);
+					} catch {
+						Debug.Log ("Cannot disable DisablePanel");
+					}
+					//simulationTextArea.text = "";
+
+					GameObject.Find ("RunButton").transform.SetAsLastSibling ();
+				}
+					
 				yield return 0;
 
 			} else {
-				
+
 				simulationTextArea.text += "\nSTEP " + step_counter + ": \n";
 
 				try {
@@ -605,275 +856,17 @@ public class ExecuteThreads : MonoBehaviour {
 
 				yield return new WaitForSeconds (1);
 			}
+
+
 		}
+
+
 
 		//simulationTextArea.text = toPrint;
 
 		//yield return new WaitForSeconds(5);
 
-		try {
-			disablePanel.SetActive (false);
-		} catch {
-			Debug.Log ("Cannot disable DisablePanel");
-		}
-		//simulationTextArea.text = "";
-
-		GameObject.Find ("RunButton").transform.SetAsLastSibling ();
-
-	}
-
-	private Transform[] GetActionBlocks() {
-
-		//get children in drop area for thread
-		//threadChildren = new GameObject[this.transform.Find("DropAreaThread").childCount];
-		Transform[] threadChildren = new Transform[this.transform.Find("DropAreaThread").childCount];
-		int childCount = threadChildren.Length;
-
-		Debug.Log ("thread childCount: " + childCount);
-
-		for (int i = 0; i < childCount; i++) {
-			//threadChildren [i] = this.transform.Find("DropAreaThread").GetChild (i).gameObject;
-		
-			threadChildren [i] = this.transform.Find ("DropAreaThread").GetChild(i);
-			//threadChildren [i] = this.transform.Find ("DropAreaThread").GetChild (i).GetComponentInChildren<Text>().text;
-			//Debug.Log ( timer.GetCurrentTime() + " -> " + threadChildren [i]);
-		}
-
-		return threadChildren;
-
-		/*
-		if (threadChildren.Length > 0) {
-
-			//if (threadChildren[0] == "CheckIn" && threadChildren[threadChildren.Length] == "Return")
-			//	return threadChildren;
-
-			//Debug.Log ("The first thing to do is check in and the last is return! Try again.");
-			//return null;
-
-			return threadChildren;
-
-		} else {
-			//Debug.Log ("There are no children in the thread drop area");
-			return null;
-		}
-		*/
-	}
-
-	//private void Simulate() {
-
-		//Debug.Log ("actions.Length: " + actions.Length);
-
-		//if there are blocks and there are tasks to be completed
-		//try{
-			//if (genTasks.tasks.Count > 0) {
-
-				//ExecuteTasks();
-
-				/*
-				for (int i = 0; i < blocks.Length; i++) {
-					//Debug.Log (timer.GetCurrentTime () + " -> " + actions [i]);
-					toPrint += "\n"+timer.GetCurrentTime () + " -> " + blocks [i];
-					simulationTextArea.text = toPrint;
-				}
-				*/
-
-			//}
-
-		//}catch(Exception e) {
-		//	Debug.Log ("There are no blocks to be executed");
-		//}
-	//}
-
-	// ---------- sample actions --------------
-
-	//TODO: execute each action (or not, depending on the task)
-	/*
-	public void ExecuteTasks() {
-		
-		//toPrint += "\n";
-
-		if (blocks.Length > 0) {
-
-			//Debug.Log ("From ExecuteTask(): ");
-			foreach (string block in blocks)
-				Debug.Log (block);
-
-			for (int i = 0; i < genTasks.tasks.Count; i++) {
-
-				//Debug.Log ("From ExecuteTask(): Value of A1: " + genTasks.tasks [i].GetA1 ());
-				//Debug.Log ("From ExecuteTask(): Value of A2: " + genTasks.tasks [i].GetA2 ());
-				//Debug.Log ("From ExecuteTask(): Value of A3: " + genTasks.tasks [i].GetA3 ());
-
-				for (int j = 0; j < blocks.Length; j++) {	
-					
-					if (blocks [j] == "CheckIn") {
-						CheckIn (genTasks.tasks [i].GetName ());
-						//toPrint += "\n (" + timer.GetCurrentTime() + ") " + genTasks.tasks [i].GetName() + " is being checked in";
-					} else if (blocks [j] == "Wash" && genTasks.tasks [i].GetA1 ()) {
-						ExecuteA1 (genTasks.tasks [i].GetName ());
-						//toPrint += "\n (" + timer.GetCurrentTime() + ") " + genTasks.tasks [i].GetName() + " is being washed.";
-					} else if (blocks [j] == "Cut" && genTasks.tasks [i].GetA2 ()) {
-						ExecuteA2 (genTasks.tasks [i].GetName ());
-						//toPrint +=  "\n (" + timer.GetCurrentTime() + ") " + genTasks.tasks [i].GetName() + "'s fur is being cut.";
-					} else if (blocks [j] == "Dry" && genTasks.tasks [i].GetA3 ()) {
-						ExecuteA3 (genTasks.tasks [i].GetName ());
-						//toPrint +=  "\n (" + timer.GetCurrentTime() + ") " + genTasks.tasks [i].GetName() + " is being dryed.";
-					} else if (blocks [j] == "Return") {
-						Return (genTasks.tasks [i].GetName ());
-						//toPrint += "\n (" + timer.GetCurrentTime () + ") " + genTasks.tasks [i].GetName() + " was returned.";
-					}
-				}
-				genTasks.tasks.RemoveAt (i);
-
-			}
-		}
-
-		simulationTextArea.text = toPrint;
-		//Debug.Log ("toPrint: " + toPrint);
-	}
-	*/
-
-	private void CheckIn(string name) {
-		toPrint += "\n (" + timer.GetCurrentTime() + ") " + name + " is being checked in";
-	}
-
-	private void ExecuteA1(string name) {
-		toPrint += "\n (" + timer.GetCurrentTime() + ") " + name + " is being washed.";
-	}
-
-	private void ExecuteA2(string name) {
-		toPrint +=  "\n (" + timer.GetCurrentTime() + ") " + name + "'s fur is being cut.";
-	}
-
-	private void ExecuteA3(string name) {
-		toPrint +=  "\n (" + timer.GetCurrentTime() + ") " + name + " is being dryed.";
-	}
-
-	private void Return(string name) {
-		toPrint +=  "\n (" + timer.GetCurrentTime() + ") " + name + " was returned.";
-	}
 
 
-	public void Execute() {
-
-		blocks = GetActionBlocks ();
-		string[] blocks_names = new string[blocks.Length];
-		int i = 0;
-		bool isError = false; //unused, for now
-
-		foreach (Transform child in blocks) {
-			if (child.GetComponent<Draggable> ().typeOfItem == Draggable.Type.ACTION) {
-
-				//Debug.Log ("TYPE ACTION");
-
-				blocks_names [i] = blocks [i].transform.GetComponentInChildren<Text> ().text + ";";
-				i++;
-			} else if (child.GetComponent<Draggable> ().typeOfItem == Draggable.Type.IFSTAT) {
-
-				//Debug.Log ("TYPE IFSTAT");
-
-				string condition, actionText, line;
-				try {
-					
-					condition = blocks [i].GetComponentInChildren<Text> ().text;
-					actionText = blocks [i].FindChild ("DropArea").GetComponentInChildren<Text> ().text + ";";
-
-					line = "\nif ( " + condition + " ) {\n    " + actionText + "\n}\n";
-
-				} catch (Exception e) {
-					//manager.showError ("At least one if statement is empty.");
-					//line = ">> ERROR: Empty if statement";
-					//simulationTextArea.text = ">>> ERROR: There is at least one empty if statement";
-					simulationTextArea.text = ">>> ERROR: There is at least one empty if statement";
-					return;
-				}
-					
-				blocks_names [i] = line;
-
-				//blocks_names [i] = blocks[i].transform.GetComponentInChildren<Text> ().text;
-				i++;
-
-			} else if (child.GetComponent<Draggable> ().typeOfItem == Draggable.Type.WHILELOOP) {
-
-				string condition, line;
-				string actionText = "";
-
-				int whileChildrenCount = child.Find ("DropArea").childCount;
-				Debug.Log ("child " + child.name + ", child count: " + whileChildrenCount);
-
-				if (whileChildrenCount < 1) {
-					Debug.Log(">>> ERROR: There is at least one empty while loop");
-					simulationTextArea.text = ">>> ERROR: There is at least one empty while loop";
-					return;
-				}
-
-				Transform[] whileChildren = new Transform[whileChildrenCount];
-
-				for (int k = 0; k < whileChildrenCount; k++) {
-					//threadChildren [i] = this.transform.Find("DropAreaThread").GetChild (i).gameObject;
-
-					whileChildren [k] = child.Find ("DropArea").GetChild (k);
-					//threadChildren [i] = this.transform.Find ("DropAreaThread").GetChild (i).GetComponentInChildren<Text>().text;
-					//Debug.Log ( timer.GetCurrentTime() + " -> " + threadChildren [i]);
-
-					//Debug.Log ("actions: " + whileChildren [k]);
-				}
-
-				foreach (Transform whileChild in whileChildren) {
-					actionText += "\t" + whileChild.GetComponentInChildren<Text>().text + ";\n";
-				}
-		
-				try {
-						condition = blocks [i].GetComponentInChildren<Text> ().text;
-						
-						//TODO: Need to get ALL children
-						//actionText = blocks [i].FindChild ("DropArea").GetComponentInChildren<Text> ().text;
-
-					line = "\nwhile ( " + condition + " ) {\n" + actionText + "}\n";
-
-				} catch (Exception e) {
-					manager.showError ("Exception caught.");
-					line = ">>> Exception caught.";
-				}
-
-				blocks_names [i] = line;
-
-				i++;
-			}
-		}
-			
-		toPrint = "";
-
-		try {
-			if (blocks.Length > 0) {
-				foreach (string line in blocks_names) {
-					//Debug.Log (block);
-					//toPrint += "\n (" + timer.GetCurrentTime() + ") " + name + "ing";
-					toPrint += "\n" + line;
-				}
-
-				simulationTextArea.text = toPrint;
-			} else {
-				manager.showError ("There are no actions to run.");
-				simulationTextArea.text = "";
-			}
-		} catch (Exception e) {
-			manager.showError ("There are no actions to run");				
-			simulationTextArea.text = "";
-		}
-	}
-
-	public void terminateSimulation() {
-	
-		stop = true;
-
-		try {
-			disablePanel.SetActive (false);
-		} catch {
-			Debug.Log ("Cannot disable DisablePanel.");
-		}
-		simulationTextArea.text = "";
-
-		GameObject.Find ("RunButton").transform.SetAsLastSibling ();
 	}
 }

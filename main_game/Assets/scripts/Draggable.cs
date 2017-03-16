@@ -245,6 +245,15 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "dry") {
 						manager.dryLeft_thread1 += 1;
+					
+					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "get") {
+						manager.resourcesLeft_thread1 += 1;
+					
+					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "ret") {
+						manager.returnLeft_thread1 += 1;
+					
+					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "checkout") {
+						manager.checkoutLeft_thread1 += 1;
 					}
 
 					Debug.Log ("An action was dropped in the toolbox");
@@ -275,6 +284,12 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 								manager.cutLeft_thread1++;
 							} else if (children [j].transform.GetComponentInChildren<Text>().text == "dry") {
 								manager.dryLeft_thread1++;
+							} else if (children [j].transform.GetComponentInChildren<Text>().text == "get") {
+								manager.resourcesLeft_thread1 += 1;
+							} else if (children [j].transform.GetComponentInChildren<Text>().text == "ret") {
+								manager.returnLeft_thread1 += 1;
+							} else if (children [j].transform.GetComponentInChildren<Text>().text == "checkout") {
+								manager.checkoutLeft_thread1 += 1;
 							}
 						}
 
@@ -296,13 +311,18 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 							manager.cutLeft_thread1++;
 						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "dry") {
 							manager.dryLeft_thread1++;
+						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "get") {
+							manager.resourcesLeft_thread1 += 1;
+						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "ret") {
+							manager.returnLeft_thread1 += 1;
+						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "checkout") {
+							manager.checkoutLeft_thread1 += 1;
 						}
 					}
 
 					Debug.Log ("An if statement was dropped in the toolbox");
 				
 				} else if (this.typeOfItem == Type.IFNEEDED) {
-					//TODO: add to "if needed" field
 					Debug.Log ("An \"if needed\" tool was dropped in the toolbox");
 				}
 			} else {
@@ -319,6 +339,15 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "dry") {
 						manager.dryLeft_thread2 += 1;
+					
+					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "get") {
+						manager.resourcesLeft_thread2 += 1;
+					
+					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "ret") {
+						manager.returnLeft_thread2 += 1;
+					
+					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "checkout") {
+						manager.checkoutLeft_thread2 += 1;
 					}
 
 					Debug.Log ("An action was dropped in the toolbox");
@@ -349,6 +378,12 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 								manager.cutLeft_thread2++;
 							} else if (children [j].transform.GetComponentInChildren<Text>().text == "dry") {
 								manager.dryLeft_thread2++;
+							} else if (children [j].transform.GetComponentInChildren<Text>().text == "get") {
+								manager.resourcesLeft_thread2++;
+							} else if (children [j].transform.GetComponentInChildren<Text>().text == "ret") {
+								manager.returnLeft_thread2++;
+							} else if (children [j].transform.GetComponentInChildren<Text>().text == "checkout") {
+								manager.checkoutLeft_thread2++;
 							}
 						}
 
@@ -370,6 +405,12 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 							manager.cutLeft_thread2++;
 						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "dry") {
 							manager.dryLeft_thread2++;
+						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "get") {
+							manager.resourcesLeft_thread2++;
+						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "ret") {
+							manager.returnLeft_thread2++;
+						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "checkout") {
+							manager.checkoutLeft_thread2++;
 						}
 					}
 

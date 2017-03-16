@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DisablePanel : MonoBehaviour {
 
@@ -8,8 +9,9 @@ public class DisablePanel : MonoBehaviour {
 
 	public void DisablePanelClicked() {
 
-		manager.showError ("Click \"stop\" to terminate the simulation");
-
+		if (GameObject.Find ("StopButton").GetComponent<Button> ().IsInteractable () == true) {
+			manager.showError ("Click \"stop\" to terminate the simulation");
+		}
 	}
 
 	// Use this for initialization

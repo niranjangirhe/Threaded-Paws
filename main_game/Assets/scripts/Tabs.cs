@@ -27,6 +27,8 @@ public class Tabs : MonoBehaviour {
 				manager.txt_whileLeft_thread1.color = Color.magenta;
 				manager.txt_ifLeft_thread1.color = Color.magenta;
 				manager.txt_resourcesLeft_thread1.color = Color.magenta;
+				manager.txt_returnLeft_thread1.color = Color.magenta;
+				manager.txt_checkoutLeft_thread1.color = Color.magenta;
 
 				manager.txt_checkinLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 				manager.txt_cutLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
@@ -35,6 +37,9 @@ public class Tabs : MonoBehaviour {
 				manager.txt_whileLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 				manager.txt_ifLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 				manager.txt_resourcesLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
+				manager.txt_returnLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
+				manager.txt_checkoutLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
+
 
 			} else if (curr_tab.transform.name == "Tab2") {
 
@@ -45,6 +50,8 @@ public class Tabs : MonoBehaviour {
 				manager.txt_whileLeft_thread2.color = new Vector4 (0, 0.7F, 0.7F, 1);
 				manager.txt_ifLeft_thread2.color = new Vector4 (0, 0.7F, 0.7F, 1);
 				manager.txt_resourcesLeft_thread2.color = new Vector4 (0, 0.7F, 0.7F, 1);
+				manager.txt_returnLeft_thread2.color = new Vector4 (0, 0.7F, 0.7F, 1);
+				manager.txt_checkoutLeft_thread2.color = new Vector4 (0, 0.7F, 0.7F, 1);
 
 				manager.txt_checkinLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 				manager.txt_cutLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
@@ -53,6 +60,8 @@ public class Tabs : MonoBehaviour {
 				manager.txt_whileLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 				manager.txt_ifLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 				manager.txt_resourcesLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
+				manager.txt_returnLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
+				manager.txt_checkoutLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 
 			}
 
@@ -200,6 +209,9 @@ public class Tabs : MonoBehaviour {
 		manager.txt_washLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 		manager.txt_whileLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 		manager.txt_ifLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
+		manager.txt_resourcesLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
+		manager.txt_returnLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
+		manager.txt_checkoutLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 
 	}
 	
