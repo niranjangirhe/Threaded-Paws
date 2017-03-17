@@ -50,14 +50,14 @@ public class ToolboxManager : MonoBehaviour {
 	public Text txt_returnLeft_thread2;
 
 	public Text txtErrorMsg;
-	public Text txtSimErrorMsg;
+	public GameObject LostPanel;
 
 	// Use this for initialization
 	void Start () {
 
 		//Debug.Log ("Start in manager called");
 		txtErrorMsg.enabled = false;
-		txtSimErrorMsg.enabled = false;
+		LostPanel.SetActive (false);
 
 		updateValues ();
 	}
@@ -104,10 +104,13 @@ public class ToolboxManager : MonoBehaviour {
 		txtErrorMsg.enabled = false;
 	}
 
-	public void simShowError(string msg) {
+	public void gameLost() {
 
-		txtSimErrorMsg.enabled = true;
-		txtSimErrorMsg.text = msg;
-	
+		try {
+
+			LostPanel.SetActive (true);
+		} catch {
+			Debug.Log ("Could not find LostPanel");
+		}
 	}
 }

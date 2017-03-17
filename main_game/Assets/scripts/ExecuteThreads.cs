@@ -642,21 +642,27 @@ public class ExecuteThreads : MonoBehaviour {
 			return;
 		}
 
-		if (blocks_t1 [0].transform.GetComponentInChildren<Text> ().text != "checkin" || blocks_t2 [0].transform.GetComponentInChildren<Text> ().text != "checkin") {
+//		if (blocks_t1 [0].transform.GetComponentInChildren<Text> ().text != "checkin" || blocks_t2 [0].transform.GetComponentInChildren<Text> ().text != "checkin") {
+//
+//			manager.showError ("Remember to always check-in your costumer first!");
+//			terminateSimulation();
 
-			manager.showError ("Remember to always check-in your costumer first!");
-			terminateSimulation();
-
-		} else if (blocks_t1 [blocks_t1.Length - 1].transform.GetComponentInChildren<Text> ().text != "checkout" || blocks_t2 [blocks_t2.Length - 1].transform.GetComponentInChildren<Text> ().text != "checkout") {
+		if (blocks_t1 [blocks_t1.Length - 1].transform.GetComponentInChildren<Text> ().text != "checkout" || blocks_t2 [blocks_t2.Length - 1].transform.GetComponentInChildren<Text> ().text != "checkout") {
 			manager.showError ("Remember to always check-out your costumer when you're done!");
-			terminateSimulation();
-		}
+			terminateSimulation ();
+			bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+		} else {
 
-		int all_blocks_names_length = 0;
-		if (blocks_t1.Length > blocks_t2.Length)
-			all_blocks_names_length = (blocks_t1.Length * 2) + thread1_whilesChildren + thread2_whilesChildren;
-		else
-			all_blocks_names_length = (blocks_t2.Length * 2) + thread1_whilesChildren + thread2_whilesChildren;
+			StartCoroutine (printThreads (blocks_names_t1, blocks_names_t2));
+
+			/*
+			int all_blocks_names_length = 0;
+			if (blocks_t1.Length > blocks_t2.Length)
+				all_blocks_names_length = (blocks_t1.Length * 2) + thread1_whilesChildren + thread2_whilesChildren;
+			else
+				all_blocks_names_length = (blocks_t2.Length * 2) + thread1_whilesChildren + thread2_whilesChildren;
+			*/
+		}
 
 		//string[] all_blocks_names = new string[all_blocks_names_length];
 
@@ -723,7 +729,6 @@ public class ExecuteThreads : MonoBehaviour {
 		*/
 
 		//StartCoroutine (printThreads (all_blocks_names, blocks_names_t1, blocks_names_t2));
-		StartCoroutine (printThreads (blocks_names_t1, blocks_names_t2));
 
 		/*
 		int step_counter = 1;
@@ -780,6 +785,8 @@ public class ExecuteThreads : MonoBehaviour {
 
 	IEnumerator printThreads(List<string> b1, List<string> b2) {
 
+		Debug.Log ("In coroutine");
+
 		bar.currentAmount = 0;
 
 		int step_counter = 1;
@@ -810,15 +817,20 @@ public class ExecuteThreads : MonoBehaviour {
 
 			} else {
 
-				manager.simShowError ("Time is up! The day is over.");
+				manager.gameLost();
 				stop = true;
 				paused = true;
+
+				/*
 				try {
 					disablePanel.SetActive (true);
 				} catch {
 					Debug.Log ("Cannot disable DisablePanel");
 				}
+				*/
+
 				GameObject.Find ("StopButton").transform.GetComponent<Button> ().interactable = false;
+				bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
 			}
 
 			if (stop) {
@@ -836,6 +848,8 @@ public class ExecuteThreads : MonoBehaviour {
 					//simulationTextArea.text = "";
 
 					GameObject.Find ("RunButton").transform.SetAsLastSibling ();
+					bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+
 				}
 					
 				yield return 0;
@@ -859,14 +873,5 @@ public class ExecuteThreads : MonoBehaviour {
 
 
 		}
-
-
-
-		//simulationTextArea.text = toPrint;
-
-		//yield return new WaitForSeconds(5);
-
-
-
 	}
 }

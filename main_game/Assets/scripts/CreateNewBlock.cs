@@ -31,7 +31,8 @@ public class CreateNewBlock : MonoBehaviour {
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
 						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						newActionBox.GetComponent<Image> ().color = Color.magenta;
+						//newActionBox.GetComponent<Image> ().color = Color.magenta;
+						newActionBox.transform.FindChild("Halo").gameObject.SetActive(true);
 
 						manager.washLeft_thread1 -= 1;
 						manager.updateValues ();
@@ -59,7 +60,7 @@ public class CreateNewBlock : MonoBehaviour {
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
 						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						newActionBox.GetComponent<Image> ().color = Color.magenta;
+						//newActionBox.GetComponent<Image> ().color = Color.magenta;
 
 						manager.checkinLeft_thread1 -= 1;
 						manager.updateValues ();
@@ -88,7 +89,7 @@ public class CreateNewBlock : MonoBehaviour {
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
 						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						newActionBox.GetComponent<Image> ().color = Color.magenta;
+						//newActionBox.GetComponent<Image> ().color = Color.magenta;
 
 						manager.cutLeft_thread1 -= 1;
 						manager.updateValues ();
@@ -118,7 +119,7 @@ public class CreateNewBlock : MonoBehaviour {
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
 						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						newActionBox.GetComponent<Image> ().color = Color.magenta;
+						//newActionBox.GetComponent<Image> ().color = Color.magenta;
 
 						manager.dryLeft_thread1 -= 1;
 						manager.updateValues ();
@@ -147,7 +148,7 @@ public class CreateNewBlock : MonoBehaviour {
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
 						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						newActionBox.GetComponent<Image> ().color = Color.magenta;
+						//newActionBox.GetComponent<Image> ().color = Color.magenta;
 
 						manager.resourcesLeft_thread1 -= 1;
 						manager.updateValues ();
@@ -176,7 +177,7 @@ public class CreateNewBlock : MonoBehaviour {
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
 						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						newActionBox.GetComponent<Image> ().color = Color.magenta;
+						//newActionBox.GetComponent<Image> ().color = Color.magenta;
 
 						manager.returnLeft_thread1 -= 1;
 						manager.updateValues ();
@@ -205,7 +206,7 @@ public class CreateNewBlock : MonoBehaviour {
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
 						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						newActionBox.GetComponent<Image> ().color = Color.magenta;
+						//newActionBox.GetComponent<Image> ().color = Color.magenta;
 
 						manager.checkoutLeft_thread1 -= 1;
 						manager.updateValues ();
@@ -240,7 +241,7 @@ public class CreateNewBlock : MonoBehaviour {
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
 						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						newActionBox.GetComponent<Image> ().color = Color.cyan;
+						//newActionBox.GetComponent<Image> ().color = Color.cyan;
 
 						manager.washLeft_thread2 -= 1;
 						manager.updateValues ();
@@ -268,7 +269,7 @@ public class CreateNewBlock : MonoBehaviour {
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
 						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						newActionBox.GetComponent<Image> ().color = Color.cyan;
+						//newActionBox.GetComponent<Image> ().color = Color.cyan;
 
 						manager.checkinLeft_thread2 -= 1;
 						manager.updateValues ();
@@ -297,7 +298,7 @@ public class CreateNewBlock : MonoBehaviour {
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
 						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						newActionBox.GetComponent<Image> ().color = Color.cyan;
+						//newActionBox.GetComponent<Image> ().color = Color.cyan;
 
 						manager.cutLeft_thread2 -= 1;
 						manager.updateValues ();
@@ -327,7 +328,7 @@ public class CreateNewBlock : MonoBehaviour {
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
 						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						newActionBox.GetComponent<Image> ().color = Color.cyan;
+						//newActionBox.GetComponent<Image> ().color = Color.cyan;
 
 						manager.dryLeft_thread2 -= 1;
 						manager.updateValues ();
@@ -356,7 +357,7 @@ public class CreateNewBlock : MonoBehaviour {
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
 						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						newActionBox.GetComponent<Image> ().color = Color.cyan;
+						//newActionBox.GetComponent<Image> ().color = Color.cyan;
 
 						manager.resourcesLeft_thread2 -= 1;
 						manager.updateValues ();
@@ -385,7 +386,7 @@ public class CreateNewBlock : MonoBehaviour {
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
 						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						newActionBox.GetComponent<Image> ().color = Color.cyan;
+						//newActionBox.GetComponent<Image> ().color = Color.cyan;
 
 						manager.returnLeft_thread2 -= 1;
 						manager.updateValues ();
@@ -414,7 +415,7 @@ public class CreateNewBlock : MonoBehaviour {
 						//newActionBox.AddComponent<Draggable>();
 						newActionBox.transform.localScale = Vector3.one;
 						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						newActionBox.GetComponent<Image> ().color = Color.cyan;
+						//newActionBox.GetComponent<Image> ().color = Color.cyan;
 
 						manager.checkoutLeft_thread2 -= 1;
 						manager.updateValues ();
@@ -454,7 +455,7 @@ public class CreateNewBlock : MonoBehaviour {
 					//newActionBox.GetComponent<Draggable>().typeOfItem = Draggable.Type.ACTION;
 					newActionBox.transform.localScale = Vector3.one;
 
-					newActionBox.GetComponent<Image> ().color = Color.magenta;
+					//newActionBox.GetComponent<Image> ().color = Color.magenta;
 
 					manager.whileLeft_thread1 -= 1;
 					manager.updateValues ();
@@ -484,7 +485,7 @@ public class CreateNewBlock : MonoBehaviour {
 					//newActionBox.GetComponent<Draggable>().typeOfItem = Draggable.Type.ACTION;
 					newActionBox.transform.localScale = Vector3.one;
 
-					newActionBox.GetComponent<Image> ().color = Color.cyan;
+					//newActionBox.GetComponent<Image> ().color = Color.cyan;
 
 					manager.whileLeft_thread2 -= 1;
 					manager.updateValues ();
@@ -527,7 +528,7 @@ public class CreateNewBlock : MonoBehaviour {
 					manager.ifLeft_thread1 -= 1;
 					manager.updateValues ();
 
-					newActionBox.GetComponent<Image> ().color = Color.magenta;
+					//newActionBox.GetComponent<Image> ().color = Color.magenta;
 
 					canCreate = false;
 				} else {
@@ -558,7 +559,7 @@ public class CreateNewBlock : MonoBehaviour {
 					manager.ifLeft_thread2 -= 1;
 					manager.updateValues ();
 
-					newActionBox.GetComponent<Image> ().color = Color.cyan;
+					//newActionBox.GetComponent<Image> ().color = Color.cyan;
 
 					canCreate = false;
 				} else {

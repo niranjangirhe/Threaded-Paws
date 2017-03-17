@@ -32,7 +32,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
 				float parent_curr_width = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.x;
 				float parent_curr_height = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.y;
-				float parent_new_height = new_height + 45;
+				float parent_new_height = new_height + 25;
 
 				this.transform.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (parent_curr_width, parent_new_height);
 				this.transform.GetComponent<RectTransform> ().sizeDelta = new Vector2 (curr_width, new_height);
@@ -40,6 +40,20 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 				//Debug.Log("parent_curr_width: " + parent_curr_width);
 				//Debug.Log("parent_curr_height: " + parent_curr_height);
 				//Debug.Log("parent_new_height: " + parent_new_height);
+			} else if ((this.transform.parent.gameObject.GetComponent<Draggable>().typeOfItem == Draggable.Type.WHILELOOP) && (eventData.pointerDrag.GetComponent<Draggable>().typeOfItem == Draggable.Type.IFSTAT)) {
+			
+				int num_children = this.transform.childCount;
+				float curr_width = this.transform.GetComponent<RectTransform> ().sizeDelta.x;
+				float curr_height = this.transform.GetComponent<RectTransform> ().sizeDelta.y;
+				float new_height = curr_height + 50;
+
+				float parent_curr_width = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.x;
+				float parent_curr_height = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.y;
+				float parent_new_height = new_height + 25;
+
+				this.transform.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (parent_curr_width, parent_new_height);
+				this.transform.GetComponent<RectTransform> ().sizeDelta = new Vector2 (curr_width, new_height);
+			
 			}
 
 		}catch{}
@@ -87,7 +101,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
 				float parent_curr_width = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.x;
 				float parent_curr_height = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.y;
-				float parent_new_height = new_height + 45;
+				float parent_new_height = new_height + 25;
 
 				this.transform.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (parent_curr_width, parent_new_height);
 				this.transform.GetComponent<RectTransform> ().sizeDelta = new Vector2 (curr_width, new_height);
@@ -95,6 +109,21 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 				//Debug.Log("parent_curr_width: " + parent_curr_width);
 				//Debug.Log("parent_curr_height: " + parent_curr_height);
 				//Debug.Log("parent_new_height: " + parent_new_height);
+			} else if ((this.transform.parent.gameObject.GetComponent<Draggable>().typeOfItem == Draggable.Type.WHILELOOP) && (eventData.pointerDrag.GetComponent<Draggable>().typeOfItem == Draggable.Type.IFSTAT)) {
+
+				//Debug.Log (eventData.pointerDrag + " exited a while loop");
+
+				int num_children = this.transform.childCount;
+				float curr_width = this.transform.GetComponent<RectTransform> ().sizeDelta.x;
+				float curr_height = this.transform.GetComponent<RectTransform> ().sizeDelta.y;
+				float new_height = curr_height - 50;
+			
+				float parent_curr_width = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.x;
+				float parent_curr_height = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.y;
+				float parent_new_height = new_height + 25;
+
+				this.transform.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (parent_curr_width, parent_new_height);
+				this.transform.GetComponent<RectTransform> ().sizeDelta = new Vector2 (curr_width, new_height);
 			}
 
 		}catch{}

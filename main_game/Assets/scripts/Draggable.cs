@@ -29,6 +29,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	public void OnBeginDrag(PointerEventData eventData) {
 		//Debug.Log ("OnBeginDrag called: " + eventData.pointerDrag.name);
 
+		this.transform.FindChild("Halo").gameObject.SetActive(false);
+
 		try {
 
 			// if the parent is a while loop, then make drop area smaller
@@ -43,7 +45,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 				float parent_curr_width = eventData.pointerDrag.transform.parent.parent.GetComponent<RectTransform> ().sizeDelta.x;
 				float parent_curr_height = eventData.pointerDrag.transform.parent.parent.GetComponent<RectTransform> ().sizeDelta.y;
-				float parent_new_height = new_height + 45;
+				float parent_new_height = new_height + 25;
 
 				eventData.pointerDrag.transform.parent.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (parent_curr_width, parent_new_height);
 				eventData.pointerDrag.transform.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (curr_width, new_height);
@@ -60,7 +62,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		placeholder.transform.SetParent (this.transform.parent); //places it at the end of the list by default
 		//want the placeholder to have the same dimensions as the draggable object removed
 		LayoutElement le = placeholder.AddComponent<LayoutElement> ();
-		placeholder.GetComponent<RectTransform> ().sizeDelta = new Vector2 (105, 25); //width, height
+		placeholder.GetComponent<RectTransform> ().sizeDelta = new Vector2 (75, 35); //width, height
 		//le.preferredWidth = this.GetComponent<LayoutElement> ().preferredWidth;
 		//le.preferredHeight = this.GetComponent<LayoutElement> ().preferredHeight;
 		//le.preferredHeight = 5;
@@ -189,8 +191,11 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 
 		//iterate through corresponding zones and remove highlights, if any
-		threadArea1.transform.GetComponent<Image>().color = Color.magenta;
-		threadArea2.transform.GetComponent<Image>().color = Color.cyan;
+//		threadArea1.transform.GetComponent<Image>().color = Color.magenta;
+//		threadArea2.transform.GetComponent<Image>().color = Color.cyan;
+
+		threadArea1.transform.GetComponent<Image> ().color = new Vector4 (0.9F, 0.9F, 0.9F, 1);
+		threadArea2.transform.GetComponent<Image>().color = new Vector4 (0.9F, 0.9F, 0.9F, 1);
 
 		Transform[] thread1Children = new Transform[threadArea1.transform.childCount];
 		Transform[] thread2Children = new Transform[threadArea2.transform.childCount];
@@ -203,6 +208,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 					
 					string zoneName = thread1Children [i].gameObject.GetComponentInChildren<DropZone> ().name;
 					//Debug.Log ("De-colouring: " + thread1Children [i].gameObject.GetComponentInChildren<DropZone> ().name);
+
 					thread1Children [i].Find (zoneName).GetComponent<Image> ().color = Color.white;
 
 				}
@@ -459,12 +465,25 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			if (this.transform.parent.name == "DropArea") {
 				//this.transform.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (this.GetComponent<RectTransform> ().sizeDelta.x, this.GetComponent<RectTransform> ().sizeDelta.y + 45);
 
-				//this.transform.parent.transform.
+				//this.transform.GetComponent<RectTransform> ().sizeDelta = new Vector2(75, 25);
 			}
 		
 		}
 
-		this.GetComponent<Image> ().color = Color.white;
+		if (this.typeOfItem == Type.IFSTAT) {
+			this.GetComponent<Image> ().color = new Vector4 (0.3F, 0.8F, 0.83F, 1);
+
+		} else if (this.typeOfItem == Type.ACTION && (this.GetComponentInChildren<Text> ().text == "get" || this.GetComponentInChildren<Text> ().text == "ret")) {
+			this.GetComponent<Image> ().color = new Vector4 (0.94F, 0.28F, 0.94F, 1);
+
+		} else if (this.typeOfItem == Type.ACTION) {
+			this.GetComponent<Image> ().color = new Vector4 (1, 0.76F, 0.24F, 1);
+
+		} else if (this.typeOfItem == Type.WHILELOOP) {
+			this.GetComponent<Image> ().color = new Vector4 (0.77F, 0.71F, 0.6F, 1);
+		}
+
+		// this.GetComponent<Image> ().color = Color.white;
 
 		Destroy (placeholder);
 
