@@ -11,7 +11,7 @@ public class Tabs : MonoBehaviour {
 
 	public void switchTabs() {
 
-		Debug.Log (this.transform.parent.name);
+		// Debug.Log (this.transform.parent.name);
 
 		curr_tab = this.transform.parent.gameObject;
 
@@ -30,6 +30,8 @@ public class Tabs : MonoBehaviour {
 				manager.txt_resourcesLeft_thread1.color = Color.black;
 				manager.txt_returnLeft_thread1.color = Color.black;
 				manager.txt_checkoutLeft_thread1.color = Color.black;
+				manager.txt_groomLeft_thread1.color = Color.black;
+				manager.txt_pickupLeft_thread1.color = Color.black;
 
 				manager.txt_checkinLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 				manager.txt_cutLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
@@ -40,6 +42,8 @@ public class Tabs : MonoBehaviour {
 				manager.txt_resourcesLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 				manager.txt_returnLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 				manager.txt_checkoutLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
+				manager.txt_groomLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
+				manager.txt_pickupLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 
 				//if (this.GetComponent<Image>().color == Color.white) {
 
@@ -59,6 +63,8 @@ public class Tabs : MonoBehaviour {
 				manager.txt_resourcesLeft_thread2.color = Color.black;
 				manager.txt_returnLeft_thread2.color = Color.black;
 				manager.txt_checkoutLeft_thread2.color = Color.black;
+				manager.txt_groomLeft_thread2.color = Color.black;
+				manager.txt_pickupLeft_thread2.color = Color.black;
 
 				manager.txt_checkinLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 				manager.txt_cutLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
@@ -69,6 +75,8 @@ public class Tabs : MonoBehaviour {
 				manager.txt_resourcesLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 				manager.txt_returnLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 				manager.txt_checkoutLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
+				manager.txt_groomLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
+				manager.txt_pickupLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 
 				//if (this.GetComponent<Image>().color == Color.white) {
 
@@ -99,6 +107,8 @@ public class Tabs : MonoBehaviour {
 		manager.txt_resourcesLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 		manager.txt_returnLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 		manager.txt_checkoutLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
+		manager.txt_groomLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
+		manager.txt_pickupLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
 	}
 	
 	// Update is called once per frame

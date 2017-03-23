@@ -29,7 +29,7 @@ public class InformationIcon : MonoBehaviour {
 
 	public void toggleInformationWindow() {
 
-		Debug.Log ("Information button clicked");
+		// Debug.Log ("Information button clicked");
 
 		try {
 			if (informationWindow.activeSelf) {
@@ -37,19 +37,14 @@ public class InformationIcon : MonoBehaviour {
 
 					informationWindow.SetActive (false);
 
-				
-
-
 			} else {
 
 
 					informationWindow.SetActive (true);
-
 			}
+
 		} catch {
 			Debug.Log ("Information Panel can't be found.");
-
 		}
-	
 	}
 }

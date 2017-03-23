@@ -68,28 +68,6 @@ public class ExecuteThreads : MonoBehaviour {
 		}
 	}
 
-	/*
-	public void Test() {
-
-		if (!genTasks)
-			Debug.Log ("No GenerateTasks object was found.");
-
-		//update blocks
-		blocks = GetActionBlocks();
-
-		runButton.GetComponent<Button> ().interactable = false;
-
-		//Debug.Log ("Running code in threads");
-
-		//toPrint += "\nTesting!";
-		//simulationTextArea.text = toPrint;
-
-		Simulate ();
-
-		runButton.GetComponent<Button> ().interactable = true;
-	}
-	*/
-
 	private Transform[] GetActionBlocks_MultiThreads(String tabNum) {
 		//get children in drop area for thread
 		//threadChildren = new GameObject[this.transform.Find("DropAreaThread").childCount];
@@ -611,23 +589,6 @@ public class ExecuteThreads : MonoBehaviour {
 			}
 		}
 
-		//toPrint = "";
-		/*
-		int all_blocks_names_length = 0;
-		if (blocks_t1.Length > blocks_t2.Length)
-			all_blocks_names_length = blocks_t1.Length * 2;
-		else
-			all_blocks_names_length = blocks_t2.Length * 2;
-
-		string[] all_blocks_names = new string[all_blocks_names_length];
-		*/
-
-		/*
-		Debug.Log ("BEFORE");
-		foreach (string name in blocks_names_t1)
-			Debug.Log(name);
-		*/
-
 		if (blocks_t1.Length < 1) {
 			manager.showError ("There are no actions to run in thread 1.");
 			simulationTextArea.text = "";
@@ -654,119 +615,7 @@ public class ExecuteThreads : MonoBehaviour {
 		} else {
 
 			StartCoroutine (printThreads (blocks_names_t1, blocks_names_t2));
-
-			/*
-			int all_blocks_names_length = 0;
-			if (blocks_t1.Length > blocks_t2.Length)
-				all_blocks_names_length = (blocks_t1.Length * 2) + thread1_whilesChildren + thread2_whilesChildren;
-			else
-				all_blocks_names_length = (blocks_t2.Length * 2) + thread1_whilesChildren + thread2_whilesChildren;
-			*/
 		}
-
-		//string[] all_blocks_names = new string[all_blocks_names_length];
-
-		/*
-		List<string> all_blocks_names = new List<string>();
-
-		//Debug.Log ("all_blocks_names.Count: " + all_blocks_names.Count);
-		//Debug.Log ("all_blocks_names_length: " + all_blocks_names_length);
-
-		int curr_index = 0;
-		//int curr_index_t1 = 0;
-		//int curr_index_t2 = 0;
-
-		if (blocks_t1.Length > 0) {
-			
-			if (blocks_t2.Length > 0) {
-
-				for (int j = 0; j < all_blocks_names_length; j+=2) {
-
-					//Debug.Log ("curr_index: " + curr_index);
-					//Debug.Log ("j: " + j);
-
-					try {
-						//all_blocks_names[j] = blocks_names_t1[curr_index];
-						all_blocks_names.Add(blocks_names_t1[curr_index]);
-						//Debug.Log(blocks_names_t1[curr_index]);
-
-					} catch {
-						Debug.Log ("Exception caught for thread 1");
-						//all_blocks_names[j] = "";
-						all_blocks_names.Add("");
-					}
-
-
-					try {
-						//all_blocks_names[j+1] = blocks_names_t2[curr_index];
-						all_blocks_names.Add(blocks_names_t2[curr_index]);
-						//Debug.Log(blocks_names_t2[curr_index]);
-					} catch {
-						Debug.Log ("Exception caught for thread 2");
-						//all_blocks_names[j+1] = "";
-						all_blocks_names.Add("");
-					}
-
-						
-					curr_index++;
-				}
-				
-			} else {
-				manager.showError ("There are no actions to run in thread 2.");
-				simulationTextArea.text = "";
-				return;
-			}
-		} else {
-			manager.showError ("There are no actions to run in thread 1.");
-			simulationTextArea.text = "";
-			return;
-		}
-
-		Debug.Log ("AFTER");
-		//foreach(string line in all_blocks_names)
-		foreach(string line in blocks_names_t1)
-			Debug.Log (line);
-		*/
-
-		//StartCoroutine (printThreads (all_blocks_names, blocks_names_t1, blocks_names_t2));
-
-		/*
-		int step_counter = 1;
-		for (int j = 0; j < all_blocks_names.Length; j+=2) {
-		
-			toPrint += "\n\nSTEP " + step_counter + ": ";
-			toPrint += "\n" + all_blocks_names [j];
-			toPrint += "\n" + all_blocks_names [j+1];
-
-			step_counter++;
-		}
-			
-		simulationTextArea.text = toPrint;
-		*/
-
-		/*
-		try {
-			if (blocks_t2.Length > 0) {
-				foreach (string line in blocks_names_t2) {
-					//Debug.Log (block);
-					//toPrint += "\n (" + timer.GetCurrentTime() + ") " + name + "ing";
-					toPrint += "\n" + line;
-				}
-
-				simulationTextArea.text += toPrint;
-				Debug.Log(""+toPrint);
-
-			} else {
-				//Debug.Log("[thread 2 - 1] There are no actions to run.");
-				//manager.showError ("[3] There are no actions to run.");
-				//simulationTextArea.text += "";
-			}
-		} catch (Exception e) {
-			//Debug.Log("[thread 2 - 2] There are no actions to run.");
-			manager.showError ("There are no actions to run in thread 2.");
-			//simulationTextArea.text += "";
-		}
-		*/
 	}
 
 	public void terminateSimulation() {
@@ -781,38 +630,32 @@ public class ExecuteThreads : MonoBehaviour {
 		simulationTextArea.text = "";
 
 		GameObject.Find ("RunButton").transform.SetAsLastSibling ();
+		bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
 	}
 
 	IEnumerator printThreads(List<string> b1, List<string> b2) {
 
-		Debug.Log ("In coroutine");
+		// Debug.Log ("In coroutine");
 
 		bar.currentAmount = 0;
 
 		int step_counter = 1;
 		int limit = 0;
 		bool paused = false;
+		bool lost = false;
 
 		if (b1.Count > b2.Count)
 			limit = b1.Count;
 		else
 			limit = b2.Count;
 
-		// Debug.Log ("limit = " + limit);
-
-		//Debug.Log ("[IN COROUTINE]: (b1.Count = " + b1.Count);
-		//foreach(string line in b1)
-		//	Debug.Log (line);
-
-		//		Debug.Log ("[IN COROUTINE]: (b2.Count = " + b2.Count);
-		//		foreach(string line in b2)
-		//			Debug.Log (line);
-
-
 		for (int j = 0; j < limit; j++) {
 
 			if (bar.currentAmount < 100) {
-				bar.currentAmount += 50;
+
+				// Debug.Log ("bar.currentAmount < 100. Bar updated.");
+
+				bar.currentAmount += 25;
 				bar.LoadingBar.GetComponent<Image>().fillAmount = bar.currentAmount / 100;
 
 			} else {
@@ -820,23 +663,17 @@ public class ExecuteThreads : MonoBehaviour {
 				manager.gameLost();
 				stop = true;
 				paused = true;
-
-				/*
-				try {
-					disablePanel.SetActive (true);
-				} catch {
-					Debug.Log ("Cannot disable DisablePanel");
-				}
-				*/
+				lost = true;
 
 				GameObject.Find ("StopButton").transform.GetComponent<Button> ().interactable = false;
-				bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+				// bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+
+				// break;
+				// yield break;
+				yield return 0;
 			}
 
 			if (stop) {
-
-				break;
-				yield break;
 
 				if (!paused) {
 
@@ -848,10 +685,16 @@ public class ExecuteThreads : MonoBehaviour {
 					//simulationTextArea.text = "";
 
 					GameObject.Find ("RunButton").transform.SetAsLastSibling ();
-					bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+					// bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
 
 				}
-					
+
+				// Debug.Log ("Bar set to 0 in if(stop)");
+
+				bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+
+				break;
+				yield break;
 				yield return 0;
 
 			} else {
@@ -870,8 +713,9 @@ public class ExecuteThreads : MonoBehaviour {
 
 				yield return new WaitForSeconds (1);
 			}
-
-
 		}
+
+		if (!lost)
+			manager.gameWon ();
 	}
 }

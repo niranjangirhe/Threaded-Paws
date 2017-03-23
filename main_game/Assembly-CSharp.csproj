@@ -54,8 +54,8 @@
      <Compile Include="Assets\scripts\GenerateTasks.cs" />
      <Compile Include="Assets\scripts\InformationIcon.cs" />
      <Compile Include="Assets\scripts\ProgressBar.cs" />
+     <Compile Include="Assets\scripts\ScenesManager.cs" />
      <Compile Include="Assets\scripts\Tabs.cs" />
-     <Compile Include="Assets\scripts\TaskClass.cs" />
      <Compile Include="Assets\scripts\Tick.cs" />
      <Compile Include="Assets\scripts\Timer.cs" />
      <Compile Include="Assets\scripts\ToolBox.cs" />

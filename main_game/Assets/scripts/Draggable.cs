@@ -100,7 +100,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 		//Debug.Log ("HIGHLIGHTING AREA");
 		//Debug.Log ("childCount: " + threadChildren.Length);
-		Debug.Log("Dragging: " + this.transform.name + " , Block Type: " + this.typeOfItem);
+		// Debug.Log("Dragging: " + this.transform.name + " , Block Type: " + this.typeOfItem);
 
 		for (int i = 0; i < thread1Children.Length; i++) {
 			//threadChildren [i] = this.transform.Find("DropAreaThread").GetChild (i).gameObject;
@@ -260,6 +260,10 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 					
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "checkout") {
 						manager.checkoutLeft_thread1 += 1;
+					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "groom") {
+						manager.groomLeft_thread1 += 1;
+					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "pickup") {
+						manager.pickupLeft_thread1 += 1;
 					}
 
 					Debug.Log ("An action was dropped in the toolbox");
@@ -296,6 +300,10 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 								manager.returnLeft_thread1 += 1;
 							} else if (children [j].transform.GetComponentInChildren<Text>().text == "checkout") {
 								manager.checkoutLeft_thread1 += 1;
+							} else if (children [j].transform.GetComponentInChildren<Text>().text == "groom") {
+								manager.groomLeft_thread1 += 1;
+							} else if (children [j].transform.GetComponentInChildren<Text>().text == "pickup") {
+								manager.pickupLeft_thread1 += 1;
 							}
 						}
 
@@ -323,6 +331,10 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 							manager.returnLeft_thread1 += 1;
 						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "checkout") {
 							manager.checkoutLeft_thread1 += 1;
+						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "groom") {
+							manager.groomLeft_thread1 += 1;
+						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "pickup") {
+							manager.pickupLeft_thread1 += 1;
 						}
 					}
 
@@ -354,6 +366,10 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 					
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "checkout") {
 						manager.checkoutLeft_thread2 += 1;
+					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "groom") {
+						manager.groomLeft_thread2 += 1;
+					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "pickup") {
+						manager.pickupLeft_thread2 += 1;
 					}
 
 					Debug.Log ("An action was dropped in the toolbox");
@@ -390,6 +406,10 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 								manager.returnLeft_thread2++;
 							} else if (children [j].transform.GetComponentInChildren<Text>().text == "checkout") {
 								manager.checkoutLeft_thread2++;
+							} else if (children [j].transform.GetComponentInChildren<Text>().text == "groom") {
+								manager.groomLeft_thread2++;
+							} else if (children [j].transform.GetComponentInChildren<Text>().text == "pickup") {
+								manager.pickupLeft_thread2++;
 							}
 						}
 
@@ -417,6 +437,10 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 							manager.returnLeft_thread2++;
 						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "checkout") {
 							manager.checkoutLeft_thread2++;
+						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "groom") {
+							manager.groomLeft_thread2++;
+						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "pickup") {
+							manager.pickupLeft_thread2++;
 						}
 					}
 
@@ -431,25 +455,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			//self-destroy
 			Destroy(this.gameObject);
 
-		} /* doing this in the CreateNewBlock script
-		else if (this.transform.parent.name == "DropAreaThread") {
-			//TODO: must substract from quantities left
-			Debug.Log ("Dropped in thread box");
-
-			if (this.typeOfItem == Type.ACTION) {
-				//TODO: add to the action field
-				Debug.Log ("An action was dropped in the thread box");
-			} else if (this.typeOfItem == Type.WHILELOOP) {
-				//TODO: add from the loop field
-				Debug.Log ("A loop was dropped in the thread box");
-			} else if (this.typeOfItem == Type.IFSTAT) {
-				//TODO: add to if statement field
-				Debug.Log ("An if statement was dropped in the thread box");
-			} else if (this.typeOfItem == Type.IFNEEDED) {
-				Debug.Log ("An \"if needed\" tool was dropped in the thread box");
-				//TODO: add to "if needed" field
-			}
-		} */
+		}
 
 		else if (this.transform.parent.gameObject == canvas) {
 
