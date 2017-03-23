@@ -24,37 +24,64 @@ public class ExecuteThreads : MonoBehaviour {
 	Transform[] blocks_t1;
 	Transform[] blocks_t2;
 
-	bool stop = false;
+	bool stop;
+	bool err;
 
-	bool t1_has_scissors;
-	bool t1_has_soap;
-	bool t1_has_dryer;
+	// bool t1_has_dog;
+	// bool t2_has_dog;
+
+	bool t1_checkedin;
+	bool t1_checkedout;
 	bool t1_has_brush;
-	bool t1_has_towel;
+	bool t1_has_clippers;
+	bool t1_has_conditioner;
+	bool t1_has_dryer;
+	bool t1_has_scissors;
+	bool t1_has_shampoo;
 	bool t1_has_station;
+	bool t1_has_towel;
 
-	bool t2_has_scissors;
-	bool t2_has_soap;
-	bool t2_has_dryer;
+	bool t2_checkedin;
+	bool t2_checkedout;
 	bool t2_has_brush;
-	bool t2_has_towel;
+	bool t2_has_clippers;
+	bool t2_has_conditioner;
+	bool t2_has_dryer;
+	bool t2_has_scissors;
+	bool t2_has_shampoo;
 	bool t2_has_station;
+	bool t2_has_towel;
 
 	void Start() {
 
-		t1_has_scissors = false;
-		t1_has_soap = false;
-		t1_has_dryer = false;
-		t1_has_brush = false;
-		t1_has_towel = false;
-		t1_has_station = false;
+		// t1_has_dog = false;
+		// t2_has_dog = false;
 
-		t2_has_scissors = false;
-		t2_has_soap = false;
-		t2_has_dryer = false;
+		stop = false;
+		err = false;
+
+		t1_checkedin = false;
+		t1_checkedout = false;
+		t2_checkedin = false;
+		t2_checkedout = false;
+
+		t1_has_brush = false;
+		t1_has_clippers = false;
+		t1_has_conditioner = false;
+		t1_has_dryer = false;
+		t1_has_scissors = false;
+		t1_has_shampoo = false;
+		t1_has_station = false;
+		t1_has_towel = false;
+
 		t2_has_brush = false;
-		t2_has_towel = false;
+		t2_has_clippers = false;
+		t2_has_conditioner = false;
+		t2_has_dryer = false;
+		t2_has_scissors = false;
+		t2_has_shampoo = false;
 		t2_has_station = false;
+		t2_has_towel = false;
 
 		manager = GameObject.Find ("_SCRIPTS_").GetComponent<ToolboxManager> ();
 		timer = GameObject.FindObjectOfType<Timer> ();
@@ -137,35 +164,46 @@ public class ExecuteThreads : MonoBehaviour {
 					if (resource == "[null]") {
 						terminateSimulation ();
 						manager.showError ("Please select a resource to acquire in thread 1.");
+					
 					} else {
+
+						// {"[null]", "brush" ,"clippers" , "cond.", "dryer", "scissors", "shampoo", "station", "towel"};
 
 						switch (resource) {
 
-						case "scissors":
-							t1_has_scissors = true;
+						case "brush":
+							acquire (ref t1_has_brush);
 							break;
 						
-						case "soap":
-							t1_has_soap = true;
+						case "clippers":
+							acquire (ref t1_has_clippers);
+							break;
+						
+						case "cond.":
+							acquire (ref t1_has_conditioner);
 							break;
 
 						case "dryer":
-							t1_has_dryer = true;
+							acquire (ref t1_has_dryer);
 							break;
-						
-						case "brush":
-							t1_has_brush = true;
-							break;
-						
-						case "towel":
-							t1_has_towel = true;
-							break;
-						
-						case "station":
-							t1_has_station = true;
-							break;
-						}
 
+						case "scissors":
+							acquire (ref t1_has_scissors);
+							break;
+
+						case "shampoo":
+							acquire (ref t1_has_shampoo);
+							break;
+
+						case "station":
+							acquire (ref t1_has_station);
+							break;
+
+						case "towel":
+							acquire (ref t1_has_towel);
+							break;
+
+						}
 
 						blocks_names_t1.Add ("[thread 1] acquire ( " + resource + " );\n");
 						i++;
@@ -182,29 +220,38 @@ public class ExecuteThreads : MonoBehaviour {
 
 						switch (resource) {
 
-						case "scissors":
-							t1_has_scissors = false;
+						case "brush":
+							return_res (ref t1_has_brush);
 							break;
 
-						case "soap":
-							t1_has_soap = false;
+						case "clippers":
+							return_res (ref t1_has_clippers);
+							break;
+
+						case "cond.":
+							return_res (ref t1_has_conditioner);
 							break;
 
 						case "dryer":
-							t1_has_dryer = false;
+							return_res (ref t1_has_dryer);
 							break;
 
-						case "brush":
-							t1_has_brush = false;
+						case "scissors":
+							return_res (ref t1_has_scissors);
 							break;
 
-						case "towel":
-							t1_has_towel = false;
+						case "shampoo":
+							return_res (ref t1_has_shampoo);
 							break;
 
 						case "station":
-							t1_has_station = false;
+							return_res (ref t1_has_station);
 							break;
+
+						case "towel":
+							return_res (ref t1_has_towel);
+							break;
+
 						}
 
 						blocks_names_t1.Add ("[thread 1] return ( " + resource + " );\n");
@@ -215,11 +262,6 @@ public class ExecuteThreads : MonoBehaviour {
 
 					//blocks_names_t1 [i] = "[thread 1] " + blocks_t1 [i].transform.GetComponentInChildren<Text> ().text + ";";
 					blocks_names_t1.Add ("[thread 1] " + blocks_t1 [i].transform.GetComponentInChildren<Text> ().text + ";\n");
-
-					/*
-					foreach(string name in blocks_names_t1)
-						Debug.Log (name);
-					*/
 
 					i++;
 				}
@@ -413,28 +455,36 @@ public class ExecuteThreads : MonoBehaviour {
 
 						switch (resource) {
 
-						case "scissors":
-							t2_has_scissors = true;
+						case "brush":
+							acquire (ref t2_has_brush);
 							break;
 
-						case "soap":
-							t2_has_soap = true;
+						case "clippers":
+							acquire (ref t2_has_clippers);
+							break;
+
+						case "cond.":
+							acquire (ref t2_has_conditioner);
 							break;
 
 						case "dryer":
-							t2_has_dryer = true;
+							acquire (ref t2_has_dryer);
 							break;
 
-						case "brush":
-							t2_has_brush = true;
+						case "scissors":
+							acquire (ref t2_has_scissors);
 							break;
 
-						case "towel":
-							t2_has_towel = true;
+						case "shampoo":
+							acquire (ref t2_has_shampoo);
 							break;
 
 						case "station":
-							t2_has_station = true;
+							acquire (ref t2_has_station);
+							break;
+
+						case "towel":
+							acquire (ref t2_has_towel);
 							break;
 						}
 
@@ -453,30 +503,39 @@ public class ExecuteThreads : MonoBehaviour {
 
 						switch (resource) {
 
-						case "scissors":
-							t2_has_scissors = false;
+						case "brush":
+							return_res (ref t2_has_brush);
 							break;
 
-						case "soap":
-							t2_has_soap = false;
+						case "clippers":
+							return_res (ref t2_has_clippers);
+							break;
+
+						case "cond.":
+							return_res (ref t2_has_conditioner);
 							break;
 
 						case "dryer":
-							t2_has_dryer = false;
+							return_res (ref t2_has_dryer);
 							break;
 
-						case "brush":
-							t2_has_brush = false;
+						case "scissors":
+							return_res (ref t2_has_scissors);
 							break;
 
-						case "towel":
-							t2_has_towel = false;
+						case "shampoo":
+							return_res (ref t2_has_shampoo);
 							break;
 
 						case "station":
-							t2_has_station = false;
+							return_res (ref t2_has_station);
+							break;
+
+						case "towel":
+							return_res (ref t2_has_towel);
 							break;
 						}
+
 
 						blocks_names_t2.Add ("[thread 2] return ( " + resource + " );\n");
 						i++;
@@ -589,6 +648,8 @@ public class ExecuteThreads : MonoBehaviour {
 			}
 		}
 
+
+
 		if (blocks_t1.Length < 1) {
 			manager.showError ("There are no actions to run in thread 1.");
 			simulationTextArea.text = "";
@@ -602,20 +663,34 @@ public class ExecuteThreads : MonoBehaviour {
 			terminateSimulation ();
 			return;
 		}
+			
+		Debug.Log ("blocks_names_t1 [0]: " + blocks_names_t1 [0].Substring(11, 7));
+		// Debug.Log ("blocks_names_t2 [0] (" + blocks_names_t2 [0] + "): " + /*blocks_names_t2 [0].Substring (11, 17)*/ blocks_names_t2[0].Length);
 
-//		if (blocks_t1 [0].transform.GetComponentInChildren<Text> ().text != "checkin" || blocks_t2 [0].transform.GetComponentInChildren<Text> ().text != "checkin") {
-//
-//			manager.showError ("Remember to always check-in your costumer first!");
-//			terminateSimulation();
+		try {
+			if ((blocks_names_t1 [0].Substring (11, 7) != "checkin" /*&& blocks_names_t1 [0].Substring (11, 17) != "pickup"*/)
+			    || (blocks_names_t2 [0].Substring (11, 7) != "checkin" /*&& blocks_names_t2 [0].Substring (11, 17) != "pickup"*/)) {
+			
+				manager.showError ("Remember to always pick-up and/or check-in your costumer first!");
+				terminateSimulation ();
+				return;
+			}
+		} catch { }
 
-		if (blocks_t1 [blocks_t1.Length - 1].transform.GetComponentInChildren<Text> ().text != "checkout" || blocks_t2 [blocks_t2.Length - 1].transform.GetComponentInChildren<Text> ().text != "checkout") {
-			manager.showError ("Remember to always check-out your costumer when you're done!");
-			terminateSimulation ();
-			bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
-		} else {
+		try {
 
+			if ((blocks_names_t1 [blocks_names_t1.Count - 1].Substring (11, 8) != "checkout")
+				|| (blocks_names_t2 [blocks_names_t2.Count - 1].Substring (11, 8) != "checkout")) {
+
+				manager.showError ("Remember to always check-out your costumer when you're done!");
+				terminateSimulation ();
+				return;
+			}
+		} catch { }
+
+		if (!err)
 			StartCoroutine (printThreads (blocks_names_t1, blocks_names_t2));
-		}
+
 	}
 
 	public void terminateSimulation() {
@@ -635,12 +710,14 @@ public class ExecuteThreads : MonoBehaviour {
 
 	IEnumerator printThreads(List<string> b1, List<string> b2) {
 
-		// Debug.Log ("In coroutine");
-
 		bar.currentAmount = 0;
 
 		int step_counter = 1;
+		int t1_curr_index = 0;
+		int t2_curr_index = 0;
+
 		int limit = 0;
+		int j = 0;
 		bool paused = false;
 		bool lost = false;
 
@@ -649,7 +726,8 @@ public class ExecuteThreads : MonoBehaviour {
 		else
 			limit = b2.Count;
 
-		for (int j = 0; j < limit; j++) {
+		// for (int j = 0; j < limit; j++) {
+		while (j < limit) {
 
 			if (bar.currentAmount < 100) {
 
@@ -703,13 +781,26 @@ public class ExecuteThreads : MonoBehaviour {
 
 				try {
 					simulationTextArea.text += "" + b1 [j];
+
+					switch(b1[t1_curr_index]) {
+
+
+					}
+
+					t1_curr_index++;
+
 				} catch { }
+				
 
 				try {
 					simulationTextArea.text += "" + b2 [j];
+
+					t2_curr_index++;
+
 				} catch { }
 
-				step_counter++;
+
+				j++;
 
 				yield return new WaitForSeconds (1);
 			}
@@ -717,5 +808,31 @@ public class ExecuteThreads : MonoBehaviour {
 
 		if (!lost)
 			manager.gameWon ();
+	}
+
+	void acquire(ref bool resource) {
+
+		if (resource) {
+			manager.showError ("You are trying to acquire a resource you already have.");
+			terminateSimulation ();
+			err = true;
+		} else {
+			resource = true;
+		}
+
+		return;
+	}
+
+	void return_res(ref bool resource) {
+
+		if (!resource) {
+			manager.showError ("You are trying to return a resource you don't have.");
+			terminateSimulation ();
+			err = true;
+		} else {
+			resource = false;
+		}
+
+		return;
 	}
 }

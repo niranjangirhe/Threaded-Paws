@@ -18,5 +18,6 @@ public class ScenesManager : MonoBehaviour {
 	public void tryAgain() {
 	
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+		CreateNewBlock.canCreate = true;
 	}
 }

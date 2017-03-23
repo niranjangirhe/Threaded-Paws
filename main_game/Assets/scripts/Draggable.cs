@@ -179,7 +179,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 	public void OnEndDrag(PointerEventData eventData) {
 
-		Debug.Log ("OnEndDrag called");
+		// Debug.Log ("OnEndDrag called");
 
 		//set parent back to where we came from (at the end of the list)
 		this.transform.SetParent(parentToReturnTo);

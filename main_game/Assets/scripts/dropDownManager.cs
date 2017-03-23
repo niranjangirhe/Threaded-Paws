@@ -8,7 +8,7 @@ public class dropDownManager : MonoBehaviour {
 	public Dropdown dropDown;
 	public Text showSelected;
 
-	List<string> options = new List<string>() {"[null]", "shampoo" ,"cond." , "clippers", "scissors", "brush", "towel", "dryer", "station"};
+	List<string> options = new List<string>() {"[null]", "brush" ,"clippers" , "cond.", "dryer", "scissors", "shampoo", "station", "towel"};
 
 	public void indexChanged(int index) { // takes selected option index
 
