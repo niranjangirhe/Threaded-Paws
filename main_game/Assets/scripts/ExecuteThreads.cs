@@ -123,7 +123,34 @@ public class ExecuteThreads : MonoBehaviour {
 	public void Execute_MultiThreads() {
 
 		simulationTextArea.text = "";
+
 		stop = false;
+		err = false;
+		paused = false;
+		lost = false;
+
+		t1_checkedin = false;
+		t1_checkedout = false;
+		t2_checkedin = false;
+		t2_checkedout = false;
+
+		t1_has_brush = false;
+		t1_has_clippers = false;
+		t1_has_conditioner = false;
+		t1_has_dryer = false;
+		t1_has_scissors = false;
+		t1_has_shampoo = false;
+		t1_has_station = false;
+		t1_has_towel = false;
+
+		t2_has_brush = false;
+		t2_has_clippers = false;
+		t2_has_conditioner = false;
+		t2_has_dryer = false;
+		t2_has_scissors = false;
+		t2_has_shampoo = false;
+		t2_has_station = false;
+		t2_has_towel = false;
 
 		try {
 			// disable all other functionalities
@@ -496,7 +523,7 @@ public class ExecuteThreads : MonoBehaviour {
 			
 		try {
 
-			Debug.Log(blocks_names_t1.Count);
+			// Debug.Log(blocks_names_t1.Count);
 
 			if ((blocks_names_t1 [blocks_names_t1.Count - 1].Substring (11, 8) != "checkout")
 				|| (blocks_names_t2 [blocks_names_t2.Count - 1].Substring (11, 8) != "checkout")) {
@@ -598,20 +625,27 @@ public class ExecuteThreads : MonoBehaviour {
 
 			} else {
 
-				simulationTextArea.text += "\nSTEP " + j + ": \n";
+				simulationTextArea.text += "\nSTEP " + (j+1) + ": \n";
+
+				// ------------------------------  THREAD 2 ------------------------------
+
+				try {
+
+					if (!err)
+						simulationTextArea.text += "" + b1 [j];
+
+				} catch { }
 
 				try {
 					
-					simulationTextArea.text += "" + b1 [j];
-
 					// {"[null]", "brush" ,"clippers" , "cond.", "dryer", "scissors", "shampoo", "station", "towel"};
 
-					if (b1[t1_curr_index].Substring(11, 3) == "get") {
+					if (b1[t1_curr_index].Substring(11, 3) == "acq") {
 
-						Debug.Log("ACQUIRING " + b1[t1_curr_index].Substring(22, 5));
+						// Debug.Log("ACQUIRING " + b1[t1_curr_index].Substring(21, 5));
 
 						// acquiring resource
-						switch(b1[t1_curr_index].Substring(22, 5)) {
+						switch(b1[t1_curr_index].Substring(21, 5)) {
 
 						case "brush":
 							acquire (ref t1_has_brush);
@@ -648,8 +682,10 @@ public class ExecuteThreads : MonoBehaviour {
 
 					} else if (b1[t1_curr_index].Substring(11, 3) == "ret") {
 
+						// Debug.Log("RETURNING " + b1[t1_curr_index].Substring(20, 5));
+
 						// returning resource
-						switch(b1[t1_curr_index].Substring(22, 5)) {
+						switch(b1[t1_curr_index].Substring(20, 5)) {
 
 						case "brush":
 							return_res (ref t1_has_brush);
@@ -685,25 +721,132 @@ public class ExecuteThreads : MonoBehaviour {
 						}
 
 					} else if (b1[t1_curr_index].Substring(11, 3) == "cut") {
+						// Debug.Log("CUTTING");
 					} else if (b1[t1_curr_index].Substring(11, 3) == "dry") {
+						// Debug.Log("DRY");
 					} else if (b1[t1_curr_index].Substring(11, 4) == "wash") {
+						// Debug.Log("WASHING");
 					} else if (b1[t1_curr_index].Substring(11, 5) == "groom") {
+						// Debug.Log("GROOMING");
 					} else if (b1[t1_curr_index].Substring(11, 7) == "checkin") {
+						// Debug.Log("CHECKING IN");
 					} else if (b1[t1_curr_index].Substring(11, 8) == "checkout") {
+						// Debug.Log("CHECKING OUT");
 					}
 			
 					t1_curr_index++;
 
 				} catch { }
-				
+
+
+				// ------------------------------  THREAD 2 ------------------------------
 
 				try {
-					simulationTextArea.text += "" + b2 [j];
+					if (!err)
+						simulationTextArea.text += "" + b2 [j];
+				} catch { }
+					
+				try {
+
+					// {"[null]", "brush" ,"clippers" , "cond.", "dryer", "scissors", "shampoo", "station", "towel"};
+
+					if (b2[t2_curr_index].Substring(11, 3) == "acq") {
+
+						Debug.Log("ACQUIRING " + b2[t2_curr_index].Substring(21, 5));
+
+						// acquiring resource
+						switch(b2[t2_curr_index].Substring(21, 5)) {
+
+						case "brush":
+							acquire (ref t2_has_brush);
+							break;
+
+						case "clipp":
+							acquire (ref t2_has_clippers);
+							break;
+
+						case "cond.":
+							acquire (ref t2_has_conditioner);
+							break;
+
+						case "dryer":
+							acquire (ref t2_has_dryer);
+							break;
+
+						case "sciss":
+							acquire (ref t2_has_scissors);
+							break;
+
+						case "shamp":
+							acquire (ref t2_has_shampoo);
+							break;
+
+						case "stati":
+							acquire (ref t2_has_station);
+							break;
+
+						case "towel":
+							acquire (ref t2_has_towel);
+							break;
+						}
+
+					} else if (b2[t2_curr_index].Substring(11, 3) == "ret") {
+
+						Debug.Log("RETURNING " + b2[t2_curr_index].Substring(20, 5));
+
+						// returning resource
+						switch(b2[t2_curr_index].Substring(20, 5)) {
+
+						case "brush":
+							return_res (ref t2_has_brush);
+							break;
+
+						case "clipp":
+							return_res (ref t2_has_clippers);
+							break;
+
+						case "cond.":
+							return_res (ref t2_has_conditioner);
+							break;
+
+						case "dryer":
+							return_res (ref t2_has_dryer);
+							break;
+
+						case "sciss":
+							return_res (ref t2_has_scissors);
+							break;
+
+						case "shamp":
+							return_res (ref t2_has_shampoo);
+							break;
+
+						case "stati":
+							return_res (ref t2_has_station);
+							break;
+
+						case "towel":
+							return_res (ref t2_has_towel);
+							break;
+						}
+
+					} else if (b2[t2_curr_index].Substring(11, 3) == "cut") {
+						Debug.Log("CUTTING");
+					} else if (b2[t2_curr_index].Substring(11, 3) == "dry") {
+						Debug.Log("DRY");
+					} else if (b2[t2_curr_index].Substring(11, 4) == "wash") {
+						Debug.Log("WASHING");
+					} else if (b2[t2_curr_index].Substring(11, 5) == "groom") {
+						Debug.Log("GROOMING");
+					} else if (b2[t2_curr_index].Substring(11, 7) == "checkin") {
+						Debug.Log("CHECKING IN");
+					} else if (b2[t2_curr_index].Substring(11, 8) == "checkout") {
+						Debug.Log("CHECKING OUT");
+					}
 
 					t2_curr_index++;
 
 				} catch { }
-
 
 				j++;
 
@@ -718,9 +861,26 @@ public class ExecuteThreads : MonoBehaviour {
 	void acquire(ref bool resource) {
 
 		if (resource) {
-			manager.showError ("You are trying to acquire a resource you already have.");
-			terminateSimulation ();
+
 			err = true;
+			lost = true;
+			stop = true;
+			paused = true;
+			
+			// manager.showError ("You are trying to acquire a resource you already have.");
+			simulationTextArea.text += "\n<color=red>> ERROR: You are trying to acquire a resource you already have.</color>";
+
+			// terminateSimulation ();
+
+			try {
+				disablePanel.SetActive (false);
+			} catch {
+				Debug.Log ("Cannot disable DisablePanel.");
+			}
+
+			GameObject.Find ("RunButton").transform.SetAsLastSibling ();
+			bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+
 		} else {
 			resource = true;
 		}
@@ -731,11 +891,25 @@ public class ExecuteThreads : MonoBehaviour {
 	void return_res(ref bool resource) {
 
 		if (!resource) {
-			manager.showError ("You are trying to return a resource you don't have.");
-			terminateSimulation ();
+
 			err = true;
+			lost = true;
 			stop = true;
 			paused = true;
+
+			// manager.showError ("You are trying to return a resource you don't have.");
+			simulationTextArea.text += "\n<color=red>> ERROR: You are trying to return a resource you don't have.</color>";
+
+			// terminateSimulation ();
+
+			try {
+				disablePanel.SetActive (false);
+			} catch {
+				Debug.Log ("Cannot disable DisablePanel.");
+			}
+
+			GameObject.Find ("RunButton").transform.SetAsLastSibling ();
+			bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
 
 		} else {
 			resource = false;
