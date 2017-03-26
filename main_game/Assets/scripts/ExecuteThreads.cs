@@ -355,7 +355,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 					string resource = blocks_t2 [i].transform.Find ("Dropdown").Find("Label").GetComponent<Text> ().text;
 
-					Debug.Log ("... attempting resource: " + resource);
+					// Debug.Log ("... attempting resource: " + resource);
 
 
 					if (resource == "[null]") {
@@ -585,7 +585,13 @@ public class ExecuteThreads : MonoBehaviour {
 			limit = b2.Count;
 
 		// for (int j = 0; j < limit; j++) {
-		while (j < limit) {
+		// while (j < limit) {
+
+		// while (j < 100) {
+
+		while ((t1_curr_index < b1.Count) && (t2_curr_index < b2.Count)) {
+
+			// Debug.Log ("b1.Count = " + b1.Count + ", t1_curr_index = " + t1_curr_index);
 
 			if (bar.currentAmount < 100) {
 
@@ -651,7 +657,18 @@ public class ExecuteThreads : MonoBehaviour {
 						switch(b1[t1_curr_index].Substring(21, 5)) {
 
 						case "brush":
-							acquire (ref t1_has_brush);
+
+							if (!t1_has_brush && t2_has_brush) { // need to wait for resource
+
+								simDisplay("[thread 1] Waiting for a brush...\n");
+								t1_canPrint = false;
+
+							} else {
+								acquire (ref t1_has_brush);
+								t1_canPrint = true;
+								lost = false;
+							}
+
 							break;
 
 						case "clipp":
@@ -795,7 +812,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 					if (b2[t2_curr_index].Substring(11, 3) == "acq") {
 
-						Debug.Log("ACQUIRING " + b2[t2_curr_index].Substring(21, 5));
+						// Debug.Log("ACQUIRING " + b2[t2_curr_index].Substring(21, 5));
 
 						// acquiring resource
 						switch(b2[t2_curr_index].Substring(21, 5)) {
@@ -835,7 +852,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 					} else if (b2[t2_curr_index].Substring(11, 3) == "ret") {
 
-						Debug.Log("RETURNING " + b2[t2_curr_index].Substring(20, 5));
+						// Debug.Log("RETURNING " + b2[t2_curr_index].Substring(20, 5));
 
 						// returning resource
 						switch(b2[t2_curr_index].Substring(20, 5)) {
@@ -990,6 +1007,13 @@ public class ExecuteThreads : MonoBehaviour {
 
 		runButton.transform.SetAsLastSibling ();
 		bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+
+	}
+
+	void simDisplay(String msg) {
+
+		lost = true;
+		simulationTextArea.text += "<color=red>" + msg + "</color>";
 
 	}
 }

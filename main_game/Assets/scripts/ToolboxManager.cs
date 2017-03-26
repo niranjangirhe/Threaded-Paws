@@ -68,6 +68,8 @@ public class ToolboxManager : MonoBehaviour {
 		LostPanel.SetActive (false);
 
 		updateValues ();
+
+		CreateNewBlock.canCreate = true;
 	}
 	
 	// Update is called once per frame
