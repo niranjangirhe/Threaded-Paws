@@ -847,7 +847,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 					} else if (b1[t1_curr_index].Substring(11, 7) == "checkin") {
 
-						if (t1_checkedin) {
+						if (t2_checkedin) {
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 							resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.");
 						} else {
@@ -857,14 +857,14 @@ public class ExecuteThreads : MonoBehaviour {
 					
 					} else if (b1[t1_curr_index].Substring(11, 8) == "checkout") {
 
-						if (t1_checkedout) {
-							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
-							resError("> ERROR: You have to check in before attempting to check out a customer.");
-
-						} else if (t1_has_brush || t1_has_clippers || t1_has_conditioner || t1_has_dryer || t1_has_scissors || t1_has_shampoo || t1_has_station || t1_has_towel) {
+						if (t1_has_brush || t1_has_clippers || t1_has_conditioner || t1_has_dryer || t1_has_scissors || t1_has_shampoo || t1_has_station || t1_has_towel) {
 
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 							resError("> ERROR: You need to return all the resources you acquired before checking out.");
+						
+						} else if (t1_checkedout) {
+							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+							resError("> ERROR: You have to check in before attempting to check out a customer.");
 
 						} else {
 							t1_checkedin = false;
@@ -1101,14 +1101,14 @@ public class ExecuteThreads : MonoBehaviour {
 					
 					} else if (b2[t2_curr_index].Substring(11, 8) == "checkout") {
 
-						if (t2_checkedout) {
-							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
-							resError("> ERROR: You have to check in before attempting to check out a customer.");
-
-						} else if (t2_has_brush || t2_has_clippers || t2_has_conditioner || t2_has_dryer || t2_has_scissors || t2_has_shampoo || t2_has_station || t2_has_towel) {
+						if (t2_has_brush || t2_has_clippers || t2_has_conditioner || t2_has_dryer || t2_has_scissors || t2_has_shampoo || t2_has_station || t2_has_towel) {
 
 							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
 							resError("> ERROR: You need to return all the resources you acquired before checking out.");
+
+						} else if (t2_checkedout) {
+							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
+							resError("> ERROR: You have to check in before attempting to check out a customer.");
 
 						} else {
 							t2_checkedin = false;
