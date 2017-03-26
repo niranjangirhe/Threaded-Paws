@@ -589,7 +589,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 		// while (j < 100) {
 
-		while ((t1_curr_index < b1.Count) && (t2_curr_index < b2.Count)) {
+		while ((t1_curr_index < b1.Count) || (t2_curr_index < b2.Count)) {
 
 			// Debug.Log ("b1.Count = " + b1.Count + ", t1_curr_index = " + t1_curr_index);
 
