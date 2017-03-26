@@ -860,6 +860,12 @@ public class ExecuteThreads : MonoBehaviour {
 						if (t1_checkedout) {
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 							resError("> ERROR: You have to check in before attempting to check out a customer.");
+
+						} else if (t1_has_brush || t1_has_clippers || t1_has_conditioner || t1_has_dryer || t1_has_scissors || t1_has_shampoo || t1_has_station || t1_has_towel) {
+
+							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+							resError("> ERROR: You need to return all the resources you acquired before checking out.");
+
 						} else {
 							t1_checkedin = false;
 							t1_checkedout = true;
@@ -1098,6 +1104,12 @@ public class ExecuteThreads : MonoBehaviour {
 						if (t2_checkedout) {
 							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
 							resError("> ERROR: You have to check in before attempting to check out a customer.");
+
+						} else if (t2_has_brush || t2_has_clippers || t2_has_conditioner || t2_has_dryer || t2_has_scissors || t2_has_shampoo || t2_has_station || t2_has_towel) {
+
+							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
+							resError("> ERROR: You need to return all the resources you acquired before checking out.");
+
 						} else {
 							t2_checkedin = false;
 							t2_checkedout = true;
