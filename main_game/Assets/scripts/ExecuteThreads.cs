@@ -672,31 +672,108 @@ public class ExecuteThreads : MonoBehaviour {
 							break;
 
 						case "clipp":
-							acquire (ref t1_has_clippers);
+							
+							if (!t1_has_clippers && t2_has_clippers) { // need to wait for resource
+
+								simDisplay("[thread 1] Waiting for nail clippers...\n");
+								t1_canPrint = false;
+
+							} else {
+								acquire (ref t1_has_clippers);
+								t1_canPrint = true;
+								lost = false;
+							}
+
 							break;
 
 						case "cond.":
-							acquire (ref t1_has_conditioner);
+
+							if (!t1_has_conditioner && t2_has_conditioner) { // need to wait for resource
+
+								simDisplay("[thread 1] Waiting for condtioner...\n");
+								t1_canPrint = false;
+
+							} else {
+								acquire (ref t1_has_conditioner);
+								t1_canPrint = true;
+								lost = false;
+							}
+
 							break;
 
 						case "dryer":
-							acquire (ref t1_has_dryer);
+
+							if (!t1_has_dryer && t2_has_dryer) { // need to wait for resource
+
+								simDisplay("[thread 1] Waiting for dryer...\n");
+								t1_canPrint = false;
+
+							} else {
+								acquire (ref t1_has_dryer);
+								t1_canPrint = true;
+								lost = false;
+							}
+
 							break;
 
 						case "sciss":
-							acquire (ref t1_has_scissors);
+							
+							if (!t1_has_scissors && t2_has_scissors) { // need to wait for resource
+
+								simDisplay("[thread 1] Waiting for scissors...\n");
+								t1_canPrint = false;
+
+							} else {
+								acquire (ref t1_has_scissors);
+								t1_canPrint = true;
+								lost = false;
+							}
+
 							break;
 
 						case "shamp":
-							acquire (ref t1_has_shampoo);
+
+							if (!t1_has_shampoo && t2_has_shampoo) { // need to wait for resource
+
+								simDisplay("[thread 1] Waiting for shampoo...\n");
+								t1_canPrint = false;
+
+							} else {
+								acquire (ref t1_has_shampoo);
+								t1_canPrint = true;
+								lost = false;
+							}
+
 							break;
 
 						case "stati":
-							acquire (ref t1_has_station);
+
+							if (!t1_has_station && t2_has_station) { // need to wait for resource
+
+								simDisplay("[thread 1] Waiting for a station...\n");
+								t1_canPrint = false;
+
+							} else {
+								acquire (ref t1_has_station);
+								t1_canPrint = true;
+								lost = false;
+							}
+
 							break;
 
 						case "towel":
-							acquire (ref t1_has_towel);
+
+							if (!t1_has_towel && t2_has_towel) { // need to wait for resource
+
+								simDisplay("[thread 1] Waiting for a towel...\n");
+								t1_canPrint = false;
+
+							} else {
+								acquire (ref t1_has_towel);
+								t1_canPrint = true;
+								lost = false;
+							}
+
 							break;
 						}
 
@@ -818,35 +895,123 @@ public class ExecuteThreads : MonoBehaviour {
 						switch(b2[t2_curr_index].Substring(21, 5)) {
 
 						case "brush":
-							acquire (ref t2_has_brush);
+
+							if (!t2_has_brush && t1_has_brush) { // need to wait for resource
+
+								simDisplay("[thread 2] Waiting for a brush...\n");
+								t2_canPrint = false;
+
+							} else {
+								acquire (ref t2_has_brush);
+								t2_canPrint = true;
+								lost = false;
+							}
+
 							break;
 
 						case "clipp":
-							acquire (ref t2_has_clippers);
+
+							if (!t2_has_clippers && t1_has_clippers) { // need to wait for resource
+
+								simDisplay("[thread 2] Waiting for nail clippers...\n");
+								t2_canPrint = false;
+
+							} else {
+								acquire (ref t2_has_clippers);
+								t2_canPrint = true;
+								lost = false;
+							}
+
 							break;
 
 						case "cond.":
-							acquire (ref t2_has_conditioner);
+
+							if (!t2_has_conditioner && t1_has_conditioner) { // need to wait for resource
+
+								simDisplay("[thread 2] Waiting for conditioner...\n");
+								t2_canPrint = false;
+
+							} else {
+								acquire (ref t2_has_conditioner);
+								t2_canPrint = true;
+								lost = false;
+							}
+
 							break;
 
 						case "dryer":
-							acquire (ref t2_has_dryer);
+
+							if (!t2_has_dryer && t1_has_dryer) { // need to wait for resource
+								
+								simDisplay("[thread 2] Waiting for dryer...\n");
+								t2_canPrint = false;
+
+							} else {
+								acquire (ref t2_has_dryer);
+								t2_canPrint = true;
+								lost = false;
+							}
+
 							break;
 
 						case "sciss":
-							acquire (ref t2_has_scissors);
+
+							if (!t2_has_scissors && t1_has_scissors) { // need to wait for resource
+
+								simDisplay("[thread 2] Waiting for scissors...\n");
+								t2_canPrint = false;
+
+							} else {
+								acquire (ref t2_has_scissors);
+								t2_canPrint = true;
+								lost = false;
+							}
+
 							break;
 
 						case "shamp":
-							acquire (ref t2_has_shampoo);
+
+							if (!t2_has_shampoo && t1_has_shampoo) { // need to wait for resource
+
+								simDisplay("[thread 2] Waiting for shampoo...\n");
+								t2_canPrint = false;
+
+							} else {
+								acquire (ref t2_has_shampoo);
+								t2_canPrint = true;
+								lost = false;
+							}
+
 							break;
 
 						case "stati":
-							acquire (ref t2_has_station);
+
+							if (!t2_has_station && t1_has_station) { // need to wait for resource
+
+								simDisplay("[thread 2] Waiting for a station...\n");
+								t2_canPrint = false;
+
+							} else {
+								acquire (ref t2_has_station);
+								t2_canPrint = true;
+								lost = false;
+							}
+
 							break;
 
 						case "towel":
-							acquire (ref t2_has_towel);
+
+							if (!t2_has_towel && t1_has_towel) { // need to wait for resource
+
+								simDisplay("[thread 2] Waiting for a towel...\n");
+								t2_canPrint = false;
+
+							} else {
+								acquire (ref t2_has_towel);
+								t2_canPrint = true;
+								lost = false;
+							}
+
 							break;
 						}
 
