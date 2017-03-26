@@ -10,7 +10,9 @@ public class ExecuteThreads : MonoBehaviour {
 	GameObject disablePanel;
 	ProgressBar bar;
 
-	public Transform runButton;
+	public GameObject runButton;
+	public GameObject stopButton;
+
 	private Timer timer;
 	private int numActions;
 	private string toPrint;
@@ -160,7 +162,7 @@ public class ExecuteThreads : MonoBehaviour {
 		}
 
 		// switch to stop button
-		GameObject.Find ("RunButton").transform.SetAsFirstSibling ();
+		runButton.transform.SetAsFirstSibling ();
 
 		//simulationTextArea.text = "test";
 
@@ -544,8 +546,11 @@ public class ExecuteThreads : MonoBehaviour {
 	}
 
 	public void terminateSimulation() {
-	
+
+		err = true;
+		lost = true;
 		stop = true;
+		// paused = true;
 
 		try {
 			disablePanel.SetActive (false);
@@ -554,7 +559,7 @@ public class ExecuteThreads : MonoBehaviour {
 		}
 		simulationTextArea.text = "";
 
-		GameObject.Find ("RunButton").transform.SetAsLastSibling ();
+		runButton.transform.SetAsLastSibling ();
 		bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
 	}
 
@@ -562,9 +567,14 @@ public class ExecuteThreads : MonoBehaviour {
 
 		bar.currentAmount = 0;
 
+		int speed = 1;
+
 		int step_counter = 1;
 		int t1_curr_index = 0;
 		int t2_curr_index = 0;
+
+		bool t1_canPrint = true;
+		bool t2_canPrint = true;
 
 		int limit = 0;
 		int j = 0;
@@ -581,7 +591,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 				// Debug.Log ("bar.currentAmount < 100. Bar updated.");
 
-				bar.currentAmount += 25;
+				bar.currentAmount += 1;
 				bar.LoadingBar.GetComponent<Image>().fillAmount = bar.currentAmount / 100;
 
 			} else {
@@ -591,7 +601,7 @@ public class ExecuteThreads : MonoBehaviour {
 				paused = true;
 				lost = true;
 
-				GameObject.Find ("StopButton").transform.GetComponent<Button> ().interactable = false;
+				stopButton.transform.GetComponent<Button> ().interactable = false;
 				// bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
 
 				// break;
@@ -610,7 +620,7 @@ public class ExecuteThreads : MonoBehaviour {
 					}
 					//simulationTextArea.text = "";
 
-					GameObject.Find ("RunButton").transform.SetAsLastSibling ();
+					runButton.transform.SetAsLastSibling ();
 					// bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
 
 				}
@@ -628,13 +638,6 @@ public class ExecuteThreads : MonoBehaviour {
 				simulationTextArea.text += "\nSTEP " + (j+1) + ": \n";
 
 				// ------------------------------  THREAD 2 ------------------------------
-
-				try {
-
-					if (!err)
-						simulationTextArea.text += "" + b1 [j];
-
-				} catch { }
 
 				try {
 					
@@ -721,31 +724,71 @@ public class ExecuteThreads : MonoBehaviour {
 						}
 
 					} else if (b1[t1_curr_index].Substring(11, 3) == "cut") {
-						// Debug.Log("CUTTING");
+
+						if (!t1_has_brush || !t1_has_scissors) {
+							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+							resError("> ERROR: You can't cut without a brush and some scissors.");
+						}
+							
 					} else if (b1[t1_curr_index].Substring(11, 3) == "dry") {
-						// Debug.Log("DRY");
+
+						if (!t1_has_station || !t1_has_dryer || !t1_has_towel) {
+							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+							resError("> ERROR: You can't dry without a station, a dryer and a towel.");
+						}
+
 					} else if (b1[t1_curr_index].Substring(11, 4) == "wash") {
-						// Debug.Log("WASHING");
+
+						if (!t1_has_station || !t1_has_shampoo || !t1_has_towel || !t1_has_conditioner) {
+							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+							resError("> ERROR: You can't dry without a station, shampoo, conditioner, and a towel.");
+						}
+
 					} else if (b1[t1_curr_index].Substring(11, 5) == "groom") {
-						// Debug.Log("GROOMING");
+
+						if (!t1_has_brush || !t1_has_clippers) {
+							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+							resError("> ERROR: You can't dry without a brush and some nail clippers.");
+						}
+
 					} else if (b1[t1_curr_index].Substring(11, 7) == "checkin") {
-						// Debug.Log("CHECKING IN");
+
+						if (t1_checkedin) {
+							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+							resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.");
+						} else {
+							t1_checkedin = true;
+							t1_checkedout = false;
+						}
+					
 					} else if (b1[t1_curr_index].Substring(11, 8) == "checkout") {
-						// Debug.Log("CHECKING OUT");
+
+						if (t1_checkedout) {
+							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+							resError("> ERROR: You have to check in before attempting to check out a customer.");
+						} else {
+							t1_checkedin = false;
+							t1_checkedout = true;
+						}
 					}
-			
-					t1_curr_index++;
+
+				} catch { }
+
+				try {
+
+					if (t1_canPrint) {
+
+						if (!err)
+							simulationTextArea.text += "" + b1 [t1_curr_index];
+						t1_curr_index++;
+					}
 
 				} catch { }
 
 
 				// ------------------------------  THREAD 2 ------------------------------
 
-				try {
-					if (!err)
-						simulationTextArea.text += "" + b2 [j];
-				} catch { }
-					
+									
 				try {
 
 					// {"[null]", "brush" ,"clippers" , "cond.", "dryer", "scissors", "shampoo", "station", "towel"};
@@ -831,24 +874,67 @@ public class ExecuteThreads : MonoBehaviour {
 						}
 
 					} else if (b2[t2_curr_index].Substring(11, 3) == "cut") {
-						Debug.Log("CUTTING");
-					} else if (b2[t2_curr_index].Substring(11, 3) == "dry") {
-						Debug.Log("DRY");
-					} else if (b2[t2_curr_index].Substring(11, 4) == "wash") {
-						Debug.Log("WASHING");
-					} else if (b2[t2_curr_index].Substring(11, 5) == "groom") {
-						Debug.Log("GROOMING");
-					} else if (b2[t2_curr_index].Substring(11, 7) == "checkin") {
-						Debug.Log("CHECKING IN");
-					} else if (b2[t2_curr_index].Substring(11, 8) == "checkout") {
-						Debug.Log("CHECKING OUT");
-					}
+						
+						if (!t2_has_brush || !t2_has_scissors) {
+							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
+							resError("> ERROR: You can't cut without a brush and some scissors.");
+						}
 
-					t2_curr_index++;
+					} else if (b2[t2_curr_index].Substring(11, 3) == "dry") {
+
+						if (!t2_has_station || !t2_has_dryer || !t2_has_towel) {
+							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
+							resError("> ERROR: You can't dry without a station, a dryer and a towel.");
+						}
+
+					} else if (b2[t2_curr_index].Substring(11, 4) == "wash") {
+
+						if (!t2_has_station || !t2_has_shampoo || !t2_has_towel || !t2_has_conditioner) {
+							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
+							resError("> ERROR: You can't dry without a station, shampoo, conditioner, and a towel.");
+						}
+					
+					} else if (b2[t2_curr_index].Substring(11, 5) == "groom") {
+
+						if (!t2_has_brush || !t2_has_clippers) {
+							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
+							resError("> ERROR: You can't dry without a brush and some nail clippers.");
+						}
+
+					} else if (b2[t2_curr_index].Substring(11, 7) == "checkin") {
+
+						if (t2_checkedin) {
+							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
+							resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.");
+						} else {
+							t2_checkedin = true;
+							t2_checkedout = false;
+						}
+					
+					} else if (b2[t2_curr_index].Substring(11, 8) == "checkout") {
+
+						if (t2_checkedout) {
+							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
+							resError("> ERROR: You have to check in before attempting to check out a customer.");
+						} else {
+							t2_checkedin = false;
+							t2_checkedout = true;
+						}
+					}
+						
+				} catch { }
+
+				try {
+
+					if (t2_canPrint) {
+						if (!err)
+							simulationTextArea.text += "" + b2 [j];
+						t2_curr_index++;
+					}
 
 				} catch { }
 
-				j++;
+				j++; // increment step
 
 				yield return new WaitForSeconds (1);
 			}
@@ -862,24 +948,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 		if (resource) {
 
-			err = true;
-			lost = true;
-			stop = true;
-			paused = true;
-			
-			// manager.showError ("You are trying to acquire a resource you already have.");
-			simulationTextArea.text += "\n<color=red>> ERROR: You are trying to acquire a resource you already have.</color>";
-
-			// terminateSimulation ();
-
-			try {
-				disablePanel.SetActive (false);
-			} catch {
-				Debug.Log ("Cannot disable DisablePanel.");
-			}
-
-			GameObject.Find ("RunButton").transform.SetAsLastSibling ();
-			bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+			resError("> ERROR: You are trying to acquire a resource you already have.");
 
 		} else {
 			resource = true;
@@ -892,29 +961,35 @@ public class ExecuteThreads : MonoBehaviour {
 
 		if (!resource) {
 
-			err = true;
-			lost = true;
-			stop = true;
-			paused = true;
-
-			// manager.showError ("You are trying to return a resource you don't have.");
-			simulationTextArea.text += "\n<color=red>> ERROR: You are trying to return a resource you don't have.</color>";
-
-			// terminateSimulation ();
-
-			try {
-				disablePanel.SetActive (false);
-			} catch {
-				Debug.Log ("Cannot disable DisablePanel.");
-			}
-
-			GameObject.Find ("RunButton").transform.SetAsLastSibling ();
-			bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+			resError("> ERROR: You are trying to return a resource you don't have.");
 
 		} else {
 			resource = false;
 		}
 
 		return;
+	}
+
+	void resError(String msg) {
+
+		err = true;
+		lost = true;
+		stop = true;
+		paused = true;
+
+		// manager.showError ("You are trying to return a resource you don't have.");
+		simulationTextArea.text += "\n<color=red>" + msg + "</color>";
+
+		// terminateSimulation ();
+
+		try {
+			disablePanel.SetActive (false);
+		} catch {
+			Debug.Log ("Cannot disable DisablePanel.");
+		}
+
+		runButton.transform.SetAsLastSibling ();
+		bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+
 	}
 }
