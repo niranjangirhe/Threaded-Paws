@@ -126,6 +126,15 @@ public class ExecuteThreads : MonoBehaviour {
 
 		simulationTextArea.text = "";
 
+		try {
+			GameObject.Find("InformationPanel").SetActive(false);
+		} catch {}
+
+		try {
+
+			GameObject.Find("AgendaPanel").SetActive(false);
+		} catch { }
+
 		stop = false;
 		err = false;
 		paused = false;

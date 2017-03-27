@@ -83,7 +83,7 @@
 'Assets/scripts/DropZone.cs'
 'Assets/scripts/ExecuteThreads.cs'
 'Assets/scripts/GenerateTasks.cs'
-'Assets/scripts/InformationIcon.cs'
+'Assets/scripts/Icons.cs'
 'Assets/scripts/MainMenuManager.cs'
 'Assets/scripts/ProgressBar.cs'
 'Assets/scripts/ScenesManager.cs'
