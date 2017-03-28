@@ -2,17 +2,10 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/ExecuteThreads.cs">
     <Files>
-      <File FileName="Assets/scripts/ExecuteThreads.cs" Line="100" Column="47" />
-      <File FileName="Assets/scripts/MainMenuManager.cs" Line="43" Column="2" />
-      <File FileName="Assets/scripts/ProgressBar.cs" Line="17" Column="51" />
-      <File FileName="Assets/scripts/dropDownManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/scripts/Draggable.cs" Line="1" Column="1" />
-      <File FileName="Assets/scripts/DropZone.cs" Line="1" Column="1" />
-      <File FileName="Assets/scripts/CreateNewBlock.cs" Line="1" Column="1" />
-      <File FileName="Assets/scripts/ToolboxManager.cs" Line="143" Column="3" />
-      <File FileName="Assets/scripts/Icons.cs" Line="54" Column="47" />
-      <File FileName="Assets/scripts/ScenesManager.cs" Line="16" Column="3" />
-      <File FileName="Assets/scripts/InstructionsManager.cs" Line="43" Column="43" />
+      <File FileName="Assets/scripts/InstructionsManager.cs" Line="48" Column="36" />
+      <File FileName="Assets/scripts/ExecuteThreads.cs" Line="18" Column="25" />
+      <File FileName="Assets/scripts/MainMenuManager.cs" Line="42" Column="3" />
+      <File FileName="Assets/scripts/ToolboxManager.cs" Line="83" Column="39" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -56,6 +56,24 @@ public class ExecuteThreads : MonoBehaviour {
 	bool t2_has_station;
 	bool t2_has_towel;
 
+	bool t1_needs_cut;
+	bool t1_needs_dry;
+	bool t1_needs_wash;
+	bool t1_needs_groom;
+	bool t1_did_cut;
+	bool t1_did_dry;
+	bool t1_did_wash;
+	bool t1_did_groom;
+
+	bool t2_needs_cut;
+	bool t2_needs_dry;
+	bool t2_needs_wash;
+	bool t2_needs_groom;
+	bool t2_did_cut;
+	bool t2_did_dry;
+	bool t2_did_wash;
+	bool t2_did_groom;
+
 	void Start() {
 
 		// t1_has_dog = false;
@@ -101,7 +119,285 @@ public class ExecuteThreads : MonoBehaviour {
 		}
 	}
 
+	public void Execute_SingleThread() {
+
+		t1_did_cut = false;
+		t1_did_dry = false;
+		t1_did_wash = false;
+		t1_did_groom = false;
+
+		// ----- SET UP FOR BRUCE, CUSTOMER FOR LEVEL 1 -----
+		t1_needs_cut = true;
+		t1_needs_dry = false;
+		t1_needs_wash = false;
+		t1_needs_groom = false;
+
+		// ------ START EXECUTE THREADS -------
+		simulationTextArea.text = "";
+
+		try {
+			GameObject.Find("InformationPanel").SetActive(false);
+		} catch {}
+
+		try {
+
+			GameObject.Find("AgendaPanel").SetActive(false);
+		} catch { }
+
+		stop = false;
+		err = false;
+		paused = false;
+		lost = false;
+
+		t1_checkedin = false;
+		t1_checkedout = false;
+		t2_checkedin = false;
+		t2_checkedout = false;
+
+		t1_has_brush = false;
+		t1_has_clippers = false;
+		t1_has_conditioner = false;
+		t1_has_dryer = false;
+		t1_has_scissors = false;
+		t1_has_shampoo = false;
+		t1_has_station = false;
+		t1_has_towel = false;
+
+		t2_has_brush = false;
+		t2_has_clippers = false;
+		t2_has_conditioner = false;
+		t2_has_dryer = false;
+		t2_has_scissors = false;
+		t2_has_shampoo = false;
+		t2_has_station = false;
+		t2_has_towel = false;
+
+
+		try {
+			// disable all other functionalities
+			disablePanel.SetActive (true);
+		} catch {
+			Debug.Log ("Cannot enable DisablePanel");
+		}
+
+		// switch to stop button
+		runButton.transform.SetAsFirstSibling ();
+
+	
+		// ------------------------ READING TAB 1 ------------------------
+
+		int thread1_whilesChildren = 0;
+
+		blocks_t1 = GetActionBlocks_MultiThreads ("1");
+		/*
+		foreach (Transform action in blocks_t1)
+			Debug.Log (action.GetComponentInChildren<Text>().text);
+		*/
+
+		//string[] blocks_names_t1 = new string[blocks_t1.Length];
+		List<string> blocks_names_t1 = new List<string> ();
+
+		int i = 0;
+		bool isError = false; //unused, for now
+
+		foreach (Transform child in blocks_t1) {
+
+			if (child.GetComponent<Draggable> ().typeOfItem == Draggable.Type.ACTION) {
+
+				//Debug.Log ("TYPE ACTION");
+
+
+				if (blocks_t1 [i].transform.GetComponentInChildren<Text> ().text == "get") {
+
+					string resource = blocks_t1 [i].transform.Find ("Dropdown").Find ("Label").GetComponent<Text> ().text;
+
+					if (resource == "[null]") {
+						terminateSimulation ();
+						manager.showError ("Please select a resource to acquire.");
+						return;
+
+					} else {
+
+						blocks_names_t1.Add ("acquire ( " + resource + " );\n");
+						i++;
+					}
+
+				} else if(blocks_t1 [i].transform.GetComponentInChildren<Text> ().text == "ret") {
+
+					string resource = blocks_t1 [i].transform.Find ("Dropdown").Find ("Label").GetComponent<Text> ().text;
+
+					if (resource == "[null]") {
+						terminateSimulation ();
+						manager.showError ("Please select a resource to return.");
+						return;
+					} else {
+
+						blocks_names_t1.Add ("return ( " + resource + " );\n");
+						i++;
+					}
+
+				} else {
+
+					//blocks_names_t1 [i] = "[thread 1] " + blocks_t1 [i].transform.GetComponentInChildren<Text> ().text + ";";
+					blocks_names_t1.Add (blocks_t1 [i].transform.GetComponentInChildren<Text> ().text + ";\n");
+
+					i++;
+				}
+
+			} else if (child.GetComponent<Draggable> ().typeOfItem == Draggable.Type.IFSTAT) {
+
+				//Debug.Log ("TYPE IFSTAT");
+
+				string condition, actionText, line;
+				try {
+
+					condition = blocks_t1 [i].GetComponentInChildren<Text> ().text;
+					actionText = blocks_t1 [i].FindChild ("DropArea").GetComponentInChildren<Text> ().text;
+
+					//line = "[thread 1] if ( " + condition + " ) {\n    " + actionText + "\n}";
+					line = actionText + "; [ if ( " + condition + " ) ]\n";
+
+				} catch (Exception e) {
+					//manager.showError ("At least one if statement is empty.");
+					//line = ">> ERROR: Empty if statement";
+					simulationTextArea.text = "";
+					manager.showError ("There is at least one empty if statement.");
+					terminateSimulation ();
+					return;
+				}
+
+				//blocks_names_t1 [i] = line;
+				blocks_names_t1.Add (line);
+
+				//blocks_names [i] = blocks[i].transform.GetComponentInChildren<Text> ().text;
+				i++;
+
+			} else if (child.GetComponent<Draggable> ().typeOfItem == Draggable.Type.WHILELOOP) {
+
+				string condition, line;
+				string actionText = "";
+
+				int whileChildrenCount = child.Find ("DropArea").childCount;
+				thread1_whilesChildren += whileChildrenCount;
+				//Debug.Log ("child " + child.name + ", child count: " + whileChildrenCount);
+
+				//Debug.Log ("Thread 1 whileChildrenCount: " + whileChildrenCount);
+				if (whileChildrenCount < 1) {
+					//Debug.Log(">>> ERROR: There is at least one empty while loop");
+					//simulationTextArea.text = "There is at least one empty while loop in thread 2.";
+					simulationTextArea.text = "";
+					manager.showError ("There is at least one empty while loop.");
+					terminateSimulation ();
+					return;
+				}
+
+				Transform[] whileChildren = new Transform[whileChildrenCount];
+
+				for (int k = 0; k < whileChildrenCount; k++) {
+					//threadChildren [i] = this.transform.Find("DropAreaThread").GetChild (i).gameObject;
+
+					whileChildren [k] = child.Find ("DropArea").GetChild (k);
+					//threadChildren [i] = this.transform.Find ("DropAreaThread").GetChild (i).GetComponentInChildren<Text>().text;
+					//Debug.Log ( timer.GetCurrentTime() + " -> " + threadChildren [i]);
+
+					//Debug.Log ("actions: " + whileChildren [k]);
+				}
+
+				try {
+
+					condition = blocks_t1 [i].Find ("Condition").GetComponent<Text> ().text;
+					if (condition == "< 2") {
+
+						if (whileChildrenCount > 1) {
+
+							//Debug.Log("There are " + whileChildrenCount + " children.");
+
+							/*
+							for (int k = 0; k < whileChildrenCount; k++) 
+								Debug.Log(whileChildren[k].GetComponentInChildren<Text>().text);
+							*/
+
+							for (int l = 0; l < 2; l++) {
+
+								for (int m = 0; m < whileChildrenCount; m++) {
+
+									blocks_names_t1.Add (whileChildren [m].GetComponentInChildren<Text> ().text + "; " +
+										"[ while ( " + condition + " ), iter = " + (l + 1) + " ]\n");
+								}
+							}
+
+						} else {
+							//Debug.Log ("There is 1 child.");
+							for (int k = 0; k < 2; k++) {
+								blocks_names_t1.Add (whileChildren [0].GetComponentInChildren<Text> ().text + "; " +
+									"[ while ( " + condition + " ), iter = " + (k + 1) + " ]\n");
+							}
+						}
+
+					} else {
+						Debug.Log ("Unidentified condition");
+					}
+
+
+					//line = "[thread 1] while ( " + condition + " ) {\n" + actionText + "}";
+
+				} catch (Exception e) {
+					manager.showError ("Exception caught.");
+					line = ">>> Exception caught.";
+				}
+
+				//blocks_names_t1 [i] = line;
+
+				i++;
+			}
+		}
+
+		if (blocks_t1.Length < 1) {
+			manager.showError ("There are no actions to run.");
+			simulationTextArea.text = "";
+			terminateSimulation ();
+			return;
+		}
+	
+		try {
+			if ((blocks_names_t1 [0].Substring (0, 7) != "checkin" /*&& blocks_names_t1 [0].Substring (11, 17) != "pickup"*/)) {
+
+				manager.showError ("Remember to always check-in your costumer first!");
+				terminateSimulation ();
+				return;
+			}
+		} catch {
+			manager.showError ("Remember to always check-in your costumer first!");
+			terminateSimulation ();
+			return;
+		}
+
+		try {
+
+			// Debug.Log(blocks_names_t1.Count);
+
+				if ((blocks_names_t1 [blocks_names_t1.Count - 1].Substring (0, 8) != "checkout")) {
+
+				manager.showError ("Remember to always check-out your costumer when you're done!");
+				terminateSimulation ();
+				return;
+			}
+		} catch{
+			manager.showError ("Remember to always check-out your costumer when you're done!");
+			terminateSimulation ();
+			return;
+		}
+
+		if (!err)
+			StartCoroutine (printThreads_single (blocks_names_t1));
+
+	}
+
+
+	// ------- FOR MULTIPLE THREADS (I.E. LEVEL 2) -------
+
 	private Transform[] GetActionBlocks_MultiThreads(String tabNum) {
+
 		//get children in drop area for thread
 		//threadChildren = new GameObject[this.transform.Find("DropAreaThread").childCount];
 		Transform[] threadChildren = new Transform[this.transform.Find("Tab" + tabNum).FindChild("ScrollRect").FindChild("DropAreaThread" + tabNum).childCount];
@@ -475,7 +771,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 								for (int m = 0; m < whileChildrenCount; m++) {
 
-									blocks_names_t2.Add ("[thread 1] " + whileChildren [m].GetComponentInChildren<Text> ().text + "; " +
+									blocks_names_t2.Add ("[thread 2] " + whileChildren [m].GetComponentInChildren<Text> ().text + "; " +
 									"[ while ( " + condition + " ), iter = " + (l + 1) + " ]\n");
 								}
 							}
@@ -522,12 +818,12 @@ public class ExecuteThreads : MonoBehaviour {
 			if ((blocks_names_t1 [0].Substring (11, 7) != "checkin" /*&& blocks_names_t1 [0].Substring (11, 17) != "pickup"*/)
 				|| (blocks_names_t2 [0].Substring (11, 7) != "checkin" /*&& blocks_names_t2 [0].Substring (11, 17) != "pickup"*/)) {
 
-				manager.showError ("Remember to always pick-up and/or check-in your costumer first!");
+				manager.showError ("Remember to always check-in your costumer first!");
 				terminateSimulation ();
 				return;
 			}
 		} catch {
-			manager.showError ("(caught) Remember to always pick-up and/or check-in your costumer first!");
+			manager.showError ("Remember to always check-in your costumer first!");
 			terminateSimulation ();
 			return;
 		}
@@ -544,7 +840,7 @@ public class ExecuteThreads : MonoBehaviour {
 				return;
 			}
 		} catch{
-			manager.showError ("(caught) Remember to always check-out your costumer when you're done!");
+			manager.showError ("Remember to always check-out your costumer when you're done!");
 			terminateSimulation ();
 			return;
 		}
@@ -570,6 +866,295 @@ public class ExecuteThreads : MonoBehaviour {
 
 		runButton.transform.SetAsLastSibling ();
 		bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+	}
+
+	// ------- FOR SINGLE THREAD (I.E. LEVEL 1)
+	IEnumerator printThreads_single(List<string> b1) {
+
+		// Debug.Log ("printThreads_single");
+		
+		bar.currentAmount = 0;
+
+		int speed = 14;
+
+		int step_counter = 1;
+		int t1_curr_index = 0;
+
+		bool t1_canPrint = true;
+
+		int limit = 0;
+		int j = 0;
+
+		while ((t1_curr_index < b1.Count)) {
+
+			// Debug.Log ("b1.Count = " + b1.Count + ", t1_curr_index = " + t1_curr_index);
+
+			if (bar.currentAmount < 100) {
+
+				// Debug.Log ("bar.currentAmount < 100. Bar updated.");
+
+				bar.currentAmount += speed;
+				bar.LoadingBar.GetComponent<Image>().fillAmount = bar.currentAmount / 100;
+
+			} else {
+
+				manager.gameLost();
+				stop = true;
+				paused = true;
+				lost = true;
+
+				stopButton.transform.GetComponent<Button> ().interactable = false;
+				// bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+
+				// break;
+				// yield break;
+				yield return 0;
+			}
+
+			if (stop) {
+
+				if (!paused) {
+
+					try {
+						disablePanel.SetActive (false);
+					} catch {
+						Debug.Log ("Cannot disable DisablePanel");
+					}
+					//simulationTextArea.text = "";
+
+					runButton.transform.SetAsLastSibling ();
+					// bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+
+				}
+
+				// Debug.Log ("Bar set to 0 in if(stop)");
+
+				bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+
+				break;
+				yield break;
+				yield return 0;
+
+			} else {
+
+				simulationTextArea.text += "\nSTEP " + (j+1) + ": \n";
+
+				// ------------------------------  THREAD 1 ------------------------------
+
+				try {
+
+					// {"[null]", "brush" ,"clippers" , "cond.", "dryer", "scissors", "shampoo", "station", "towel"};
+
+					// Debug.Log("b1[t1_curr_index].Substring(0, 3): \"" + b1[t1_curr_index].Substring(0, 3) + "\"");
+
+					if (b1[t1_curr_index].Substring(0, 3) == "acq") {
+
+						// Debug.Log("ACQUIRING " + b1[t1_curr_index].Substring(10, 5));
+
+						// acquiring resource
+						switch(b1[t1_curr_index].Substring(10, 5)) {
+
+						case "brush":
+
+							acquire (ref t1_has_brush);
+							t1_canPrint = true;
+							// lost = false;
+						
+							break;
+
+						case "clipp":
+
+							acquire (ref t1_has_clippers);
+							t1_canPrint = true;
+							// lost = false;
+
+							break;
+
+						case "cond.":
+
+							acquire (ref t1_has_conditioner);
+							t1_canPrint = true;
+							// lost = false;
+
+							break;
+
+						case "dryer":
+
+							acquire (ref t1_has_dryer);
+							t1_canPrint = true;
+							// lost = false;
+
+							break;
+
+						case "sciss":
+
+							acquire (ref t1_has_scissors);
+							t1_canPrint = true;
+							// lost = false;
+
+							break;
+
+						case "shamp":
+
+							acquire (ref t1_has_shampoo);
+							t1_canPrint = true;
+							// lost = false;
+
+							break;
+
+						case "stati":
+
+							acquire (ref t1_has_station);
+							t1_canPrint = true;
+							// lost = false;
+
+							break;
+
+						case "towel":
+
+							acquire (ref t1_has_towel);
+							t1_canPrint = true;
+							// lost = false;
+
+							break;
+						}
+
+					} else if (b1[t1_curr_index].Substring(0, 3) == "ret") {
+
+						// Debug.Log("RETURNING " + b1[t1_curr_index].Substring(0, 5));
+						
+
+						// returning resource
+						switch(b1[t1_curr_index].Substring(9, 5)) {
+
+						case "brush":
+							return_res (ref t1_has_brush);
+							break;
+
+						case "clipp":
+							return_res (ref t1_has_clippers);
+							break;
+
+						case "cond.":
+							return_res (ref t1_has_conditioner);
+							break;
+
+						case "dryer":
+							return_res (ref t1_has_dryer);
+							break;
+
+						case "sciss":
+							return_res (ref t1_has_scissors);
+							break;
+
+						case "shamp":
+							return_res (ref t1_has_shampoo);
+							break;
+
+						case "stati":
+							return_res (ref t1_has_station);
+							break;
+
+						case "towel":
+							return_res (ref t1_has_towel);
+							break;
+						}
+
+					} else if (b1[t1_curr_index].Substring(0, 3) == "cut") {
+						
+						if (!t1_has_brush || !t1_has_scissors) {
+							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+							resError("\n> ERROR: You can't cut without a brush and some scissors.\n\n");
+						}
+
+						// perform cut
+						t1_did_cut = true;
+
+					} else if (b1[t1_curr_index].Substring(0, 3) == "dry") {
+
+						if (!t1_has_station || !t1_has_dryer || !t1_has_towel) {
+							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+							resError("\n> ERROR: You can't dry without a station, a dryer and a towel.\n\n");
+						}
+
+						// perform dry
+						t1_did_dry = true;
+
+					} else if (b1[t1_curr_index].Substring(0, 4) == "wash") {
+
+						if (!t1_has_station || !t1_has_shampoo || !t1_has_towel || !t1_has_conditioner) {
+							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+							resError("\n> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.\n\n");
+						}
+
+						// perform wash
+						t1_did_wash = true;
+
+					} else if (b1[t1_curr_index].Substring(0, 5) == "groom") {
+
+						if (!t1_has_brush || !t1_has_clippers) {
+							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+							resError("\n> ERROR: You can't groom without a brush and some nail clippers.\n\n");
+						}
+
+						// perform groom
+						t1_did_groom = true;
+
+					} else if (b1[t1_curr_index].Substring(0, 7) == "checkin") {
+
+						if (t2_checkedin) {
+							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+							resError("\n> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.\n\n");
+						} else {
+							t1_checkedin = true;
+							t1_checkedout = false;
+						}
+
+					} else if (b1[t1_curr_index].Substring(0, 8) == "checkout") {
+						
+						if (t1_has_brush || t1_has_clippers || t1_has_conditioner || t1_has_dryer || t1_has_scissors || t1_has_shampoo || t1_has_station || t1_has_towel) {
+
+							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+							resError("\n> ERROR: You need to return all the resources you acquired before checking out.\n\n");
+
+						} else if ((t1_needs_cut && !t1_did_cut) || (t1_needs_dry && !t1_did_dry)
+									|| (t1_needs_groom && !t1_did_groom) || (t1_needs_wash && !t1_did_wash)) {
+						
+							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+							resError("\n> ERROR: Seems like you didn't fulfill all of your customer's requests. Please try again.\n\n");
+						}
+						else if (t1_checkedout) {
+							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+							resError("\n> ERROR: You have to check in before attempting to check out a customer.\n\n");
+
+						} else {
+							t1_checkedin = false;
+							t1_checkedout = true;
+						}
+					}
+
+				} catch { }
+
+				try {
+
+					if (t1_canPrint) {
+
+						if (!err)
+							simulationTextArea.text += "" + b1 [t1_curr_index];
+						t1_curr_index++;
+					}
+
+				} catch { }
+
+				j++; // increment step
+
+				yield return new WaitForSeconds (1);
+			}
+		}
+
+		if (!lost)
+			manager.gameWon ();
+	
 	}
 
 	IEnumerator printThreads(List<string> b1, List<string> b2) {
@@ -652,7 +1237,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 				simulationTextArea.text += "\nSTEP " + (j+1) + ": \n";
 
-				// ------------------------------  THREAD 2 ------------------------------
+				// ------------------------------  THREAD 1 ------------------------------
 
 				try {
 					
@@ -830,35 +1415,35 @@ public class ExecuteThreads : MonoBehaviour {
 
 						if (!t1_has_brush || !t1_has_scissors) {
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
-							resError("> ERROR: You can't cut without a brush and some scissors.");
+							resError("> ERROR: You can't cut without a brush and some scissors.\n\n");
 						}
 							
 					} else if (b1[t1_curr_index].Substring(11, 3) == "dry") {
 
 						if (!t1_has_station || !t1_has_dryer || !t1_has_towel) {
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
-							resError("> ERROR: You can't dry without a station, a dryer and a towel.");
+							resError("> ERROR: You can't dry without a station, a dryer and a towel.\n\n");
 						}
 
 					} else if (b1[t1_curr_index].Substring(11, 4) == "wash") {
 
 						if (!t1_has_station || !t1_has_shampoo || !t1_has_towel || !t1_has_conditioner) {
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
-							resError("> ERROR: You can't dry without a station, shampoo, conditioner, and a towel.");
+												resError("> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.\n\n");
 						}
 
 					} else if (b1[t1_curr_index].Substring(11, 5) == "groom") {
 
 						if (!t1_has_brush || !t1_has_clippers) {
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
-							resError("> ERROR: You can't dry without a brush and some nail clippers.");
+							resError("> ERROR: You can't groom without a brush and some nail clippers.\n\n");
 						}
 
 					} else if (b1[t1_curr_index].Substring(11, 7) == "checkin") {
 
 						if (t2_checkedin) {
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
-							resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.");
+							resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.\n\n");
 						} else {
 							t1_checkedin = true;
 							t1_checkedout = false;
@@ -869,11 +1454,11 @@ public class ExecuteThreads : MonoBehaviour {
 						if (t1_has_brush || t1_has_clippers || t1_has_conditioner || t1_has_dryer || t1_has_scissors || t1_has_shampoo || t1_has_station || t1_has_towel) {
 
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
-							resError("> ERROR: You need to return all the resources you acquired before checking out.");
+							resError("> ERROR: You need to return all the resources you acquired before checking out.\n\n");
 						
 						} else if (t1_checkedout) {
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
-							resError("> ERROR: You have to check in before attempting to check out a customer.");
+							resError("> ERROR: You have to check in before attempting to check out a customer.\n\n");
 
 						} else {
 							t1_checkedin = false;
@@ -1081,28 +1666,28 @@ public class ExecuteThreads : MonoBehaviour {
 
 						if (!t2_has_station || !t2_has_dryer || !t2_has_towel) {
 							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
-							resError("> ERROR: You can't dry without a station, a dryer and a towel.");
+							resError("> ERROR: You can't dry without a station, a dryer and a towel.\n\n");
 						}
 
 					} else if (b2[t2_curr_index].Substring(11, 4) == "wash") {
 
 						if (!t2_has_station || !t2_has_shampoo || !t2_has_towel || !t2_has_conditioner) {
 							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
-							resError("> ERROR: You can't dry without a station, shampoo, conditioner, and a towel.");
+							resError("> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.\n\n");
 						}
 					
 					} else if (b2[t2_curr_index].Substring(11, 5) == "groom") {
 
 						if (!t2_has_brush || !t2_has_clippers) {
 							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
-							resError("> ERROR: You can't dry without a brush and some nail clippers.");
+							resError("> ERROR: You can't groom without a brush and some nail clippers.\n\n");
 						}
 
 					} else if (b2[t2_curr_index].Substring(11, 7) == "checkin") {
 
 						if (t2_checkedin) {
 							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
-							resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.");
+							resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.\n\n");
 						} else {
 							t2_checkedin = true;
 							t2_checkedout = false;
@@ -1113,11 +1698,11 @@ public class ExecuteThreads : MonoBehaviour {
 						if (t2_has_brush || t2_has_clippers || t2_has_conditioner || t2_has_dryer || t2_has_scissors || t2_has_shampoo || t2_has_station || t2_has_towel) {
 
 							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
-							resError("> ERROR: You need to return all the resources you acquired before checking out.");
+							resError("> ERROR: You need to return all the resources you acquired before checking out.\n\n");
 
 						} else if (t2_checkedout) {
 							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
-							resError("> ERROR: You have to check in before attempting to check out a customer.");
+							resError("> ERROR: You have to check in before attempting to check out a customer.\n\n");
 
 						} else {
 							t2_checkedin = false;
@@ -1147,30 +1732,45 @@ public class ExecuteThreads : MonoBehaviour {
 			manager.gameWon ();
 	}
 
-	void acquire(ref bool resource) {
+	int acquire(ref bool resource) {
 
 		if (resource) {
 
-			resError("> ERROR: You are trying to acquire a resource you already have.");
+			err = true;
+			lost = true;
+			stop = true;
+			paused = true;
+
+			resError("\n> ERROR: You are trying to acquire a resource you already have.");
+
+			return -1;
 
 		} else {
 			resource = true;
+			return 0;
 		}
 
-		return;
 	}
 
-	void return_res(ref bool resource) {
+	int return_res(ref bool resource) {
 
 		if (!resource) {
 
-			resError("> ERROR: You are trying to return a resource you don't have.");
+			err = true;
+			lost = true;
+			stop = true;
+			paused = true;
+
+			resError("\n> ERROR: You are trying to return a resource you don't have.");
+
+			return -1;
 
 		} else {
 			resource = false;
+
+			return 0;
 		}
 
-		return;
 	}
 
 	void resError(String msg) {
@@ -1181,7 +1781,8 @@ public class ExecuteThreads : MonoBehaviour {
 		paused = true;
 
 		// manager.showError ("You are trying to return a resource you don't have.");
-		simulationTextArea.text += "\n<color=red>" + msg + "</color>";
+		// simulationTextArea.text += "\n<color=red>" + msg + "</color>";
+		simDisplay (msg);
 
 		// terminateSimulation ();
 
