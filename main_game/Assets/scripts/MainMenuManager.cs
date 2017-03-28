@@ -30,7 +30,8 @@ public class MainMenuManager : MonoBehaviour {
 
 	public void startGame() {
 	
-		SceneManager.LoadScene ("Level1");
+		//SceneManager.LoadScene ("Level1");
+		SceneManager.LoadScene ("LevelTemplate");
 	}
 
 	public void quitGame() {
@@ -38,6 +39,6 @@ public class MainMenuManager : MonoBehaviour {
 	}
 
 	public void getInstructions() {
-		// SceneManager.LoadScene ("Instructions");
+		SceneManager.LoadScene ("Instructions");
 	}
 }

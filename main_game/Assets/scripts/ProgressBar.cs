@@ -14,6 +14,7 @@ public class ProgressBar : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		// currentAmount = 0;
+		LoadingBar.GetComponent<Image>().fillAmount = 0;
 	}
 	
 	// Update is called once per frame

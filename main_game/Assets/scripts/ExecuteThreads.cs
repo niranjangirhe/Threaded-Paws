@@ -97,7 +97,7 @@ public class ExecuteThreads : MonoBehaviour {
 		try { 
 			disablePanel.SetActive (false);
 		} catch {
-			Debug.Log ("Panel is disabled.");
+			Debug.Log ("Disable Panel is can't be found.");
 		}
 	}
 

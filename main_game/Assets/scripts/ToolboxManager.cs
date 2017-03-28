@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class ToolboxManager : MonoBehaviour {
 
@@ -59,6 +60,7 @@ public class ToolboxManager : MonoBehaviour {
 	public Text txtErrorMsg;
 	public GameObject LostPanel;
 	public GameObject WonPanel;
+	public GameObject InstructionsPanel;
 
 	// Use this for initialization
 	void Start () {
@@ -75,6 +77,10 @@ public class ToolboxManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+	}
+
+	public void getMainMenu() {
+		SceneManager.LoadScene ("MainMenu");
 	}
 
 	public void updateValues() {
@@ -139,5 +145,12 @@ public class ToolboxManager : MonoBehaviour {
 		} catch {
 			Debug.Log ("Could not find WonPanel");
 		}
+	}
+
+
+	public void playAfterInstructions() {
+
+		InstructionsPanel.SetActive (false);
+
 	}
 }
