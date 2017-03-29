@@ -516,7 +516,7 @@ public class ExecuteThreadsLevel4 : MonoBehaviour {
 				thread2_whilesChildren += whileChildrenCount;
 				//Debug.Log ("child " + child.name + ", child count: " + whileChildrenCount);
 
-				Debug.Log ("Thread 2 whileChildrenCount: " + whileChildrenCount);
+				// Debug.Log ("Thread 2 whileChildrenCount: " + whileChildrenCount);
 				if (whileChildrenCount < 1) {
 					//Debug.Log(">>> ERROR: There is at least one empty while loop");
 					//simulationTextArea.text = "There is at least one empty while loop in thread 2.";
@@ -666,7 +666,7 @@ public class ExecuteThreadsLevel4 : MonoBehaviour {
 		}
 
 		if (!err)
-			StartCoroutine (printThreads (blocks_names_t1, blocks_names_t2, 8));
+			StartCoroutine (printThreads (blocks_names_t1, blocks_names_t2, 1));
 
 	}
 
@@ -1106,23 +1106,22 @@ public class ExecuteThreadsLevel4 : MonoBehaviour {
 					
 					} else if (b1[t1_curr_index].Substring(11, 8) == "checkout") {
 
-						if ((t1_needs_cut && !t1_did_cut) || (t1_needs_dry && !t1_did_dry) || (t1_needs_wash && !t1_did_wash) || (t1_needs_groom && !t1_did_groom)) {
+						if ((!t1_did_cut) || (!t1_did_dry) || (!t1_did_wash) || (!t1_did_groom)) {
 
 							// Debug.Log("worker 1 is missing actions. add them.");
 
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
-							resError("\n> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.\n\n");
-						
+							resError("\n> ERROR: Seems like thread 1 hasn't covered all posibilities yet; it should be done before check-out is reached. Please try again.\n\n");
+
 						}
 
-//						else if (t1_has_brush || t1_has_clippers || t1_has_conditioner || t1_has_dryer || t1_has_scissors || t1_has_shampoo || t1_has_station || t1_has_towel) {
-//
-//							// Debug.Log("worker 1: still have some resources.");
-//
-//							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
-//							resError("\n> ERROR: You need to return all the resources you acquired before checking out.\n\n");
-//						
-//						} 
+						else if (t1_has_brush || t1_has_clippers || t1_has_conditioner || t1_has_dryer || t1_has_scissors || t1_has_shampoo || t1_has_station || t1_has_towel) {
+
+							// Debug.Log("worker 1: still have some resources.");
+
+							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+							resError("\n> ERROR: You need to return all the resources you acquired before checking out.\n\n");
+						}
 
 						else if (t1_checkedout) {
 							
@@ -1136,6 +1135,8 @@ public class ExecuteThreadsLevel4 : MonoBehaviour {
 							t1_checkedin = false;
 							t1_checkedout = true;
 						}
+
+						// Debug.Log("1. lost var status: " + lost);
 					}
 
 				} catch { }
@@ -1467,18 +1468,18 @@ public class ExecuteThreadsLevel4 : MonoBehaviour {
 							// Debug.Log("worker 2 is missing actions. add them.");
 
 							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
-							resError("\n> ERROR: Seems like worker 2 didn't fulfill all of the customer's requests. Please try again.\n\n");
+							resError("\n> ERROR: Seems like thread 1 hasn't covered all posibilities yet; it should be done before check-out is reached. Please try again.\n\n");
 
 						} 
 
-//						else if (t2_has_brush || t2_has_clippers || t2_has_conditioner || t2_has_dryer || t2_has_scissors || t2_has_shampoo || t2_has_station || t2_has_towel) {
-//
-//							// Debug.Log("worker 2 hasnt returned all resources.");
-//
-//							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
-//							resError("\n> ERROR: You need to return all the resources you acquired before checking out.\n\n");
-//
-//						} 
+						else if (t2_has_brush || t2_has_clippers || t2_has_conditioner || t2_has_dryer || t2_has_scissors || t2_has_shampoo || t2_has_station || t2_has_towel) {
+
+							// Debug.Log("worker 2 hasnt returned all resources.");
+
+							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
+							resError("\n> ERROR: You need to return all the resources you acquired before checking out.\n\n");
+
+						} 
 
 						else if (t2_checkedout) {
 
@@ -1491,8 +1492,11 @@ public class ExecuteThreadsLevel4 : MonoBehaviour {
 							
 							t2_checkedin = false;
 							t2_checkedout = true;
-							lost = false;
+							// lost = false;
 						}
+
+						// Debug.Log("2. lost var status: " + lost);
+
 					}
 						
 				} catch { }

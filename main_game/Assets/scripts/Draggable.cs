@@ -200,8 +200,6 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 //		threadArea1.transform.GetComponent<Image>().color = Color.magenta;
 //		threadArea2.transform.GetComponent<Image>().color = Color.cyan;
 
-		threadArea1.transform.GetComponent<Image> ().color = new Vector4 (0.9F, 0.9F, 0.9F, 1);
-		threadArea2.transform.GetComponent<Image>().color = new Vector4 (0.9F, 0.9F, 0.9F, 1);
 
 		Transform[] thread1Children = new Transform[threadArea1.transform.childCount];
 		Transform[] thread2Children = new Transform[threadArea2.transform.childCount];
@@ -217,10 +215,20 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 					//Debug.Log ("De-colouring: " + thread1Children [i].gameObject.GetComponentInChildren<DropZone> ().name);
 
 					thread1Children [i].Find (zoneName).GetComponent<Image> ().color = Color.white;
-
 				}
 
 			} catch {}
+		}
+
+		if (manager.isLevel4) {
+
+			threadArea1.transform.GetComponent<Image> ().color = Color.white;
+			threadArea2.transform.GetComponent<Image>().color = Color.white;
+			
+		} else {
+
+			threadArea1.transform.GetComponent<Image> ().color = new Vector4 (0.9F, 0.9F, 0.9F, 1);
+			threadArea2.transform.GetComponent<Image>().color = new Vector4 (0.9F, 0.9F, 0.9F, 1);
 		}
 
 		for (int i = 0; i < thread2Children.Length; i++) {
