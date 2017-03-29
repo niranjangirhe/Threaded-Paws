@@ -34,7 +34,7 @@ public class Icons : MonoBehaviour {
 				informationPanel.SetActive (false);
 			} else {
 				informationPanel.SetActive (true);
-				agendaPanel.SetActive(false);
+				// agendaPanel.SetActive(false);
 			}
 		} catch {
 			Debug.Log ("Information Panel can't be found.");

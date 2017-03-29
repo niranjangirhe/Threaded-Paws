@@ -8,11 +8,15 @@ public class dropDownManager : MonoBehaviour {
 	public Dropdown dropDown;
 	public Text showSelected;
 
+	public string selected;
+
 	List<string> options = new List<string>() {"[null]", "brush" ,"clippers" , "cond.", "dryer", "scissors", "shampoo", "station", "towel"};
 
 	public void indexChanged(int index) { // takes selected option index
 
-		showSelected.text = options[index];
+		// Debug.Log ("indexChanged() called");
+
+		showSelected.text = options [index];
 
 		if (index == 0)
 			showSelected.color = Color.red;
@@ -28,5 +32,10 @@ public class dropDownManager : MonoBehaviour {
 	void PopulateList () {
 
 		dropDown.AddOptions (options);
+
+		if (selected != "") {
+			showSelected.text = selected;
+			showSelected.color = Color.black;
+		}	
 	}
 }

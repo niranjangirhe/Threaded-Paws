@@ -266,7 +266,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 						manager.pickupLeft_thread1 += 1;
 					}
 
-					Debug.Log ("An action was dropped in the toolbox");
+					// Debug.Log ("An action was dropped in the toolbox");
 
 				} else if (this.typeOfItem == Type.WHILELOOP) {
 
@@ -372,7 +372,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 						manager.pickupLeft_thread2 += 1;
 					}
 
-					Debug.Log ("An action was dropped in the toolbox");
+					// Debug.Log ("An action was dropped in the toolbox");
 
 				} else if (this.typeOfItem == Type.WHILELOOP) {
 					

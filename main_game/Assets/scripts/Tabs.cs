@@ -5,15 +5,21 @@ using UnityEngine.UI;
 
 public class Tabs : MonoBehaviour {
 
-	GameObject curr_tab;
 	ToolboxManager manager;
 	GameObject toolbox;
+
+	public void switchCustomer() {
+
+		GameObject curr_worker = this.transform.parent.gameObject;
+
+		curr_worker.transform.SetAsLastSibling ();
+	}
 
 	public void switchTabs() {
 
 		// Debug.Log (this.transform.parent.name);
 
-		curr_tab = this.transform.parent.gameObject;
+		GameObject curr_tab = this.transform.parent.gameObject;
 
 		if (CreateNewBlock.canCreate) {
 			

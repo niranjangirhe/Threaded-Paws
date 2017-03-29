@@ -7,6 +7,10 @@ using UnityEngine.UI;
 
 public class InstructionsManager : MonoBehaviour {
 
+	public GameObject level2_part1;
+	public GameObject level2_part2;
+	public GameObject level2_disableFunctionality;
+
 	public ProgressBar timer;
 
 	public GameObject coverError;
@@ -156,5 +160,13 @@ public class InstructionsManager : MonoBehaviour {
 		coverPlayStop.SetActive (true);
 
 		coverError.SetActive (false);
+	}
+
+	public void level2_getPanel1() {
+	
+	}
+
+	public void level2_getPanel2() {
+		
 	}
 }
