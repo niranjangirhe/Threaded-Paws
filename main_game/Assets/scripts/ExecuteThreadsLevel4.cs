@@ -367,20 +367,40 @@ public class ExecuteThreadsLevel4 : MonoBehaviour {
 							}
 						}
 
-					} else if (condition == "list != empty" ) {
+					} else if (condition == "list != empty") {
 
-						if (whileChildrenCount > 1) {
+//						if (whileChildrenCount > 1) {
 							
 							for (int m = 0; m < whileChildrenCount; m++) {
 
-								blocks_names_t1.Add ("[thread 1] " + whileChildren [m].GetComponentInChildren<Text> ().text + "; " +
-									"[ while ( " + condition + " ) ]\n");
-							}
+								Transform currChild = whileChildren[m];
+								
+								if (currChild.GetComponent<Draggable>().typeOfItem == Draggable.Type.IFSTAT) {
+
+								// Debug.Log("IF statement first child: " + currChild.GetChild(1).name);
+
+									string action = currChild.GetChild(1).GetComponentInChildren<Text>().text;
+									blocks_names_t1.Add ("[thread 1] " + action + "; " +
+										"[ while ( " + condition + " ), if needed ]\n");
+									
+									// Debug.Log("Adding to the list: " + "[thread 1] " + action + "; " +
+										// "[ while ( " + condition + " ), if needed ]\n");
+
+								} else {
+
+									blocks_names_t1.Add ("[thread 1] " + whileChildren [m].GetComponentInChildren<Text> ().text + "; " +
+										"[ while ( " + condition + " ) ]\n");
+
+									// Debug.Log("Adding to the list: " + "[thread 1] " + whileChildren [m].GetComponentInChildren<Text> ().text + "; " +
+										// "[ while ( " + condition + " ) ]\n");
+								}
 						
-						} else {
-							blocks_names_t1.Add ("[thread 1] " + whileChildren [0].GetComponentInChildren<Text> ().text + "; " +
-									"[ while ( " + condition + " ) ]\n");
-						}
+						} 
+
+//						else {
+//							blocks_names_t1.Add ("[thread 1] " + whileChildren [0].GetComponentInChildren<Text> ().text + "; " +
+//									"[ while ( " + condition + " ) ]\n");
+//						}
 
 					} else {
 						Debug.Log ("Unidentified condition");
@@ -543,20 +563,31 @@ public class ExecuteThreadsLevel4 : MonoBehaviour {
 									"[ while ( " + condition + " ), iter = " + (k + 1) + " ]\n");
 						}
 
-					} else if (condition == "list != empty" ) {
+					} else if (condition == "list != empty") {
+						
+						for (int m = 0; m < whileChildrenCount; m++) {
 
-						if (whileChildrenCount > 1) {
+							Transform currChild = whileChildren[m];
 
-							for (int m = 0; m < whileChildrenCount; m++) {
+							if (currChild.GetComponent<Draggable>().typeOfItem == Draggable.Type.IFSTAT) {
 
-								blocks_names_t2.Add ("[thread 2] " + whileChildren [m].GetComponentInChildren<Text> ().text + "; " +
+								string action = currChild.GetChild(1).GetComponentInChildren<Text>().text;
+								blocks_names_t2.Add ("[thread 1] " + action + "; " +
+									"[ while ( " + condition + " ), if needed ]\n");
+
+								// Debug.Log("Adding to the list: " + "[thread 1] " + action + "; " +
+								// 	"[ while ( " + condition + " ), if needed ]\n");
+
+							} else {
+
+								blocks_names_t2.Add ("[thread 1] " + whileChildren [m].GetComponentInChildren<Text> ().text + "; " +
 									"[ while ( " + condition + " ) ]\n");
+
+								// Debug.Log("Adding to the list: " + "[thread 1] " + whileChildren [m].GetComponentInChildren<Text> ().text + "; " +
+								// 	"[ while ( " + condition + " ) ]\n");
 							}
 
-						} else {
-							blocks_names_t2.Add ("[thread 2] " + whileChildren [0].GetComponentInChildren<Text> ().text + "; " +
-								"[ while ( " + condition + " ) ]\n");
-						}
+						} 
 
 					} else {
 						Debug.Log ("Unidentified condition");
