@@ -1,0 +1,22 @@
+THREAD 1
+----------
+checkin;
+get brush;
+get scissors;
+cut;
+return brush;
+return scissors:
+checkout;
+
+THREAD 2
+----------
+checkin;
+get brush;
+get scissors;
+cut;
+ret scissors;
+get clippers;
+groom;
+ret clippers;
+ret brush;
+checkout;

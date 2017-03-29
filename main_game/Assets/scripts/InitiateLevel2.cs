@@ -28,11 +28,11 @@ public class InitiateLevel2 : MonoBehaviour {
 
 		newBox (actionPrefab, "cut", t1);
 
-		box = newBox (returnPrefab, "ret", t1);
-		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "brush";
-
-		box = newBox (returnPrefab, "ret", t1);
-		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "scissors";
+//		box = newBox (returnPrefab, "ret", t1);
+//		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "brush";
+//
+//		box = newBox (returnPrefab, "ret", t1);
+//		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "scissors";
 
 		// acquire (station);
 		// acquire (towel);
@@ -51,18 +51,18 @@ public class InitiateLevel2 : MonoBehaviour {
 		newBox (actionPrefab, "checkin", t2);
 
 		box = newBox (acquirePrefab, "get", t2); // acquire (brush);
-		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "scissors";
+		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "brush";
 
 		box = newBox (acquirePrefab, "get", t2); // acquire (brush);
-		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "brush";
+		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "scissors";
 
 		newBox (actionPrefab, "cut", t2);
 
-		box = newBox (returnPrefab, "ret", t2);
-		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "scissors";
-
-		box = newBox (returnPrefab, "ret", t2);
-		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "brush";
+//		box = newBox (returnPrefab, "ret", t2);
+//		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "scissors";
+//
+//		box = newBox (returnPrefab, "ret", t2);
+//		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "brush";
 
 		newBox (actionPrefab, "checkout", t2);
 	

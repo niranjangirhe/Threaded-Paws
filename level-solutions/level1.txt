@@ -1,0 +1,14 @@
+checkin;
+acquire (conditioner);
+acquire (shampoo);
+acquire (towel);
+acquire (station);
+wash;
+return (conditioner); - optional
+return (shampoo); - optional
+acquire (dryer);
+dry;
+return (towel); - optional
+return (dryer); - optional
+return (station); - optional
+checkout;

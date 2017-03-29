@@ -1,0 +1,21 @@
+checkin;
+
+acquire (scissors);
+acquire (brush);
+
+cut;
+
+return (scissors);
+return (brush);
+
+acquire (station);
+acquire (towel);
+acquire (dryer);
+
+dry;
+
+return (station);
+return (towel);
+return (dryer);
+
+checkout;

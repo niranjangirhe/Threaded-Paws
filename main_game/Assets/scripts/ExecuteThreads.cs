@@ -1667,12 +1667,14 @@ public class ExecuteThreads : MonoBehaviour {
 
 					} else if (b1[t1_curr_index].Substring(0, 8) == "checkout") {
 						
-						if (t1_has_brush || t1_has_clippers || t1_has_conditioner || t1_has_dryer || t1_has_scissors || t1_has_shampoo || t1_has_station || t1_has_towel) {
+//						if (t1_has_brush || t1_has_clippers || t1_has_conditioner || t1_has_dryer || t1_has_scissors || t1_has_shampoo || t1_has_station || t1_has_towel) {
+//
+//							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+//							resError("\n> ERROR: You need to return all the resources you acquired before checking out.\n\n");
+//
+//						} else 
 
-							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
-							resError("\n> ERROR: You need to return all the resources you acquired before checking out.\n\n");
-
-						} else if ((t1_needs_cut && !t1_did_cut) || (t1_needs_dry && !t1_did_dry)
+						if ((t1_needs_cut && !t1_did_cut) || (t1_needs_dry && !t1_did_dry)
 									|| (t1_needs_groom && !t1_did_groom) || (t1_needs_wash && !t1_did_wash)) {
 						
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";

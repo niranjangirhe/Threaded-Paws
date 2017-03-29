@@ -136,7 +136,7 @@ public class ToolboxManager : MonoBehaviour {
 
 	public void gameWon() {
 
-		Debug.Log("In gameWon() function");
+		// Debug.Log("In gameWon() function");
 
 		try {
 
@@ -145,12 +145,5 @@ public class ToolboxManager : MonoBehaviour {
 		} catch {
 			Debug.Log ("Could not find WonPanel");
 		}
-	}
-
-
-	public void playAfterInstructions() {
-
-		InstructionsPanel.SetActive (false);
-
 	}
 }

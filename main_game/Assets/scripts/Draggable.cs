@@ -99,7 +99,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		Transform[] thread2Children = new Transform[threadArea2.transform.childCount];
 
 		//Debug.Log ("HIGHLIGHTING AREA");
-		//Debug.Log ("childCount: " + threadChildren.Length);
+		// Debug.Log ("childCount: " + thread1Children.Length);
 		// Debug.Log("Dragging: " + this.transform.name + " , Block Type: " + this.typeOfItem);
 
 		for (int i = 0; i < thread1Children.Length; i++) {
@@ -108,14 +108,18 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			//Debug.Log ( timer.GetCurrentTime() + " -> " + threadChildren [i]);
 
 			try {
+							
 				//Debug.Log (thread1Children [i].name + ", DropZone Type: " + thread1Children [i].GetComponentInChildren<DropZone>().typeOfArea);
-				if (thread1Children [i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == this.typeOfItem) {
+				if ((thread1Children [i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == this.typeOfItem) ||
+					(thread1Children [i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == Type.ALL)) {
+
 					string zoneName = thread1Children [i].gameObject.GetComponentInChildren<DropZone> ().name;
 					//Debug.Log("Theres a dropzone!: " + zoneName);
 					thread1Children [i].Find (zoneName).GetComponent<Image> ().color = Color.green;
 				}
 
 			} catch {}
+
 		}
 
 		for (int i = 0; i < thread2Children.Length; i++) {
@@ -124,7 +128,9 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			//Debug.Log (threadChildren [i].name);
 			//Debug.Log ( timer.GetCurrentTime() + " -> " + threadChildren [i]);
 			try {
-				if (thread2Children [i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == this.typeOfItem) {
+				if ((thread2Children [i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == this.typeOfItem) ||
+					(thread2Children [i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == Type.ALL)) {
+
 					string zoneName = thread2Children [i].gameObject.GetComponentInChildren<DropZone> ().name;
 					//Debug.Log("Theres a dropzone!: " + zoneName);
 					thread2Children [i].Find (zoneName).GetComponent<Image> ().color = Color.green;
@@ -204,7 +210,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 			try {
 				thread1Children [i] = threadArea1.transform.GetChild (i);
-				if (thread1Children [i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == this.typeOfItem) {
+				if ((thread1Children [i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == this.typeOfItem) ||
+					(thread1Children [i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == Type.ALL)) {
 					
 					string zoneName = thread1Children [i].gameObject.GetComponentInChildren<DropZone> ().name;
 					//Debug.Log ("De-colouring: " + thread1Children [i].gameObject.GetComponentInChildren<DropZone> ().name);
@@ -220,7 +227,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 			try {
 				thread2Children [i] = threadArea2.transform.GetChild (i);
-				if (thread2Children [i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == this.typeOfItem) {
+				if ((thread2Children [i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == this.typeOfItem) ||
+					(thread2Children [i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == Type.ALL)) {
 
 					string zoneName = thread2Children [i].gameObject.GetComponentInChildren<DropZone> ().name;
 					//Debug.Log ("De-colouring: " + thread2Children [i].gameObject.GetComponentInChildren<DropZone> ().name);

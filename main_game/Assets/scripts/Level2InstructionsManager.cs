@@ -23,6 +23,7 @@ public class Level2InstructionsManager : MonoBehaviour {
 
 		level2_part2.SetActive (true);
 		level2_part1.SetActive (false);
+		level2_part3.SetActive (false);
 	}
 
 	public void level2_getPanel3() {
