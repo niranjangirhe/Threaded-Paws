@@ -136,7 +136,7 @@ public class ToolboxManager : MonoBehaviour {
 
 	public void gameWon() {
 
-		// Debug.Log("In gameWon() function");
+		Debug.Log("In gameWon() function");
 
 		try {
 

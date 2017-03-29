@@ -428,7 +428,7 @@ public class ExecuteThreads : MonoBehaviour {
 	}
 
 
-	// USED FOR LEVEL 2 ONLY
+	// USED FOR LEVEL **3** ONLY
 	public void Execute_MultiThreads_Level2() {
 
 		t1_did_cut = false;
@@ -441,15 +441,15 @@ public class ExecuteThreads : MonoBehaviour {
 		t2_did_wash = false;
 		t2_did_groom = false;
 
-		// ----- SET UP FOR LOLA AND ROCKY, CUSTOMERS FOR LEVEL 2 -----
+		// ----- SET UP FOR LOLA AND ROCKY, CUSTOMERS FOR LEVEL 3 -----
 
 		t1_needs_cut = true;
 		t1_needs_dry = false;
-		t1_needs_wash = false;
+		t1_needs_wash = true;
 		t1_needs_groom = false;
 
 		t2_needs_cut = true;
-		t2_needs_dry = false;
+		t2_needs_dry = true;
 		t2_needs_wash = false;
 		t2_needs_groom = false;
 
@@ -883,6 +883,8 @@ public class ExecuteThreads : MonoBehaviour {
 
 	}
 
+
+	// TEMPLATE FUNCTION
 	public void Execute_MultiThreads() {
 
 		simulationTextArea.text = "";
@@ -1716,8 +1718,6 @@ public class ExecuteThreads : MonoBehaviour {
 
 		bar.currentAmount = 0;
 
-		// int speed = 1;
-
 		int step_counter = 1;
 		int t1_curr_index = 0;
 		int t2_curr_index = 0;
@@ -2115,22 +2115,29 @@ public class ExecuteThreads : MonoBehaviour {
 					
 					} else if (b1[t1_curr_index].Substring(11, 8) == "checkout") {
 
-
 						if ((t1_needs_cut && !t1_did_cut) || (t1_needs_dry && !t1_did_dry) || (t1_needs_wash && !t1_did_wash) || (t1_needs_groom && !t1_did_groom)) {
+
+							// Debug.Log("worker 1 is missing actions. add them.");
 
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 							resError("\n> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.\n\n");
 						
 						} else if (t1_has_brush || t1_has_clippers || t1_has_conditioner || t1_has_dryer || t1_has_scissors || t1_has_shampoo || t1_has_station || t1_has_towel) {
 
+							// Debug.Log("worker 1: still have some resources.");
+
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 							resError("\n> ERROR: You need to return all the resources you acquired before checking out.\n\n");
 						
 						} else if (t1_checkedout) {
+							
+							// Debug.Log("check in before checking out.");
+
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 							resError("\n> ERROR: You have to check in before attempting to check out a customer.\n\n");
 
 						} else {
+							
 							t1_checkedin = false;
 							t1_checkedout = true;
 						}
@@ -2414,6 +2421,7 @@ public class ExecuteThreads : MonoBehaviour {
 					} else if (b2[t2_curr_index].Substring(11, 3) == "cut") {
 						
 						if (!t2_has_brush || !t2_has_scissors) {
+
 							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
 							resError("\n> ERROR: You can't cut without a brush and some scissors.");
 						}
@@ -2461,21 +2469,30 @@ public class ExecuteThreads : MonoBehaviour {
 
 						if ((t2_needs_cut && !t2_did_cut) || (t2_needs_dry && !t2_did_dry) || (t2_needs_wash && !t2_did_wash) || (t2_needs_groom && !t2_did_groom)) {
 
+							// Debug.Log("worker 2 is missing actions. add them.");
+
 							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
 							resError("\n> ERROR: Seems like worker 2 didn't fulfill all of the customer's requests. Please try again.\n\n");
 
 						} else if (t2_has_brush || t2_has_clippers || t2_has_conditioner || t2_has_dryer || t2_has_scissors || t2_has_shampoo || t2_has_station || t2_has_towel) {
 
+							// Debug.Log("worker 2 hasnt returned all resources.");
+
 							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
 							resError("\n> ERROR: You need to return all the resources you acquired before checking out.\n\n");
 
 						} else if (t2_checkedout) {
+
+							// Debug.Log("worker 2 needs to check in before checking out.");
+
 							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
 							resError("\n> ERROR: You have to check in before attempting to check out a customer.\n\n");
 
 						} else {
+							
 							t2_checkedin = false;
 							t2_checkedout = true;
+							lost = false;
 						}
 					}
 						
@@ -2496,6 +2513,8 @@ public class ExecuteThreads : MonoBehaviour {
 				yield return new WaitForSeconds (1);
 			}
 		}
+
+		// Debug.Log ("lost?: " + lost);
 
 		if (!lost) {
 			manager.gameWon ();
