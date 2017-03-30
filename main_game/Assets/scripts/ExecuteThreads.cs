@@ -409,15 +409,25 @@ public class ExecuteThreads : MonoBehaviour {
 
 		//get children in drop area for thread
 		//threadChildren = new GameObject[this.transform.Find("DropAreaThread").childCount];
-		Transform[] threadChildren = new Transform[this.transform.Find("Tab" + tabNum).FindChild("ScrollRect").FindChild("DropAreaThread" + tabNum).childCount];
-		int childCount = threadChildren.Length;
+	
+		string path = "";
+
+		if (tabNum == "1")
+			path = "Tab1/ScrollRect/Holder/DropAreaThread1";
+		else
+			path = "Tab2/ScrollRect/Holder/DropAreaThread2";
+
+		Debug.Log ("children: " + GameObject.Find (path).transform.childCount);
+		int childCount = GameObject.Find (path).transform.childCount;
+
+		Transform[] threadChildren = new Transform[childCount];
 
 		//Debug.Log ("thread childCount: " + childCount);
 
 		for (int i = 0; i < childCount; i++) {
 			//threadChildren [i] = this.transform.Find("DropAreaThread").GetChild (i).gameObject;
 
-			threadChildren [i] = this.transform.Find ("Tab" + tabNum).FindChild("ScrollRect").FindChild("DropAreaThread" + tabNum).GetChild(i);
+			threadChildren [i] = GameObject.Find (path).transform.GetChild(i);
 			//threadChildren [i] = this.transform.Find ("DropAreaThread").GetChild (i).GetComponentInChildren<Text>().text;
 			//Debug.Log ( timer.GetCurrentTime() + " -> " + threadChildren [i]);
 
@@ -879,7 +889,7 @@ public class ExecuteThreads : MonoBehaviour {
 		}
 
 		if (!err)
-			StartCoroutine (printThreads (blocks_names_t1, blocks_names_t2, 7));
+			StartCoroutine (printThreads (blocks_names_t1, blocks_names_t2, 6));
 
 	}
 
