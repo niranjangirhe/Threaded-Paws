@@ -284,11 +284,46 @@ public class ExecuteThreadsLevel4 : MonoBehaviour {
 				string condition, actionText, line;
 				try {
 
-					condition = blocks_t1 [i].GetComponentInChildren<Text> ().text;
-					actionText = blocks_t1 [i].FindChild ("DropArea").GetComponentInChildren<Text> ().text;
+					Transform ifChild = blocks_t1 [i].FindChild ("DropArea").GetChild(0);
 
-					//line = "[thread 1] if ( " + condition + " ) {\n    " + actionText + "\n}";
-					line = "[thread 1] " + actionText + "; [ if ( " + condition + " ) ]\n";
+					if (ifChild.GetComponentInChildren<Text> ().text == "get") {
+
+						string resource = ifChild.transform.Find ("Dropdown").Find("Label").GetComponent<Text> ().text;
+
+						if (resource == "[null]") {
+
+							// terminateSimulation ();
+							pauseSimulation();
+							manager.showError ("Please select a resource to acquire in thread 1.");
+							return;
+
+						} else {
+							actionText =  "acquire ( " + resource + " )";
+						}
+
+					} else if (ifChild.GetComponentInChildren<Text> ().text == "ret") {
+
+						string resource = ifChild.transform.Find ("Dropdown").Find("Label").GetComponent<Text> ().text;
+
+						if (resource == "[null]") {
+
+							// terminateSimulation ();
+							pauseSimulation();
+							manager.showError ("Please select a resource to return in thread 2.");
+							return;
+
+						} else {
+							actionText =  "return ( " + resource + " )";
+						}
+
+					} else {
+
+						actionText = blocks_t1 [i].FindChild ("DropArea").GetComponentInChildren<Text> ().text;
+					} 
+
+					condition = blocks_t1 [i].GetComponentInChildren<Text> ().text;
+					line = "[thread 1] " + actionText + "; [ if " + condition + " ]\n";
+
 
 				} catch (Exception e) {
 					//manager.showError ("At least one if statement is empty.");
@@ -445,9 +480,7 @@ public class ExecuteThreadsLevel4 : MonoBehaviour {
 
 					if (resource == "[null]") {
 
-						Debug.Log ("Please select a resource to acquire in thread 2.");
-
-						terminateSimulation ();
+						// terminateSimulation ();
 						manager.showError ("Please select a resource to acquire in thread 2.");
 						return;
 
@@ -464,7 +497,7 @@ public class ExecuteThreadsLevel4 : MonoBehaviour {
 					if (resource == "[null]") {
 
 						terminateSimulation ();
-						manager.showError ("Please select a resource to return in thread 2.");
+						// manager.showError ("Please select a resource to return in thread 2.");
 						return;
 
 					} else {
@@ -486,11 +519,45 @@ public class ExecuteThreadsLevel4 : MonoBehaviour {
 				string condition, actionText, line;
 				try {
 
-					condition = blocks_t2 [i].GetComponentInChildren<Text> ().text;
-					actionText = blocks_t2 [i].FindChild ("DropArea").GetComponentInChildren<Text> ().text;
+					Transform ifChild = blocks_t2 [i].FindChild ("DropArea").GetChild(0);
 
-					//line = "[thread 1] if ( " + condition + " ) {\n    " + actionText + "\n}";
-					line = "[thread 2] " + actionText + "; [ if ( " + condition + " ) ]\n";
+					if (ifChild.GetComponentInChildren<Text> ().text == "get") {
+
+						string resource = ifChild.transform.Find ("Dropdown").Find("Label").GetComponent<Text> ().text;
+
+						if (resource == "[null]") {
+
+							// terminateSimulation ();
+							pauseSimulation();
+							manager.showError ("Please select a resource to acquire in thread 2.");
+							return;
+
+						} else {
+							actionText =  "acquire ( " + resource + " )";
+						}
+
+					} else if (ifChild.GetComponentInChildren<Text> ().text == "ret") {
+
+						string resource = ifChild.transform.Find ("Dropdown").Find("Label").GetComponent<Text> ().text;
+
+						if (resource == "[null]") {
+
+							// terminateSimulation ();
+							pauseSimulation();
+							manager.showError ("Please select a resource to return in thread 2.");
+							return;
+
+						} else {
+							actionText =  "return ( " + resource + " )";
+						}
+				
+					} else {
+
+						actionText = blocks_t2 [i].FindChild ("DropArea").GetComponentInChildren<Text> ().text;
+					} 
+
+					condition = blocks_t2 [i].GetComponentInChildren<Text> ().text;
+					line = "[thread 2] " + actionText + "; [ if " + condition + " ]\n";
 
 				} catch (Exception e) {
 					//manager.showError ("At least one if statement is empty.");
@@ -620,19 +687,19 @@ public class ExecuteThreadsLevel4 : MonoBehaviour {
 			return;
 		}
 			
-		if (blocks_t1.Length > 1) {
-			manager.showError ("You only need one element per thread. It wraps everything else.");
-			simulationTextArea.text = "";
-			terminateSimulation ();
-			return;
-		}
-
-		if (blocks_t2.Length > 1) {
-			manager.showError ("You only need one element per thread. It wraps everything else.");
-			simulationTextArea.text = "";
-			terminateSimulation ();
-			return;
-		}
+//		if (blocks_t1.Length > 1) {
+//			manager.showError ("You only need one element per thread. It wraps everything else.");
+//			simulationTextArea.text = "";
+//			terminateSimulation ();
+//			return;
+//		}
+//
+//		if (blocks_t2.Length > 1) {
+//			manager.showError ("You only need one element per thread. It wraps everything else.");
+//			simulationTextArea.text = "";
+//			terminateSimulation ();
+//			return;
+//		}
 
 		try {
 			if ((blocks_names_t1 [0].Substring (11, 7) != "checkin" /*&& blocks_names_t1 [0].Substring (11, 17) != "pickup"*/)
@@ -684,7 +751,7 @@ public class ExecuteThreadsLevel4 : MonoBehaviour {
 		}
 
 		runButton.transform.SetAsLastSibling ();
-		bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+		// bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
 	}
 
 	public void terminateSimulation() {
@@ -1106,16 +1173,14 @@ public class ExecuteThreadsLevel4 : MonoBehaviour {
 					
 					} else if (b1[t1_curr_index].Substring(11, 8) == "checkout") {
 
-						if ((!t1_did_cut) || (!t1_did_dry) || (!t1_did_wash) || (!t1_did_groom)) {
+//						if ((!t1_did_cut) || (!t1_did_dry) || (!t1_did_wash) || (!t1_did_groom)) {
+//
+//							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+//							resError("\n> ERROR: Seems like thread 1 hasn't covered all posibilities yet; it should be done before check-out is reached. Please try again.\n\n");
+//
+//						}
 
-							// Debug.Log("worker 1 is missing actions. add them.");
-
-							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
-							resError("\n> ERROR: Seems like thread 1 hasn't covered all posibilities yet; it should be done before check-out is reached. Please try again.\n\n");
-
-						}
-
-						else if (t1_has_brush || t1_has_clippers || t1_has_conditioner || t1_has_dryer || t1_has_scissors || t1_has_shampoo || t1_has_station || t1_has_towel) {
+						if (t1_has_brush || t1_has_clippers || t1_has_conditioner || t1_has_dryer || t1_has_scissors || t1_has_shampoo || t1_has_station || t1_has_towel) {
 
 							// Debug.Log("worker 1: still have some resources.");
 

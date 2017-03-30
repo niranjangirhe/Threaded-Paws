@@ -10,7 +10,7 @@ public class ScenesManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		CreateNewBlock.canCreate = true;
 	}
 	
 	// Update is called once per frame
@@ -27,7 +27,7 @@ public class ScenesManager : MonoBehaviour {
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 		CreateNewBlock.canCreate = true;
 
-		instructionsPanel.SetActive (false);
+		// instructionsPanel.SetActive (false);
 	}
 
 	public void getLevel2() {
@@ -35,6 +35,10 @@ public class ScenesManager : MonoBehaviour {
 	}
 
 	public void getLevel3() {
-		// SceneManager.LoadScene ("Level3");
+		SceneManager.LoadScene ("Level3");
+	}
+
+	public void getLevel4() {
+		SceneManager.LoadScene ("Level4");
 	}
 }
