@@ -161,12 +161,4 @@ public class InstructionsManager : MonoBehaviour {
 
 		coverError.SetActive (false);
 	}
-
-	public void level2_getPanel1() {
-	
-	}
-
-	public void level2_getPanel2() {
-		
-	}
 }

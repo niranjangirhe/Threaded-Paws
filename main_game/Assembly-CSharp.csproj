@@ -58,6 +58,7 @@
      <Compile Include="Assets\scripts\InitiateLevel2.cs" />
      <Compile Include="Assets\scripts\InitiateLevel3.cs" />
      <Compile Include="Assets\scripts\InstructionsManager.cs" />
+     <Compile Include="Assets\scripts\Level1InstructionsManager.cs" />
      <Compile Include="Assets\scripts\Level2InstructionsManager.cs" />
      <Compile Include="Assets\scripts\Level3InstructionsManager.cs" />
      <Compile Include="Assets\scripts\Level4InstructionsManager.cs" />

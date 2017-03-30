@@ -796,6 +796,8 @@ public class ExecuteThreadsLevel4 : MonoBehaviour {
 
 		// while (j < 100) {
 
+		simulationTextArea.text += "<color=green>\nwhile ( list != empty ):</color>\n";
+
 		while ((t1_curr_index < b1.Count) || (t2_curr_index < b2.Count)) {
 
 			// Debug.Log ("b1.Count = " + b1.Count + ", t1_curr_index = " + t1_curr_index);
@@ -1581,7 +1583,7 @@ public class ExecuteThreadsLevel4 : MonoBehaviour {
 				yield return new WaitForSeconds (1);
 			}
 		}
-
+	
 		// Debug.Log ("lost?: " + lost);
 
 		if (!lost) {
