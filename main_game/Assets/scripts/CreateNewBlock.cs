@@ -165,6 +165,8 @@ public class CreateNewBlock : MonoBehaviour {
 			
 			} else if (this.transform.name == "ReturnBox") {
 
+				Debug.Log ("Generating a return box");
+
 				if (manager.returnLeft_thread1 > 0) {
 
 					if (canCreate) {

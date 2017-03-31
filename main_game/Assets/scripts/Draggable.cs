@@ -495,8 +495,11 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		if (this.typeOfItem == Type.IFSTAT) {
 			this.GetComponent<Image> ().color = new Vector4 (0.3F, 0.8F, 0.83F, 1);
 
-		} else if (this.typeOfItem == Type.ACTION && (this.GetComponentInChildren<Text> ().text == "get" || this.GetComponentInChildren<Text> ().text == "ret")) {
+		} else if (this.typeOfItem == Type.ACTION && (this.GetComponentInChildren<Text> ().text == "get")) {
 			this.GetComponent<Image> ().color = new Vector4 (0.94F, 0.28F, 0.94F, 1);
+
+		} else if (this.typeOfItem == Type.ACTION && (this.GetComponentInChildren<Text> ().text == "ret")) {
+			this.GetComponent<Image> ().color = new Vector4 (0.56F, 0.82F, 0.44F, 1);
 
 		} else if (this.typeOfItem == Type.ACTION) {
 			this.GetComponent<Image> ().color = new Vector4 (1, 0.76F, 0.24F, 1);

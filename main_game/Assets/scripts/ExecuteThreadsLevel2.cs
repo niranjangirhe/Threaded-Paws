@@ -9,6 +9,7 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 	ToolboxManager manager;
 	GameObject disablePanel;
 	ProgressBar bar;
+	ScrollRect simulationScrollRect;
 
 	public GameObject runButton;
 	public GameObject stopButton;
@@ -111,6 +112,7 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 		timer = GameObject.FindObjectOfType<Timer> ();
 		disablePanel = GameObject.Find ("DisablePanel");
 		bar = GameObject.Find ("RadialProgressBar").GetComponent<ProgressBar>();
+		simulationScrollRect = simulationTextArea.transform.parent.gameObject.GetComponent<ScrollRect>();
 
 		try { 
 			disablePanel.SetActive (false);
@@ -1440,6 +1442,10 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 				} catch { }
 
 				j++; // increment step
+
+				Canvas.ForceUpdateCanvases();
+				simulationScrollRect.verticalNormalizedPosition = 0f;
+				Canvas.ForceUpdateCanvases ();
 
 				yield return new WaitForSeconds (1);
 			}
