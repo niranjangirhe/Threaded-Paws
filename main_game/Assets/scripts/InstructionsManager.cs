@@ -36,10 +36,13 @@ public class InstructionsManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		panel1.SetActive (true);
-		timer = GameObject.Find ("RadialProgressBar").GetComponent<ProgressBar>();
+		try {
 
-		timer.LoadingBar.GetComponent<Image> ().fillAmount = 0.15F;
+			panel1.SetActive (true);
+			timer = GameObject.Find ("RadialProgressBar").GetComponent<ProgressBar>();
+
+			timer.LoadingBar.GetComponent<Image> ().fillAmount = 0.15F;
+		} catch { }
 	}
 	
 	// Update is called once per frame

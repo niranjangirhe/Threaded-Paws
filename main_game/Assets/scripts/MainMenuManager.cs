@@ -12,12 +12,7 @@ public class MainMenuManager : MonoBehaviour {
 	void Start () {
 		volumeOffIcon.SetActive (false);
 	}
-	
-	// Update is called once per frame
-	void Update () {
 		
-	}
-
 	public void playMusic() {
 		volumeOnIcon.SetActive (false);
 		volumeOffIcon.SetActive (true);
@@ -40,5 +35,9 @@ public class MainMenuManager : MonoBehaviour {
 
 	public void getInstructions() {
 		SceneManager.LoadScene ("Instructions");
+	}
+
+	public void getCredits() {
+		SceneManager.LoadScene ("Credits");
 	}
 }

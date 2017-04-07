@@ -66,13 +66,15 @@ public class ToolboxManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		//Debug.Log ("Start in manager called");
-		txtErrorMsg.enabled = false;
-		LostPanel.SetActive (false);
+		try {
+			//Debug.Log ("Start in manager called");
+			txtErrorMsg.enabled = false;
+			LostPanel.SetActive (false);
 
-		updateValues ();
+			updateValues ();
 
-		CreateNewBlock.canCreate = true;
+			CreateNewBlock.canCreate = true;
+		} catch { }
 	}
 	
 	// Update is called once per frame
