@@ -891,7 +891,7 @@ public class ExecuteThreads : MonoBehaviour {
 		}
 
 		if (!err)
-			StartCoroutine (printThreads (blocks_names_t1, blocks_names_t2, 6));
+			StartCoroutine (printThreads (blocks_names_t1, blocks_names_t2, 5));
 
 	}
 
