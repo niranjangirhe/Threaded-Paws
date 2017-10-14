@@ -1,36 +1,6 @@
-# Honours Thesis
+<center>**ThreadedPaws** is a serious game for learning about concurrency concepts including thread interleavings, data races and deadlocks.
 
-Progress and projects for my 2016-2017 Computer Science Honours Thesis will be recorded in this reponsitory.
+Advances in multi-core processors continue to increase the need for concurrent programming. Unfortunately, writing concurrent programs remains difficult due to the many, possibly unexpected program executions. Furthermore, students learning concurrent programming need to comprehend and avoid common pitfalls such as data races and deadlocks. To address this need, we have developed **ThreadedPaws**, a game-based learning tool that teaches students to identify and fix concurrency pitfalls and bugs.<br>
 
-**Supervisor**: Dr. Jeremy Bradbury.
-
-###Problem
----
-
-- **What is the general focus of the game?**
-
-	It aims to be an eduactional game that teaches concurrency and threading as Computer Science *concepts*.
-
-- **Who are we targeting?**
-	
-	Undergraduate (2rd - 4th) Computer Science students. An introductory level of programming is required.
-
-- **What do we want them to learn?**
-
-	- How threads work, conceptually/abstractly.
-
-		- Lock-based usage
-		
-		- Shared data/resources
-		
-		- Thread scheduling (i.e. different number of CPUs)
-		
-		- How many threads? ( < 10. More than this requires thread pools, which we will not focus on)<br><br>
-
-	- Understand pitfalls (data races, deadlocks, starvation)
-
-	- Understand the purpose of threads and why they are so widely used.
-
-		- Understand performance benefits vs sequential processing.
-		
-		- Understand that more thread doesn't always indicate better performance.
+![](readme-media/threaded_paws_ui.jpg)
+</center>
