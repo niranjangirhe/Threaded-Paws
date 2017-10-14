@@ -14,6 +14,9 @@ public class ExecuteThreads : MonoBehaviour {
 	public GameObject runButton;
 	public GameObject stopButton;
 
+	public GameObject simulationImagePrefab;
+	public GameObject simulationErrorPrefab;
+
 	public bool level2;
 	public bool level3;
 
@@ -30,6 +33,7 @@ public class ExecuteThreads : MonoBehaviour {
 	Transform[] blocks;
 	Transform[] blocks_t1;
 	Transform[] blocks_t2;
+	GameObject[] simulationImagesToDisplay;
 
 	bool stop;
 	bool err;
