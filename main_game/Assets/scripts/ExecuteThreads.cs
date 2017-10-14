@@ -22,6 +22,7 @@ public class ExecuteThreads : MonoBehaviour {
 	private string toPrint;
 	//get simulation space for printing
 	public Text simulationTextArea;
+	// public 
 	//get instance of GenerateTasks
 	public GenerateTasks genTasks;
 	//Task t; //"playerTank"
