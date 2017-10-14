@@ -1,7 +1,0 @@
-checkin;
-get brush;
-get scissors;
-cut;
-return scissors:
-return brush;
-checkout;
