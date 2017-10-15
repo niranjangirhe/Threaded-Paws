@@ -162,6 +162,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 		// ------ START EXECUTE THREADS -------
 		simulationTextArea.text = "";
+		clearVerticalLayout ();
 
 		try {
 			GameObject.Find("InformationPanel").SetActive(false);
@@ -494,6 +495,7 @@ public class ExecuteThreads : MonoBehaviour {
 		if (blocks_t1.Length < 1) {
 			manager.showError ("There are no actions to run.");
 			simulationTextArea.text = "";
+			clearVerticalLayout ();
 			terminateSimulation ();
 			return;
 		}
@@ -593,6 +595,7 @@ public class ExecuteThreads : MonoBehaviour {
 		t2_needs_groom = false;
 
 		simulationTextArea.text = "";
+		clearVerticalLayout ();
 
 		try {
 			GameObject.Find("InformationPanel").SetActive(false);
@@ -978,6 +981,7 @@ public class ExecuteThreads : MonoBehaviour {
 		if (blocks_t1.Length < 1) {
 			manager.showError ("There are no actions to run in thread 1.");
 			simulationTextArea.text = "";
+			clearVerticalLayout ();
 			terminateSimulation ();
 			return;
 		}
@@ -985,6 +989,7 @@ public class ExecuteThreads : MonoBehaviour {
 		if (blocks_t2.Length < 1) {
 			manager.showError ("There are no actions to run in thread 2.");
 			simulationTextArea.text = "";
+			clearVerticalLayout ();
 			terminateSimulation ();
 			return;
 		}
@@ -1029,6 +1034,7 @@ public class ExecuteThreads : MonoBehaviour {
 	public void Execute_MultiThreads() {
 
 		simulationTextArea.text = "";
+		clearVerticalLayout ();
 
 		try {
 			GameObject.Find("InformationPanel").SetActive(false);
@@ -1411,6 +1417,7 @@ public class ExecuteThreads : MonoBehaviour {
 		if (blocks_t1.Length < 1) {
 			manager.showError ("There are no actions to run in thread 1.");
 			simulationTextArea.text = "";
+			clearVerticalLayout ();
 			terminateSimulation ();
 			return;
 		}
@@ -1418,6 +1425,7 @@ public class ExecuteThreads : MonoBehaviour {
 		if (blocks_t2.Length < 1) {
 			manager.showError ("There are no actions to run in thread 2.");
 			simulationTextArea.text = "";
+			clearVerticalLayout ();
 			terminateSimulation ();
 			return;
 		}
@@ -1471,6 +1479,7 @@ public class ExecuteThreads : MonoBehaviour {
 			Debug.Log ("Cannot disable DisablePanel.");
 		}
 		simulationTextArea.text = "";
+		clearVerticalLayout ();
 
 		runButton.transform.SetAsLastSibling ();
 		bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
@@ -1548,7 +1557,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 				simulationTextArea.text += "\nSTEP " + (j+1) + ": \n";
 				stepsIndicator.text = ""+(j + 1);
-				Debug.Log("\nSTEP " + (j+1) + ": \n");
+//				Debug.Log("\nSTEP " + (j+1) + ": \n");
 
 				// ------------------------------  THREAD 1 ------------------------------
 
@@ -2828,5 +2837,15 @@ public class ExecuteThreads : MonoBehaviour {
 		newItem.transform.parent = layoutPanel.transform;
 		newItem.transform.localScale = Vector3.one;
 
+	}
+
+	void clearVerticalLayout() {
+
+		stepsIndicator.text = "0";
+
+		//layoutPanel
+		foreach (Transform child in layoutPanel.transform) {
+			GameObject.Destroy(child.gameObject);
+		}
 	}
 }
