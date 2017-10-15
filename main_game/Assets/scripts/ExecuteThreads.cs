@@ -11,6 +11,7 @@ public class ExecuteThreads : MonoBehaviour {
 	public GameObject simulationImagePrefab;
 	public GameObject simulationErrorPrefab;
 	public GameObject layoutPanel;
+	public Text stepsIndicator;
 
 	public Sprite dogSprite;
 	public Sprite workerSprite;
@@ -1546,6 +1547,7 @@ public class ExecuteThreads : MonoBehaviour {
 			} else {
 
 				simulationTextArea.text += "\nSTEP " + (j+1) + ": \n";
+				stepsIndicator.text = ""+(j + 1);
 				Debug.Log("\nSTEP " + (j+1) + ": \n");
 
 				// ------------------------------  THREAD 1 ------------------------------
