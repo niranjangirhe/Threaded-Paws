@@ -11,10 +11,13 @@ public class ExecuteThreads : MonoBehaviour {
 	public GameObject simulationImagePrefab;
 	public GameObject simulationErrorPrefab;
 	public GameObject layoutPanel;
+	public GameObject layoutPanel2;
 	public Text stepsIndicator;
 
 	public Sprite dogSprite;
+	public Sprite dogSprite2;
 	public Sprite workerSprite;
+	public Sprite workerSprite2;
 	public Sprite displayErrorSprite;
 	public Sprite[] itemsSprites;
 	public Sprite[] actionsSprites;
@@ -28,7 +31,6 @@ public class ExecuteThreads : MonoBehaviour {
 
 	public GameObject runButton;
 	public GameObject stopButton;
-
 
 	public bool level2;
 	public bool level3;
@@ -340,7 +342,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 					if (action == "checkin") {
 						
-						Debug.Log ("CHECKING IN");
+						// Debug.Log ("CHECKING IN");
 
 						newItem.transform.FindChild ("Icon").GetComponent<Image> ().sprite = workerSprite;
 						newItem.transform.FindChild ("ItemAction").GetComponent<Image> ().sprite = dogSprite;
@@ -348,7 +350,8 @@ public class ExecuteThreads : MonoBehaviour {
 						newItem.transform.FindChild ("AcqRet").GetComponent<Image> ().sprite = actionsSprites [0];
 
 					} else if (action == "checkout") {
-						Debug.Log ("CHECKING OUT");
+
+						//Debug.Log ("CHECKING OUT");
 
 //						GameObject newItem = Instantiate (simulationImagePrefab) as GameObject;
 						newItem.transform.FindChild ("Icon").GetComponent<Image> ().sprite = workerSprite;
@@ -1579,7 +1582,7 @@ public class ExecuteThreads : MonoBehaviour {
 							// lost = false;
 
 							if (output1 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(acquireErrMsg); // ERROR: You are trying to acquire a resource you already have.";
 							}
 						
@@ -1592,7 +1595,7 @@ public class ExecuteThreads : MonoBehaviour {
 							// lost = false;
 
 							if (output2 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(acquireErrMsg);
 							}
 
@@ -1605,7 +1608,7 @@ public class ExecuteThreads : MonoBehaviour {
 							// lost = false;
 
 							if (output3 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(acquireErrMsg);
 							}
 
@@ -1618,7 +1621,7 @@ public class ExecuteThreads : MonoBehaviour {
 							// lost = false;
 
 							if (output4 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(acquireErrMsg);
 							}
 
@@ -1632,7 +1635,7 @@ public class ExecuteThreads : MonoBehaviour {
 							// lost = false;
 
 							if (output5 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(acquireErrMsg);
 							}
 
@@ -1645,7 +1648,7 @@ public class ExecuteThreads : MonoBehaviour {
 							// lost = false;
 
 							if (output6 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(acquireErrMsg);
 							}
 
@@ -1658,7 +1661,7 @@ public class ExecuteThreads : MonoBehaviour {
 							// lost = false;
 
 							if (output7 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(acquireErrMsg);
 							}
 
@@ -1671,7 +1674,7 @@ public class ExecuteThreads : MonoBehaviour {
 							// lost = false;
 
 							if (output8 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(acquireErrMsg);
 							}
 
@@ -1689,7 +1692,7 @@ public class ExecuteThreads : MonoBehaviour {
 							int output1 = return_res (ref t1_has_brush);
 						
 							if (output1 < 0) {
-								resError(b1[t1_curr_index]);
+//								resError(b1[t1_curr_index]);
 								resError(returnErrMsg);
 							}
 
@@ -1699,7 +1702,7 @@ public class ExecuteThreads : MonoBehaviour {
 							int output2 = return_res (ref t1_has_clippers);
 
 							if (output2 < 0) {
-								resError(b1[t1_curr_index]);
+//								resError(b1[t1_curr_index]);
 								resError(returnErrMsg);
 							}
 
@@ -1709,7 +1712,7 @@ public class ExecuteThreads : MonoBehaviour {
 							int output3 = return_res (ref t1_has_conditioner);
 
 							if (output3 < 0) {
-								resError(b1[t1_curr_index]);
+//								resError(b1[t1_curr_index]);
 								resError(returnErrMsg);
 							}
 
@@ -1719,7 +1722,7 @@ public class ExecuteThreads : MonoBehaviour {
 							int output4 = return_res (ref t1_has_dryer);
 
 							if (output4 < 0) {
-								resError(b1[t1_curr_index]);
+//								resError(b1[t1_curr_index]);
 								resError(returnErrMsg);
 							}
 
@@ -1729,7 +1732,7 @@ public class ExecuteThreads : MonoBehaviour {
 							int output5 = return_res (ref t1_has_scissors);
 
 							if (output5 < 0) {
-								resError(b1[t1_curr_index]);
+//								resError(b1[t1_curr_index]);
 								resError(returnErrMsg);
 							}
 
@@ -1739,7 +1742,7 @@ public class ExecuteThreads : MonoBehaviour {
 							int output6 = return_res (ref t1_has_shampoo);
 
 							if (output6 < 0) {
-								resError(b1[t1_curr_index]);
+//								resError(b1[t1_curr_index]);
 								resError(returnErrMsg);
 							}
 
@@ -1749,7 +1752,7 @@ public class ExecuteThreads : MonoBehaviour {
 							int output7 = return_res (ref t1_has_station);
 
 							if (output7 < 0) {
-								resError(b1[t1_curr_index]);
+//								resError(b1[t1_curr_index]);
 								resError(returnErrMsg);
 							}
 
@@ -1759,7 +1762,7 @@ public class ExecuteThreads : MonoBehaviour {
 							int output8 = return_res (ref t1_has_towel);
 
 							if (output8 < 0) {
-								resError(b1[t1_curr_index]);
+//								resError(b1[t1_curr_index]);
 								resError(returnErrMsg);
 							}
 
