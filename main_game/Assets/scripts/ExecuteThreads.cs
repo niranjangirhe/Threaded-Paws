@@ -6,6 +6,20 @@ using System;
 
 public class ExecuteThreads : MonoBehaviour {
 
+	// --- IMAGE SIMULATION ---
+
+	public GameObject simulationImagePrefab;
+	public GameObject simulationErrorPrefab;
+	public GameObject layoutPanel;
+
+	public Sprite dogSprite;
+	public Sprite workerSprite;
+	public Sprite displayErrorSprite;
+	public Sprite[] itemsSprites;
+	public Sprite[] actionsSprites;
+
+	// ------------------------
+
 	ToolboxManager manager;
 	GameObject disablePanel;
 	ProgressBar bar;
@@ -14,8 +28,6 @@ public class ExecuteThreads : MonoBehaviour {
 	public GameObject runButton;
 	public GameObject stopButton;
 
-	public GameObject simulationImagePrefab;
-	public GameObject simulationErrorPrefab;
 
 	public bool level2;
 	public bool level3;
@@ -30,10 +42,9 @@ public class ExecuteThreads : MonoBehaviour {
 	public GenerateTasks genTasks;
 	//Task t; //"playerTank"
 
-	Transform[] blocks;
+//	Transform[] blocks;
 	Transform[] blocks_t1;
 	Transform[] blocks_t2;
-	GameObject[] simulationImagesToDisplay;
 
 	bool stop;
 	bool err;
@@ -206,17 +217,15 @@ public class ExecuteThreads : MonoBehaviour {
 
 		int thread1_whilesChildren = 0;
 
+		// retrieving the objects (blocks) current in thread 1
 		blocks_t1 = GetActionBlocks_MultiThreads ("1");
-		/*
-		foreach (Transform action in blocks_t1)
-			Debug.Log (action.GetComponentInChildren<Text>().text);
-		*/
-
-		//string[] blocks_names_t1 = new string[blocks_t1.Length];
+	
+		// this structure will store the text lines to display
 		List<string> blocks_names_t1 = new List<string> ();
+		List<GameObject> simulationImagesToDisplay = new List<GameObject>();
 
 		int i = 0;
-		bool isError = false; //unused, for now
+		bool isError = false;
 
 		foreach (Transform child in blocks_t1) {
 
@@ -238,6 +247,37 @@ public class ExecuteThreads : MonoBehaviour {
 
 						blocks_names_t1.Add ("acquire ( " + resource + " );\n");
 						i++;
+
+						// create new object from prefab
+						GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
+						newItem.transform.FindChild ("Icon").GetComponent<Image> ().sprite = workerSprite;
+						newItem.transform.FindChild ("AcqRet").GetComponent<Image> ().sprite = actionsSprites [0];
+
+						Sprite item;
+
+						if (resource == "brush")
+							item = itemsSprites [0];
+						else if (resource == "clippers")
+							item = itemsSprites [1];
+						else if (resource == "cond.")
+							item = itemsSprites [2];
+						else if (resource == "dryer")
+							item = itemsSprites [3];
+						else if (resource == "scissors")
+							item = itemsSprites [4];
+						else if (resource == "shampoo")
+							item = itemsSprites [5];
+						else if (resource == "station")
+							item = itemsSprites [6];
+						else if (resource == "towel")
+							item = itemsSprites [7];
+						else
+							item = displayErrorSprite;
+						
+						newItem.transform.FindChild ("ItemAction").GetComponent<Image> ().sprite = item;
+						newItem.transform.FindChild ("ActionText").GetComponent<Text>().text = "get(" + resource + ");";
+						simulationImagesToDisplay.Add (newItem);
+
 					}
 
 				} else if(blocks_t1 [i].transform.GetComponentInChildren<Text> ().text == "ret") {
@@ -252,14 +292,94 @@ public class ExecuteThreads : MonoBehaviour {
 
 						blocks_names_t1.Add ("return ( " + resource + " );\n");
 						i++;
+
+						// create new object from prefab
+						GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
+						newItem.transform.FindChild ("Icon").GetComponent<Image> ().sprite = workerSprite;
+						newItem.transform.FindChild ("AcqRet").GetComponent<Image> ().sprite = actionsSprites [1];
+
+						Sprite item;
+
+						if (resource == "brush")
+							item = itemsSprites [0];
+						else if (resource == "clippers")
+							item = itemsSprites [1];
+						else if (resource == "cond.")
+							item = itemsSprites [2];
+						else if (resource == "dryer")
+							item = itemsSprites [3];
+						else if (resource == "scissors")
+							item = itemsSprites [4];
+						else if (resource == "shampoo")
+							item = itemsSprites [5];
+						else if (resource == "station")
+							item = itemsSprites [6];
+						else if (resource == "towel")
+							item = itemsSprites [7];
+						else
+							item = displayErrorSprite;
+
+						newItem.transform.FindChild ("ItemAction").GetComponent<Image> ().sprite = item;
+						newItem.transform.FindChild ("ActionText").GetComponent<Text>().text = "return(" + resource + ");";
+						simulationImagesToDisplay.Add (newItem);
+
 					}
 
 				} else {
 
-					//blocks_names_t1 [i] = "[thread 1] " + blocks_t1 [i].transform.GetComponentInChildren<Text> ().text + ";";
-					blocks_names_t1.Add (blocks_t1 [i].transform.GetComponentInChildren<Text> ().text + ";\n");
+					String action = blocks_t1 [i].transform.GetComponentInChildren<Text> ().text;
 
+					//blocks_names_t1 [i] = "[thread 1] " + blocks_t1 [i].transform.GetComponentInChildren<Text> ().text + ";";
+					blocks_names_t1.Add (action + ";\n");
 					i++;
+
+					GameObject newItem = Instantiate (simulationImagePrefab) as GameObject;
+
+
+					if (action == "checkin") {
+						
+						Debug.Log ("CHECKING IN");
+
+						newItem.transform.FindChild ("Icon").GetComponent<Image> ().sprite = workerSprite;
+						newItem.transform.FindChild ("ItemAction").GetComponent<Image> ().sprite = dogSprite;
+//						newItem.transform.FindChild ("ActionText").GetComponent<Text> ().text = action + ";";
+						newItem.transform.FindChild ("AcqRet").GetComponent<Image> ().sprite = actionsSprites [0];
+
+					} else if (action == "checkout") {
+						Debug.Log ("CHECKING OUT");
+
+//						GameObject newItem = Instantiate (simulationImagePrefab) as GameObject;
+						newItem.transform.FindChild ("Icon").GetComponent<Image> ().sprite = workerSprite;
+						newItem.transform.FindChild ("ItemAction").GetComponent<Image> ().sprite = dogSprite;
+//						newItem.transform.FindChild ("ActionText").GetComponent<Text> ().text = action + ";";
+						newItem.transform.FindChild ("AcqRet").GetComponent<Image> ().sprite = actionsSprites [1];
+
+					} else {
+
+						// create new object from prefab (single action)
+//						GameObject newItem = Instantiate (simulationImagePrefab) as GameObject;
+						newItem.transform.FindChild ("Icon").GetComponent<Image> ().sprite = dogSprite;
+						//					newItem.transform.FindChild ("AcqRet").GetComponent<Image> ().sprite = actionsSprites [0]; // leave empty
+
+						Sprite item;
+
+						if (action == "cut")
+							item = actionsSprites [2];
+						else if (action == "dry")
+							item = actionsSprites [3];
+						else if (action == "wash")
+							item = actionsSprites [4];
+						else if (action == "groom")
+							item = actionsSprites [5];
+						else
+							item = displayErrorSprite;
+
+						newItem.transform.FindChild ("ItemAction").GetComponent<Image> ().sprite = item;
+//						newItem.transform.FindChild ("ActionText").GetComponent<Text> ().text = action + ";";
+					}
+					newItem.transform.FindChild ("ActionText").GetComponent<Text> ().text = action + ";";
+					simulationImagesToDisplay.Add (newItem);
+
 				}
 
 			} else if (child.GetComponent<Draggable> ().typeOfItem == Draggable.Type.IFSTAT) {
@@ -407,7 +527,8 @@ public class ExecuteThreads : MonoBehaviour {
 		}
 
 		if (!err)
-			StartCoroutine (printThreads_single (blocks_names_t1, 14)); // List<>, speed/step
+			// StartCoroutine (printThreads_single (blocks_names_t1, 14)); // List<>, speed/step
+			StartCoroutine (printThreads_single (blocks_names_t1, simulationImagesToDisplay, 14)); // List<>, speed/step
 
 	}
 
@@ -555,7 +676,7 @@ public class ExecuteThreads : MonoBehaviour {
 						return;
 
 					} else {
-
+						// level 3
 						blocks_names_t1.Add ("[thread 1] acquire ( " + resource + " );\n");
 						i++;
 					}
@@ -569,7 +690,7 @@ public class ExecuteThreads : MonoBehaviour {
 						manager.showError ("Please select a resource to return in thread 1.");
 						return;
 					} else {
-
+						// level 3
 						blocks_names_t1.Add ("[thread 1] return ( " + resource + " );\n");
 						i++;
 					}
@@ -577,6 +698,7 @@ public class ExecuteThreads : MonoBehaviour {
 				} else {
 
 					//blocks_names_t1 [i] = "[thread 1] " + blocks_t1 [i].transform.GetComponentInChildren<Text> ().text + ";";
+					// level 3
 					blocks_names_t1.Add ("[thread 1] " + blocks_t1 [i].transform.GetComponentInChildren<Text> ().text + ";\n");
 
 					i++;
@@ -605,6 +727,7 @@ public class ExecuteThreads : MonoBehaviour {
 				}
 
 				//blocks_names_t1 [i] = line;
+				// level 3
 				blocks_names_t1.Add (line);
 
 				//blocks_names [i] = blocks[i].transform.GetComponentInChildren<Text> ().text;
@@ -658,7 +781,7 @@ public class ExecuteThreads : MonoBehaviour {
 							for (int l = 0; l < 2; l++) {
 
 								for (int m = 0; m < whileChildrenCount; m++) {
-
+									// level 3
 									blocks_names_t1.Add ("[thread 1] " + whileChildren [m].GetComponentInChildren<Text> ().text + "; " +
 										"[ while ( " + condition + " ), iter = " + (l + 1) + " ]\n");
 								}
@@ -667,6 +790,7 @@ public class ExecuteThreads : MonoBehaviour {
 						} else {
 							//Debug.Log ("There is 1 child.");
 							for (int k = 0; k < 2; k++) {
+								// level 3
 								blocks_names_t1.Add ("[thread 1] " + whileChildren [0].GetComponentInChildren<Text> ().text + "; " +
 									"[ while ( " + condition + " ), iter = " + (k + 1) + " ]\n");
 							}
@@ -901,7 +1025,6 @@ public class ExecuteThreads : MonoBehaviour {
 	}
 
 
-	// TEMPLATE FUNCTION
 	public void Execute_MultiThreads() {
 
 		simulationTextArea.text = "";
@@ -1353,7 +1476,8 @@ public class ExecuteThreads : MonoBehaviour {
 	}
 
 	// ------- FOR SINGLE THREAD (I.E. LEVEL 1)
-	IEnumerator printThreads_single(List<string> b1, int speed) {
+//	IEnumerator printThreads_single(List<string> b1, int speed) {
+	IEnumerator printThreads_single(List<string> b1, List<GameObject> b3, int speed) {
 
 		// Debug.Log ("printThreads_single");
 		
@@ -1422,14 +1546,13 @@ public class ExecuteThreads : MonoBehaviour {
 			} else {
 
 				simulationTextArea.text += "\nSTEP " + (j+1) + ": \n";
+				Debug.Log("\nSTEP " + (j+1) + ": \n");
 
 				// ------------------------------  THREAD 1 ------------------------------
 
 				try {
 
 					// {"[null]", "brush" ,"clippers" , "cond.", "dryer", "scissors", "shampoo", "station", "towel"};
-
-					// Debug.Log("b1[t1_curr_index].Substring(0, 3): \"" + b1[t1_curr_index].Substring(0, 3) + "\"");
 
 					if (b1[t1_curr_index].Substring(0, 3) == "acq") {
 
@@ -1446,7 +1569,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 							if (output1 < 0) {
 								resError(b1[t1_curr_index]);
-								resError(acquireErrMsg);
+								resError(acquireErrMsg); // ERROR: You are trying to acquire a resource you already have.";
 							}
 						
 							break;
@@ -1636,7 +1759,19 @@ public class ExecuteThreads : MonoBehaviour {
 						
 						if (!t1_has_brush || !t1_has_scissors) {
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+
+							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
+							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+							b3[t1_curr_index].transform.parent = layoutPanel.transform;
+							b3[t1_curr_index].transform.localScale = Vector3.one;
+
+//							GameObject newItemError = Instantiate(simulationErrorPrefab) as GameObject;
+//							newItemError.transform.Find("ActionText").GetComponent<Text>().text = "> ERROR: You can't cut without a brush and some scissors.";
+//							newItemError.transform.parent = layoutPanel.transform;
+
 							resError("\n> ERROR: You can't cut without a brush and some scissors.\n\n");
+
+
 						}
 
 						// perform cut
@@ -1646,7 +1781,18 @@ public class ExecuteThreads : MonoBehaviour {
 
 						if (!t1_has_station || !t1_has_dryer || !t1_has_towel) {
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+
+							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
+							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+							b3[t1_curr_index].transform.parent = layoutPanel.transform;
+							b3[t1_curr_index].transform.localScale = Vector3.one;
+
+//							GameObject newItemError = Instantiate(simulationErrorPrefab) as GameObject;
+//							newItemError.transform.Find("ActionText").GetComponent<Text>().text = "> ERROR: You can't dry without a station, a dryer and a towel.";
+//							newItemError.transform.parent = layoutPanel.transform;
+
 							resError("\n> ERROR: You can't dry without a station, a dryer and a towel.\n\n");
+
 						}
 
 						// perform dry
@@ -1656,7 +1802,19 @@ public class ExecuteThreads : MonoBehaviour {
 
 						if (!t1_has_station || !t1_has_shampoo || !t1_has_towel || !t1_has_conditioner) {
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+
+							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
+							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+							b3[t1_curr_index].transform.parent = layoutPanel.transform;
+							b3[t1_curr_index].transform.localScale = Vector3.one;
+
+//							GameObject newItemError = Instantiate(simulationErrorPrefab) as GameObject;
+//							newItemError.transform.Find("ActionText").GetComponent<Text>().text = "> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.";
+//							newItemError.transform.parent = layoutPanel.transform;
+
 							resError("\n> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.\n\n");
+
+
 						}
 
 						// perform wash
@@ -1666,7 +1824,18 @@ public class ExecuteThreads : MonoBehaviour {
 
 						if (!t1_has_brush || !t1_has_clippers) {
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+
+							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
+							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+							b3[t1_curr_index].transform.parent = layoutPanel.transform;
+							b3[t1_curr_index].transform.localScale = Vector3.one;
+
+//							GameObject newItemError = Instantiate(simulationErrorPrefab) as GameObject;
+//							newItemError.transform.Find("ActionText").GetComponent<Text>().text = "> ERROR: You can't groom without a brush and some nail clippers.";
+//							newItemError.transform.parent = layoutPanel.transform;
+
 							resError("\n> ERROR: You can't groom without a brush and some nail clippers.\n\n");
+
 						}
 
 						// perform groom
@@ -1676,7 +1845,19 @@ public class ExecuteThreads : MonoBehaviour {
 
 						if (t2_checkedin) {
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+
+							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
+							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+							b3[t1_curr_index].transform.parent = layoutPanel.transform;
+							b3[t1_curr_index].transform.localScale = Vector3.one;
+
+//							GameObject newItemError = Instantiate(simulationErrorPrefab) as GameObject;
+//							newItemError.transform.Find("ActionText").GetComponent<Text>().text = "> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.";
+//							newItemError.transform.parent = layoutPanel.transform;
+
 							resError("\n> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.\n\n");
+
+						
 						} else {
 							t1_checkedin = true;
 							t1_checkedout = false;
@@ -1695,10 +1876,27 @@ public class ExecuteThreads : MonoBehaviour {
 									|| (t1_needs_groom && !t1_did_groom) || (t1_needs_wash && !t1_did_wash)) {
 						
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+
+							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
+							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+							b3[t1_curr_index].transform.parent = layoutPanel.transform;
+							b3[t1_curr_index].transform.localScale = Vector3.one;
+
+//							GameObject newItemError = Instantiate(simulationErrorPrefab) as GameObject;
+//							newItemError.transform.Find("ActionText").GetComponent<Text>().text = "> ERROR: Seems like you didn't fulfill all of your customer's requests. Please try again.";
+//							newItemError.transform.parent = layoutPanel.transform;
+
 							resError("\n> ERROR: Seems like you didn't fulfill all of your customer's requests. Please try again.\n\n");
+
 						}
 						else if (t1_checkedout) {
 							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+
+							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
+							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+							b3[t1_curr_index].transform.parent = layoutPanel.transform;
+							b3[t1_curr_index].transform.localScale = Vector3.one;
+
 							resError("\n> ERROR: You have to check in before attempting to check out a customer.\n\n");
 
 						} else {
@@ -1713,8 +1911,11 @@ public class ExecuteThreads : MonoBehaviour {
 
 					if (t1_canPrint) {
 
-						if (!err)
+						if (!err) {
 							simulationTextArea.text += "" + b1 [t1_curr_index];
+							b3[t1_curr_index].transform.parent = layoutPanel.transform;
+							b3[t1_curr_index].transform.localScale = Vector3.one;
+						}
 						t1_curr_index++;
 					}
 
@@ -2564,6 +2765,7 @@ public class ExecuteThreads : MonoBehaviour {
 			return -1;
 
 		} else {
+			
 			resource = true;
 			return 0;
 		}
@@ -2618,6 +2820,11 @@ public class ExecuteThreads : MonoBehaviour {
 
 		lost = true;
 		simulationTextArea.text += "<color=red>" + msg + "</color>";
+
+		GameObject newItem = Instantiate(simulationErrorPrefab) as GameObject;
+		newItem.transform.FindChild ("ActionText").GetComponent<Text>().text = "<color=red>" + msg + "</color>";
+		newItem.transform.parent = layoutPanel.transform;
+		newItem.transform.localScale = Vector3.one;
 
 	}
 }
