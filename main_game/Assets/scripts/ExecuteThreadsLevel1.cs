@@ -8,6 +8,8 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 	// --- IMAGE SIMULATION ---
 
+	public GameObject scrollRect;
+
 	public GameObject simulationImagePrefab;
 	public GameObject simulationErrorPrefab;
 	public GameObject layoutPanel;
@@ -99,7 +101,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 		timer = GameObject.FindObjectOfType<Timer> ();
 		disablePanel = GameObject.Find ("DisablePanel");
 		bar = GameObject.Find ("RadialProgressBar").GetComponent<ProgressBar>();
-		simulationScrollRect = GameObject.Find("ScrollRect").transform.GetComponent<ScrollRect>();
+		simulationScrollRect = scrollRect.transform.GetComponent<ScrollRect>();
 
 		try { 
 			disablePanel.SetActive (false);
@@ -631,7 +633,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							// lost = false;
 
 							if (output1 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(acquireErrMsg); // ERROR: You are trying to acquire a resource you already have.";
 							}
 
@@ -644,7 +646,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							// lost = false;
 
 							if (output2 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(acquireErrMsg);
 							}
 
@@ -657,7 +659,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							// lost = false;
 
 							if (output3 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(acquireErrMsg);
 							}
 
@@ -670,7 +672,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							// lost = false;
 
 							if (output4 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(acquireErrMsg);
 							}
 
@@ -684,7 +686,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							// lost = false;
 
 							if (output5 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(acquireErrMsg);
 							}
 
@@ -697,7 +699,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							// lost = false;
 
 							if (output6 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(acquireErrMsg);
 							}
 
@@ -710,7 +712,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							// lost = false;
 
 							if (output7 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(acquireErrMsg);
 							}
 
@@ -723,7 +725,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							// lost = false;
 
 							if (output8 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(acquireErrMsg);
 							}
 
@@ -741,7 +743,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							int output1 = return_res (ref t1_has_brush);
 
 							if (output1 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(returnErrMsg);
 							}
 
@@ -751,7 +753,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							int output2 = return_res (ref t1_has_clippers);
 
 							if (output2 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(returnErrMsg);
 							}
 
@@ -761,7 +763,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							int output3 = return_res (ref t1_has_conditioner);
 
 							if (output3 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(returnErrMsg);
 							}
 
@@ -771,7 +773,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							int output4 = return_res (ref t1_has_dryer);
 
 							if (output4 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(returnErrMsg);
 							}
 
@@ -781,7 +783,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							int output5 = return_res (ref t1_has_scissors);
 
 							if (output5 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(returnErrMsg);
 							}
 
@@ -791,7 +793,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							int output6 = return_res (ref t1_has_shampoo);
 
 							if (output6 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(returnErrMsg);
 							}
 
@@ -801,7 +803,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							int output7 = return_res (ref t1_has_station);
 
 							if (output7 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(returnErrMsg);
 							}
 
@@ -811,7 +813,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							int output8 = return_res (ref t1_has_towel);
 
 							if (output8 < 0) {
-								resError(b1[t1_curr_index]);
+								// resError(b1[t1_curr_index]);
 								resError(returnErrMsg);
 							}
 
@@ -833,6 +835,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							//							newItemError.transform.parent = layoutPanel.transform;
 
 							resError("\n> ERROR: You can't cut without a brush and some scissors.\n\n");
+							scrollToBottom();
 
 
 						}
@@ -855,6 +858,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							//							newItemError.transform.parent = layoutPanel.transform;
 
 							resError("\n> ERROR: You can't dry without a station, a dryer and a towel.\n\n");
+							scrollToBottom();
 
 						}
 
@@ -876,6 +880,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							//							newItemError.transform.parent = layoutPanel.transform;
 
 							resError("\n> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.\n\n");
+							scrollToBottom();
 
 
 						}
@@ -898,6 +903,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							//							newItemError.transform.parent = layoutPanel.transform;
 
 							resError("\n> ERROR: You can't groom without a brush and some nail clippers.\n\n");
+							scrollToBottom();
 
 						}
 
@@ -919,6 +925,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							//							newItemError.transform.parent = layoutPanel.transform;
 
 							resError("\n> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.\n\n");
+							scrollToBottom();
 
 
 						} else {
@@ -950,6 +957,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							//							newItemError.transform.parent = layoutPanel.transform;
 
 							resError("\n> ERROR: Seems like you didn't fulfill all of your customer's requests. Please try again.\n\n");
+							scrollToBottom();
 
 						}
 						else if (t1_checkedout) {
@@ -961,6 +969,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							b3[t1_curr_index].transform.localScale = Vector3.one;
 
 							resError("\n> ERROR: You have to check in before attempting to check out a customer.\n\n");
+							scrollToBottom();
 
 						} else {
 							t1_checkedin = false;
@@ -979,17 +988,17 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							b3[t1_curr_index].transform.parent = layoutPanel.transform;
 							b3[t1_curr_index].transform.localScale = Vector3.one;
 						}
+
 						t1_curr_index++;
 					}
+					scrollToBottom ();
 
-				} catch { }
+				} catch { 
+					scrollToBottom ();
+				}
 
 				j++; // increment step
-
-				Canvas.ForceUpdateCanvases();
-				simulationScrollRect.verticalNormalizedPosition = 0f;
-				Canvas.ForceUpdateCanvases ();
-
+				scrollToBottom();
 				yield return new WaitForSeconds (1);
 			}
 		}
@@ -1047,13 +1056,15 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 		stepsIndicator.text = "0";
 
+		simDisplay (msg);
+
 		err = true;
 		lost = true;
 		stop = true;
 		paused = true;
 
 		// simulationTextArea.text += "\n<color=red>" + msg + "</color>";
-		simDisplay (msg);
+
 
 		// terminateSimulation ();
 
@@ -1065,6 +1076,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 		runButton.transform.SetAsLastSibling ();
 		bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+		scrollToBottom ();
 
 	}
 
@@ -1077,6 +1089,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 		newItem.transform.FindChild ("ActionText").GetComponent<Text>().text = "<color=red>" + msg + "</color>";
 		newItem.transform.parent = layoutPanel.transform;
 		newItem.transform.localScale = Vector3.one;
+		scrollToBottom ();
 
 	}
 
@@ -1087,5 +1100,11 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 		foreach (Transform child in layoutPanel.transform) {
 			GameObject.Destroy (child.gameObject);
 		}
+	}
+
+	void scrollToBottom() {
+		Debug.Log ("scrollToBottom()");
+		simulationScrollRect.verticalNormalizedPosition = 0f;
+		Canvas.ForceUpdateCanvases ();
 	}
 }
