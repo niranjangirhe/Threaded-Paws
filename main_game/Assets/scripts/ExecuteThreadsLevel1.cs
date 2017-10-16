@@ -63,8 +63,8 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 	bool t1_did_wash;
 	bool t1_did_groom;
 
-	string returnErrMsg = "\n> ERROR: You are trying to return a resource you don't have.";
-	string acquireErrMsg = "\n> ERROR: You are trying to acquire a resource you already have.";
+	string returnErrMsg = "> ERROR: You are trying to return a resource you don't have.";
+	string acquireErrMsg = "> ERROR: You are trying to acquire a resource you already have.";
 
 	void Start() {
 
@@ -184,7 +184,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 					} else {
 
-						blocks_names_t1.Add ("acquire ( " + resource + " );\n");
+						blocks_names_t1.Add ("acquire ( " + resource + " );");
 						i++;
 
 						// create new object from prefab
@@ -232,7 +232,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 					} else {
 
-						blocks_names_t1.Add ("return ( " + resource + " );\n");
+						blocks_names_t1.Add ("return ( " + resource + " );");
 						i++;
 
 						// create new object from prefab
@@ -264,14 +264,13 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 						newItem.transform.FindChild ("ItemAction").GetComponent<Image> ().sprite = item;
 						newItem.transform.FindChild ("ActionText").GetComponent<Text>().text = "return(" + resource + ");";
 						simulationImagesToDisplay.Add (newItem);
-
 					}
 
 				} else {
 
 					String action = blocks_t1 [i].transform.GetComponentInChildren<Text> ().text;
 
-					blocks_names_t1.Add (action + ";\n");
+					blocks_names_t1.Add (action + ";");
 					i++;
 
 					GameObject newItem = Instantiate (simulationImagePrefab) as GameObject;
@@ -325,7 +324,6 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 			} else if (child.GetComponent<Draggable> ().typeOfItem == Draggable.Type.WHILELOOP) {
 
 				//Debug.Log ("TYPE WHILELOOP");
-
 			}
 		}
 
@@ -410,6 +408,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 		runButton.transform.SetAsLastSibling ();
 		bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+		scrollToBottom ();
 	}
 
 	IEnumerator printThreads_single(List<string> b1, List<GameObject> b3, int speed) {
@@ -667,7 +666,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							b3[t1_curr_index].transform.parent = layoutPanel.transform;
 							b3[t1_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You can't cut without a brush and some scissors.\n\n");
+							resError("> ERROR: You can't cut without a brush and some scissors.");
 							scrollToBottom();
 
 						} else {
@@ -685,7 +684,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							b3[t1_curr_index].transform.parent = layoutPanel.transform;
 							b3[t1_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You can't dry without a station, a dryer and a towel.\n\n");
+							resError("> ERROR: You can't dry without a station, a dryer and a towel.");
 							scrollToBottom();
 						
 						} else {
@@ -703,7 +702,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							b3[t1_curr_index].transform.parent = layoutPanel.transform;
 							b3[t1_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.\n\n");
+							resError("> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.");
 							scrollToBottom();
 						
 						} else {
@@ -721,7 +720,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							b3[t1_curr_index].transform.parent = layoutPanel.transform;
 							b3[t1_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You can't groom without a brush and some nail clippers.\n\n");
+							resError("> ERROR: You can't groom without a brush and some nail clippers.");
 							scrollToBottom();
 						
 						} else {
@@ -739,7 +738,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							b3[t1_curr_index].transform.parent = layoutPanel.transform;
 							b3[t1_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.\n\n");
+							resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.");
 							scrollToBottom();
 
 						} else {
@@ -759,7 +758,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							b3[t1_curr_index].transform.parent = layoutPanel.transform;
 							b3[t1_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: Seems like you didn't fulfill all of your customer's requests. Please try again.\n\n");
+							resError("> ERROR: Seems like you didn't fulfill all of your customer's requests. Please try again.");
 							scrollToBottom();
 						
 						} else if (t1_checkedout) {
@@ -769,7 +768,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 							b3[t1_curr_index].transform.parent = layoutPanel.transform;
 							b3[t1_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You have to check in before attempting to check out a customer.\n\n");
+							resError("> ERROR: You have to check in before attempting to check out a customer.");
 							scrollToBottom();
 
 						} else {

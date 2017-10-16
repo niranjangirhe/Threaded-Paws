@@ -87,8 +87,8 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 	bool t2_did_wash;
 	bool t2_did_groom;
 
-	string returnErrMsg = "\n> ERROR: You are trying to return a resource you don't have.";
-	string acquireErrMsg = "\n> ERROR: You are trying to acquire a resource you already have.";
+	string returnErrMsg = "> ERROR: You are trying to return a resource you don't have.";
+	string acquireErrMsg = "> ERROR: You are trying to acquire a resource you already have.";
 
 	void Start() {
 		
@@ -265,7 +265,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 					} else {
 
-						blocks_names_t1.Add ("[thread 1] acquire ( " + resource + " );\n");
+						blocks_names_t1.Add ("[thread 1] acquire ( " + resource + " );");
 						i++;
 
 						// create new object from prefab
@@ -310,7 +310,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 						return;
 					} else {
 
-						blocks_names_t1.Add ("[thread 1] return ( " + resource + " );\n");
+						blocks_names_t1.Add ("[thread 1] return ( " + resource + " );");
 						i++;
 
 						// create new object from prefab
@@ -348,7 +348,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 				} else {
 
 					String action = blocks_t1 [i].transform.GetComponentInChildren<Text> ().text;
-					blocks_names_t1.Add ("[thread 1] " + action + ";\n");
+					blocks_names_t1.Add ("[thread 1] " + action + ";");
 
 					i++;
 
@@ -438,7 +438,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 					} else {
 
-						blocks_names_t2.Add ("[thread 2] acquire ( " + resource + " );\n");
+						blocks_names_t2.Add ("[thread 2] acquire ( " + resource + " );");
 						i++;
 
 						// create new object from prefab
@@ -486,7 +486,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 					} else {
 
-						blocks_names_t2.Add ("[thread 2] return ( " + resource + " );\n");
+						blocks_names_t2.Add ("[thread 2] return ( " + resource + " );");
 						i++;
 
 						// create new object from prefab
@@ -524,7 +524,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 					String action = blocks_t2 [i].transform.GetComponentInChildren<Text> ().text;
 
-					blocks_names_t2.Add ("[thread 2] " + action + ";\n");
+					blocks_names_t2.Add ("[thread 2] " + action + ";");
 					i++;
 
 					GameObject newItem = Instantiate (simulationImagePrefab) as GameObject;
@@ -654,6 +654,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 		runButton.transform.SetAsLastSibling ();
 		bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+		scrollToBottom ();
 	}
 
 	IEnumerator printThreads(List<string> b1, List<string> b2, List<GameObject> s1, List<GameObject> s2, int speed) {
@@ -734,7 +735,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[0];
-								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "Waiting for brush...";
+								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for brush...</color>";
 								newItem.transform.parent = layoutPanel1.transform;
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
@@ -759,7 +760,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[1];
-								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "Waiting for nail clippers...";
+								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for nail clippers...</color>";
 								newItem.transform.parent = layoutPanel1.transform;
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
@@ -785,7 +786,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[2];
-								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "Waiting for conditioner...";
+								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for conditioner...</color>";
 								newItem.transform.parent = layoutPanel1.transform;
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
@@ -811,7 +812,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[3];
-								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "Waiting for dryer...";
+								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for dryer...</color>";
 								newItem.transform.parent = layoutPanel1.transform;
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
@@ -837,7 +838,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[4];
-								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "Waiting for scissors...";
+								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for scissors...</color>";
 								newItem.transform.parent = layoutPanel1.transform;
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
@@ -863,7 +864,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[5];
-								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "Waiting for shampoo...";
+								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for shampoo...</color>";
 								newItem.transform.parent = layoutPanel1.transform;
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
@@ -888,7 +889,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[6];
-								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "Waiting for station...";
+								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for station...</color>";
 								newItem.transform.parent = layoutPanel1.transform;
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
@@ -913,7 +914,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[7];
-								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "Waiting for towel...";
+								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for towel...</color>";
 								newItem.transform.parent = layoutPanel1.transform;
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
@@ -1028,7 +1029,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 							s1[t1_curr_index].transform.parent = layoutPanel1.transform;
 							s1[t1_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You can't cut without a brush and some scissors.\n\n", 1);
+							resError("> ERROR: You can't cut without a brush and some scissors.", 1);
 							scrollToBottom();
 						
 						} else {
@@ -1045,7 +1046,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 							s1[t1_curr_index].transform.parent = layoutPanel1.transform;
 							s1[t1_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You can't dry without a station, a dryer and a towel.\n\n", 1);
+							resError("> ERROR: You can't dry without a station, a dryer and a towel.", 1);
 							scrollToBottom();
 						
 						} else {
@@ -1063,7 +1064,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 							s1[t1_curr_index].transform.parent = layoutPanel1.transform;
 							s1[t1_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.\n\n", 1);
+							resError("> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.", 1);
 							scrollToBottom();
 						
 						} else {
@@ -1081,7 +1082,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 							s1[t1_curr_index].transform.parent = layoutPanel1.transform;
 							s1[t1_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You can't groom without a brush and some nail clippers.\n\n", 1);
+							resError("> ERROR: You can't groom without a brush and some nail clippers.", 1);
 							scrollToBottom();
 						
 						} else {
@@ -1099,7 +1100,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 							s1[t1_curr_index].transform.parent = layoutPanel1.transform;
 							s1[t1_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.\n\n", 1);
+							resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.", 1);
 							scrollToBottom();
 						
 						} else {
@@ -1118,7 +1119,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 							s1[t1_curr_index].transform.parent = layoutPanel1.transform;
 							s1[t1_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.\n\n", 1);
+							resError("> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.", 1);
 							scrollToBottom();
 
 						} else if (t1_has_brush || t1_has_clippers || t1_has_conditioner || t1_has_dryer || t1_has_scissors || t1_has_shampoo || t1_has_station || t1_has_towel) {
@@ -1128,7 +1129,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 							s1[t1_curr_index].transform.parent = layoutPanel1.transform;
 							s1[t1_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You need to return all the resources you acquired before checking out.\n\n", 1);
+							resError("> ERROR: You need to return all the resources you acquired before checking out.", 1);
 							scrollToBottom();
 
 						} else if (t1_checkedout) {
@@ -1138,7 +1139,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 							s1[t1_curr_index].transform.parent = layoutPanel1.transform;
 							s1[t1_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You have to check in before attempting to check out a customer.\n\n", 1);
+							resError("> ERROR: You have to check in before attempting to check out a customer.", 1);
 							scrollToBottom();
 
 						} else {
@@ -1187,7 +1188,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[0];
-								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "Waiting for brush...";
+								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for brush...</color>";
 								newItem.transform.parent = layoutPanel2.transform;
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
@@ -1213,7 +1214,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[1];
-								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "Waiting for nail clippers...";
+								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for nail clippers...</color>";
 								newItem.transform.parent = layoutPanel2.transform;
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
@@ -1239,7 +1240,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[2];
-								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "Waiting for conditioner...";
+								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for conditioner...</color>";
 								newItem.transform.parent = layoutPanel2.transform;
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
@@ -1265,7 +1266,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[3];
-								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "Waiting for dryer...";
+								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for dryer...</color>";
 								newItem.transform.parent = layoutPanel2.transform;
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
@@ -1291,7 +1292,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[4];
-								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "Waiting for scissors...";
+								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for scissors...</color>";
 								newItem.transform.parent = layoutPanel2.transform;
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
@@ -1317,7 +1318,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[5];
-								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "Waiting for shampoo...";
+								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for shampoo...</color>";
 								newItem.transform.parent = layoutPanel2.transform;
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
@@ -1343,7 +1344,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[6];
-								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "Waiting for station...";
+								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for station...</color>";
 								newItem.transform.parent = layoutPanel2.transform;
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
@@ -1369,7 +1370,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[7];
-								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "Waiting for towel...";
+								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for towel...</color>";
 								newItem.transform.parent = layoutPanel2.transform;
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
@@ -1483,7 +1484,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 							s2[t2_curr_index].transform.parent = layoutPanel2.transform;
 							s2[t2_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You can't cut without a brush and some scissors.", 2);
+							resError("> ERROR: You can't cut without a brush and some scissors.", 2);
 							scrollToBottom();
 						
 						} else {
@@ -1501,7 +1502,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 							s2[t2_curr_index].transform.parent = layoutPanel2.transform;
 							s2[t2_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You can't dry without a station, a dryer and a towel.\n\n", 2);
+							resError("> ERROR: You can't dry without a station, a dryer and a towel.", 2);
 							scrollToBottom();
 						
 						} else {
@@ -1519,7 +1520,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 							s2[t2_curr_index].transform.parent = layoutPanel2.transform;
 							s2[t2_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.\n\n", 2);
+							resError("> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.", 2);
 							scrollToBottom();
 						
 						} else {
@@ -1537,7 +1538,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 							s2[t2_curr_index].transform.parent = layoutPanel2.transform;
 							s2[t2_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You can't groom without a brush and some nail clippers.\n\n", 2);
+							resError("> ERROR: You can't groom without a brush and some nail clippers.", 2);
 							scrollToBottom();
 
 						} else {
@@ -1555,7 +1556,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 							s2[t2_curr_index].transform.parent = layoutPanel2.transform;
 							s2[t2_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.\n\n", 2);
+							resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.", 2);
 							scrollToBottom();
 						
 						} else {
@@ -1574,7 +1575,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 							s2[t2_curr_index].transform.parent = layoutPanel2.transform;
 							s2[t2_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: Seems like worker 2 didn't fulfill all of the customer's requests. Please try again.\n\n", 2);
+							resError("> ERROR: Seems like worker 2 didn't fulfill all of the customer's requests. Please try again.", 2);
 							scrollToBottom();
 
 						} else if (t2_has_brush || t2_has_clippers || t2_has_conditioner || t2_has_dryer || t2_has_scissors || t2_has_shampoo || t2_has_station || t2_has_towel) {
@@ -1584,7 +1585,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 							s2[t2_curr_index].transform.parent = layoutPanel2.transform;
 							s2[t2_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You need to return all the resources you acquired before checking out.\n\n", 2);
+							resError("> ERROR: You need to return all the resources you acquired before checking out.", 2);
 							scrollToBottom();
 
 						} else if (t2_checkedout) {
@@ -1594,7 +1595,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 							s2[t2_curr_index].transform.parent = layoutPanel2.transform;
 							s2[t2_curr_index].transform.localScale = Vector3.one;
 
-							resError("\n> ERROR: You have to check in before attempting to check out a customer.\n\n", 2);
+							resError("> ERROR: You have to check in before attempting to check out a customer.", 2);
 							scrollToBottom();
 
 						} else {
@@ -1669,7 +1670,6 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 			return 0;
 		}
-
 	}
 
 	void resError(String msg, int thread_num) {
@@ -1691,7 +1691,6 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 		runButton.transform.SetAsLastSibling ();
 		bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
-
 	}
 
 	void printError(String msg, int thread_num) {
@@ -1709,7 +1708,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 		newItem.transform.FindChild ("ActionText").GetComponent<Text>().text = "<color=red>" + msg + "</color>";
 		newItem.transform.parent = newItemParent;
 		newItem.transform.localScale = Vector3.one;
-
+		scrollToBottom ();
 	}
 
 	void clearVerticalLayouts() {
