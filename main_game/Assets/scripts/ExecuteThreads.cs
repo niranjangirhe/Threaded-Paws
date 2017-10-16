@@ -163,7 +163,7 @@ public class ExecuteThreads : MonoBehaviour {
 		t1_needs_groom = false;
 
 		// ------ START EXECUTE THREADS -------
-		simulationTextArea.text = "";
+//		simulationTextArea.text = "";
 		clearVerticalLayout ();
 		clearVerticalLayout2 ();
 
@@ -579,6 +579,10 @@ public class ExecuteThreads : MonoBehaviour {
 
 		// Debug.Log ("Execute_MultiThreads_Level2()");
 
+		clearAllClones ();
+		clearVerticalLayout ();
+		clearVerticalLayout2 ();
+
 		t1_did_cut = false;
 		t1_did_dry = false;
 		t1_did_wash = false;
@@ -601,9 +605,7 @@ public class ExecuteThreads : MonoBehaviour {
 		t2_needs_wash = false;
 		t2_needs_groom = false;
 
-		simulationTextArea.text = "";
-		clearVerticalLayout ();
-		clearVerticalLayout2 ();
+//		simulationTextArea.text = "";
 
 		try {
 			GameObject.Find("InformationPanel").SetActive(false);
@@ -654,6 +656,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 		//simulationTextArea.text = "test";
 
+		Canvas.ForceUpdateCanvases ();
 		simulationScrollRect.verticalNormalizedPosition = 1f;
 		Canvas.ForceUpdateCanvases ();
 
@@ -834,7 +837,7 @@ public class ExecuteThreads : MonoBehaviour {
 				} catch (Exception e) {
 					//manager.showError ("At least one if statement is empty.");
 					//line = ">> ERROR: Empty if statement";
-					simulationTextArea.text = "";
+//					simulationTextArea.text = "";
 					manager.showError ("There is at least one empty if statement in thread 1.");
 					terminateSimulation ();
 					return;
@@ -860,7 +863,7 @@ public class ExecuteThreads : MonoBehaviour {
 				if (whileChildrenCount < 1) {
 					//Debug.Log(">>> ERROR: There is at least one empty while loop");
 					//simulationTextArea.text = "There is at least one empty while loop in thread 2.";
-					simulationTextArea.text = "";
+//					simulationTextArea.text = "";
 					manager.showError ("There is at least one empty while loop in thread 1.");
 					terminateSimulation ();
 					return;
@@ -1106,7 +1109,7 @@ public class ExecuteThreads : MonoBehaviour {
 				} catch (Exception e) {
 					//manager.showError ("At least one if statement is empty.");
 					//line = ">> ERROR: Empty if statement";
-					simulationTextArea.text = "";
+//					simulationTextArea.text = "";
 					manager.showError ("There is at least one empty if statement in thread 2.");
 					terminateSimulation ();
 					return;
@@ -1131,7 +1134,7 @@ public class ExecuteThreads : MonoBehaviour {
 				if (whileChildrenCount < 1) {
 					//Debug.Log(">>> ERROR: There is at least one empty while loop");
 					//simulationTextArea.text = "There is at least one empty while loop in thread 2.";
-					simulationTextArea.text = "";
+//					simulationTextArea.text = "";
 					manager.showError ("There is at least one empty while loop in thread 2.");
 					terminateSimulation ();
 					return;
@@ -1193,7 +1196,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 		if (blocks_t1.Length < 1) {
 			manager.showError ("There are no actions to run in thread 1.");
-			simulationTextArea.text = "";
+//			simulationTextArea.text = "";
 			clearVerticalLayout ();
 			clearVerticalLayout2 ();
 			terminateSimulation ();
@@ -1202,7 +1205,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 		if (blocks_t2.Length < 1) {
 			manager.showError ("There are no actions to run in thread 2.");
-			simulationTextArea.text = "";
+//			simulationTextArea.text = "";
 			clearVerticalLayout ();
 			clearVerticalLayout2 ();
 			terminateSimulation ();
@@ -1248,7 +1251,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 	public void terminateSimulation() {
 
-		clearAllClones ();
+		// clearAllClones ();
 
 		stepsIndicator.text = "0";
 
@@ -1262,9 +1265,9 @@ public class ExecuteThreads : MonoBehaviour {
 		} catch {
 			Debug.Log ("Cannot disable DisablePanel.");
 		}
-		simulationTextArea.text = "";
-		//clearVerticalLayout ();
-		//clearVerticalLayout2 ();
+//		simulationTextArea.text = "";
+//		clearVerticalLayout ();
+//		clearVerticalLayout2 ();
 
 		runButton.transform.SetAsLastSibling ();
 		bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
@@ -1342,7 +1345,8 @@ public class ExecuteThreads : MonoBehaviour {
 
 			} else {
 
-				simulationTextArea.text += "\nSTEP " + (j+1) + ": \n";
+
+				// simulationTextArea.text += "\nSTEP " + (j+1) + ": \n";
 				stepsIndicator.text = ""+(j + 1);
 //				Debug.Log("\nSTEP " + (j+1) + ": \n");
 
@@ -1556,7 +1560,7 @@ public class ExecuteThreads : MonoBehaviour {
 					} else if (b1[t1_curr_index].Substring(0, 3) == "cut") {
 						
 						if (!t1_has_brush || !t1_has_scissors) {
-							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 
 							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -1579,7 +1583,7 @@ public class ExecuteThreads : MonoBehaviour {
 					} else if (b1[t1_curr_index].Substring(0, 3) == "dry") {
 
 						if (!t1_has_station || !t1_has_dryer || !t1_has_towel) {
-							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 
 							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -1601,7 +1605,7 @@ public class ExecuteThreads : MonoBehaviour {
 					} else if (b1[t1_curr_index].Substring(0, 4) == "wash") {
 
 						if (!t1_has_station || !t1_has_shampoo || !t1_has_towel || !t1_has_conditioner) {
-							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 
 							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -1624,7 +1628,7 @@ public class ExecuteThreads : MonoBehaviour {
 					} else if (b1[t1_curr_index].Substring(0, 5) == "groom") {
 
 						if (!t1_has_brush || !t1_has_clippers) {
-							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 
 							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -1646,7 +1650,7 @@ public class ExecuteThreads : MonoBehaviour {
 					} else if (b1[t1_curr_index].Substring(0, 7) == "checkin") {
 
 						if (t1_checkedin) {
-							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 
 							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -1682,7 +1686,7 @@ public class ExecuteThreads : MonoBehaviour {
 						if ((t1_needs_cut && !t1_did_cut) || (t1_needs_dry && !t1_did_dry)
 									|| (t1_needs_groom && !t1_did_groom) || (t1_needs_wash && !t1_did_wash)) {
 						
-							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 
 							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -1698,7 +1702,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 						}
 						else if (t1_checkedout) {
-							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 
 							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -1721,7 +1725,7 @@ public class ExecuteThreads : MonoBehaviour {
 					if (t1_canPrint) {
 
 						if (!err) {
-							simulationTextArea.text += "" + b1 [t1_curr_index];
+//							simulationTextArea.text += "" + b1 [t1_curr_index];
 							b3[t1_curr_index].transform.parent = layoutPanel.transform;
 							Debug.Log("8");
 							b3[t1_curr_index].transform.localScale = Vector3.one;
@@ -1749,11 +1753,6 @@ public class ExecuteThreads : MonoBehaviour {
 	}
 
 	IEnumerator printThreads(List<string> b1, List<string> b2, List<GameObject> s1, List<GameObject> s2, int speed) {
-
-		// Debug.Log ("printThreads()");
-
-		// Canvas.ForceUpdateCanvases();
-
 
 		bar.currentAmount = 0;
 
@@ -1829,7 +1828,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 			} else {
 				
-				simulationTextArea.text += "\nSTEP " + (j+1) + ": \n";
+//				simulationTextArea.text += "\nSTEP " + (j+1) + ": \n";
 				stepsIndicator.text = "" + (j + 1);
 
 				// ------------------------------  THREAD 1 ------------------------------
@@ -2212,7 +2211,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 						if (!t1_has_brush || !t1_has_scissors) {
 
-							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 
 							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -2229,7 +2228,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 						if (!t1_has_station || !t1_has_dryer || !t1_has_towel) {
 							
-							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 
 							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -2245,7 +2244,7 @@ public class ExecuteThreads : MonoBehaviour {
 					} else if (b1[t1_curr_index].Substring(11, 4) == "wash") {
 
 						if (!t1_has_station || !t1_has_shampoo || !t1_has_towel || !t1_has_conditioner) {
-							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 
 							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -2261,7 +2260,7 @@ public class ExecuteThreads : MonoBehaviour {
 					} else if (b1[t1_curr_index].Substring(11, 5) == "groom") {
 
 						if (!t1_has_brush || !t1_has_clippers) {
-							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 
 							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -2277,7 +2276,7 @@ public class ExecuteThreads : MonoBehaviour {
 					} else if (b1[t1_curr_index].Substring(11, 7) == "checkin") {
 
 						if (t1_checkedin) {
-							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 
 							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -2301,7 +2300,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 							// Debug.Log("worker 1 is missing actions. add them.");
 
-							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 
 							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -2315,7 +2314,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 							// Debug.Log("worker 1: still have some resources.");
 
-							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 
 							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -2329,7 +2328,7 @@ public class ExecuteThreads : MonoBehaviour {
 							
 							// Debug.Log("check in before checking out.");
 
-							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b1 [t1_curr_index] + "</color>";
 
 							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -2353,7 +2352,7 @@ public class ExecuteThreads : MonoBehaviour {
 					if (t1_canPrint) {
 
 						if (!err) {
-							simulationTextArea.text += "" + b1 [t1_curr_index];
+//							simulationTextArea.text += "" + b1 [t1_curr_index];
 							s1[t1_curr_index].transform.parent = layoutPanel.transform;
 							Debug.Log("25");
 							s1[t1_curr_index].transform.localScale = Vector3.one;
@@ -2362,6 +2361,7 @@ public class ExecuteThreads : MonoBehaviour {
 					}
 
 				} catch { }
+
 
 
 				// ------------------------------  THREAD 2 ------------------------------
@@ -2733,7 +2733,7 @@ public class ExecuteThreads : MonoBehaviour {
 						
 						if (!t2_has_brush || !t2_has_scissors) {
 
-							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
 
 							String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -2749,7 +2749,7 @@ public class ExecuteThreads : MonoBehaviour {
 					} else if (b2[t2_curr_index].Substring(11, 3) == "dry") {
 
 						if (!t2_has_station || !t2_has_dryer || !t2_has_towel) {
-							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
 
 							String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -2765,7 +2765,7 @@ public class ExecuteThreads : MonoBehaviour {
 					} else if (b2[t2_curr_index].Substring(11, 4) == "wash") {
 
 						if (!t2_has_station || !t2_has_shampoo || !t2_has_towel || !t2_has_conditioner) {
-							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
 
 							String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -2781,7 +2781,7 @@ public class ExecuteThreads : MonoBehaviour {
 					} else if (b2[t2_curr_index].Substring(11, 5) == "groom") {
 
 						if (!t2_has_brush || !t2_has_clippers) {
-							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
 
 							String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -2797,7 +2797,7 @@ public class ExecuteThreads : MonoBehaviour {
 					} else if (b2[t2_curr_index].Substring(11, 7) == "checkin") {
 
 						if (t2_checkedin) {
-							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
 
 							String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -2821,7 +2821,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 							// Debug.Log("worker 2 is missing actions. add them.");
 
-							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
 
 							String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -2835,7 +2835,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 							// Debug.Log("worker 2 hasnt returned all resources.");
 
-							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
 
 							String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -2849,7 +2849,7 @@ public class ExecuteThreads : MonoBehaviour {
 
 							// Debug.Log("worker 2 needs to check in before checking out.");
 
-							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
+//							simulationTextArea.text += "<color=red>" + b2 [t2_curr_index] + "</color>";
 
 							String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
@@ -2868,12 +2868,12 @@ public class ExecuteThreads : MonoBehaviour {
 					}
 						
 				} catch { }
-
+					
 				try {
 
 					if (t2_canPrint) {
 						if (!err) {
-							simulationTextArea.text += "" + b2 [t2_curr_index];
+//							simulationTextArea.text += "" + b2 [t2_curr_index];
 							s2[t2_curr_index].transform.parent = layoutPanel2.transform;
 							Debug.Log("42");
 							s2[t2_curr_index].transform.localScale = Vector3.one;
@@ -2979,7 +2979,7 @@ public class ExecuteThreads : MonoBehaviour {
 			newItemParent = layoutPanel2.transform;
 
 		lost = true;
-		simulationTextArea.text += "<color=red>" + msg + "</color>";
+//		simulationTextArea.text += "<color=red>" + msg + "</color>";
 
 		GameObject newItem = Instantiate(simulationErrorPrefab) as GameObject;
 		newItem.transform.FindChild ("ActionText").GetComponent<Text>().text = "<color=red>" + msg + "</color>";
