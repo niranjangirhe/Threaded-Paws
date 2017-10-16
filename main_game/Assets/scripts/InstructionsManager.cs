@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
 
 public class InstructionsManager : MonoBehaviour {
 
@@ -163,5 +164,11 @@ public class InstructionsManager : MonoBehaviour {
 		coverPlayStop.SetActive (true);
 
 		coverError.SetActive (false);
+	}
+
+	public void getAudioURL() {
+
+		String URL = "https://www.youtube.com/watch?v=RVEGGGKMdn0";
+		Application.OpenURL (URL);
 	}
 }
