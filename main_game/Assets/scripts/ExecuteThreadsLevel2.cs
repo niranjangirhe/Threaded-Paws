@@ -143,7 +143,7 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 		else
 			path = "Tab2/ScrollRect/Holder/DropAreaThread2";
 
-		Debug.Log ("children: " + GameObject.Find (path).transform.childCount);
+		Debug.Log ("children (T" + tabNum + "): " + GameObject.Find (path).transform.childCount);
 		int childCount = GameObject.Find (path).transform.childCount;
 
 		Transform[] threadChildren = new Transform[childCount];
@@ -159,6 +159,7 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 
 	public void ExecuteThreads() {
 
+		clearAllClones ();
 		clearVerticalLayouts ();
 
 		t1_did_cut = false;
@@ -1099,16 +1100,6 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 							resError("> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.", 1);
 							scrollToBottom();
 
-						} else if (t1_has_brush || t1_has_clippers || t1_has_conditioner || t1_has_dryer || t1_has_scissors || t1_has_shampoo || t1_has_station || t1_has_towel) {
-
-							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
-							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-							s1[t1_curr_index].transform.parent = layoutPanel1.transform;
-							s1[t1_curr_index].transform.localScale = Vector3.one;
-
-							resError("> ERROR: You need to return all the resources you acquired before checking out.", 1);
-							scrollToBottom();
-
 						} else if (t1_checkedout) {
 
 							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
@@ -1127,7 +1118,9 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 						}
 					}
 
-				} catch { }
+				} catch { 
+					// scrollToBottom ();
+				}
 
 				try {
 
@@ -1139,11 +1132,13 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 						}
 						t1_curr_index++;
 					}
-					scrollToBottom();
+					// scrollToBottom();
 
 				} catch { 
-					scrollToBottom ();
+					// scrollToBottom ();
 				}
+
+				scrollToBottom ();
 
 
 				// ------------------------------  THREAD 2 ------------------------------
@@ -1556,16 +1551,6 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 							resError("> ERROR: Seems like worker 2 didn't fulfill all of the customer's requests. Please try again.", 2);
 							scrollToBottom();
 
-						} else if (t2_has_brush || t2_has_clippers || t2_has_conditioner || t2_has_dryer || t2_has_scissors || t2_has_shampoo || t2_has_station || t2_has_towel) {
-
-							String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
-							s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-							s2[t2_curr_index].transform.parent = layoutPanel2.transform;
-							s2[t2_curr_index].transform.localScale = Vector3.one;
-
-							resError("> ERROR: You need to return all the resources you acquired before checking out.", 2);
-							scrollToBottom();
-
 						} else if (t2_checkedout) {
 
 							String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
@@ -1598,12 +1583,13 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 					}
 
 				} catch { 
-					scrollToBottom ();
+					// scrollToBottom ();
 				}
 
 				j++; // increment step
 				scrollToBottom ();
 				yield return new WaitForSeconds (1);
+				scrollToBottom ();
 			}
 		}
 
@@ -1710,5 +1696,16 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 		Canvas.ForceUpdateCanvases ();
 		simulationScrollRect.verticalNormalizedPosition = 0f;
 		Canvas.ForceUpdateCanvases ();
+	}
+
+	void clearAllClones() {
+
+		GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>() ;
+
+		foreach (GameObject obj in allObjects) {
+
+			if (obj.transform.name == "SimulationImage(Clone)")
+				GameObject.Destroy (obj);
+		}
 	}
 }

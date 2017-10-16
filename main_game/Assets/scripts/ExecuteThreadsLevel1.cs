@@ -100,6 +100,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 		
 	public void ExecuteThreads() {
 
+		clearAllClones ();
 		clearVerticalLayout ();
 
 		t1_did_cut = false;
@@ -898,5 +899,16 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 		Debug.Log ("scrollToBottom()");
 		simulationScrollRect.verticalNormalizedPosition = 0f;
 		Canvas.ForceUpdateCanvases ();
+	}
+
+	void clearAllClones() {
+
+		GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>() ;
+
+		foreach (GameObject obj in allObjects) {
+
+			if (obj.transform.name == "SimulationImage(Clone)")
+				GameObject.Destroy (obj);
+		}
 	}
 }

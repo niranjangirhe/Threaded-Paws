@@ -143,7 +143,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 		else
 			path = "Tab2/ScrollRect/Holder/DropAreaThread2";
 
-		Debug.Log ("children: " + GameObject.Find (path).transform.childCount);
+		Debug.Log ("children (T" + tabNum + "): " + GameObject.Find (path).transform.childCount);
 		int childCount = GameObject.Find (path).transform.childCount;
 
 		Transform[] threadChildren = new Transform[childCount];
@@ -158,6 +158,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 	public void ExecuteThreads() {
 
+		clearAllClones ();
 		clearVerticalLayouts ();
 
 		t1_did_cut = false;
@@ -1711,5 +1712,16 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 		Canvas.ForceUpdateCanvases ();
 		simulationScrollRect.verticalNormalizedPosition = 0f;
 		Canvas.ForceUpdateCanvases ();
+	}
+
+	void clearAllClones() {
+
+		GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>() ;
+
+		foreach (GameObject obj in allObjects) {
+
+			if (obj.transform.name == "SimulationImage(Clone)")
+				GameObject.Destroy (obj);
+		}
 	}
 }
