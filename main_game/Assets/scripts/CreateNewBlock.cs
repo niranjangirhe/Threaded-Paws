@@ -165,7 +165,7 @@ public class CreateNewBlock : MonoBehaviour {
 			
 			} else if (this.transform.name == "ReturnBox") {
 
-				Debug.Log ("Generating a return box");
+				// Debug.Log ("Generating a return box");
 
 				if (manager.returnLeft_thread1 > 0) {
 
@@ -692,8 +692,8 @@ public class CreateNewBlock : MonoBehaviour {
 		
 	// Use this for initialization
 	void Start () {
-		manager = GameObject.Find ("_SCRIPTS_").GetComponent<ToolboxManager> ();
 
+		manager = GameObject.Find ("_SCRIPTS_").GetComponent<ToolboxManager> ();
 		canCreate = true;
 	}
 

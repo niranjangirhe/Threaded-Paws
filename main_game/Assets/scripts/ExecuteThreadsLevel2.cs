@@ -159,6 +159,8 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 
 	public void ExecuteThreads() {
 
+		clearVerticalLayouts ();
+
 		t1_did_cut = false;
 		t1_did_dry = false;
 		t1_did_wash = false;
@@ -188,7 +190,6 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 		} catch {}
 
 		try {
-
 			GameObject.Find("AgendaPanel").SetActive(false);
 		} catch { }
 
@@ -1705,7 +1706,7 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 
 	void scrollToBottom() {
 
-		Debug.Log ("scrollToBottom()");
+		// Debug.Log ("scrollToBottom()");
 		Canvas.ForceUpdateCanvases ();
 		simulationScrollRect.verticalNormalizedPosition = 0f;
 		Canvas.ForceUpdateCanvases ();

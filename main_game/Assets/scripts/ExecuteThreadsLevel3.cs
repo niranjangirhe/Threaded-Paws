@@ -1707,7 +1707,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 	void scrollToBottom() {
 		
-		Debug.Log ("scrollToBottom()");
+		// Debug.Log ("scrollToBottom()");
 		Canvas.ForceUpdateCanvases ();
 		simulationScrollRect.verticalNormalizedPosition = 0f;
 		Canvas.ForceUpdateCanvases ();
