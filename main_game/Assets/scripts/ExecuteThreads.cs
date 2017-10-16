@@ -654,6 +654,8 @@ public class ExecuteThreads : MonoBehaviour {
 
 		//simulationTextArea.text = "test";
 
+		simulationScrollRect.verticalNormalizedPosition = 1f;
+		Canvas.ForceUpdateCanvases ();
 
 		// ------------------------ READING TAB 1 ------------------------
 
@@ -1246,6 +1248,8 @@ public class ExecuteThreads : MonoBehaviour {
 
 	public void terminateSimulation() {
 
+		clearAllClones ();
+
 		stepsIndicator.text = "0";
 
 		err = true;
@@ -1265,7 +1269,7 @@ public class ExecuteThreads : MonoBehaviour {
 		runButton.transform.SetAsLastSibling ();
 		bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
 
-		simulationScrollRect.verticalNormalizedPosition = 1f;
+//		simulationScrollRect.verticalNormalizedPosition = 1f;
 	}
 
 	// ------- FOR SINGLE THREAD (I.E. LEVEL 1)
@@ -1650,6 +1654,10 @@ public class ExecuteThreads : MonoBehaviour {
 							Debug.Log("5");
 							b3[t1_curr_index].transform.localScale = Vector3.one;
 
+							Canvas.ForceUpdateCanvases ();
+							simulationScrollRect.verticalNormalizedPosition = 1f;
+							Canvas.ForceUpdateCanvases ();
+
 //							GameObject newItemError = Instantiate(simulationErrorPrefab) as GameObject;
 //							newItemError.transform.Find("ActionText").GetComponent<Text>().text = "> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.";
 //							newItemError.transform.parent = layoutPanel.transform;
@@ -1744,6 +1752,8 @@ public class ExecuteThreads : MonoBehaviour {
 
 		// Debug.Log ("printThreads()");
 
+		// Canvas.ForceUpdateCanvases();
+
 
 		bar.currentAmount = 0;
 
@@ -1818,7 +1828,7 @@ public class ExecuteThreads : MonoBehaviour {
 				yield return 0;
 
 			} else {
-
+				
 				simulationTextArea.text += "\nSTEP " + (j+1) + ": \n";
 				stepsIndicator.text = "" + (j + 1);
 
@@ -1848,6 +1858,10 @@ public class ExecuteThreads : MonoBehaviour {
 								newItem.transform.parent = layoutPanel.transform;
 								Debug.Log("9");
 								newItem.transform.localScale = Vector3.one;
+
+								Canvas.ForceUpdateCanvases();
+								simulationScrollRect.verticalNormalizedPosition = 0f;
+								Canvas.ForceUpdateCanvases ();
 
 								t1_canPrint = false;
 
@@ -1880,6 +1894,10 @@ public class ExecuteThreads : MonoBehaviour {
 								Debug.Log("10");
 								newItem.transform.localScale = Vector3.one;
 
+								Canvas.ForceUpdateCanvases();
+								simulationScrollRect.verticalNormalizedPosition = 0f;
+								Canvas.ForceUpdateCanvases ();
+
 								t1_canPrint = false;
 
 							} else {
@@ -1911,6 +1929,10 @@ public class ExecuteThreads : MonoBehaviour {
 								Debug.Log("11");
 								newItem.transform.localScale = Vector3.one;
 
+								Canvas.ForceUpdateCanvases();
+								simulationScrollRect.verticalNormalizedPosition = 0f;
+								Canvas.ForceUpdateCanvases ();
+
 							} else {
 								
 								int output = acquire (ref t1_has_conditioner);
@@ -1940,6 +1962,10 @@ public class ExecuteThreads : MonoBehaviour {
 								Debug.Log("12");
 								newItem.transform.localScale = Vector3.one;
 
+								Canvas.ForceUpdateCanvases();
+								simulationScrollRect.verticalNormalizedPosition = 0f;
+								Canvas.ForceUpdateCanvases ();
+
 							} else {
 								int output = acquire (ref t1_has_dryer);
 								t1_canPrint = true;
@@ -1967,6 +1993,10 @@ public class ExecuteThreads : MonoBehaviour {
 								newItem.transform.parent = layoutPanel.transform;
 								Debug.Log("13");
 								newItem.transform.localScale = Vector3.one;
+
+								Canvas.ForceUpdateCanvases();
+								simulationScrollRect.verticalNormalizedPosition = 0f;
+								Canvas.ForceUpdateCanvases ();
 
 							} else {
 								int output = acquire (ref t1_has_scissors);
@@ -1996,6 +2026,10 @@ public class ExecuteThreads : MonoBehaviour {
 								Debug.Log("14");
 								newItem.transform.localScale = Vector3.one;
 
+								Canvas.ForceUpdateCanvases();
+								simulationScrollRect.verticalNormalizedPosition = 0f;
+								Canvas.ForceUpdateCanvases ();
+
 							} else {
 								int output = acquire (ref t1_has_shampoo);
 								t1_canPrint = true;
@@ -2024,6 +2058,10 @@ public class ExecuteThreads : MonoBehaviour {
 								Debug.Log("15");
 								newItem.transform.localScale = Vector3.one;
 
+								Canvas.ForceUpdateCanvases();
+								simulationScrollRect.verticalNormalizedPosition = 0f;
+								Canvas.ForceUpdateCanvases ();
+
 							} else {
 								int output = acquire (ref t1_has_station);
 								t1_canPrint = true;
@@ -2051,6 +2089,10 @@ public class ExecuteThreads : MonoBehaviour {
 								newItem.transform.parent = layoutPanel.transform;
 								Debug.Log("16");
 								newItem.transform.localScale = Vector3.one;
+
+								Canvas.ForceUpdateCanvases();
+								simulationScrollRect.verticalNormalizedPosition = 0f;
+								Canvas.ForceUpdateCanvases ();
 
 							} else {
 								int output = acquire (ref t1_has_towel);
@@ -2243,6 +2285,10 @@ public class ExecuteThreads : MonoBehaviour {
 							Debug.Log("21");
 							s1[t1_curr_index].transform.localScale = Vector3.one;
 
+							Canvas.ForceUpdateCanvases ();
+							simulationScrollRect.verticalNormalizedPosition = 1f;
+							Canvas.ForceUpdateCanvases ();
+
 							resError("\n> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.\n\n", 1);
 						} else {
 							t1_checkedin = true;
@@ -2346,6 +2392,10 @@ public class ExecuteThreads : MonoBehaviour {
 								Debug.Log("26");
 								newItem.transform.localScale = Vector3.one;
 
+								Canvas.ForceUpdateCanvases();
+								simulationScrollRect.verticalNormalizedPosition = 0f;
+								Canvas.ForceUpdateCanvases ();
+
 								t2_canPrint = false;
 
 							} else {
@@ -2375,6 +2425,10 @@ public class ExecuteThreads : MonoBehaviour {
 								newItem.transform.parent = layoutPanel2.transform;
 								Debug.Log("27");
 								newItem.transform.localScale = Vector3.one;
+
+								Canvas.ForceUpdateCanvases();
+								simulationScrollRect.verticalNormalizedPosition = 0f;
+								Canvas.ForceUpdateCanvases ();
 
 								t2_canPrint = false;
 
@@ -2406,6 +2460,10 @@ public class ExecuteThreads : MonoBehaviour {
 								Debug.Log("28");
 								newItem.transform.localScale = Vector3.one;
 
+								Canvas.ForceUpdateCanvases();
+								simulationScrollRect.verticalNormalizedPosition = 0f;
+								Canvas.ForceUpdateCanvases ();
+
 								t2_canPrint = false;
 
 							} else {
@@ -2434,6 +2492,10 @@ public class ExecuteThreads : MonoBehaviour {
 								newItem.transform.parent = layoutPanel2.transform;
 								Debug.Log("29");
 								newItem.transform.localScale = Vector3.one;
+
+								Canvas.ForceUpdateCanvases();
+								simulationScrollRect.verticalNormalizedPosition = 0f;
+								Canvas.ForceUpdateCanvases ();
 
 								t2_canPrint = false;
 
@@ -2465,6 +2527,10 @@ public class ExecuteThreads : MonoBehaviour {
 								Debug.Log("30");
 								newItem.transform.localScale = Vector3.one;
 
+								Canvas.ForceUpdateCanvases();
+								simulationScrollRect.verticalNormalizedPosition = 0f;
+								Canvas.ForceUpdateCanvases ();
+
 								t2_canPrint = false;
 
 							} else {
@@ -2494,6 +2560,10 @@ public class ExecuteThreads : MonoBehaviour {
 								newItem.transform.parent = layoutPanel2.transform;
 								Debug.Log("31");
 								newItem.transform.localScale = Vector3.one;
+
+								Canvas.ForceUpdateCanvases();
+								simulationScrollRect.verticalNormalizedPosition = 0f;
+								Canvas.ForceUpdateCanvases ();
 
 								t2_canPrint = false;
 
@@ -2525,6 +2595,10 @@ public class ExecuteThreads : MonoBehaviour {
 								Debug.Log("32");
 								newItem.transform.localScale = Vector3.one;
 
+								Canvas.ForceUpdateCanvases();
+								simulationScrollRect.verticalNormalizedPosition = 0f;
+								Canvas.ForceUpdateCanvases ();
+
 								t2_canPrint = false;
 
 							} else {
@@ -2554,6 +2628,10 @@ public class ExecuteThreads : MonoBehaviour {
 								newItem.transform.parent = layoutPanel2.transform;
 								Debug.Log("33");
 								newItem.transform.localScale = Vector3.one;
+
+								Canvas.ForceUpdateCanvases();
+								simulationScrollRect.verticalNormalizedPosition = 0f;
+								Canvas.ForceUpdateCanvases ();
 
 								t2_canPrint = false;
 
@@ -2726,6 +2804,10 @@ public class ExecuteThreads : MonoBehaviour {
 							s2[t2_curr_index].transform.parent = layoutPanel2.transform;
 							Debug.Log("38");
 							s2[t2_curr_index].transform.localScale = Vector3.one;
+
+							Canvas.ForceUpdateCanvases ();
+							simulationScrollRect.verticalNormalizedPosition = 1f;
+							Canvas.ForceUpdateCanvases ();
 
 							resError("\n> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.\n\n", 2);
 						} else {
@@ -2925,5 +3007,14 @@ public class ExecuteThreads : MonoBehaviour {
 		foreach (Transform child in layoutPanel2.transform) {
 			GameObject.Destroy(child.gameObject);
 		}
+	}
+
+	void clearAllClones() {
+
+		GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>() ;
+		foreach (GameObject obj in allObjects)
+			if (obj.transform.name == "SimulationImage(Clone)")
+				GameObject.Destroy (obj);
+	
 	}
 }
