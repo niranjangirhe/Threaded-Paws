@@ -37,7 +37,6 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 	private Timer timer;
 	private int numActions;
 	private string toPrint;
-	public GenerateTasks genTasks;
 
 	Transform[] blocks_t1;
 	Transform[] blocks_t2;
@@ -635,28 +634,6 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 	}
 
-	public void terminateSimulation() {
-
-		stepsIndicator.text = "0";
-
-		err = true;
-		lost = true;
-		stop = true;
-
-		try {
-			
-			disablePanel.SetActive (false);
-
-		} catch {
-			
-			Debug.Log ("Cannot disable DisablePanel.");
-		}
-
-		runButton.transform.SetAsLastSibling ();
-		bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
-		scrollToBottom ();
-	}
-
 	IEnumerator printThreads(List<string> b1, List<string> b2, List<GameObject> s1, List<GameObject> s2, int speed) {
 
 		bar.currentAmount = 0;
@@ -1118,6 +1095,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
 							s1[t1_curr_index].transform.parent = layoutPanel1.transform;
 							s1[t1_curr_index].transform.localScale = Vector3.one;
+							scrollToBottom();
 
 							resError("> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.", 1);
 							scrollToBottom();
@@ -1574,6 +1552,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 							s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
 							s2[t2_curr_index].transform.parent = layoutPanel2.transform;
 							s2[t2_curr_index].transform.localScale = Vector3.one;
+							scrollToBottom();
 
 							resError("> ERROR: Seems like worker 2 didn't fulfill all of the customer's requests. Please try again.", 2);
 							scrollToBottom();
@@ -1635,6 +1614,46 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 		}
 	}
 
+	public void terminateSimulation() {
+
+		stepsIndicator.text = "0";
+
+		err = true;
+		lost = true;
+		stop = true;
+		paused = true;
+
+		try {
+			disablePanel.SetActive (false);
+		} catch {
+			Debug.Log ("Cannot disable DisablePanel.");
+		}
+
+		runButton.transform.SetAsLastSibling ();
+		bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
+		scrollToBottom ();
+	}
+
+	void resError(String msg, int thread_num) {
+
+		// display error
+		Transform newItemParent;
+
+		if (thread_num == 1)
+			newItemParent = layoutPanel1.transform;
+		else
+			newItemParent = layoutPanel2.transform;
+
+		GameObject newItem = Instantiate(simulationErrorPrefab) as GameObject;
+		newItem.transform.FindChild ("ActionText").GetComponent<Text>().text = "<color=red>" + msg + "</color>";
+		newItem.transform.parent = newItemParent;
+		newItem.transform.localScale = Vector3.one;
+		scrollToBottom ();
+
+		// terminate simulation
+		terminateSimulation ();
+	}
+
 	int acquire(ref bool resource) {
 
 		if (resource) {
@@ -1672,45 +1691,6 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 		}
 	}
 
-	void resError(String msg, int thread_num) {
-
-		stepsIndicator.text = "0";
-
-		err = true;
-		lost = true;
-		stop = true;
-		paused = true;
-
-		printError (msg, thread_num);
-
-		try {
-			disablePanel.SetActive (false);
-		} catch {
-			Debug.Log ("Cannot disable DisablePanel.");
-		}
-
-		runButton.transform.SetAsLastSibling ();
-		bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
-	}
-
-	void printError(String msg, int thread_num) {
-
-		lost = true;
-
-		Transform newItemParent;
-
-		if (thread_num == 1)
-			newItemParent = layoutPanel1.transform;
-		else
-			newItemParent = layoutPanel2.transform;
-
-		GameObject newItem = Instantiate(simulationErrorPrefab) as GameObject;
-		newItem.transform.FindChild ("ActionText").GetComponent<Text>().text = "<color=red>" + msg + "</color>";
-		newItem.transform.parent = newItemParent;
-		newItem.transform.localScale = Vector3.one;
-		scrollToBottom ();
-	}
-
 	void clearVerticalLayouts() {
 		stepsIndicator.text = "0";
 
@@ -1728,6 +1708,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 	void scrollToBottom() {
 		
 		Debug.Log ("scrollToBottom()");
+		Canvas.ForceUpdateCanvases ();
 		simulationScrollRect.verticalNormalizedPosition = 0f;
 		Canvas.ForceUpdateCanvases ();
 	}
