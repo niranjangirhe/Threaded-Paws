@@ -24,6 +24,8 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 	public Sprite[] itemsSprites;
 	public Sprite[] actionsSprites;
 
+	GameObject contentContainer;
+
 	// ------------------------
 
 	ToolboxManager manager;
@@ -123,7 +125,10 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 		timer = GameObject.FindObjectOfType<Timer> ();
 		disablePanel = GameObject.Find ("DisablePanel");
 		bar = GameObject.Find ("RadialProgressBar").GetComponent<ProgressBar>();
-		simulationScrollRect = scrollRect.transform.GetComponent<ScrollRect>();
+		try {
+			simulationScrollRect = scrollRect.transform.GetComponent<ScrollRect>();
+			contentContainer = layoutPanel1.transform.parent.gameObject;
+		} catch { }
 
 		try { 
 			disablePanel.SetActive (false);
@@ -157,6 +162,8 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 	}
 
 	public void ExecuteThreads() {
+
+		scrollToTop ();
 
 		clearAllClones ();
 		clearVerticalLayouts ();
@@ -630,12 +637,16 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 			return;
 		}
 
-		if (!err)
+		if (!err) {
 			StartCoroutine (printThreads (blocks_names_t1, blocks_names_t2, simulationImagesToDisplay_T1, simulationImagesToDisplay_T2, 5));
-
+		}
 	}
 
 	IEnumerator printThreads(List<string> b1, List<string> b2, List<GameObject> s1, List<GameObject> s2, int speed) {
+
+		// waitOneSecond ();
+
+		// scrollToTop ();
 
 		bar.currentAmount = 0;
 
@@ -651,7 +662,6 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 		while ((t1_curr_index < b1.Count) || (t2_curr_index < b2.Count)) {
 
 			if (bar.currentAmount < 100) {
-
 
 				bar.currentAmount += speed;
 				bar.LoadingBar.GetComponent<Image>().fillAmount = bar.currentAmount / 100;
@@ -721,6 +731,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								t1_canPrint = false;
 
 							} else {
+								
 								int output = acquire (ref t1_has_brush);
 								t1_canPrint = true;
 
@@ -1143,10 +1154,9 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 					}
 					scrollToBottom();
 
-				} catch { 
-					scrollToBottom ();
-				}
+				} catch { }
 
+				scrollToBottom();
 
 				// ------------------------------  THREAD 2 ------------------------------
 
@@ -1604,8 +1614,8 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 				}
 
 				j++; // increment step
-				scrollToBottom ();
 				yield return new WaitForSeconds (1);
+				scrollToBottom ();
 			}
 		}
 			
@@ -1613,6 +1623,9 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 			manager.gameWon ();
 			Debug.Log ("Finished in " + j + " steps.");
 		}
+			
+		Canvas.ForceUpdateCanvases();
+		scrollToBottom ();
 	}
 
 	public void terminateSimulation() {
@@ -1632,7 +1645,9 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 		runButton.transform.SetAsLastSibling ();
 		bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
-		scrollToBottom ();
+
+		// StartCoroutine (waitOneSecond());
+		// scrollToBottom ();
 	}
 
 	void resError(String msg, int thread_num) {
@@ -1649,7 +1664,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 		newItem.transform.FindChild ("ActionText").GetComponent<Text>().text = "<color=red>" + msg + "</color>";
 		newItem.transform.parent = newItemParent;
 		newItem.transform.localScale = Vector3.one;
-		scrollToBottom ();
+		// scrollToBottom ();
 
 		// terminate simulation
 		terminateSimulation ();
@@ -1710,7 +1725,17 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 		
 		// Debug.Log ("scrollToBottom()");
 		Canvas.ForceUpdateCanvases ();
+		waitOneFrame ();
 		simulationScrollRect.verticalNormalizedPosition = 0f;
+		Canvas.ForceUpdateCanvases ();
+	}
+
+	void scrollToTop() {
+
+		// Debug.Log ("scrollToBottom()");
+		Canvas.ForceUpdateCanvases ();
+		waitOneFrame ();
+		simulationScrollRect.verticalNormalizedPosition = 1f;
 		Canvas.ForceUpdateCanvases ();
 	}
 
@@ -1723,5 +1748,9 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 			if (obj.transform.name == "SimulationImage(Clone)")
 				GameObject.Destroy (obj);
 		}
+	}
+
+	IEnumerator waitOneFrame() {
+		yield return 0;
 	}
 }

@@ -852,35 +852,15 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 	void resError(String msg) {
 
-		stepsIndicator.text = "0";
-
-		simDisplay (msg);
-
-		err = true;
-		lost = true;
-		stop = true;
-		paused = true;
-
-		try {
-			disablePanel.SetActive (false);
-		} catch {
-			Debug.Log ("Cannot disable DisablePanel.");
-		}
-
-		runButton.transform.SetAsLastSibling ();
-		bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
-		scrollToBottom ();
-
-	}
-
-	void simDisplay(String msg) {
-
-		lost = true;
-
 		GameObject newItem = Instantiate(simulationErrorPrefab) as GameObject;
 		newItem.transform.FindChild ("ActionText").GetComponent<Text>().text = "<color=red>" + msg + "</color>";
 		newItem.transform.parent = layoutPanel.transform;
 		newItem.transform.localScale = Vector3.one;
+		scrollToBottom ();
+
+		// terminate simulation
+		terminateSimulation ();
+
 		scrollToBottom ();
 
 	}
