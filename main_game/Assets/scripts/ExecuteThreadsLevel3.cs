@@ -724,7 +724,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[0];
 								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for brush...</color>";
-								newItem.transform.parent = layoutPanel1.transform;
+								newItem.transform.SetParent(layoutPanel1.transform);
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
 
@@ -750,7 +750,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[1];
 								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for nail clippers...</color>";
-								newItem.transform.parent = layoutPanel1.transform;
+								newItem.transform.SetParent(layoutPanel1.transform);
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
 
@@ -776,7 +776,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[2];
 								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for conditioner...</color>";
-								newItem.transform.parent = layoutPanel1.transform;
+								newItem.transform.SetParent(layoutPanel1.transform);
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
 
@@ -802,7 +802,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[3];
 								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for dryer...</color>";
-								newItem.transform.parent = layoutPanel1.transform;
+								newItem.transform.SetParent(layoutPanel1.transform);
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
 
@@ -828,7 +828,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[4];
 								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for scissors...</color>";
-								newItem.transform.parent = layoutPanel1.transform;
+								newItem.transform.SetParent(layoutPanel1.transform);
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
 
@@ -854,7 +854,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[5];
 								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for shampoo...</color>";
-								newItem.transform.parent = layoutPanel1.transform;
+								newItem.transform.SetParent(layoutPanel1.transform);
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
 
@@ -879,7 +879,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[6];
 								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for station...</color>";
-								newItem.transform.parent = layoutPanel1.transform;
+								newItem.transform.SetParent(layoutPanel1.transform);
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
 
@@ -904,7 +904,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[7];
 								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for towel...</color>";
-								newItem.transform.parent = layoutPanel1.transform;
+								newItem.transform.SetParent(layoutPanel1.transform);
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
 
@@ -1178,7 +1178,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[0];
 								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for brush...</color>";
-								newItem.transform.parent = layoutPanel2.transform;
+								newItem.transform.SetParent(layoutPanel2.transform);
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
 
@@ -1204,7 +1204,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[1];
 								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for nail clippers...</color>";
-								newItem.transform.parent = layoutPanel2.transform;
+								newItem.transform.SetParent(layoutPanel2.transform);
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
 
@@ -1230,7 +1230,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[2];
 								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for conditioner...</color>";
-								newItem.transform.parent = layoutPanel2.transform;
+								newItem.transform.SetParent(layoutPanel2.transform);
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
 
@@ -1256,7 +1256,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[3];
 								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for dryer...</color>";
-								newItem.transform.parent = layoutPanel2.transform;
+								newItem.transform.SetParent(layoutPanel2.transform);
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
 
@@ -1282,7 +1282,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[4];
 								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for scissors...</color>";
-								newItem.transform.parent = layoutPanel2.transform;
+								newItem.transform.SetParent(layoutPanel2.transform);
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
 
@@ -1308,7 +1308,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[5];
 								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for shampoo...</color>";
-								newItem.transform.parent = layoutPanel2.transform;
+								newItem.transform.SetParent(layoutPanel2.transform);
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
 
@@ -1334,7 +1334,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[6];
 								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for station...</color>";
-								newItem.transform.parent = layoutPanel2.transform;
+								newItem.transform.SetParent(layoutPanel2.transform);
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
 
@@ -1360,7 +1360,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 								newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = actionsSprites[6];
 								newItem.transform.FindChild("ItemAction").GetComponent<Image>().sprite = itemsSprites[7];
 								newItem.transform.FindChild("ActionText").GetComponent<Text>().text = "<color=red>Waiting for towel...</color>";
-								newItem.transform.parent = layoutPanel2.transform;
+								newItem.transform.SetParent(layoutPanel2.transform);
 								newItem.transform.localScale = Vector3.one;
 								scrollToBottom();
 
@@ -1662,7 +1662,8 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 		GameObject newItem = Instantiate(simulationErrorPrefab) as GameObject;
 		newItem.transform.FindChild ("ActionText").GetComponent<Text>().text = "<color=red>" + msg + "</color>";
-		newItem.transform.parent = newItemParent;
+		// newItem.transform.parent = newItemParent;
+		newItem.transform.SetParent(newItemParent);
 		newItem.transform.localScale = Vector3.one;
 		// scrollToBottom ();
 

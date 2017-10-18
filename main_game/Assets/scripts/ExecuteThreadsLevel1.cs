@@ -664,7 +664,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-							b3[t1_curr_index].transform.parent = layoutPanel.transform;
+							b3[t1_curr_index].transform.SetParent(layoutPanel.transform);
 							b3[t1_curr_index].transform.localScale = Vector3.one;
 
 							resError("> ERROR: You can't cut without a brush and some scissors.");
@@ -682,7 +682,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-							b3[t1_curr_index].transform.parent = layoutPanel.transform;
+							b3[t1_curr_index].transform.SetParent(layoutPanel.transform);
 							b3[t1_curr_index].transform.localScale = Vector3.one;
 
 							resError("> ERROR: You can't dry without a station, a dryer and a towel.");
@@ -700,7 +700,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-							b3[t1_curr_index].transform.parent = layoutPanel.transform;
+							b3[t1_curr_index].transform.SetParent(layoutPanel.transform);
 							b3[t1_curr_index].transform.localScale = Vector3.one;
 
 							resError("> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.");
@@ -718,7 +718,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-							b3[t1_curr_index].transform.parent = layoutPanel.transform;
+							b3[t1_curr_index].transform.SetParent(layoutPanel.transform);
 							b3[t1_curr_index].transform.localScale = Vector3.one;
 
 							resError("> ERROR: You can't groom without a brush and some nail clippers.");
@@ -736,7 +736,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-							b3[t1_curr_index].transform.parent = layoutPanel.transform;
+							b3[t1_curr_index].transform.SetParent(layoutPanel.transform);
 							b3[t1_curr_index].transform.localScale = Vector3.one;
 
 							resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.");
@@ -756,7 +756,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-							b3[t1_curr_index].transform.parent = layoutPanel.transform;
+							b3[t1_curr_index].transform.SetParent(layoutPanel.transform);
 							b3[t1_curr_index].transform.localScale = Vector3.one;
 
 							resError("> ERROR: Seems like you didn't fulfill all of your customer's requests. Please try again.");
@@ -766,7 +766,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 							String actionText = b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							b3[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-							b3[t1_curr_index].transform.parent = layoutPanel.transform;
+							b3[t1_curr_index].transform.SetParent(layoutPanel.transform);
 							b3[t1_curr_index].transform.localScale = Vector3.one;
 
 							resError("> ERROR: You have to check in before attempting to check out a customer.");
@@ -787,7 +787,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 					if (t1_canPrint) {
 
 						if (!err) {
-							b3[t1_curr_index].transform.parent = layoutPanel.transform;
+							b3[t1_curr_index].transform.SetParent(layoutPanel.transform);
 							b3[t1_curr_index].transform.localScale = Vector3.one;
 						}
 
@@ -854,7 +854,8 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 		GameObject newItem = Instantiate(simulationErrorPrefab) as GameObject;
 		newItem.transform.FindChild ("ActionText").GetComponent<Text>().text = "<color=red>" + msg + "</color>";
-		newItem.transform.parent = layoutPanel.transform;
+		// newItem.transform.parent = layoutPanel.transform;
+		newItem.transform.SetParent(layoutPanel.transform);
 		newItem.transform.localScale = Vector3.one;
 		scrollToBottom ();
 
