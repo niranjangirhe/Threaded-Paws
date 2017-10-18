@@ -34,7 +34,7 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 	public GameObject runButton;
 	public GameObject stopButton;
 
-	private Timer timer;
+	// private Timer timer;
 	private int numActions;
 	private string toPrint;
 
@@ -120,7 +120,7 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 		t2_has_towel = false;
 
 		manager = GameObject.Find ("_SCRIPTS_").GetComponent<ToolboxManager> ();
-		timer = GameObject.FindObjectOfType<Timer> ();
+		// timer = GameObject.FindObjectOfType<Timer> ();
 		disablePanel = GameObject.Find ("DisablePanel");
 		bar = GameObject.Find ("RadialProgressBar").GetComponent<ProgressBar>();
 		simulationScrollRect = scrollRect.transform.GetComponent<ScrollRect>();
@@ -235,7 +235,7 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 
 		// ------------------------ READING THREAD 1 ------------------------
 
-		int thread1_whilesChildren = 0;
+		// int thread1_whilesChildren = 0;
 
 		// retrieving the objects (blocks) current in thread 1
 		blocks_t1 = GetActionBlocks_MultiThreads ("1");
@@ -407,7 +407,7 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 
 		// ------------------------ READING THREAD 2 ------------------------
 
-		int thread2_whilesChildren = 0;
+		// int thread2_whilesChildren = 0;
 
 		// retrieving the objects (blocks) current in thread 1
 		blocks_t2 = GetActionBlocks_MultiThreads ("2");
@@ -638,7 +638,7 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 
 		bar.currentAmount = 0;
 
-		int step_counter = 1;
+		// int step_counter = 1;
 		int t1_curr_index = 0;
 		int t2_curr_index = 0;
 
@@ -687,8 +687,8 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 				bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
 
 				break;
-				yield break;
-				yield return 0;
+				// yield break;
+				// yield return 0;
 
 			} else {
 
@@ -1070,7 +1070,7 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 
 					} else if (b1[t1_curr_index].Substring(11, 7) == "checkin") {
 
-						if (t2_checkedin) {
+						if (t1_checkedin) {
 
 							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";

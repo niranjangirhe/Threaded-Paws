@@ -24,7 +24,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 	public Sprite[] itemsSprites;
 	public Sprite[] actionsSprites;
 
-	GameObject contentContainer;
+	// GameObject contentContainer;
 
 	// ------------------------
 
@@ -36,7 +36,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 	public GameObject runButton;
 	public GameObject stopButton;
 
-	private Timer timer;
+	// private Timer timer;
 	private int numActions;
 	private string toPrint;
 
@@ -122,12 +122,12 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 		t2_has_towel = false;
 
 		manager = GameObject.Find ("_SCRIPTS_").GetComponent<ToolboxManager> ();
-		timer = GameObject.FindObjectOfType<Timer> ();
+		// timer = GameObject.FindObjectOfType<Timer> ();
 		disablePanel = GameObject.Find ("DisablePanel");
 		bar = GameObject.Find ("RadialProgressBar").GetComponent<ProgressBar>();
 		try {
 			simulationScrollRect = scrollRect.transform.GetComponent<ScrollRect>();
-			contentContainer = layoutPanel1.transform.parent.gameObject;
+			// contentContainer = layoutPanel1.transform.parent.gameObject;
 		} catch { }
 
 		try { 
@@ -243,7 +243,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 		// ------------------------ READING THREAD 1 ------------------------
 
-		int thread1_whilesChildren = 0;
+		// int thread1_whilesChildren = 0;
 
 		// retrieving the objects (blocks) current in thread 1
 		blocks_t1 = GetActionBlocks_MultiThreads ("1");
@@ -415,7 +415,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 		// ------------------------ READING THREAD 2 ------------------------
 
-		int thread2_whilesChildren = 0;
+		// int thread2_whilesChildren = 0;
 
 		// retrieving the objects (blocks) current in thread 1
 		blocks_t2 = GetActionBlocks_MultiThreads ("2");
@@ -650,7 +650,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 		bar.currentAmount = 0;
 
-		int step_counter = 1;
+		// int step_counter = 1;
 		int t1_curr_index = 0;
 		int t2_curr_index = 0;
 
@@ -698,8 +698,8 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 				bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
 
 				break;
-				yield break;
-				yield return 0;
+				// yield break;
+				// yield return 0;
 
 			} else {
 
@@ -1015,7 +1015,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-							s2[t2_curr_index].transform.SetParent(layoutPanel1.transform);
+							s1[t1_curr_index].transform.SetParent(layoutPanel1.transform);
 							s1[t1_curr_index].transform.localScale = Vector3.one;
 
 							resError("> ERROR: You can't cut without a brush and some scissors.", 1);
@@ -1032,7 +1032,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-							s2[t2_curr_index].transform.SetParent(layoutPanel1.transform);
+							s1[t1_curr_index].transform.SetParent(layoutPanel1.transform);
 							s1[t1_curr_index].transform.localScale = Vector3.one;
 
 							resError("> ERROR: You can't dry without a station, a dryer and a towel.", 1);
@@ -1050,7 +1050,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-							s2[t2_curr_index].transform.SetParent(layoutPanel1.transform);
+							s1[t1_curr_index].transform.SetParent(layoutPanel1.transform);
 							s1[t1_curr_index].transform.localScale = Vector3.one;
 
 							resError("> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.", 1);
@@ -1068,7 +1068,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-							s2[t2_curr_index].transform.SetParent(layoutPanel1.transform);
+							s1[t1_curr_index].transform.SetParent(layoutPanel1.transform);
 							s1[t1_curr_index].transform.localScale = Vector3.one;
 
 							resError("> ERROR: You can't groom without a brush and some nail clippers.", 1);
@@ -1082,11 +1082,11 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 					} else if (b1[t1_curr_index].Substring(11, 7) == "checkin") {
 
-						if (t2_checkedin) {
+						if (t1_checkedin) {
 
 							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-							s2[t2_curr_index].transform.SetParent(layoutPanel1.transform);
+							s1[t1_curr_index].transform.SetParent(layoutPanel1.transform);
 							s1[t1_curr_index].transform.localScale = Vector3.one;
 
 							resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.", 1);
@@ -1105,7 +1105,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-							s2[t2_curr_index].transform.SetParent(layoutPanel1.transform);
+							s1[t1_curr_index].transform.SetParent(layoutPanel1.transform);
 							s1[t1_curr_index].transform.localScale = Vector3.one;
 							scrollToBottom();
 
@@ -1116,7 +1116,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-							s2[t2_curr_index].transform.SetParent(layoutPanel1.transform);
+							s1[t1_curr_index].transform.SetParent(layoutPanel1.transform);
 							s1[t1_curr_index].transform.localScale = Vector3.one;
 
 							resError("> ERROR: You need to return all the resources you acquired before checking out.", 1);
@@ -1126,7 +1126,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 							String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
 							s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-							s2[t2_curr_index].transform.SetParent(layoutPanel1.transform);
+							s1[t1_curr_index].transform.SetParent(layoutPanel1.transform);
 							s1[t1_curr_index].transform.localScale = Vector3.one;
 
 							resError("> ERROR: You have to check in before attempting to check out a customer.", 1);
@@ -1147,7 +1147,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 					if (t1_canPrint) {
 
 						if (!err) {
-							s2[t2_curr_index].transform.SetParent(layoutPanel1.transform);
+							s1[t1_curr_index].transform.SetParent(layoutPanel1.transform);
 							s1[t1_curr_index].transform.localScale = Vector3.one;
 						}
 						t1_curr_index++;

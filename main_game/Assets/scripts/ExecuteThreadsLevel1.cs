@@ -31,7 +31,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 	public GameObject runButton;
 	public GameObject stopButton;
 
-	private Timer timer;
+	// private Timer timer;
 	private int numActions;
 	private string toPrint;
 	public GenerateTasks genTasks;
@@ -86,7 +86,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 		t1_has_towel = false;
 
 		manager = GameObject.Find ("_SCRIPTS_").GetComponent<ToolboxManager> ();
-		timer = GameObject.FindObjectOfType<Timer> ();
+		// timer = GameObject.FindObjectOfType<Timer> ();
 		disablePanel = GameObject.Find ("DisablePanel");
 		bar = GameObject.Find ("RadialProgressBar").GetComponent<ProgressBar>();
 		simulationScrollRect = scrollRect.transform.GetComponent<ScrollRect>();
@@ -156,7 +156,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 		// ------------------------ READING THREAD 1 ------------------------
 
-		int thread1_whilesChildren = 0;
+		// int thread1_whilesChildren = 0;
 
 		// retrieving the objects (blocks) current in thread 1
 		blocks_t1 = GetActionBlocks_MultiThreads ("1");
@@ -417,7 +417,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 		bar.currentAmount = 0;
 
-		int step_counter = 1;
+		// int step_counter = 1;
 		int t1_curr_index = 0;
 
 		bool t1_canPrint = true;
@@ -464,8 +464,8 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 				bar.LoadingBar.GetComponent<Image> ().fillAmount = 0;
 
 				break;
-				yield break;
-				yield return 0;
+				// yield break;
+				// yield return 0;
 
 			} else {
 

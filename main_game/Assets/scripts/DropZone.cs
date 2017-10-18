@@ -31,7 +31,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 				//Debug.Log("num_children: " + num_children);
 
 				float parent_curr_width = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.x;
-				float parent_curr_height = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.y;
+				// float parent_curr_height = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.y;
 				float parent_new_height = new_height + 25;
 
 				this.transform.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (parent_curr_width, parent_new_height);
@@ -48,7 +48,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 				float new_height = curr_height + 50;
 
 				float parent_curr_width = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.x;
-				float parent_curr_height = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.y;
+				// float parent_curr_height = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.y;
 				float parent_new_height = new_height + 25;
 
 				this.transform.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (parent_curr_width, parent_new_height);
@@ -100,7 +100,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 				//Debug.Log("num_children: " + num_children);
 
 				float parent_curr_width = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.x;
-				float parent_curr_height = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.y;
+				// float parent_curr_height = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.y;
 				float parent_new_height = new_height + 25;
 
 				this.transform.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (parent_curr_width, parent_new_height);
@@ -119,7 +119,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 				float new_height = curr_height - 50;
 			
 				float parent_curr_width = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.x;
-				float parent_curr_height = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.y;
+				// float parent_curr_height = this.transform.parent.GetComponent<RectTransform> ().sizeDelta.y;
 				float parent_new_height = new_height + 25;
 
 				this.transform.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (parent_curr_width, parent_new_height);

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Tabs : MonoBehaviour {
 
 	ToolboxManager manager;
-	GameObject toolbox;
+	// GameObject toolbox;
 
 	public void switchCustomer() {
 
@@ -100,7 +100,7 @@ public class Tabs : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		manager = GameObject.Find ("_SCRIPTS_").GetComponent<ToolboxManager> ();
-		toolbox = GameObject.Find ("DropAreaTools");
+		// toolbox = GameObject.Find ("DropAreaTools");
 
 		GameObject.Find ("Tab1").transform.Find ("Tick").GetComponent<Image> ().color = new Vector4 (0.9F, 0.9F, 0.9F, 1);
 

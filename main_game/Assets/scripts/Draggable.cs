@@ -10,7 +10,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	GameObject placeholder = null;
 	// keep track of this in order to bounce back in case of illegal area
 	public Transform placeholderParent = null;
-	GameObject threadArea;
+	// GameObject threadArea;
 	GameObject canvas;
 	GameObject toolbox;
 
@@ -38,13 +38,13 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 				int num_children = eventData.pointerDrag.transform.parent.childCount;
 				float curr_width = eventData.pointerDrag.transform.parent.GetComponent<RectTransform> ().sizeDelta.x;
-				float curr_height = eventData.pointerDrag.transform.parent.GetComponent<RectTransform> ().sizeDelta.y;
+				// float curr_height = eventData.pointerDrag.transform.parent.GetComponent<RectTransform> ().sizeDelta.y;
 				float new_height = (num_children * 25);
 
 				//Debug.Log("num_children: " + num_children);
 
 				float parent_curr_width = eventData.pointerDrag.transform.parent.parent.GetComponent<RectTransform> ().sizeDelta.x;
-				float parent_curr_height = eventData.pointerDrag.transform.parent.parent.GetComponent<RectTransform> ().sizeDelta.y;
+				// float parent_curr_height = eventData.pointerDrag.transform.parent.parent.GetComponent<RectTransform> ().sizeDelta.y;
 				float parent_new_height = new_height + 25;
 
 				eventData.pointerDrag.transform.parent.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (parent_curr_width, parent_new_height);
@@ -176,7 +176,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 				}
 
-			} catch (Exception e) {
+			} catch {
 				//Debug.Log ("An exception occured: " + e.GetBaseException());
 				//Debug.Log (e.Message);
 			}
@@ -516,7 +516,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	}
 
 	void Start() {
-		threadArea = GameObject.Find("DropAreaThread");
+		// threadArea = GameObject.Find("DropAreaThread");
 
 		threadArea1 = GameObject.Find("DropAreaThread1");
 		threadArea2 = GameObject.Find("DropAreaThread2");
