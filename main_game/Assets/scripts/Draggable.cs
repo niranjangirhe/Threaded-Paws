@@ -29,7 +29,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	public void OnBeginDrag(PointerEventData eventData) {
 		//Debug.Log ("OnBeginDrag called: " + eventData.pointerDrag.name);
 
-		this.transform.FindChild("Halo").gameObject.SetActive(false);
+		this.transform.Find("Halo").gameObject.SetActive(false);
 
 		try {
 

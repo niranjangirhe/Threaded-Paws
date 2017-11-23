@@ -79,7 +79,7 @@ public class InitiateLevel3 : MonoBehaviour {
 		newActionBox.transform.localScale = Vector3.one;
 		newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = actionName;
 		//newActionBox.GetComponent<Image> ().color = Color.magenta;
-		newActionBox.transform.FindChild ("Halo").gameObject.SetActive (false);
+		newActionBox.transform.Find ("Halo").gameObject.SetActive (false);
 
 		return newActionBox;
 	}

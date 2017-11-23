@@ -32,7 +32,7 @@ public class CreateNewBlock : MonoBehaviour {
 						newActionBox.transform.localScale = Vector3.one;
 						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
 						//newActionBox.GetComponent<Image> ().color = Color.magenta;
-						newActionBox.transform.FindChild("Halo").gameObject.SetActive(true);
+						newActionBox.transform.Find("Halo").gameObject.SetActive(true);
 
 						manager.washLeft_thread1 -= 1;
 						manager.updateValues ();
