@@ -1,0 +1,11 @@
+{
+"TOTAL_MEMORY": 268435456,
+"dataUrl": "webgl-threadedpaws-flexible.data.unityweb",
+"asmCodeUrl": "webgl-threadedpaws-flexible.asm.code.unityweb",
+"asmMemoryUrl": "webgl-threadedpaws-flexible.asm.memory.unityweb",
+"asmFrameworkUrl": "webgl-threadedpaws-flexible.asm.framework.unityweb",
+"graphicsAPI": ["WebGL 2.0", "WebGL 1.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"splashScreenStyle": "Dark",
+"backgroundColor": "#231F20"
+}
