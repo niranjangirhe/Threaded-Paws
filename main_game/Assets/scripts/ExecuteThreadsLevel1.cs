@@ -190,8 +190,8 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 						// create new object from prefab
 						GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-						newItem.transform.FindChild ("Icon").GetComponent<Image> ().sprite = workerSprite;
-						newItem.transform.FindChild ("AcqRet").GetComponent<Image> ().sprite = actionsSprites [0];
+						newItem.transform.Find ("Icon").GetComponent<Image> ().sprite = workerSprite;
+						newItem.transform.Find ("AcqRet").GetComponent<Image> ().sprite = actionsSprites [0];
 
 						Sprite item;
 
@@ -214,8 +214,8 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 						else
 							item = displayErrorSprite;
 
-						newItem.transform.FindChild ("ItemAction").GetComponent<Image> ().sprite = item;
-						newItem.transform.FindChild ("ActionText").GetComponent<Text>().text = "get(" + resource + ");";
+						newItem.transform.Find ("ItemAction").GetComponent<Image> ().sprite = item;
+						newItem.transform.Find ("ActionText").GetComponent<Text>().text = "get(" + resource + ");";
 						simulationImagesToDisplay.Add (newItem);
 
 					}
@@ -238,8 +238,8 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 						// create new object from prefab
 						GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-						newItem.transform.FindChild ("Icon").GetComponent<Image> ().sprite = workerSprite;
-						newItem.transform.FindChild ("AcqRet").GetComponent<Image> ().sprite = actionsSprites [1];
+						newItem.transform.Find ("Icon").GetComponent<Image> ().sprite = workerSprite;
+						newItem.transform.Find ("AcqRet").GetComponent<Image> ().sprite = actionsSprites [1];
 
 						Sprite item;
 
@@ -262,8 +262,8 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 						else
 							item = displayErrorSprite;
 
-						newItem.transform.FindChild ("ItemAction").GetComponent<Image> ().sprite = item;
-						newItem.transform.FindChild ("ActionText").GetComponent<Text>().text = "return(" + resource + ");";
+						newItem.transform.Find ("ItemAction").GetComponent<Image> ().sprite = item;
+						newItem.transform.Find ("ActionText").GetComponent<Text>().text = "return(" + resource + ");";
 						simulationImagesToDisplay.Add (newItem);
 					}
 
@@ -281,22 +281,22 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 						//Debug.Log ("CHECKING IN");
 
-						newItem.transform.FindChild ("Icon").GetComponent<Image> ().sprite = workerSprite;
-						newItem.transform.FindChild ("ItemAction").GetComponent<Image> ().sprite = dogSprite;
-						newItem.transform.FindChild ("AcqRet").GetComponent<Image> ().sprite = actionsSprites [0];
+						newItem.transform.Find ("Icon").GetComponent<Image> ().sprite = workerSprite;
+						newItem.transform.Find ("ItemAction").GetComponent<Image> ().sprite = dogSprite;
+						newItem.transform.Find ("AcqRet").GetComponent<Image> ().sprite = actionsSprites [0];
 
 					} else if (action == "checkout") {
 
 						// Debug.Log ("CHECKING OUT");
 
-						newItem.transform.FindChild ("Icon").GetComponent<Image> ().sprite = workerSprite;
-						newItem.transform.FindChild ("ItemAction").GetComponent<Image> ().sprite = dogSprite;
-						newItem.transform.FindChild ("AcqRet").GetComponent<Image> ().sprite = actionsSprites [1];
+						newItem.transform.Find ("Icon").GetComponent<Image> ().sprite = workerSprite;
+						newItem.transform.Find ("ItemAction").GetComponent<Image> ().sprite = dogSprite;
+						newItem.transform.Find ("AcqRet").GetComponent<Image> ().sprite = actionsSprites [1];
 
 					} else {
 
 						// create new object from prefab (single action)
-						newItem.transform.FindChild ("Icon").GetComponent<Image> ().sprite = dogSprite;
+						newItem.transform.Find ("Icon").GetComponent<Image> ().sprite = dogSprite;
 
 						Sprite item;
 
@@ -311,9 +311,9 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 						else
 							item = displayErrorSprite;
 
-						newItem.transform.FindChild ("ItemAction").GetComponent<Image> ().sprite = item;
+						newItem.transform.Find ("ItemAction").GetComponent<Image> ().sprite = item;
 					}
-					newItem.transform.FindChild ("ActionText").GetComponent<Text> ().text = action + ";";
+					newItem.transform.Find ("ActionText").GetComponent<Text> ().text = action + ";";
 					simulationImagesToDisplay.Add (newItem);
 
 				}
@@ -853,7 +853,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 	void resError(String msg) {
 
 		GameObject newItem = Instantiate(simulationErrorPrefab) as GameObject;
-		newItem.transform.FindChild ("ActionText").GetComponent<Text>().text = "<color=red>" + msg + "</color>";
+		newItem.transform.Find ("ActionText").GetComponent<Text>().text = "<color=red>" + msg + "</color>";
 		// newItem.transform.parent = layoutPanel.transform;
 		newItem.transform.SetParent(layoutPanel.transform);
 		newItem.transform.localScale = Vector3.one;
