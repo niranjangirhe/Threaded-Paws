@@ -78,7 +78,6 @@ public class CreateNewBlock : MonoBehaviour {
 			} else if (this.transform.name == "CutBox") {
 
 				if (manager.cutLeft_thread1 > 0) {
-
 					if (canCreate) {
 
 						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
@@ -95,6 +94,7 @@ public class CreateNewBlock : MonoBehaviour {
 						manager.updateValues ();
 
 						canCreate = false;
+
 					} else {
 						manager.showError ("Use or discard your current object first");
 					}
