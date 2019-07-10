@@ -1,0 +1,31 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Analytics;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class Level1InstructionsManager : MonoBehaviour {
+
+	public GameObject instructionsPanel;
+
+	public void skipInstructions () {
+
+		instructionsPanel.SetActive (false);
+		LogData.chronologicalLogs.Add ("StartLevel01: " + LogManager.instance.UniEndTime ());
+
+	}
+
+	void Start () {
+
+		instructionsPanel.SetActive (true);
+
+		LogManager.instance.isQuitLogNeed = true;
+		LogData.sessionID = AnalyticsSessionInfo.sessionId;
+		LogData.levelNo = 1;
+		LogData.userID = AnalyticsSessionInfo.userId;
+		LogManager.instance.StartTimer ();
+
+	}
+}

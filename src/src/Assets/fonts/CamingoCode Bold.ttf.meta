@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: e9fce5d06ede549cda339eb5383c009d
+timeCreated: 1486056949
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: CamingoCode
+  fontNames:
+  - CamingoCode
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 45698c54cc8704202b3b4e95bc0ee862, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
