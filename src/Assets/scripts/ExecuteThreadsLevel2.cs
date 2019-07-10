@@ -157,6 +157,7 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 	}
 
 	public void ExecuteThreads () {
+		LogData.chronologicalLogs.Add ("RunLevel02Thread: " + LogManager.instance.UniEndTime ());
 
 		clearAllClones ();
 		clearVerticalLayouts ();

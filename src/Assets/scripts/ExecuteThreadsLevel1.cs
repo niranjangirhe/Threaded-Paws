@@ -102,7 +102,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 	}
 
 	public void ExecuteThreads () {
-		LogData.chronologicalLogs.Add ("RunThread: " + LogManager.instance.UniEndTime ());
+		LogData.chronologicalLogs.Add ("RunLevel01Thread: " + LogManager.instance.UniEndTime ());
 
 		clearAllClones ();
 		clearVerticalLayout ();

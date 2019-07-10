@@ -162,6 +162,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 	}
 
 	public void ExecuteThreads () {
+		LogData.chronologicalLogs.Add ("RunLevel03Thread: " + LogManager.instance.UniEndTime ());
 
 		scrollToTop ();
 
