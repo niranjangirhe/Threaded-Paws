@@ -71,6 +71,7 @@ public class LogManager : MonoBehaviour {
 		Debug.Log (json);
 		LogData.inputList_t1.Clear ();
 		LogData.inputList_t2.Clear ();
+		LogData.chronologicalLogs.Clear();
 
 	}
 
@@ -131,6 +132,7 @@ public class LogManager : MonoBehaviour {
 		if (!isQuitLogNeed)
 			return;
 		LogData.isLevelCleared = false;
+		LogData.failedReason = "Game Quit";
 		//	LogData.isLevelSteps = j;
 		LogData.levelClearedTime = LogManager.instance.EndTimer ();
 		//	LogData.levelClearAmount = bar.LoadingBar.GetComponent<Image> ().fillAmount;

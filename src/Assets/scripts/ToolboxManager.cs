@@ -129,7 +129,6 @@ public class ToolboxManager : MonoBehaviour {
 	}
 
 	public void gameLost () {
-
 		try {
 			LostPanel.SetActive (true);
 		} catch {

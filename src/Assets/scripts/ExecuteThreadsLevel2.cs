@@ -663,6 +663,17 @@ public class ExecuteThreadsLevel2 : MonoBehaviour {
 				LogData.chronologicalLogs.Add ("Level02Lost: " + LogManager.instance.UniEndTime ());
 
 				manager.gameLost ();
+				//logging
+				LogData.isLevelCleared = false;
+				//	LogData.levelSteps = j;
+				LogData.levelClearedTime = LogManager.instance.EndTimer ();
+				LogData.levelClearAmount = bar.currentAmount;
+				LogData.failedReason = "Times up! GameLost";
+				LogManager.instance.failCount++;
+				LogData.failedAttempts = LogManager.instance.failCount;
+				StartCoroutine (LogManager.instance.SendLogJson ());
+				LogManager.instance.isQuitLogNeed = false;
+
 				stop = true;
 				paused = true;
 				lost = true;
