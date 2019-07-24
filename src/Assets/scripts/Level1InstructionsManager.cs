@@ -13,7 +13,7 @@ public class Level1InstructionsManager : MonoBehaviour {
 	public void skipInstructions () {
 
 		instructionsPanel.SetActive (false);
-		LogData.chronologicalLogs.Add ("StartLevel01: " + LogManager.instance.UniEndTime ());
+		GameLogData.chronologicalLogs.Add ("StartLevel01: " + LogManager.instance.UniEndTime ());
 
 	}
 
@@ -21,10 +21,12 @@ public class Level1InstructionsManager : MonoBehaviour {
 
 		instructionsPanel.SetActive (true);
 
-		LogManager.instance.isQuitLogNeed = true;
-		LogData.sessionID = AnalyticsSessionInfo.sessionId;
-		LogData.levelNo = 1;
-		LogData.userID = AnalyticsSessionInfo.userId;
+	//	LogManager.instance.isQuitLogNeed = true;
+		GameLogData.sessionID = AnalyticsSessionInfo.sessionId;
+	//	print(AnalyticsSessionInfo.sessionId);
+		GameLogData.levelNo = 1;
+		GameLogData.userID = AnalyticsSessionInfo.userId;
+
 		LogManager.instance.StartTimer ();
 
 	}

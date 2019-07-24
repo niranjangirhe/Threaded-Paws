@@ -162,7 +162,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 	}
 
 	public void ExecuteThreads () {
-		LogData.chronologicalLogs.Add ("RunLevel03Thread: " + LogManager.instance.UniEndTime ());
+		GameLogData.chronologicalLogs.Add ("RunLevel03Thread: " + LogManager.instance.UniEndTime ());
 
 		scrollToTop ();
 
@@ -273,7 +273,9 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 					} else {
 
 						blocks_names_t1.Add ("[thread 1] acquire ( " + resource + " );");
-						LogData.inputList_t1.Add ("Acquire: " + resource);
+						InputWorkerData inpt = new InputWorkerData { action = resource, typeOf = "Acquire" };
+						GameLogData.inputList_t1.Add (inpt);
+//						LogData.inputList_t1.Add ("Acquire: " + resource);
 
 						i++;
 
@@ -320,7 +322,9 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 					} else {
 
 						blocks_names_t1.Add ("[thread 1] return ( " + resource + " );");
-						LogData.inputList_t1.Add ("Return: " + resource);
+						InputWorkerData inpt = new InputWorkerData { action = resource, typeOf = "Return" };
+						GameLogData.inputList_t1.Add (inpt);
+//						LogData.inputList_t1.Add ("Return: " + resource);
 
 						i++;
 
@@ -360,7 +364,9 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 					String action = blocks_t1[i].transform.GetComponentInChildren<Text> ().text;
 					blocks_names_t1.Add ("[thread 1] " + action + ";");
-					LogData.inputList_t1.Add ("Action: " + action);
+					InputWorkerData inpt = new InputWorkerData { action = action, typeOf = "Action" };
+						GameLogData.inputList_t1.Add (inpt);
+//					LogData.inputList_t1.Add ("Action: " + action);
 
 					i++;
 
@@ -450,7 +456,9 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 					} else {
 
 						blocks_names_t2.Add ("[thread 2] acquire ( " + resource + " );");
-						LogData.inputList_t2.Add ("Acquire: " + resource);
+						InputWorkerData inpt = new InputWorkerData { action = resource, typeOf = "Acquire" };
+						GameLogData.inputList_t2.Add (inpt);
+//						LogData.inputList_t2.Add ("Acquire: " + resource);
 
 						i++;
 
@@ -500,7 +508,9 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 					} else {
 
 						blocks_names_t2.Add ("[thread 2] return ( " + resource + " );");
-						LogData.inputList_t2.Add ("Return: " + resource);
+						InputWorkerData inpt = new InputWorkerData { action = resource, typeOf = "Return" };
+						GameLogData.inputList_t2.Add (inpt);
+//						LogData.inputList_t2.Add ("Return: " + resource);
 
 						i++;
 
@@ -540,7 +550,9 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 					String action = blocks_t2[i].transform.GetComponentInChildren<Text> ().text;
 
 					blocks_names_t2.Add ("[thread 2] " + action + ";");
-					LogData.inputList_t2.Add ("Action: " + action);
+					InputWorkerData inpt = new InputWorkerData { action = action, typeOf = "Action" };
+						GameLogData.inputList_t2.Add (inpt);
+//					LogData.inputList_t2.Add ("Action: " + action);
 
 					i++;
 
@@ -676,18 +688,19 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 			} else {
 
-				LogData.chronologicalLogs.Add ("Level03Lost: " + LogManager.instance.UniEndTime ());
+				GameLogData.chronologicalLogs.Add ("Level03Lost: " + LogManager.instance.UniEndTime ());
 				manager.gameLost ();
-				
+
 				//logging
-				LogData.isLevelCleared = false;
+				GameLogData.isLevelCleared = false;
 				//	LogData.levelSteps = j;
-				LogData.levelClearedTime = LogManager.instance.EndTimer ();
-				LogData.levelClearAmount = bar.currentAmount;
-				LogData.failedReason = "Times up! GameLost";
+				GameLogData.levelClearedTime = LogManager.instance.EndTimer ();
+				GameLogData.levelClearAmount = bar.currentAmount;
+				GameLogData.failedReason = "Times up! GameLost";
 				LogManager.instance.failCount++;
-				LogData.failedAttempts = LogManager.instance.failCount;
-				StartCoroutine (LogManager.instance.SendLogJson ());
+				GameLogData.failedAttempts = LogManager.instance.failCount;
+				LogManager.instance.CreateLogData ();
+
 				LogManager.instance.isQuitLogNeed = false;
 
 				stop = true;
@@ -1640,20 +1653,21 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 		}
 
 		if (!lost) {
-			LogData.chronologicalLogs.Add ("Level03Won: " + LogManager.instance.UniEndTime ());
+			GameLogData.chronologicalLogs.Add ("Level03Won: " + LogManager.instance.UniEndTime ());
 			manager.gameWon ();
 			Debug.Log ("Finished in " + j + " steps.");
 
 			//logging
-			LogData.isLevelCleared = true;
+			GameLogData.isLevelCleared = true;
 			//	LogData.levelSteps = j;
-			LogData.levelClearedTime = LogManager.instance.EndTimer ();
-			LogData.levelClearAmount = bar.currentAmount;
-			LogData.failedReason = "Passed";
-			LogData.failedAttempts = LogManager.instance.failCount;
-			LogData.infoButtonCount = LogManager.instance.infoCount;
-			LogData.agendaButtonCount = LogManager.instance.agendaCount;
-			StartCoroutine (LogManager.instance.SendLogJson ());
+			GameLogData.levelClearedTime = LogManager.instance.EndTimer ();
+			GameLogData.levelClearAmount = bar.currentAmount;
+			GameLogData.failedReason = "Passed";
+			GameLogData.failedAttempts = LogManager.instance.failCount;
+			GameLogData.infoButtonCount = LogManager.instance.infoCount;
+			GameLogData.agendaButtonCount = LogManager.instance.agendaCount;
+			LogManager.instance.CreateLogData ();
+
 			LogManager.instance.isQuitLogNeed = false;
 		}
 
@@ -1662,10 +1676,11 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 	}
 
 	public void terminateSimulation (string error) {
-		LogData.chronologicalLogs.Add ("TerminateLevel3: " + LogManager.instance.UniEndTime ());
+		GameLogData.chronologicalLogs.Add ("TerminateLevel3: " + LogManager.instance.UniEndTime ());
 
-		LogData.failedReason = error;
-		StartCoroutine (LogManager.instance.SendLogJson ());
+		GameLogData.failedReason = error;
+		LogManager.instance.CreateLogData ();
+
 		LogManager.instance.failCount++;
 
 		stepsIndicator.text = "0";

@@ -249,38 +249,39 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			if (GameObject.Find ("Tab1").transform.GetSiblingIndex () > GameObject.Find ("Tab2").transform.GetSiblingIndex ()) {
 
 				if (this.typeOfItem == Type.ACTION) {
+					LogManager.chronoInputCount++;
 					if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "checkin") {
-						LogData.chronologicalLogs.Add ("DropW1-checkin: " + LogManager.instance.UniEndTime ());
+						GameLogData.chronologicalLogs.Add ("DropW1-checkin_"+LogManager.chronoInputCount+": " + LogManager.instance.UniEndTime ());
 						manager.checkinLeft_thread1 += 1;
 
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "wash") {
-						LogData.chronologicalLogs.Add ("DropW1-wash: " + LogManager.instance.UniEndTime ());
+						GameLogData.chronologicalLogs.Add ("DropW1-wash_"+LogManager.chronoInputCount+": " + LogManager.instance.UniEndTime ());
 						manager.washLeft_thread1 += 1;
 
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "cut") {
-						LogData.chronologicalLogs.Add ("DropW1-cut: " + LogManager.instance.UniEndTime ());
+						GameLogData.chronologicalLogs.Add ("DropW1-cut_"+LogManager.chronoInputCount+": " + LogManager.instance.UniEndTime ());
 						manager.cutLeft_thread1 += 1;
 
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "dry") {
-						LogData.chronologicalLogs.Add ("DropW1-dry: " + LogManager.instance.UniEndTime ());
+						GameLogData.chronologicalLogs.Add ("DropW1-dry_"+LogManager.chronoInputCount+": " + LogManager.instance.UniEndTime ());
 						manager.dryLeft_thread1 += 1;
 
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "get") {
-						LogData.chronologicalLogs.Add ("DropW1-get: " + LogManager.instance.UniEndTime ());
+						GameLogData.chronologicalLogs.Add ("DropW1-get_"+LogManager.chronoInputCount+": " + LogManager.instance.UniEndTime ());
 						manager.resourcesLeft_thread1 += 1;
 
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "ret") {
-						LogData.chronologicalLogs.Add ("DropW1-ret: " + LogManager.instance.UniEndTime ());
+						GameLogData.chronologicalLogs.Add ("DropW1-ret_"+LogManager.chronoInputCount+": " + LogManager.instance.UniEndTime ());
 						manager.returnLeft_thread1 += 1;
 
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "checkout") {
-						LogData.chronologicalLogs.Add ("DropW1-checkout: " + LogManager.instance.UniEndTime ());
+						GameLogData.chronologicalLogs.Add ("DropW1-checkout_"+LogManager.chronoInputCount+": " + LogManager.instance.UniEndTime ());
 						manager.checkoutLeft_thread1 += 1;
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "groom") {
-						LogData.chronologicalLogs.Add ("DropW1-groom: " + LogManager.instance.UniEndTime ());
+						GameLogData.chronologicalLogs.Add ("DropW1-groom_"+LogManager.chronoInputCount+": " + LogManager.instance.UniEndTime ());
 						manager.groomLeft_thread1 += 1;
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "pickup") {
-						LogData.chronologicalLogs.Add ("DropW1-pickup: " + LogManager.instance.UniEndTime ());
+						GameLogData.chronologicalLogs.Add ("DropW1-pickup_"+LogManager.chronoInputCount+": " + LogManager.instance.UniEndTime ());
 						manager.pickupLeft_thread1 += 1;
 					}
 
@@ -361,46 +362,47 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 				}
 			} else {
 				if (this.typeOfItem == Type.ACTION) {
+					LogManager.chronoInputCount++;
 					if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "checkin") {
-						LogData.chronologicalLogs.Add ("DropW2-checkin: " + LogManager.instance.UniEndTime ());
+						GameLogData.chronologicalLogs.Add ("DropW2-checkin_"+LogManager.chronoInputCount+": " +  LogManager.instance.UniEndTime ());
 
 						manager.checkinLeft_thread2 += 1;
 
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "wash") {
-						LogData.chronologicalLogs.Add ("DropW2-wash: " + LogManager.instance.UniEndTime ());
+						GameLogData.chronologicalLogs.Add ("DropW2-wash_"+LogManager.chronoInputCount+": " + LogManager.instance.UniEndTime ());
 
 						manager.washLeft_thread2 += 1;
 
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "cut") {
-						LogData.chronologicalLogs.Add ("DropW2-cut: " + LogManager.instance.UniEndTime ());
+						GameLogData.chronologicalLogs.Add ("DropW2-cut_"+LogManager.chronoInputCount+": " + LogManager.instance.UniEndTime ());
 
 						manager.cutLeft_thread2 += 1;
 
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "dry") {
-						LogData.chronologicalLogs.Add ("DropW2-dry: " + LogManager.instance.UniEndTime ());
+						GameLogData.chronologicalLogs.Add ("DropW2-dry_"+LogManager.chronoInputCount+": " + LogManager.instance.UniEndTime ());
 
 						manager.dryLeft_thread2 += 1;
 
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "get") {
-						LogData.chronologicalLogs.Add ("DropW2-get: " + LogManager.instance.UniEndTime ());
+						GameLogData.chronologicalLogs.Add ("DropW2-get_"+LogManager.chronoInputCount+": " + LogManager.instance.UniEndTime ());
 
 						manager.resourcesLeft_thread2 += 1;
 
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "ret") {
-						LogData.chronologicalLogs.Add ("DropW2-ret: " + LogManager.instance.UniEndTime ());
+						GameLogData.chronologicalLogs.Add ("DropW2-ret_"+LogManager.chronoInputCount+": " + LogManager.instance.UniEndTime ());
 
 						manager.returnLeft_thread2 += 1;
 
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "checkout") {
-						LogData.chronologicalLogs.Add ("DropW2-checkout: " + LogManager.instance.UniEndTime ());
+						GameLogData.chronologicalLogs.Add ("DropW2-checkout_"+LogManager.chronoInputCount+": " + LogManager.instance.UniEndTime ());
 
 						manager.checkoutLeft_thread2 += 1;
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "groom") {
-						LogData.chronologicalLogs.Add ("DropW2-groom: " + LogManager.instance.UniEndTime ());
+						GameLogData.chronologicalLogs.Add ("DropW2-groom_"+LogManager.chronoInputCount+": " + LogManager.instance.UniEndTime ());
 
 						manager.groomLeft_thread2 += 1;
 					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "pickup") {
-						LogData.chronologicalLogs.Add ("DropW2-pickup: " + LogManager.instance.UniEndTime ());
+						GameLogData.chronologicalLogs.Add ("DropW2-pickup_"+LogManager.chronoInputCount+": " + LogManager.instance.UniEndTime ());
 
 						manager.pickupLeft_thread2 += 1;
 					}
@@ -495,7 +497,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 			//Debug.Log ("Dropped within another box... probably");
 			//Debug.Log ("Parent: " + this.transform.parent.name);
-			LogData.chronologicalLogs.Add ("Put_" + this.GetComponentInChildren<Text> ().text + " : " + LogManager.instance.UniEndTime ());
+			LogManager.chronoInputCount++;
+			GameLogData.chronologicalLogs.Add ("Put_"+LogManager.chronoInputCount + this.GetComponentInChildren<Text> ().text + " : " + LogManager.instance.UniEndTime ());
 			//new parent is inside an if statement or a look
 			if (this.transform.parent.name == "DropArea") {
 				//this.transform.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (this.GetComponent<RectTransform> ().sizeDelta.x, this.GetComponent<RectTransform> ().sizeDelta.y + 45);

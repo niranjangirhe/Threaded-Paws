@@ -102,7 +102,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 	}
 
 	public void ExecuteThreads () {
-		LogData.chronologicalLogs.Add ("RunLevel01Thread: " + LogManager.instance.UniEndTime ());
+		GameLogData.chronologicalLogs.Add ("RunLevel01Thread: " + LogManager.instance.UniEndTime ());
 
 		clearAllClones ();
 		clearVerticalLayout ();
@@ -188,7 +188,8 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 					} else {
 
 						blocks_names_t1.Add ("acquire ( " + resource + " );");
-						LogData.inputList_t1.Add ("Acquire: " + resource);
+						InputWorkerData inpt = new InputWorkerData { action = resource, typeOf = "Acquire" };
+						GameLogData.inputList_t1.Add (inpt);
 
 						i++;
 
@@ -238,7 +239,10 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 					} else {
 
 						blocks_names_t1.Add ("return ( " + resource + " );");
-						LogData.inputList_t1.Add ("Return: " + resource);
+						InputWorkerData inpt = new InputWorkerData { action = resource, typeOf = "Return" };
+						GameLogData.inputList_t1.Add (inpt);
+
+						//						LogData.inputList_t1.Add ("Return: " + resource);
 
 						i++;
 
@@ -279,7 +283,10 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 					String action = blocks_t1[i].transform.GetComponentInChildren<Text> ().text;
 
 					blocks_names_t1.Add (action + ";");
-					LogData.inputList_t1.Add ("Action: " + action);
+					InputWorkerData inpt = new InputWorkerData { action = action, typeOf = "Action" };
+					GameLogData.inputList_t1.Add (inpt);
+
+					//					LogData.inputList_t1.Add ("Action: " + action);
 
 					i++;
 
@@ -418,15 +425,15 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 	}
 
 	public void terminateSimulation (string error) {
-		LogData.chronologicalLogs.Add ("TerminateLevel1: " + LogManager.instance.UniEndTime ());
+		GameLogData.chronologicalLogs.Add ("TerminateLevel1: " + LogManager.instance.UniEndTime ());
 
-		LogData.failedReason = error;
+		GameLogData.failedReason = error;
 		LogManager.instance.failCount++;
 		// LogData.levelSteps = blocks_t1.Length;
-		LogData.failedAttempts = LogManager.instance.failCount;
-		LogData.levelClearedTime = LogManager.instance.EndTimer ();
-		LogData.levelClearAmount = bar.currentAmount;
-		StartCoroutine (LogManager.instance.SendLogJson ());
+		GameLogData.failedAttempts = LogManager.instance.failCount;
+		GameLogData.levelClearedTime = LogManager.instance.EndTimer ();
+		GameLogData.levelClearAmount = bar.currentAmount;
+		LogManager.instance.CreateLogData ();
 
 		err = true;
 		lost = true;
@@ -462,18 +469,20 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 				bar.LoadingBar.GetComponent<Image> ().fillAmount = bar.currentAmount / 100;
 
 			} else {
-				LogData.chronologicalLogs.Add ("Level01Lost: " + LogManager.instance.UniEndTime ());
+				GameLogData.chronologicalLogs.Add ("Level01Lost: " + LogManager.instance.UniEndTime ());
 
 				manager.gameLost ();
 				//logging
-				LogData.isLevelCleared = false;
+				GameLogData.isLevelCleared = false;
 				//	LogData.levelSteps = j;
-				LogData.levelClearedTime = LogManager.instance.EndTimer ();
-				LogData.levelClearAmount = bar.currentAmount;
-				LogData.failedReason = "Times up! GameLost";
+				GameLogData.levelClearedTime = LogManager.instance.EndTimer ();
+				GameLogData.levelClearAmount = bar.currentAmount;
+				GameLogData.failedReason = "Times up! GameLost";
 				LogManager.instance.failCount++;
-				LogData.failedAttempts = LogManager.instance.failCount;
-				StartCoroutine (LogManager.instance.SendLogJson ());
+				GameLogData.failedAttempts = LogManager.instance.failCount;
+				//				StartCoroutine (LogManager.instance.SendLogJson ());
+				LogManager.instance.CreateLogData ();
+
 				LogManager.instance.isQuitLogNeed = false;
 
 				stop = true;
@@ -846,21 +855,22 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 		}
 
 		if (!lost) {
-			LogData.chronologicalLogs.Add ("Level01Won: " + LogManager.instance.UniEndTime ());
+			GameLogData.chronologicalLogs.Add ("Level01Won: " + LogManager.instance.UniEndTime ());
 			manager.gameWon ();
 			Debug.Log ("Finished in " + j + " steps.");
 
 			//logging
-			LogData.isLevelCleared = true;
+			GameLogData.isLevelCleared = true;
 			//	LogData.levelSteps = j;
-			LogData.levelClearedTime = LogManager.instance.EndTimer ();
-			LogData.levelClearAmount = bar.currentAmount;
-			LogData.failedReason = "Passed";
-			LogData.failedAttempts = LogManager.instance.failCount;
-			LogData.infoButtonCount = LogManager.instance.infoCount;
-			LogData.agendaButtonCount = LogManager.instance.agendaCount;
+			GameLogData.levelClearedTime = LogManager.instance.EndTimer ();
+			GameLogData.levelClearAmount = bar.currentAmount;
+			GameLogData.failedReason = "Passed";
+			GameLogData.failedAttempts = LogManager.instance.failCount;
+			GameLogData.infoButtonCount = LogManager.instance.infoCount;
+			GameLogData.agendaButtonCount = LogManager.instance.agendaCount;
 
-			StartCoroutine (LogManager.instance.SendLogJson ());
+			LogManager.instance.CreateLogData ();
+
 			LogManager.instance.isQuitLogNeed = false;
 
 		}

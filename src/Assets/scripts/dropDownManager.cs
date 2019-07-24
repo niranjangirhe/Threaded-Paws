@@ -16,7 +16,7 @@ public class dropDownManager : MonoBehaviour {
 
 		// Debug.Log ("indexChanged() called");
 	//	print(options[index]);
-		LogData.chronologicalLogs.Add ("DropDown: " + options[index] + " : " + LogManager.instance.UniEndTime ());
+		GameLogData.chronologicalLogs.Add ("DropDown: " + options[index] + " : " + LogManager.instance.UniEndTime ());
 
 		showSelected.text = options[index];
 

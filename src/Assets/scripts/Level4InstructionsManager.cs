@@ -47,7 +47,7 @@ public class Level4InstructionsManager : MonoBehaviour {
 	}
 
 	public void skipInstructions() {
-		LogData.chronologicalLogs.Add ("StartLevel04: " + LogManager.instance.UniEndTime ());
+		GameLogData.chronologicalLogs.Add ("StartLevel04: " + LogManager.instance.UniEndTime ());
 
 		level4_part1.SetActive (false);
 		level4_part2.SetActive (false);
@@ -65,9 +65,10 @@ public class Level4InstructionsManager : MonoBehaviour {
 		level4_disableFunctionality.SetActive (true);
 
 			LogManager.instance.isQuitLogNeed=true;
-		LogData.sessionID = AnalyticsSessionInfo.sessionId;
-		LogData.levelNo = 4;
-		LogData.userID = AnalyticsSessionInfo.userId;
+		GameLogData.sessionID = AnalyticsSessionInfo.sessionId;
+		GameLogData.levelNo = 4;
+		GameLogData.userID = AnalyticsSessionInfo.userId;
 		LogManager.instance.StartTimer ();
+		
 	}
 }

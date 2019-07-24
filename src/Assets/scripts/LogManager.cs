@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class LogManager : MonoBehaviour {
 
@@ -13,8 +14,11 @@ public class LogManager : MonoBehaviour {
 	[HideInInspector]
 
 	public int infoCount, agendaCount, failCount;
+	public static int chronoInputCount;
+	public string jsonFilePath;
 
 	public bool isQuitLogNeed;
+	List<GameLogData> sessionData = new List<GameLogData> ();
 	//	private LogData loggingData = new LogData();
 	void Awake () {
 
@@ -26,34 +30,128 @@ public class LogManager : MonoBehaviour {
 			DontDestroyOnLoad (this);
 
 		}
-		//	 StartCoroutine (SendLogJson ());
+
+	//	StartCoroutine (PublishLogData ());
 	}
 
 	void Start () {
 		uniTimeStart = Time.realtimeSinceStartup;
+
+		// WWW www = new WWW ("/paws/LogFile.json");
+		// //UnityWebRequest myWr = UnityWebRequest.Get("http://localhostpaws/LogFile.json");
+		// using (StreamReader stream = new StreamReader ("Paws01/LogFile.json")) {
+		// 	string json = stream.ReadToEnd ();
+		// 	LogData[] logi = JsonHelper.getJsonArray<LogData> (json);
+		// 	//logi = JsonUtility.FromJson<List<LogData>>(json);
+		// 	foreach (LogData a in logi) {
+		// 		Debug.Log (a.ChronologicalLogs.Count);
+		// 	}
+		// }
 	}
 
-	public IEnumerator SendLogJson () {
+	public class JsonHelper {
+		public static List<T> getJsonArray<T> (string json) {
+			string newJson = "{ \"Array\": " + json + "'}'";
+			Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>> (newJson);
+			return wrapper.Logs;
+		}
+		public static string arrayToJson<T> (List<T> array) {
+			Wrapper<T> wrapper = new Wrapper<T> ();
+			wrapper.Logs = array;
+			return JsonUtility.ToJson (wrapper, true);
+		}
 
-		LogData logData = new LogData {
-			UserID = LogData.userID,
-				SessionID = LogData.sessionID,
-				ChronologicalLogs = LogData.chronologicalLogs,
-				LevelNo = LogData.levelNo,
-				IsLevelCleared = LogData.isLevelCleared,
-				FailedReason = LogData.failedReason,
-				InputList_Worker1 = LogData.inputList_t1,
-				InputList_Worker2 = LogData.inputList_t2,
-				//	LevelSteps = LogData.levelSteps,
-				LevelClearedTime = System.Math.Round (LogData.levelClearedTime, 2),
-				LevelClearAmount = LogData.levelClearAmount,
-				FailedAttempt = LogData.failedAttempts,
-				InfoButtonCount = LogData.infoButtonCount,
-				AgendaButtonCount = LogManager.instance.agendaCount,
+		[System.Serializable]
+		private class Wrapper<T> {
+			//			public T[] array;
+			public List<T> Logs;
+		}
+	}
+	public void SendLogJson () {
+
+		// LogData logData = new LogData {
+		// 	UserID = LogData.userID,
+		// 		SessionID = LogData.sessionID,
+		// 		ChronologicalLogs = LogData.chronologicalLogs,
+		// 		LevelNo = LogData.levelNo,
+		// 		IsLevelCleared = LogData.isLevelCleared,
+		// 		FailedReason = LogData.failedReason,
+		// 		InputList_Worker1 = LogData.inputList_t1,
+		// 		InputList_Worker2 = LogData.inputList_t2,
+		// 		//	LevelSteps = LogData.levelSteps,
+		// 		LevelClearedTime = System.Math.Round (LogData.levelClearedTime, 2),
+		// 		LevelClearAmount = LogData.levelClearAmount,
+		// 		FailedAttempt = LogData.failedAttempts,
+		// 		InfoButtonCount = LogData.infoButtonCount,
+		// 		AgendaButtonCount = LogManager.instance.agendaCount,
+		// };
+
+		// List<TimeSessionData> sessionD = new List<TimeSessionData> ();
+		// TimeSessionData x = new TimeSessionData (TimeSessionData.userID, TimeSessionData.sessionID);
+		// sessionD.Add (x);
+		// TimeSessionData logs = new TimeSessionData (
+		// 		 TimeSessionData.chronologicalLogs,
+		// 		 LogData.levelNo,
+		// 		 LogData.isLevelCleared,
+		// 		 LogData.failedReason,
+		// 		 LogData.inputList_t1,
+		// 		 LogData.inputList_t2,
+		// 		System.Math.Round (LogData.levelClearedTime, 2),
+		// 		 LogData.levelClearAmount,
+		// 		LogData.failedAttempts,
+		// 		LogData.infoButtonCount,
+		// 		 LogManager.instance.agendaCount
+		// );
+		// sessionD.Add(logs);
+		// 		sessionD.Add(logs);
+
+		//		 TimeSessionData[] sessionData= new TimeSessionData[2];
+
+		//  sessionData[0] = new TimeSessionData ("AAAAa",TimeSessionData.sessionID);
+		//  sessionData[1] = new TimeSessionData ( TimeSessionData.chronologicalLogs,
+		// 		 LogData.levelNo,
+		// 		 LogData.isLevelCleared,
+		// 		 LogData.failedReason,
+		// 		 LogData.inputList_t1,
+		// 		 LogData.inputList_t2,
+		// 		System.Math.Round (LogData.levelClearedTime, 2),
+		// 		 LogData.levelClearAmount,
+		// 		LogData.failedAttempts,
+		// 		LogData.infoButtonCount,
+		// 		 LogManager.instance.agendaCount);
+	}
+	public void CreateLogData () {
+		// InputWorkerData c = new InputWorkerData { action = InputWorkerData.Action, typeOf = InputWorkerData.TypeOf };
+		// InputWorkerData cc = new InputWorkerData { action = "B", typeOf = "X" };
+		// GameLogData.inputList_t1.Add (c);
+
+		// GameLogData.inputList_t2.Add (cc);
+		GameLogData logs = new GameLogData {
+			UserId = GameLogData.userID,
+			SessionID = GameLogData.sessionID,
+			ChronologicalLogs = GameLogData.chronologicalLogs,
+				LevelNo = GameLogData.levelNo,
+				IsLevelCleared = GameLogData.isLevelCleared,
+				FailedReason = GameLogData.failedReason,
+				InputList_Worker1 = GameLogData.inputList_t1,
+				InputList_Worker2 = GameLogData.inputList_t2,
+				LevelClearedTime = System.Math.Round (GameLogData.levelClearedTime, 2),
+				LevelClearAmount = GameLogData.levelClearAmount,
+				FailedAttempt = GameLogData.failedAttempts,
+				InfoButtonCount = GameLogData.infoButtonCount,
+				AgendaButtonCount = LogManager.instance.agendaCount
 		};
 
+		sessionData.Add (logs);
+	//	print ("Add");
+
+	}
+
+	public IEnumerator PublishLogData () {
 		WWWForm form = new WWWForm ();
-		string json = JsonUtility.ToJson (logData, true);
+		//string json = "{ \"Array\": " + JsonUtility.ToJson (sessionData, true) + "," + JsonUtility.ToJson (logData, true) + "}";
+		string json = JsonHelper.arrayToJson<GameLogData> (sessionData);
+		print (sessionData.Count);
 		//	File.AppendAllText (Application.dataPath + "save1.txt", json);
 		form.AddField ("log", json);
 		//	WWW www = new WWW ("http://localhost/formunity.php", form);
@@ -69,10 +167,9 @@ public class LogManager : MonoBehaviour {
 			//	successful = true;
 		}
 		Debug.Log (json);
-		LogData.inputList_t1.Clear ();
-		LogData.inputList_t2.Clear ();
-		LogData.chronologicalLogs.Clear();
-
+		//	LogData.inputList_t1.Clear ();
+		//	LogData.inputList_t2.Clear ();
+		//	LogData.chronologicalLogs.Clear ();
 	}
 
 	//Not Using this module now
@@ -80,18 +177,18 @@ public class LogManager : MonoBehaviour {
 		//	bool successful = true;
 
 		WWWForm form = new WWWForm ();
-		form.AddField ("sessionID", LogData.sessionID.ToString ());
-		form.AddField ("userID", LogData.userID.ToString ());
-		form.AddField ("levelNo", LogData.levelNo.ToString ());
-		form.AddField ("isLevelCleared", LogData.isLevelCleared.ToString ());
-		//	form.AddField ("isLevelSteps", LogData.levelSteps.ToString ());
-		form.AddField ("levelClearedTime", LogData.levelClearedTime.ToString ());
-		form.AddField ("levelClearAmount", LogData.levelClearAmount.ToString ());
-		form.AddField ("failedAttempts", LogData.failedAttempts.ToString ());
-		form.AddField ("infoButtonCount", LogData.infoButtonCount.ToString ());
-		form.AddField ("agendaButtonCount", LogData.agendaButtonCount.ToString ());
+		// form.AddField ("sessionID", LogData.sessionID.ToString ());
+		// form.AddField ("userID", "a");
+		// form.AddField ("levelNo", LogData.levelNo.ToString ());
+		// form.AddField ("isLevelCleared", LogData.isLevelCleared.ToString ());
+		// //	form.AddField ("isLevelSteps", LogData.levelSteps.ToString ());
+		// form.AddField ("levelClearedTime", LogData.levelClearedTime.ToString ());
+		// form.AddField ("levelClearAmount", LogData.levelClearAmount.ToString ());
+		// form.AddField ("failedAttempts", LogData.failedAttempts.ToString ());
+		// form.AddField ("infoButtonCount", LogData.infoButtonCount.ToString ());
+		// form.AddField ("agendaButtonCount", LogData.agendaButtonCount.ToString ());
 
-		WWW www = new WWW ("http://localhost/formunity.php", form);
+		WWW www = new WWW ("/paws/formunity.php", form);
 
 		yield return www;
 		if (www.error != null) {
@@ -131,15 +228,16 @@ public class LogManager : MonoBehaviour {
 	void OnApplicationQuit () {
 		if (!isQuitLogNeed)
 			return;
-		LogData.isLevelCleared = false;
-		LogData.failedReason = "Game Quit";
-		//	LogData.isLevelSteps = j;
-		LogData.levelClearedTime = LogManager.instance.EndTimer ();
-		//	LogData.levelClearAmount = bar.LoadingBar.GetComponent<Image> ().fillAmount;
-		LogData.failedAttempts = LogManager.instance.failCount;
-		LogData.infoButtonCount = LogManager.instance.infoCount;
-		LogData.agendaButtonCount = LogManager.instance.agendaCount;
-		StartCoroutine (SendLogJson ());
+		// GameLogData.isLevelCleared = false;
+		// GameLogData.failedReason = "Game Quit";
+		// //	LogData.isLevelSteps = j;
+		// GameLogData.levelClearedTime = LogManager.instance.EndTimer ();
+		// //	LogData.levelClearAmount = bar.LoadingBar.GetComponent<Image> ().fillAmount;
+		// GameLogData.failedAttempts = LogManager.instance.failCount;
+		// GameLogData.infoButtonCount = LogManager.instance.infoCount;
+		// GameLogData.agendaButtonCount = LogManager.instance.agendaCount;
+		// CreateLogData ();
+		// StartCoroutine (PublishLogData ());
 	}
 
 	// 	public LogData data;

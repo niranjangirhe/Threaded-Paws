@@ -83,7 +83,7 @@ public class ToolboxManager : MonoBehaviour {
 	}
 
 	public void getMainMenu () {
-		LogData.chronologicalLogs.Add ("MainMenuBtn: " + LogManager.instance.UniEndTime ());
+		GameLogData.chronologicalLogs.Add ("MainMenuBtn: " + LogManager.instance.UniEndTime ());
 
 		SceneManager.LoadScene ("MainMenu");
 	}
@@ -147,5 +147,11 @@ public class ToolboxManager : MonoBehaviour {
 		} catch {
 			Debug.Log ("Could not find WonPanel");
 		}
+	}
+
+	public void BackButton()
+	{
+		GameLogData.chronologicalLogs.Add ("BackToMain: " + LogManager.instance.UniEndTime ());
+	SceneManager.LoadScene("MainMenu");
 	}
 }
