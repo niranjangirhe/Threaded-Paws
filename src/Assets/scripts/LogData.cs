@@ -75,8 +75,7 @@ public class InputWorkerData {
 
 [System.Serializable]
 public class chronologicalLogs {
-	public string action;
-	public string typeOf;
+	
 	public string time; //time user got each button
 }
 
