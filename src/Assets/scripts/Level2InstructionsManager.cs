@@ -39,7 +39,8 @@ public class Level2InstructionsManager : MonoBehaviour {
 	}
 
 	public void skipInstructions () {
-		GameLogData.chronologicalLogs.Add ("StartLevel02: " + LogManager.instance.UniEndTime ());
+
+		LogManager.instance.logger.sendChronologicalLogs("StartLevel02", "", LogManager.instance.UniEndTime().ToString());
 
 		level2_part1.SetActive (false);
 		level2_part2.SetActive (false);
@@ -57,9 +58,10 @@ public class Level2InstructionsManager : MonoBehaviour {
 		level2_disableFunctionality.SetActive (true);
 
 		LogManager.instance.isQuitLogNeed = true;
-		GameLogData.sessionID = AnalyticsSessionInfo.sessionId;
+		//GameLogData.sessionID = AnalyticsSessionInfo.sessionId;
 		GameLogData.levelNo = 2;
-		GameLogData.userID = AnalyticsSessionInfo.userId;
+		//GameLogData.userID = AnalyticsSessionInfo.userId;
 		LogManager.instance.StartTimer ();
+		LogManager.instance.logger.startLoggingData(GameLogData.levelNo.ToString(), "", "" , "" , "", "", "", "", System.DateTime.Now.ToString(), "");
 	}
 }

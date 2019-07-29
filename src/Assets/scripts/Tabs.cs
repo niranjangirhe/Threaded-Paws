@@ -26,7 +26,7 @@ public class Tabs : MonoBehaviour {
 			curr_tab.transform.SetAsLastSibling ();
 
 			if (curr_tab.transform.name == "Tab1") {
-				GameLogData.chronologicalLogs.Add ("Worker1Tab: " + LogManager.instance.UniEndTime ());
+				LogManager.instance.logger.sendChronologicalLogs("Worker1Tab", "", LogManager.instance.UniEndTime().ToString());
 
 				manager.txt_checkinLeft_thread1.color = Color.black;
 				manager.txt_cutLeft_thread1.color = Color.black;
@@ -60,7 +60,7 @@ public class Tabs : MonoBehaviour {
 				//}
 
 			} else if (curr_tab.transform.name == "Tab2") {
-				GameLogData.chronologicalLogs.Add ("Worker2Tab: " + LogManager.instance.UniEndTime ());
+				LogManager.instance.logger.sendChronologicalLogs("Worker2Tab", "", LogManager.instance.UniEndTime().ToString());
 
 				manager.txt_checkinLeft_thread2.color = Color.black;
 				manager.txt_cutLeft_thread2.color = Color.black;

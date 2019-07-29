@@ -34,7 +34,8 @@ public class Icons : MonoBehaviour {
 				informationPanel.SetActive (false);
 			} else {
 				informationPanel.SetActive (true);
-				GameLogData.chronologicalLogs.Add ("InfoButton: " + LogManager.instance.UniEndTime ());
+
+				LogManager.instance.logger.sendChronologicalLogs("InfoButton", "", LogManager.instance.UniEndTime().ToString());
 				LogManager.instance.infoCount++;
 				// agendaPanel.SetActive(false);
 			}
@@ -50,7 +51,7 @@ public class Icons : MonoBehaviour {
 				agendaPanel.SetActive (false);
 			} else {
 				agendaPanel.SetActive (true);
-				GameLogData.chronologicalLogs.Add ("AgendaButton: " + LogManager.instance.UniEndTime ());
+				LogManager.instance.logger.sendChronologicalLogs("AgendaButton", "", LogManager.instance.UniEndTime().ToString());
 
 				LogManager.instance.agendaCount++;
 				informationPanel.SetActive (false);

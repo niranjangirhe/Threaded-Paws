@@ -102,7 +102,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 	}
 
 	public void ExecuteThreads () {
-		GameLogData.chronologicalLogs.Add ("RunLevel01Thread: " + LogManager.instance.UniEndTime ());
+		LogManager.instance.logger.sendChronologicalLogs("RunLevel01Thread", "", LogManager.instance.UniEndTime().ToString());
 
 		clearAllClones ();
 		clearVerticalLayout ();
@@ -189,6 +189,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 						blocks_names_t1.Add ("acquire ( " + resource + " );");
 						InputWorkerData inpt = new InputWorkerData { action = resource, typeOf = "Acquire" };
+						LogManager.instance.logger.sendInputWorkerOne(resource, "Acquire", LogManager.instance.UniEndTime().ToString());
 						GameLogData.inputList_t1.Add (inpt);
 
 						i++;
@@ -240,6 +241,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 						blocks_names_t1.Add ("return ( " + resource + " );");
 						InputWorkerData inpt = new InputWorkerData { action = resource, typeOf = "Return" };
+						LogManager.instance.logger.sendInputWorkerOne(resource, "Return", LogManager.instance.UniEndTime().ToString());
 						GameLogData.inputList_t1.Add (inpt);
 
 						//						LogData.inputList_t1.Add ("Return: " + resource);
@@ -284,6 +286,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 
 					blocks_names_t1.Add (action + ";");
 					InputWorkerData inpt = new InputWorkerData { action = action, typeOf = "Action" };
+					LogManager.instance.logger.sendInputWorkerOne(action, "Action", LogManager.instance.UniEndTime().ToString());
 					GameLogData.inputList_t1.Add (inpt);
 
 					//					LogData.inputList_t1.Add ("Action: " + action);
@@ -425,7 +428,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 	}
 
 	public void terminateSimulation (string error) {
-		GameLogData.chronologicalLogs.Add ("TerminateLevel1: " + LogManager.instance.UniEndTime ());
+		LogManager.instance.logger.sendChronologicalLogs("TerminateLevel1", "", LogManager.instance.UniEndTime().ToString());
 
 		GameLogData.failedReason = error;
 		LogManager.instance.failCount++;
@@ -469,7 +472,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 				bar.LoadingBar.GetComponent<Image> ().fillAmount = bar.currentAmount / 100;
 
 			} else {
-				GameLogData.chronologicalLogs.Add ("Level01Lost: " + LogManager.instance.UniEndTime ());
+				LogManager.instance.logger.sendChronologicalLogs("Level01Lost", "", LogManager.instance.UniEndTime().ToString());
 
 				manager.gameLost ();
 				//logging
@@ -855,7 +858,7 @@ public class ExecuteThreadsLevel1 : MonoBehaviour {
 		}
 
 		if (!lost) {
-			GameLogData.chronologicalLogs.Add ("Level01Won: " + LogManager.instance.UniEndTime ());
+			LogManager.instance.logger.sendChronologicalLogs("Level01Won", "", LogManager.instance.UniEndTime().ToString());
 			manager.gameWon ();
 			Debug.Log ("Finished in " + j + " steps.");
 

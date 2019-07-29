@@ -83,7 +83,7 @@ public class ToolboxManager : MonoBehaviour {
 	}
 
 	public void getMainMenu () {
-		GameLogData.chronologicalLogs.Add ("MainMenuBtn: " + LogManager.instance.UniEndTime ());
+		LogManager.instance.logger.sendChronologicalLogs("MainMenuBtn", "", LogManager.instance.UniEndTime().ToString());
 
 		SceneManager.LoadScene ("MainMenu");
 	}
@@ -151,7 +151,7 @@ public class ToolboxManager : MonoBehaviour {
 
 	public void BackButton()
 	{
-		GameLogData.chronologicalLogs.Add ("BackToMain: " + LogManager.instance.UniEndTime ());
+		LogManager.instance.logger.sendChronologicalLogs("BackToMain", "", LogManager.instance.UniEndTime().ToString());
 	SceneManager.LoadScene("MainMenu");
 	}
 }

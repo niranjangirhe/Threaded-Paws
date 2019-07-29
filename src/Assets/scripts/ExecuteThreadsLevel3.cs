@@ -162,7 +162,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 	}
 
 	public void ExecuteThreads () {
-		GameLogData.chronologicalLogs.Add ("RunLevel03Thread: " + LogManager.instance.UniEndTime ());
+		LogManager.instance.logger.sendChronologicalLogs("RunLevel03Thread", "", LogManager.instance.UniEndTime().ToString());
 
 		scrollToTop ();
 
@@ -274,6 +274,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 						blocks_names_t1.Add ("[thread 1] acquire ( " + resource + " );");
 						InputWorkerData inpt = new InputWorkerData { action = resource, typeOf = "Acquire" };
+						LogManager.instance.logger.sendInputWorkerOne(resource, "Acquire", LogManager.instance.UniEndTime().ToString());
 						GameLogData.inputList_t1.Add (inpt);
 //						LogData.inputList_t1.Add ("Acquire: " + resource);
 
@@ -323,6 +324,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 						blocks_names_t1.Add ("[thread 1] return ( " + resource + " );");
 						InputWorkerData inpt = new InputWorkerData { action = resource, typeOf = "Return" };
+						LogManager.instance.logger.sendInputWorkerOne(resource, "Return", LogManager.instance.UniEndTime().ToString());
 						GameLogData.inputList_t1.Add (inpt);
 //						LogData.inputList_t1.Add ("Return: " + resource);
 
@@ -365,6 +367,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 					String action = blocks_t1[i].transform.GetComponentInChildren<Text> ().text;
 					blocks_names_t1.Add ("[thread 1] " + action + ";");
 					InputWorkerData inpt = new InputWorkerData { action = action, typeOf = "Action" };
+					LogManager.instance.logger.sendInputWorkerOne(action, "Action", LogManager.instance.UniEndTime().ToString());
 						GameLogData.inputList_t1.Add (inpt);
 //					LogData.inputList_t1.Add ("Action: " + action);
 
@@ -457,6 +460,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 						blocks_names_t2.Add ("[thread 2] acquire ( " + resource + " );");
 						InputWorkerData inpt = new InputWorkerData { action = resource, typeOf = "Acquire" };
+						LogManager.instance.logger.sendInputWorkerTwo(resource, "Acquire", LogManager.instance.UniEndTime().ToString());
 						GameLogData.inputList_t2.Add (inpt);
 //						LogData.inputList_t2.Add ("Acquire: " + resource);
 
@@ -509,6 +513,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 						blocks_names_t2.Add ("[thread 2] return ( " + resource + " );");
 						InputWorkerData inpt = new InputWorkerData { action = resource, typeOf = "Return" };
+						LogManager.instance.logger.sendInputWorkerTwo(resource, "Return", LogManager.instance.UniEndTime().ToString());
 						GameLogData.inputList_t2.Add (inpt);
 //						LogData.inputList_t2.Add ("Return: " + resource);
 
@@ -551,6 +556,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 					blocks_names_t2.Add ("[thread 2] " + action + ";");
 					InputWorkerData inpt = new InputWorkerData { action = action, typeOf = "Action" };
+					LogManager.instance.logger.sendInputWorkerTwo(action, "Action", LogManager.instance.UniEndTime().ToString());
 						GameLogData.inputList_t2.Add (inpt);
 //					LogData.inputList_t2.Add ("Action: " + action);
 
@@ -688,7 +694,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 			} else {
 
-				GameLogData.chronologicalLogs.Add ("Level03Lost: " + LogManager.instance.UniEndTime ());
+				LogManager.instance.logger.sendChronologicalLogs("Level03Lost", "", LogManager.instance.UniEndTime().ToString());
 				manager.gameLost ();
 
 				//logging
@@ -1653,7 +1659,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 		}
 
 		if (!lost) {
-			GameLogData.chronologicalLogs.Add ("Level03Won: " + LogManager.instance.UniEndTime ());
+			LogManager.instance.logger.sendChronologicalLogs("Level03Won", "", LogManager.instance.UniEndTime().ToString());
 			manager.gameWon ();
 			Debug.Log ("Finished in " + j + " steps.");
 
@@ -1677,6 +1683,7 @@ public class ExecuteThreadsLevel3 : MonoBehaviour {
 
 	public void terminateSimulation (string error) {
 		GameLogData.chronologicalLogs.Add ("TerminateLevel3: " + LogManager.instance.UniEndTime ());
+		LogManager.instance.logger.sendChronologicalLogs("TerminateLevel3", "", LogManager.instance.UniEndTime().ToString());
 
 		GameLogData.failedReason = error;
 		LogManager.instance.CreateLogData ();

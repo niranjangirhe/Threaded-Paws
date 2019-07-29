@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
+using UnityEngine.Analytics;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -9,6 +9,7 @@ using UnityEngine.Networking;
 public class LogManager : MonoBehaviour {
 
 	public static LogManager instance;
+	public GameLogData logger;
 	[HideInInspector]
 	public double timeStart, timeEnd, totalTime, uniTimeStart;
 	[HideInInspector]
@@ -20,35 +21,27 @@ public class LogManager : MonoBehaviour {
 	public bool isQuitLogNeed;
 	List<GameLogData> sessionData = new List<GameLogData> ();
 	//	private LogData loggingData = new LogData();
-	void Awake () {
-
-		if (instance != null) {
-			Destroy (instance);
-		} else {
-			instance = this;
-
-			DontDestroyOnLoad (this);
-
-		}
-
-	//	StartCoroutine (PublishLogData ());
-	}
+	public string url {get; set;}
+    public string jsonData {get; set;}
+    void Awake(){
+        if(!instance){
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }else{
+            DestroyImmediate(gameObject);
+        }
+    }
 
 	void Start () {
 		uniTimeStart = Time.realtimeSinceStartup;
-
-		// WWW www = new WWW ("/paws/LogFile.json");
-		// //UnityWebRequest myWr = UnityWebRequest.Get("http://localhostpaws/LogFile.json");
-		// using (StreamReader stream = new StreamReader ("Paws01/LogFile.json")) {
-		// 	string json = stream.ReadToEnd ();
-		// 	LogData[] logi = JsonHelper.getJsonArray<LogData> (json);
-		// 	//logi = JsonUtility.FromJson<List<LogData>>(json);
-		// 	foreach (LogData a in logi) {
-		// 		Debug.Log (a.ChronologicalLogs.Count);
-		// 	}
-		// }
+		if(PlayerPrefs.HasKey("sessionID") && PlayerPrefs.HasKey("userID")){
+			logger = new GameLogData(PlayerPrefs.GetString("userID"), Convert.ToInt64( PlayerPrefs.GetString("sessionID")));
+		}else{
+			logger = new GameLogData(AnalyticsSessionInfo.userId,AnalyticsSessionInfo.sessionId);
+			PlayerPrefs.SetString("userID", GameLogData.userID);
+			PlayerPrefs.SetString("sessionID", GameLogData.sessionID.ToString());
+		}
 	}
-
 	public class JsonHelper {
 		public static List<T> getJsonArray<T> (string json) {
 			string newJson = "{ \"Array\": " + json + "'}'";
@@ -142,6 +135,9 @@ public class LogManager : MonoBehaviour {
 				AgendaButtonCount = LogManager.instance.agendaCount
 		};
 
+		logger.endLoggingData(GameLogData.levelNo.ToString(), GameLogData.isLevelCleared.ToString(), GameLogData.failedReason, GameLogData.levelClearedTime.ToString(),
+								GameLogData.levelClearAmount.ToString(), GameLogData.failedAttempts.ToString(), GameLogData.infoButtonCount.ToString(), GameLogData.agendaButtonCount.ToString(),
+								"", System.DateTime.Now.ToString());
 		sessionData.Add (logs);
 	//	print ("Add");
 
@@ -172,33 +168,6 @@ public class LogManager : MonoBehaviour {
 		//	LogData.chronologicalLogs.Clear ();
 	}
 
-	//Not Using this module now
-	public IEnumerator sendLogToFile () {
-		//	bool successful = true;
-
-		WWWForm form = new WWWForm ();
-		// form.AddField ("sessionID", LogData.sessionID.ToString ());
-		// form.AddField ("userID", "a");
-		// form.AddField ("levelNo", LogData.levelNo.ToString ());
-		// form.AddField ("isLevelCleared", LogData.isLevelCleared.ToString ());
-		// //	form.AddField ("isLevelSteps", LogData.levelSteps.ToString ());
-		// form.AddField ("levelClearedTime", LogData.levelClearedTime.ToString ());
-		// form.AddField ("levelClearAmount", LogData.levelClearAmount.ToString ());
-		// form.AddField ("failedAttempts", LogData.failedAttempts.ToString ());
-		// form.AddField ("infoButtonCount", LogData.infoButtonCount.ToString ());
-		// form.AddField ("agendaButtonCount", LogData.agendaButtonCount.ToString ());
-
-		WWW www = new WWW ("/paws/formunity.php", form);
-
-		yield return www;
-		if (www.error != null) {
-			//	successful = false;
-			Debug.Log (www.text);
-		} else {
-			Debug.Log (www.text);
-			//	successful = true;
-		}
-	}
 	public void StartTimer () {
 		agendaCount = infoCount = 0;
 		//timeStart = ((float)DateTime.Now.Hour + ((float)DateTime.Now.Minute * 0.01f));
@@ -240,44 +209,48 @@ public class LogManager : MonoBehaviour {
 		// StartCoroutine (PublishLogData ());
 	}
 
-	// 	public LogData data;
-	// 	public string file = "logging.txt";
-	// 	string url = "http://localhost:80/formunity.php";
-	// 	private string filePath;
-	// 	void Start () {
-	// 		filePath = Path.Combine (Application.dataPath, "save.txt");
+    //TODO Change Access Control Allow Origin , *  to an actual adress
+    //Sends Data to DB thorugh POST
+    IEnumerator PostToDB(string url, string bodyJsonString)
+    {
+        var request = new UnityWebRequest(url, "POST");
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(bodyJsonString);
+        Debug.Log("POST URL: " + url);
+        Debug.Log("POST Data: " + bodyJsonString );
+        request.uploadHandler = (UploadHandler) new UploadHandlerRaw(bodyRaw);
+        request.SetRequestHeader("Content-Type", "application/json");
+        request.SetRequestHeader("Accept", "*");
+        request.SetRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT");
+        request.SetRequestHeader("Access-Control-Allow-Headers", "Accept, X-Access-Token, X-Requested-With,content-type");
+        request.SetRequestHeader("Access-Control-Allow-Origin", "*");
+        yield return request.SendWebRequest();
+		//Debug.Log("Status Code for POST: " + request.responseCode);
+    }
 
-	// 	}
+   //TODO Change Access Control Allow Origin , *  to an actual adress
+   //Sends Data to DB thorugh PUT
+    IEnumerator Put(string url, string bodyJsonString)
+    {
+        byte[] myData = System.Text.Encoding.UTF8.GetBytes(bodyJsonString);
+        Debug.Log("PUT URL: " + url);
+        Debug.Log("Put Data: " + bodyJsonString );
+        UnityWebRequest request = UnityWebRequest.Put(url, myData);
+        request.SetRequestHeader("Content-Type", "application/json");
+        request.SetRequestHeader("Accept", "*");
+        request.SetRequestHeader("cache-control", "no-cache");
+        request.SetRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT");
+        request.SetRequestHeader("Access-Control-Allow-Headers", "Accept, X-Access-Token, X-Requested-With,content-type");
+        request.SetRequestHeader("Access-Control-Allow-Origin", "*");
+        yield return request.SendWebRequest();
+        //Debug.Log("Status Code for PUT: " + request.responseCode);
+    }
 
-	// 	IEnumerator Save () {
-	// 		WWWForm form = new WWWForm ();
-	// 		string jsonString = JsonUtility.ToJson (data, true);
-	// 		File.WriteAllText (filePath, jsonString);
-	// 		form.AddField ("x", jsonString);
+	public void PostToDataBase(){
+        StartCoroutine(PostToDB(url, jsonData));
+    }
 
-	// 		WWW www = new WWW (url, form);
-	// 		yield return null;
-	// 	}
-	// 	public void EnterLog () {
-	// 		LogData data = new LogData {
-	// 			id = 1,
-	// 				status = "Passed",
-	// 				time = 10.1f
-	// 		};
-	// 		string json = JsonUtility.ToJson (data);
-	// 		WriteToFile (file, json);
-	// 		print (data);
-	// 	}
-
-	// 	private void WriteToFile (string filename, string json) {
-	// 		string path = Application.persistentDataPath + "/" + filename;
-	// 		FileStream fileStream = new FileStream (path, FileMode.Create);
-
-	// 		using (StreamWriter writer = new StreamWriter (fileStream)) {
-	// 			writer.Write (json);
-	// 		}
-	// 	}
-
-	// }
+    public void PutToDataBase(){
+        StartCoroutine(Put(url, jsonData));
+    }
 
 }

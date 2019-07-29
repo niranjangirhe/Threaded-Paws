@@ -18,12 +18,12 @@ public class ScenesManager : MonoBehaviour {
 	}
 
 	public void getMainMenu () {
-		GameLogData.chronologicalLogs.Add ("MainMenuBtn: " + LogManager.instance.UniEndTime ());
+		LogManager.instance.logger.sendChronologicalMenuLogs("MainMenuBtn", LogManager.instance.UniEndTime().ToString());
 		SceneManager.LoadScene ("MainMenu");
 	}
 
 	public void tryAgain () {
-		GameLogData.chronologicalLogs.Add ("TryAgain: " + LogManager.instance.UniEndTime ());
+		LogManager.instance.logger.sendChronologicalMenuLogs("TryAgain", LogManager.instance.UniEndTime().ToString());
 
 		SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
 		CreateNewBlock.canCreate = true;
@@ -32,17 +32,17 @@ public class ScenesManager : MonoBehaviour {
 	}
 
 	public void getLevel2 () {
-		GameLogData.chronologicalLogs.Add ("StartLevel02: " + LogManager.instance.UniEndTime ());
+		LogManager.instance.logger.sendChronologicalMenuLogs("StartLevel02", LogManager.instance.UniEndTime().ToString());
 		SceneManager.LoadScene ("Level2");
 	}
 
 	public void getLevel3 () {
-		GameLogData.chronologicalLogs.Add ("StartLevel03: " + LogManager.instance.UniEndTime ());
+		LogManager.instance.logger.sendChronologicalMenuLogs("StartLevel03", LogManager.instance.UniEndTime().ToString());
 		SceneManager.LoadScene ("Level3");
 	}
 
 	public void getLevel4 () {
-		GameLogData.chronologicalLogs.Add ("StartLevel04: " + LogManager.instance.UniEndTime ());
+		LogManager.instance.logger.sendChronologicalMenuLogs("StartLevel04", LogManager.instance.UniEndTime().ToString());
 		SceneManager.LoadScene ("Level4");
 	}
 }
