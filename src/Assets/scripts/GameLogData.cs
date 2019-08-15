@@ -11,6 +11,14 @@ public class InputWorkerData {
 	public static string TypeOf;
 }
 
+public static class option{
+
+public static bool logmode=true;
+
+
+}
+
+
 [System.Serializable]
 public class GameLogData {
 
@@ -18,6 +26,8 @@ public class GameLogData {
 
 	public static string userID { get; set; }
 	public static long sessionID { get; set; }
+
+
 
 	public string UserId;
 	public long SessionID;

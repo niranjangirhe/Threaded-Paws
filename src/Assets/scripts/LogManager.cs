@@ -34,13 +34,13 @@ public class LogManager : MonoBehaviour {
 
 	void Start () {
 		uniTimeStart = Time.realtimeSinceStartup;
-		if(PlayerPrefs.HasKey("sessionID") && PlayerPrefs.HasKey("userID")){
-			logger = new GameLogData(PlayerPrefs.GetString("userID"), Convert.ToInt64( PlayerPrefs.GetString("sessionID")));
-		}else{
-			logger = new GameLogData(AnalyticsSessionInfo.userId,AnalyticsSessionInfo.sessionId);
-			PlayerPrefs.SetString("userID", GameLogData.userID);
-			PlayerPrefs.SetString("sessionID", GameLogData.sessionID.ToString());
-		}
+		// if(PlayerPrefs.HasKey("sessionID") && PlayerPrefs.HasKey("userID")){
+		// 	logger = new GameLogData(PlayerPrefs.GetString("userID"), Convert.ToInt64( PlayerPrefs.GetString("sessionID")));
+		// }else{
+		logger = new GameLogData(AnalyticsSessionInfo.userId,AnalyticsSessionInfo.sessionId);
+		// 	PlayerPrefs.SetString("userID", GameLogData.userID);
+		// 	PlayerPrefs.SetString("sessionID", GameLogData.sessionID.ToString());
+		// }
 	}
 	public class JsonHelper {
 		public static List<T> getJsonArray<T> (string json) {
@@ -60,59 +60,7 @@ public class LogManager : MonoBehaviour {
 			public List<T> Logs;
 		}
 	}
-	public void SendLogJson () {
 
-		// LogData logData = new LogData {
-		// 	UserID = LogData.userID,
-		// 		SessionID = LogData.sessionID,
-		// 		ChronologicalLogs = LogData.chronologicalLogs,
-		// 		LevelNo = LogData.levelNo,
-		// 		IsLevelCleared = LogData.isLevelCleared,
-		// 		FailedReason = LogData.failedReason,
-		// 		InputList_Worker1 = LogData.inputList_t1,
-		// 		InputList_Worker2 = LogData.inputList_t2,
-		// 		//	LevelSteps = LogData.levelSteps,
-		// 		LevelClearedTime = System.Math.Round (LogData.levelClearedTime, 2),
-		// 		LevelClearAmount = LogData.levelClearAmount,
-		// 		FailedAttempt = LogData.failedAttempts,
-		// 		InfoButtonCount = LogData.infoButtonCount,
-		// 		AgendaButtonCount = LogManager.instance.agendaCount,
-		// };
-
-		// List<TimeSessionData> sessionD = new List<TimeSessionData> ();
-		// TimeSessionData x = new TimeSessionData (TimeSessionData.userID, TimeSessionData.sessionID);
-		// sessionD.Add (x);
-		// TimeSessionData logs = new TimeSessionData (
-		// 		 TimeSessionData.chronologicalLogs,
-		// 		 LogData.levelNo,
-		// 		 LogData.isLevelCleared,
-		// 		 LogData.failedReason,
-		// 		 LogData.inputList_t1,
-		// 		 LogData.inputList_t2,
-		// 		System.Math.Round (LogData.levelClearedTime, 2),
-		// 		 LogData.levelClearAmount,
-		// 		LogData.failedAttempts,
-		// 		LogData.infoButtonCount,
-		// 		 LogManager.instance.agendaCount
-		// );
-		// sessionD.Add(logs);
-		// 		sessionD.Add(logs);
-
-		//		 TimeSessionData[] sessionData= new TimeSessionData[2];
-
-		//  sessionData[0] = new TimeSessionData ("AAAAa",TimeSessionData.sessionID);
-		//  sessionData[1] = new TimeSessionData ( TimeSessionData.chronologicalLogs,
-		// 		 LogData.levelNo,
-		// 		 LogData.isLevelCleared,
-		// 		 LogData.failedReason,
-		// 		 LogData.inputList_t1,
-		// 		 LogData.inputList_t2,
-		// 		System.Math.Round (LogData.levelClearedTime, 2),
-		// 		 LogData.levelClearAmount,
-		// 		LogData.failedAttempts,
-		// 		LogData.infoButtonCount,
-		// 		 LogManager.instance.agendaCount);
-	}
 	public void CreateLogData () {
 		// InputWorkerData c = new InputWorkerData { action = InputWorkerData.Action, typeOf = InputWorkerData.TypeOf };
 		// InputWorkerData cc = new InputWorkerData { action = "B", typeOf = "X" };
@@ -197,16 +145,7 @@ public class LogManager : MonoBehaviour {
 	void OnApplicationQuit () {
 		if (!isQuitLogNeed)
 			return;
-		// GameLogData.isLevelCleared = false;
-		// GameLogData.failedReason = "Game Quit";
-		// //	LogData.isLevelSteps = j;
-		// GameLogData.levelClearedTime = LogManager.instance.EndTimer ();
-		// //	LogData.levelClearAmount = bar.LoadingBar.GetComponent<Image> ().fillAmount;
-		// GameLogData.failedAttempts = LogManager.instance.failCount;
-		// GameLogData.infoButtonCount = LogManager.instance.infoCount;
-		// GameLogData.agendaButtonCount = LogManager.instance.agendaCount;
-		// CreateLogData ();
-		// StartCoroutine (PublishLogData ());
+
 	}
 
     //TODO Change Access Control Allow Origin , *  to an actual adress
@@ -246,10 +185,17 @@ public class LogManager : MonoBehaviour {
     }
 
 	public void PostToDataBase(){
+		if (option.logmode==false){
+			return ;
+		}
+
         StartCoroutine(PostToDB(url, jsonData));
     }
 
     public void PutToDataBase(){
+    	if(option.logmode==false){
+    		return;
+    	}
         StartCoroutine(Put(url, jsonData));
     }
 

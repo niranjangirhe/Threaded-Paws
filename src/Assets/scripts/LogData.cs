@@ -41,70 +41,69 @@ using UnityEngine;
 
 
 
-[System.Serializable]
-public class userinfo{
-    public string userID;
-    public long sessionID;
-    public string startTime;
-}
+//[System.Serializable]
+//public class userinfo{
+    //public string userID;
+    //public long sessionID;
+  //  public string startTime;
+//}
 
-[System.Serializable]
-public class level{
-    public int levelNo;
-    public bool isLevelCleared;
-    public double failedReason;
-    public double levelClearedTime;
-    public float levelClearAmount;
-    public int failedAttempts;
-    public int infoButtonCount;
-    public int agendaButtonCount;
-    public string startTime;
-    public string endTime;
-}
-
-
-[System.Serializable]
-public class InputWorkerData {
-	public string action;
-	public string typeOf;
-	public static string Action;
-	public static string TypeOf;
-	public string time-- //time user got each button
-}
+//[System.Serializable]
+//public class level{
+    //public int levelNo;
+   // public bool isLevelCleared;
+    //public double failedReason;
+    //public double levelClearedTime;
+    //public float levelClearAmount;
+    //public int failedAttempts;
+    //public int infoButtonCount;
+   // public int agendaButtonCount;
+    //public string startTime;
+  //  public string endTime;
+//}
 
 
-[System.Serializable]
-public class chronologicalLogs {
-	
-	public string time; //time user got each button
-}
+//[System.Serializable]
+//public class InputWorkerData {
+//	public string action;
+//	public string typeOf;
+//	public static string Action;
+//	public static string TypeOf;
+//	public string time-- //time user got each button
+//}
 
 
-public GameLogData (string userid, long sessionid) {
-		userinfo uInfo = new userinfo();
-		uInfo.SessionID = sessionid.ToString();
-		uInfo.UserId = userid;
-		uInfo.startTime = System.DateTime.Now.ToString();
+//[System.Serializable]
 
-		string json = JsonUtility.ToJson(uInfo);
+//	public string time; //time user got each button
+//}
+
+
+//public GameLogData (string userid, long sessionid) {
+//		userinfo uInfo = new userinfo();
+//		uInfo.SessionID = sessionid.ToString();
+//		uInfo.UserId = userid;
+//		uInfo.startTime = System.DateTime.Now.ToString();
+
+//		string json = JsonUtility.ToJson(uInfo);
 		//SEND TO DB
-	}
+//	}
 
-	public void chronologicalLogsDB(List<string> chrono){
+	//public void chronologicalLogsDB(List<string> chrono){
 
 //fn tght has a action/dropdown and time
 //the chronological stuff -of what button is pressed and and time
 
-chronologicalLogs = chrono;
- public static List<string> chronologicalLogs = new List<string> ();
+//chronologicalLogs = chrono;
+// public static List<string> chronologicalLogs = new List<string> ();
 
-public static List<InputWorkerData> inputList_t1 = new List<InputWorkerData> ();
-public static List<InputWorkerData> inputList_t2 = new List<InputWorkerData> ();
+//public static List<InputWorkerData> inputList_t1 = new List<InputWorkerData> ();
+//public static List<InputWorkerData> inputList_t2 = new List<InputWorkerData> ();
 
 
 		
 
-	}
+	//}
 
 //
 //[System.Serializable]
