@@ -9,14 +9,19 @@ public class dropDownManager : MonoBehaviour {
 	public Text showSelected;
 
 	public string selected;
+	public bool isGetDropdown;
 
 	List<string> options = new List<string> () { "[null]", "brush", "clippers", "cond.", "dryer", "scissors", "shampoo", "station", "towel" };
 
 	public void indexChanged (int index) { // takes selected option index
 
 		// Debug.Log ("indexChanged() called");
-	//	print(options[index]);
-		LogManager.instance.logger.sendChronologicalLogs("get", options[index], LogManager.instance.UniEndTime().ToString());
+		//	print(options[index]);
+		if (isGetDropdown)
+			LogManager.instance.logger.sendChronologicalLogs ("get", options[index], LogManager.instance.UniEndTime ().ToString ());
+		else {
+			LogManager.instance.logger.sendChronologicalLogs ("ret", options[index], LogManager.instance.UniEndTime ().ToString ());
+		}
 
 		showSelected.text = options[index];
 

@@ -185,17 +185,10 @@ public class LogManager : MonoBehaviour {
     }
 
 	public void PostToDataBase(){
-		if (option.logmode==false){
-			return ;
-		}
-
         StartCoroutine(PostToDB(url, jsonData));
     }
 
     public void PutToDataBase(){
-    	if(option.logmode==false){
-    		return;
-    	}
         StartCoroutine(Put(url, jsonData));
     }
 
