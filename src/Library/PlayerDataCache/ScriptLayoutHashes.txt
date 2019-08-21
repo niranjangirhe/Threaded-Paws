@@ -15,6 +15,7 @@ ff05dcdf90651c3d98a9cad3df5e471e UnityEngine.Timeline.dll:UnityEngine.Timeline.C
 6af7378a45ad6da4992a71ef50ddc2eb UnityEngine.Timeline.dll:UnityEngine.Timeline.PlayableTrack
 af723155c251fcfa0e66530a75f3ea4c UnityEngine.Timeline.dll:UnityEngine.Timeline.TimelineAsset
 65a856f37283ac7bdfba64679c182739 Assembly-CSharp.dll:.DropZone
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.UITextTypeWriter
 f12a39a0412fca430efd13b53363a9f4 Assembly-CSharp.dll:.ExecuteThreadsLevel1
 a35dc9cca2faebc5f5f1aeb9e8e47bbe UnityEngine.UI.dll:UnityEngine.UI.AspectRatioFitter
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.UI.dll:UnityEngine.EventSystems.BaseInput
@@ -116,6 +117,7 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingRenderer
 bf8a2446ce646e9a427d3de5fd76de82 Assembly-CSharp.dll:.ExecuteThreadsLevel3
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.ExecuteThreadsLevel4
+051da36900232140eefb0374e87779f7 Assembly-CSharp.dll:.GameHandler
 0900cfb605e0da100918501be1f4f8ca Assembly-CSharp.dll:.Level2InstructionsManager
 de3ab8efff38979ee8056566e2234cfb Assembly-CSharp.dll:.ProgressBar
 2f3e7f69f4ac160d96b831239a710e94 Assembly-CSharp.dll:.Draggable
@@ -157,6 +159,8 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 bb806997000cf3f5ff3cf019b8f668f8 Assembly-CSharp.dll:.MainMenuManager
 9de3a22eca9aefadba2d10d5987cefe3 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
 0900cfb605e0da100918501be1f4f8ca Assembly-CSharp.dll:.LevelsInstructionsManager
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.tempLog
 cfb6b8404081a7640c977aa46c9153b0 Assembly-CSharp.dll:.Timer
 24de775cb390e63bcdb02d01de54c348 Assembly-CSharp.dll:.CreateNewBlock
-2c700fbc812adc3553a51ec718765d51 Assembly-CSharp.dll:.dropDownManager
+1012a51a190e960f32e58a98d363803c Assembly-CSharp.dll:.dropDownManager
+a02ee9b96552d90009bdbdbd75a6f502 Assembly-CSharp.dll:.LogManager
