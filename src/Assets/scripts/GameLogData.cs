@@ -14,7 +14,7 @@ public class InputWorkerData {
 [System.Serializable]
 public class GameLogData {
 
-	public static string DB_URL = "http://127.0.0.1:3000/paws/";
+	public static string DB_URL = "http://sqrlab2.science.uoit.ca:4000/paws/";
 
 	public static string userID { get; set; }
 	public static long sessionID { get; set; }
