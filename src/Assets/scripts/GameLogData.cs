@@ -63,6 +63,7 @@ public class GameLogData {
 		userProfile.startTime = System.DateTime.Now.ToString();
 
 		string json = JsonUtility.ToJson(userProfile);
+		Debug.Log(json);
 		//POST TO DB
 		sendDatatoDBPOST(GameLogData.DB_URL, json);
 	}

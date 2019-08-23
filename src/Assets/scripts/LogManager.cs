@@ -154,8 +154,8 @@ public class LogManager : MonoBehaviour {
     {
         var request = new UnityWebRequest(url, "POST");
         byte[] bodyRaw = Encoding.UTF8.GetBytes(bodyJsonString);
-        Debug.Log("POST URL: " + url);
-        Debug.Log("POST Data: " + bodyJsonString );
+        //Debug.Log("POST URL: " + url);
+        //Debug.Log("POST Data: " + bodyJsonString );
         request.uploadHandler = (UploadHandler) new UploadHandlerRaw(bodyRaw);
         request.SetRequestHeader("Content-Type", "application/json");
         request.SetRequestHeader("Accept", "*");
@@ -171,8 +171,8 @@ public class LogManager : MonoBehaviour {
     IEnumerator Put(string url, string bodyJsonString)
     {
         byte[] myData = System.Text.Encoding.UTF8.GetBytes(bodyJsonString);
-        Debug.Log("PUT URL: " + url);
-        Debug.Log("Put Data: " + bodyJsonString );
+        //Debug.Log("PUT URL: " + url);
+        //Debug.Log("Put Data: " + bodyJsonString );
         UnityWebRequest request = UnityWebRequest.Put(url, myData);
         request.SetRequestHeader("Content-Type", "application/json");
         request.SetRequestHeader("Accept", "*");
