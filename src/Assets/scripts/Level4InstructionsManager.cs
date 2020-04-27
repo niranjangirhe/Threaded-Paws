@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Analytics;
 
 public class Level4InstructionsManager : MonoBehaviour {
 
@@ -46,6 +47,7 @@ public class Level4InstructionsManager : MonoBehaviour {
 	}
 
 	public void skipInstructions() {
+		LogManager.instance.logger.sendChronologicalLogs("StartLevel04", "", LogManager.instance.UniEndTime().ToString());
 
 		level4_part1.SetActive (false);
 		level4_part2.SetActive (false);
@@ -61,5 +63,13 @@ public class Level4InstructionsManager : MonoBehaviour {
 		level4_part2.SetActive (false);
 
 		level4_disableFunctionality.SetActive (true);
+
+		LogManager.instance.isQuitLogNeed=true;
+		//GameLogData.sessionID = AnalyticsSessionInfo.sessionId;
+		GameLogData.levelNo = 4;
+		//GameLogData.userID = AnalyticsSessionInfo.userId;
+		LogManager.instance.StartTimer ();
+		LogManager.instance.logger.startLoggingData(GameLogData.levelNo.ToString(), "", "" , "" , "", "", "", "", System.DateTime.Now.ToString(), "");
+		
 	}
 }

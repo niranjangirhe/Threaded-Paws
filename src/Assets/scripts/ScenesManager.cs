@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
 public class ScenesManager : MonoBehaviour {
 
 	public GameObject instructionsPanel;
@@ -12,33 +11,38 @@ public class ScenesManager : MonoBehaviour {
 	void Start () {
 		CreateNewBlock.canCreate = true;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
 
-	public void getMainMenu() {
+	public void getMainMenu () {
+		LogManager.instance.logger.sendChronologicalMenuLogs("MainMenuBtn", LogManager.instance.UniEndTime().ToString());
 		SceneManager.LoadScene ("MainMenu");
 	}
 
-	public void tryAgain() {
-	
-		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+	public void tryAgain () {
+		LogManager.instance.logger.sendChronologicalMenuLogs("TryAgain", LogManager.instance.UniEndTime().ToString());
+
+		SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
 		CreateNewBlock.canCreate = true;
 
 		// instructionsPanel.SetActive (false);
 	}
 
-	public void getLevel2() {
+	public void getLevel2 () {
+		LogManager.instance.logger.sendChronologicalMenuLogs("StartLevel02", LogManager.instance.UniEndTime().ToString());
 		SceneManager.LoadScene ("Level2");
 	}
 
-	public void getLevel3() {
+	public void getLevel3 () {
+		LogManager.instance.logger.sendChronologicalMenuLogs("StartLevel03", LogManager.instance.UniEndTime().ToString());
 		SceneManager.LoadScene ("Level3");
 	}
 
-	public void getLevel4() {
+	public void getLevel4 () {
+		LogManager.instance.logger.sendChronologicalMenuLogs("StartLevel04", LogManager.instance.UniEndTime().ToString());
 		SceneManager.LoadScene ("Level4");
 	}
 }

@@ -9,9 +9,9 @@ public class Icons : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+
 		// informationWindow = GameObject.Find ("InformationPanel");
-	
+
 		try {
 			informationPanel.SetActive (false);
 		} catch {
@@ -25,7 +25,7 @@ public class Icons : MonoBehaviour {
 		}
 	}
 
-	public void toggleInformationWindow() {
+	public void toggleInformationWindow () {
 
 		// Debug.Log ("Information button clicked");
 
@@ -34,6 +34,9 @@ public class Icons : MonoBehaviour {
 				informationPanel.SetActive (false);
 			} else {
 				informationPanel.SetActive (true);
+
+				LogManager.instance.logger.sendChronologicalLogs("InfoButton", "", LogManager.instance.UniEndTime().ToString());
+				LogManager.instance.infoCount++;
 				// agendaPanel.SetActive(false);
 			}
 		} catch {
@@ -41,18 +44,21 @@ public class Icons : MonoBehaviour {
 		}
 	}
 
-	public void toggleAgendaWindow() {
+	public void toggleAgendaWindow () {
 
 		try {
 			if (agendaPanel.activeSelf) {
 				agendaPanel.SetActive (false);
 			} else {
 				agendaPanel.SetActive (true);
-				informationPanel.SetActive(false);
+				LogManager.instance.logger.sendChronologicalLogs("AgendaButton", "", LogManager.instance.UniEndTime().ToString());
+
+				LogManager.instance.agendaCount++;
+				informationPanel.SetActive (false);
 			}
 		} catch {
 			Debug.Log ("Agenda Panel can't be found.");
 		}
-		
+
 	}
 }

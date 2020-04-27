@@ -8,24 +8,25 @@ public class Tabs : MonoBehaviour {
 	ToolboxManager manager;
 	// GameObject toolbox;
 
-	public void switchCustomer() {
+	public void switchCustomer () {
 
 		GameObject curr_worker = this.transform.parent.gameObject;
 
 		curr_worker.transform.SetAsLastSibling ();
 	}
 
-	public void switchTabs() {
+	public void switchTabs () {
 
 		// Debug.Log (this.transform.parent.name);
 
 		GameObject curr_tab = this.transform.parent.gameObject;
 
 		if (CreateNewBlock.canCreate) {
-			
+
 			curr_tab.transform.SetAsLastSibling ();
 
 			if (curr_tab.transform.name == "Tab1") {
+				LogManager.instance.logger.sendChronologicalLogs("Worker1Tab", "", LogManager.instance.UniEndTime().ToString());
 
 				manager.txt_checkinLeft_thread1.color = Color.black;
 				manager.txt_cutLeft_thread1.color = Color.black;
@@ -39,26 +40,27 @@ public class Tabs : MonoBehaviour {
 				manager.txt_groomLeft_thread1.color = Color.black;
 				manager.txt_pickupLeft_thread1.color = Color.black;
 
-				manager.txt_checkinLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_cutLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_dryLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_washLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_whileLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_ifLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_resourcesLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_returnLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_checkoutLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_groomLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_pickupLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
+				manager.txt_checkinLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_cutLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_dryLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_washLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_whileLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_ifLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_resourcesLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_returnLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_checkoutLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_groomLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_pickupLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
 
 				//if (this.GetComponent<Image>().color == Color.white) {
 
-					this.GetComponent<Image> ().color = new Vector4 (0.9F, 0.9F, 0.9F, 1);
-					GameObject.Find ("Tab2").transform.Find ("Tick").GetComponent<Image> ().color = Color.white;
+				this.GetComponent<Image> ().color = new Vector4 (0.9F, 0.9F, 0.9F, 1);
+				GameObject.Find ("Tab2").transform.Find ("Tick").GetComponent<Image> ().color = Color.white;
 
 				//}
 
 			} else if (curr_tab.transform.name == "Tab2") {
+				LogManager.instance.logger.sendChronologicalLogs("Worker2Tab", "", LogManager.instance.UniEndTime().ToString());
 
 				manager.txt_checkinLeft_thread2.color = Color.black;
 				manager.txt_cutLeft_thread2.color = Color.black;
@@ -72,22 +74,22 @@ public class Tabs : MonoBehaviour {
 				manager.txt_groomLeft_thread2.color = Color.black;
 				manager.txt_pickupLeft_thread2.color = Color.black;
 
-				manager.txt_checkinLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_cutLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_dryLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_washLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_whileLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_ifLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_resourcesLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_returnLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_checkoutLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_groomLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-				manager.txt_pickupLeft_thread1.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
+				manager.txt_checkinLeft_thread1.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_cutLeft_thread1.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_dryLeft_thread1.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_washLeft_thread1.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_whileLeft_thread1.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_ifLeft_thread1.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_resourcesLeft_thread1.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_returnLeft_thread1.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_checkoutLeft_thread1.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_groomLeft_thread1.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+				manager.txt_pickupLeft_thread1.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
 
 				//if (this.GetComponent<Image>().color == Color.white) {
 
-					this.GetComponent<Image> ().color = new Vector4 (0.9F, 0.9F, 0.9F, 1);
-					GameObject.Find ("Tab1").transform.Find ("Tick").GetComponent<Image> ().color = Color.white;
+				this.GetComponent<Image> ().color = new Vector4 (0.9F, 0.9F, 0.9F, 1);
+				GameObject.Find ("Tab1").transform.Find ("Tick").GetComponent<Image> ().color = Color.white;
 
 				//}
 			}
@@ -104,21 +106,21 @@ public class Tabs : MonoBehaviour {
 
 		GameObject.Find ("Tab1").transform.Find ("Tick").GetComponent<Image> ().color = new Vector4 (0.9F, 0.9F, 0.9F, 1);
 
-		manager.txt_checkinLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-		manager.txt_cutLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-		manager.txt_dryLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-		manager.txt_washLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-		manager.txt_whileLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-		manager.txt_ifLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-		manager.txt_resourcesLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-		manager.txt_returnLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-		manager.txt_checkoutLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-		manager.txt_groomLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
-		manager.txt_pickupLeft_thread2.color = new Vector4(0.82F, 0.82F, 0.82F, 1);
+		manager.txt_checkinLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+		manager.txt_cutLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+		manager.txt_dryLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+		manager.txt_washLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+		manager.txt_whileLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+		manager.txt_ifLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+		manager.txt_resourcesLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+		manager.txt_returnLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+		manager.txt_checkoutLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+		manager.txt_groomLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
+		manager.txt_pickupLeft_thread2.color = new Vector4 (0.82F, 0.82F, 0.82F, 1);
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
 }

@@ -9,14 +9,21 @@ public class dropDownManager : MonoBehaviour {
 	public Text showSelected;
 
 	public string selected;
+	public bool isGetDropdown;
 
-	List<string> options = new List<string>() {"[null]", "brush" ,"clippers" , "cond.", "dryer", "scissors", "shampoo", "station", "towel"};
+	List<string> options = new List<string> () { "[null]", "brush", "clippers", "cond.", "dryer", "scissors", "shampoo", "station", "towel" };
 
-	public void indexChanged(int index) { // takes selected option index
+	public void indexChanged (int index) { // takes selected option index
 
 		// Debug.Log ("indexChanged() called");
+		//	print(options[index]);
+		if (isGetDropdown)
+			LogManager.instance.logger.sendChronologicalLogs ("get", options[index], LogManager.instance.UniEndTime ().ToString ());
+		else {
+			LogManager.instance.logger.sendChronologicalLogs ("ret", options[index], LogManager.instance.UniEndTime ().ToString ());
+		}
 
-		showSelected.text = options [index];
+		showSelected.text = options[index];
 
 		if (index == 0)
 			showSelected.color = Color.red;
@@ -25,7 +32,7 @@ public class dropDownManager : MonoBehaviour {
 	}
 
 	// Get data from a resource
-	void Start() {
+	void Start () {
 		PopulateList ();
 	}
 
@@ -36,6 +43,6 @@ public class dropDownManager : MonoBehaviour {
 		if (selected != "") {
 			showSelected.text = selected;
 			showSelected.color = Color.black;
-		}	
+		}
 	}
 }

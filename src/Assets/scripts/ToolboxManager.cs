@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.UI;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ToolboxManager : MonoBehaviour {
 
@@ -16,7 +16,7 @@ public class ToolboxManager : MonoBehaviour {
 	public int resourcesLeft_thread1;
 	public int checkoutLeft_thread1;
 	public int returnLeft_thread1;
-	public int groomLeft_thread1;	
+	public int groomLeft_thread1;
 	public int pickupLeft_thread1;
 
 	public Text txt_checkinLeft_thread1;
@@ -76,18 +76,20 @@ public class ToolboxManager : MonoBehaviour {
 			CreateNewBlock.canCreate = true;
 		} catch { }
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 
-	public void getMainMenu() {
+	public void getMainMenu () {
+		LogManager.instance.logger.sendChronologicalLogs("MainMenuBtn", "", LogManager.instance.UniEndTime().ToString());
+
 		SceneManager.LoadScene ("MainMenu");
 	}
 
-	public void updateValues() {
-		
+	public void updateValues () {
+
 		txt_checkinLeft_thread1.text = "x " + checkinLeft_thread1;
 		txt_cutLeft_thread1.text = "x " + cutLeft_thread1;
 		txt_washLeft_thread1.text = "x " + washLeft_thread1;
@@ -113,22 +115,20 @@ public class ToolboxManager : MonoBehaviour {
 		txt_pickupLeft_thread2.text = "x " + pickupLeft_thread2;
 	}
 
-	public void showError(string msg) {
-
+	public void showError (string msg) {
 		StartCoroutine (ErrorMsg (msg));
-		
+
 	}
 
-	IEnumerator ErrorMsg(string msg) {
+	IEnumerator ErrorMsg (string msg) {
 
 		txtErrorMsg.enabled = true;
 		txtErrorMsg.text = msg;
-		yield return new WaitForSeconds(2.0f);
+		yield return new WaitForSeconds (2.0f);
 		txtErrorMsg.enabled = false;
 	}
 
-	public void gameLost() {
-
+	public void gameLost () {
 		try {
 			LostPanel.SetActive (true);
 		} catch {
@@ -136,7 +136,7 @@ public class ToolboxManager : MonoBehaviour {
 		}
 	}
 
-	public void gameWon() {
+	public void gameWon () {
 
 		// Debug.Log("In gameWon() function");
 
@@ -147,5 +147,11 @@ public class ToolboxManager : MonoBehaviour {
 		} catch {
 			Debug.Log ("Could not find WonPanel");
 		}
+	}
+
+	public void BackButton()
+	{
+		LogManager.instance.logger.sendChronologicalLogs("BackToMain", "", LogManager.instance.UniEndTime().ToString());
+	SceneManager.LoadScene("MainMenu");
 	}
 }
