@@ -7,6 +7,53 @@ using UnityEngine.UI;
 public class ExecuteThreadsLevel3_5 : MonoBehaviour
 {
 
+
+    //----- Niranjan Variables ------
+
+    [System.Serializable]
+    public class Thread
+    {
+        //This is list of ticks(UI) which can be set on/off
+        public List<GameObject> ticks;
+        public List<GameObject> innerTicks;
+
+        //stores the bool for all works
+        public WorkList workList = new WorkList();
+        public HasItems hasItems = new HasItems();
+    }
+    public class HasItems
+    {
+        public bool hasBrush;
+        public bool hasClippers;
+        public bool hasConditioner;
+        public bool hasDryer;
+        public bool hasScissors;
+        public bool hasShampoo;
+        public bool hasStation;
+        public bool hasTowel;
+
+        public HasItems()
+        {
+            hasBrush = false;
+            hasClippers = false;
+            hasConditioner = false;
+            hasDryer = false;
+            hasScissors = false;
+            hasShampoo = false;
+            hasStation = false;
+            hasTowel = false;       
+        }
+    }
+
+    public List<Thread> threads;
+
+
+
+
+
+
+
+
     // --- IMAGE SIMULATION ---
 
     public GameObject scrollRect;
@@ -24,7 +71,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     public Sprite displayErrorSprite;
     public Sprite[] itemsSprites;
     public Sprite[] actionsSprites;
-
+    
     // GameObject contentContainer;
 
     // ------------------------
@@ -94,7 +141,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     void Start()
     {
-
         stop = false;
         err = false;
         paused = false;
@@ -170,9 +216,28 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         return threadChildren;
     }
 
+    public void Awake()
+    {
+        ApplyTicks();
+    }
     public void ExecuteThreads()
     {
         LogManager.instance.logger.sendChronologicalLogs("RunLevel03Thread", "", LogManager.instance.UniEndTime().ToString());
+
+
+
+
+        //Niranjan's Piece of code ;)
+       
+
+
+
+
+
+
+
+
+
 
         scrollToTop();
 
@@ -191,13 +256,13 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
         // ----- SET UP FOR LOLA AND ROCKY, CUSTOMERS FOR LEVEL 3 -----
 
-        t1_needs_cut = true;
+        t1_needs_cut = false;
         t1_needs_dry = false;
-        t1_needs_wash = true;
+        t1_needs_wash = false;
         t1_needs_groom = false;
 
-        t2_needs_cut = true;
-        t2_needs_dry = true;
+        t2_needs_cut = false;
+        t2_needs_dry = false;
         t2_needs_wash = false;
         t2_needs_groom = false;
 
@@ -737,6 +802,42 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         if (!err)
         {
             StartCoroutine(printThreads(blocks_names_t1, blocks_names_t2, simulationImagesToDisplay_T1, simulationImagesToDisplay_T2, 5));
+        }
+    }
+
+    private void ApplyTicks()
+    {
+        foreach (Thread t in threads)
+        {
+            Debug.Log("hi");
+            foreach (GameObject g in t.ticks)
+            {              
+                try
+                {
+                   
+                    g.SetActive((bool)t.workList.GetType().GetField(g.name).GetValue(t.workList)) ;
+                    
+                }
+                catch(Exception e)
+                {
+                    
+                    Debug.Log(e.Message+" Name The Tick as same as work "+ g.name);
+                }
+            }
+            foreach (GameObject g in t.innerTicks)
+            {
+                try
+                {
+
+                    g.SetActive((bool)t.workList.GetType().GetField(g.name).GetValue(t.workList));
+
+                }
+                catch (Exception e)
+                {
+
+                    Debug.Log(e.Message + " Name The Tick as same as work " + g.name);
+                }
+            }
         }
     }
 
