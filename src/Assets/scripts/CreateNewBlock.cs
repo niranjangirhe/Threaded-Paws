@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class CreateNewBlock : MonoBehaviour {
@@ -17,541 +17,135 @@ public class CreateNewBlock : MonoBehaviour {
 		if (GameObject.Find ("Tab1").transform.GetSiblingIndex () > GameObject.Find ("Tab2").transform.GetSiblingIndex ()) {
 
 			if (this.transform.name == "WashBox") {
-				//Debug.Log ("This is a wash box");
+				Debug.Log ("This is a wash box");
 
-				if (manager.washLeft_thread1 > 0) {
-
-					if (canCreate) {
-
-						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
-						newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-						//newActionBox.AddComponent<Draggable>();
-						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						//newActionBox.GetComponent<Image> ().color = Color.magenta;
-						newActionBox.transform.Find("Halo").gameObject.SetActive(true);
-
-						manager.washLeft_thread1 -= 1;
-						manager.updateValues ();
-
-						canCreate = false;
-					} else {
-						manager.showError ("Use or discard your current object first");
-					}
-
-				} else {
-					//display error message to user
-					manager.showError ("You don\'t have any more of those left!");
-				}
-
+				newActionBlockMaker(ref manager.washLeft_thread1);
+				
 			} else if (this.transform.name == "CheckInBox") {
-
-				if (manager.checkinLeft_thread1 > 0) {
-
-					if (canCreate) {
-						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
-						newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-						//newActionBox.AddComponent<Draggable>();
-						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						//newActionBox.GetComponent<Image> ().color = Color.magenta;
-
-						manager.checkinLeft_thread1 -= 1;
-						manager.updateValues ();
-
-						canCreate = false;
-					} else {
-						manager.showError ("Use or discard your current object first");
-					}
-
-				} else {
-					//display error message to user
-					manager.showError ("You dont have any more of those left!");
-				}
-
-			} else if (this.transform.name == "CutBox") {
-
-				if (manager.cutLeft_thread1 > 0) {
-					if (canCreate) {
-
-						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
-						newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-						//newActionBox.AddComponent<Draggable>();
-						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						//newActionBox.GetComponent<Image> ().color = Color.magenta;
-
-						manager.cutLeft_thread1 -= 1;
-						manager.updateValues ();
-
-						canCreate = false;
-
-					} else {
-						manager.showError ("Use or discard your current object first");
-					}
-
-				} else {
-					//display error message to user
-					manager.showError ("You don\'t have any more of those left!");
-				}
-
-			} else if (this.transform.name == "DryBox") {
-
-
-				if (manager.dryLeft_thread1 > 0) {
-
-					if (canCreate) {
-
-						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
-						newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-						//newActionBox.AddComponent<Draggable>();
-						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						//newActionBox.GetComponent<Image> ().color = Color.magenta;
-
-						manager.dryLeft_thread1 -= 1;
-						manager.updateValues ();
-
-						canCreate = false;
-					} else {
-						manager.showError ("Use or discard your current object first");
-					}
-
-				} else {
-					//display error message to user
-					manager.showError ("You don\'t have any more of those left!");
-				}
-
-			} else if (this.transform.name == "ResourceBox") {
-
-				if (manager.resourcesLeft_thread1 > 0) {
-
-					if (canCreate) {
-
-						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
-						newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-						//newActionBox.AddComponent<Draggable>();
-						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						//newActionBox.GetComponent<Image> ().color = Color.magenta;
-
-						manager.resourcesLeft_thread1 -= 1;
-						manager.updateValues ();
-
-						canCreate = false;
-					} else {
-						manager.showError ("Use or discard your current object first");
-					}
-
-				} else {
-					//display error message to user
-					manager.showError ("You don\'t have any more of those left!");
-				}
-			
-			} else if (this.transform.name == "ReturnBox") {
-
-				// Debug.Log ("Generating a return box");
-
-				if (manager.returnLeft_thread1 > 0) {
-
-					if (canCreate) {
-
-						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
-						newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-						//newActionBox.AddComponent<Draggable>();
-						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						//newActionBox.GetComponent<Image> ().color = Color.magenta;
-
-						manager.returnLeft_thread1 -= 1;
-						manager.updateValues ();
-
-						canCreate = false;
-					} else {
-						manager.showError ("Use or discard your current object first");
-					}
-
-				} else {
-					//display error message to user
-					manager.showError ("You don\'t have any more of those left!");
-				}
-
-			} else if (this.transform.name == "CheckOutBox") {
-
-				if (manager.checkoutLeft_thread1 > 0) {
-
-					if (canCreate) {
-
-						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
-						newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-						//newActionBox.AddComponent<Draggable>();
-						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						//newActionBox.GetComponent<Image> ().color = Color.magenta;
-
-						manager.checkoutLeft_thread1 -= 1;
-						manager.updateValues ();
-
-						canCreate = false;
-					} else {
-						manager.showError ("Use or discard your current object first");
-					}
-
-				} else {
-					//display error message to user
-					manager.showError ("You don\'t have any more of those left!");
-				}
-
-			} else if (this.transform.name == "GroomBox") {
-
-				if (manager.groomLeft_thread1 > 0) {
-
-					if (canCreate) {
-
-						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
-						newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-						//newActionBox.AddComponent<Draggable>();
-						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						//newActionBox.GetComponent<Image> ().color = Color.magenta;
-
-						manager.groomLeft_thread1 -= 1;
-						manager.updateValues ();
-
-						canCreate = false;
-					} else {
-						manager.showError ("Use or discard your current object first");
-					}
-
-				} else {
-					//display error message to user
-					manager.showError ("You don\'t have any more of those left!");
-				}
-
-			} else if (this.transform.name == "PickUpBox") {
-
-				if (manager.pickupLeft_thread1 > 0) {
-
-					if (canCreate) {
-
-						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
-						newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-						//newActionBox.AddComponent<Draggable>();
-						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						//newActionBox.GetComponent<Image> ().color = Color.magenta;
-
-						manager.pickupLeft_thread1 -= 1;
-						manager.updateValues ();
-
-						canCreate = false;
-					} else {
-						manager.showError ("Use or discard your current object first");
-					}
-
-				} else {
-					//display error message to user
-					manager.showError ("You don\'t have any more of those left!");
-				}
-
+                Debug.Log("This is a CheckInBox");
+                newActionBlockMaker(ref manager.checkinLeft_thread1);
+                
+            }
+            else if (this.transform.name == "CutBox") {
+                Debug.Log("This is a CutBox");
+
+                newActionBlockMaker(ref manager.cutLeft_thread1);
+				
+            }
+            else if (this.transform.name == "DryBox") {
+                Debug.Log("This is a DryBox");
+                newActionBlockMaker(ref manager.dryLeft_thread1);
+				
+            }
+            else if (this.transform.name == "ResourceBox") {
+                Debug.Log("This is a ResourceBox");
+                newActionBlockMaker(ref manager.resourcesLeft_thread1);
+				
+            }
+            else if (this.transform.name == "ReturnBox") {
+                Debug.Log("This is a ReturnBox");
+                // Debug.Log ("Generating a return box");
+                newActionBlockMaker(ref manager.returnLeft_thread1);
+				
+            }
+            else if (this.transform.name == "CheckOutBox") {
+                Debug.Log("This is a CheckOutBox");
+                newActionBlockMaker(ref manager.checkoutLeft_thread1);
+
+				
+            }
+            else if (this.transform.name == "GroomBox") {
+                Debug.Log("This is a GroomBox");
+                newActionBlockMaker(ref manager.groomLeft_thread1);
+				
+            }
+            else if (this.transform.name == "PickUpBox") {
+                Debug.Log("This is a PickUpBox");
+                newActionBlockMaker(ref manager.pickupLeft_thread1);
+
+				
 			}
 
 		// tab 2 is the active panel
 		} else { 
 			if (this.transform.name == "WashBox") {
-				//Debug.Log ("This is a wash box");
-
-				if (manager.washLeft_thread2 > 0) {
-
-					if (canCreate) {
-
-						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
-						newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-						//newActionBox.AddComponent<Draggable>();
-						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						//newActionBox.GetComponent<Image> ().color = Color.cyan;
-
-						manager.washLeft_thread2 -= 1;
-						manager.updateValues ();
-
-						canCreate = false;
-					} else {
-						manager.showError ("Use or discard your current object first");
-					}
-
-				} else {
-					//display error message to user
-					manager.showError ("You don\'t have any more of those left!");
-				}
+                //Debug.Log ("This is a wash box");
+                newActionBlockMaker(ref manager.washLeft_thread2);
+                
 
 			} else if (this.transform.name == "CheckInBox") {
-
-				if (manager.checkinLeft_thread2 > 0) {
-
-					if (canCreate) {
-						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
-						newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-						//newActionBox.AddComponent<Draggable>();
-						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						//newActionBox.GetComponent<Image> ().color = Color.cyan;
-
-						manager.checkinLeft_thread2 -= 1;
-						manager.updateValues ();
-
-						canCreate = false;
-					} else {
-						manager.showError ("Use or discard your current object first");
-					}
-
-				} else {
-					//display error message to user
-					manager.showError ("You dont have any more of those left!");
-				}
+                newActionBlockMaker(ref manager.checkinLeft_thread2);
+                
 
 			} else if (this.transform.name == "CutBox") {
-
-				if (manager.cutLeft_thread2 > 0) {
-
-					if (canCreate) {
-
-						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
-						newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-						//newActionBox.AddComponent<Draggable>();
-						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						//newActionBox.GetComponent<Image> ().color = Color.cyan;
-
-						manager.cutLeft_thread2 -= 1;
-						manager.updateValues ();
-
-						canCreate = false;
-					} else {
-						manager.showError ("Use or discard your current object first");
-					}
-
-				} else {
-					//display error message to user
-					manager.showError ("You don\'t have any more of those left!");
-				}
+                newActionBlockMaker(ref manager.cutLeft_thread2);
+                
 
 			} else if (this.transform.name == "DryBox") {
 
-
-				if (manager.dryLeft_thread2 > 0) {
-
-					if (canCreate) {
-
-						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
-						newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-						//newActionBox.AddComponent<Draggable>();
-						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						//newActionBox.GetComponent<Image> ().color = Color.cyan;
-
-						manager.dryLeft_thread2 -= 1;
-						manager.updateValues ();
-
-						canCreate = false;
-					} else {
-						manager.showError ("Use or discard your current object first");
-					}
-
-				} else {
-					//display error message to user
-					manager.showError ("You don\'t have any more of those left!");
-				}
+                newActionBlockMaker(ref manager.dryLeft_thread2);
+                
 
 			} else if (this.transform.name == "ResourceBox") {
-
-				if (manager.resourcesLeft_thread2 > 0) {
-
-					if (canCreate) {
-
-						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
-						newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-						//newActionBox.AddComponent<Draggable>();
-						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						//newActionBox.GetComponent<Image> ().color = Color.cyan;
-
-						manager.resourcesLeft_thread2 -= 1;
-						manager.updateValues ();
-
-						canCreate = false;
-					} else {
-						manager.showError ("Use or discard your current object first");
-					}
-
-				} else {
-					//display error message to user
-					manager.showError ("You don\'t have any more of those left!");
-				}
+                newActionBlockMaker(ref manager.resourcesLeft_thread2);
+                
 
 			} else if (this.transform.name == "ReturnBox") {
-
-				if (manager.returnLeft_thread2 > 0) {
-
-					if (canCreate) {
-
-						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
-						newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-						//newActionBox.AddComponent<Draggable>();
-						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						//newActionBox.GetComponent<Image> ().color = Color.cyan;
-
-						manager.returnLeft_thread2 -= 1;
-						manager.updateValues ();
-
-						canCreate = false;
-					} else {
-						manager.showError ("Use or discard your current object first");
-					}
-
-				} else {
-					//display error message to user
-					manager.showError ("You don\'t have any more of those left!");
-				}
+                newActionBlockMaker(ref manager.returnLeft_thread2);
+                
 
 			} else if (this.transform.name == "CheckOutBox") {
-
-				if (manager.checkoutLeft_thread2 > 0) {
-
-					if (canCreate) {
-
-						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
-						newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-						//newActionBox.AddComponent<Draggable>();
-						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						//newActionBox.GetComponent<Image> ().color = Color.cyan;
-
-						manager.checkoutLeft_thread2 -= 1;
-						manager.updateValues ();
-
-						canCreate = false;
-					} else {
-						manager.showError ("Use or discard your current object first");
-					}
-
-				} else {
-					//display error message to user
-					manager.showError ("You don\'t have any more of those left!");
-				}
+                newActionBlockMaker(ref manager.checkoutLeft_thread2);
+                
 
 			} else if (this.transform.name == "GroomBox") {
 
-				if (manager.groomLeft_thread2 > 0) {
-
-					if (canCreate) {
-
-						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
-						newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-						//newActionBox.AddComponent<Draggable>();
-						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						//newActionBox.GetComponent<Image> ().color = Color.magenta;
-
-						manager.groomLeft_thread2 -= 1;
-						manager.updateValues ();
-
-						canCreate = false;
-					} else {
-						manager.showError ("Use or discard your current object first");
-					}
-
-				} else {
-					//display error message to user
-					manager.showError ("You don\'t have any more of those left!");
-				}
+                newActionBlockMaker(ref manager.groomLeft_thread2);
+                
 
 			} else if (this.transform.name == "PickUpBox") {
-
-				if (manager.pickupLeft_thread2 > 0) {
-
-					if (canCreate) {
-
-						GameObject newActionBox = (GameObject)Instantiate (prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
-						newActionBox.transform.SetParent (this.transform);
-						//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-						//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-						//newActionBox.AddComponent<Draggable>();
-						newActionBox.transform.localScale = Vector3.one;
-						newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = this.GetComponentInChildren<Text> ().text;
-						//newActionBox.GetComponent<Image> ().color = Color.magenta;
-
-						manager.pickupLeft_thread2 -= 1;
-						manager.updateValues ();
-
-						canCreate = false;
-					} else {
-						manager.showError ("Use or discard your current object first");
-					}
-
-				} else {
-					//display error message to user
-					manager.showError ("You don\'t have any more of those left!");
-				}
+                newActionBlockMaker(ref manager.pickupLeft_thread2);
+                
 
 			}
 		}
 	}
 
+	public void newActionBlockMaker(ref int cardCount)
+    {
+        if (cardCount > 0)
+        {
+
+            if (canCreate)
+            {
+
+                GameObject newActionBox = (GameObject)Instantiate(prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
+
+                newActionBox.transform.SetParent(this.transform);
+                //newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
+                //newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
+                //newActionBox.AddComponent<Draggable>();
+                newActionBox.transform.localScale = Vector3.one;
+                newActionBox.transform.GetChild(0).GetComponentInChildren<Text>().text = this.GetComponentInChildren<Text>().text;
+                //newActionBox.GetComponent<Image> ().color = Color.magenta;
+
+                cardCount -= 1;
+                manager.updateValues();
+
+                canCreate = false;
+            }
+            else
+            {
+                manager.showError("Use or discard your current object first");
+            }
+
+        }
+        else
+        {
+            //display error message to user
+            manager.showError("You don\'t have any more of those left!");
+        }
+    }
 	public void NewWhileLoopBlock() {
 		//Debug.Log ("While loop block was clicked");
 		//Debug.Log (canCreate);

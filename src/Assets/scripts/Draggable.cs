@@ -144,6 +144,10 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		//physically move the card
 		this.transform.position = eventData.position;
 
+		//to visualize that the selection is active
+		this.GetComponent<CanvasGroup>().alpha = 0.5f;
+		this.GetComponent<RectTransform>().localScale = new Vector3(0.8f, 0.8f, 0.8f);
+
 		// do not shift items in the toolbox
 		if ((parentToReturnTo.transform.name != toolbox.transform.name) && (placeholder.transform.parent.name != toolbox.transform.name) && (placeholderParent.transform.name != toolbox.transform.name)) {
 
@@ -186,13 +190,17 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 		Debug.Log ("OnEndDrag called");
 
-		//set parent back to where we came from (at the end of the list)
-		this.transform.SetParent (parentToReturnTo);
+        //to end the visualization of selection
+        this.GetComponent<CanvasGroup>().alpha = 1;
+        this.GetComponent<RectTransform>().localScale= new Vector3(1,1,1);
+
+        //set parent back to where we came from (at the end of the list)
+        this.transform.SetParent (parentToReturnTo);
 
 		//bounce back the object to where the placeholder is
 		this.transform.SetSiblingIndex (placeholder.transform.GetSiblingIndex ());
 
-		GetComponent<CanvasGroup> ().blocksRaycasts = true;
+        GetComponent<CanvasGroup> ().blocksRaycasts = true;
 
 		//iterate through corresponding zones and remove highlights, if any
 		//		threadArea1.transform.GetComponent<Image>().color = Color.magenta;
