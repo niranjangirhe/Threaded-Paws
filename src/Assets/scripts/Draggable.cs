@@ -17,9 +17,6 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	GameObject threadArea1;
 	GameObject threadArea2;
 
-	Text actionsCount;
-	Text loopsCount;
-	Text statsCount;
 
 	ToolboxManager manager;
 
@@ -31,31 +28,34 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
  this.transform.Find ("Halo").gameObject.SetActive (false);
 
- try {
+		try
+		{
 
- // if the parent is a while loop, then make drop area smaller
- if (eventData.pointerDrag.transform.parent.parent.gameObject.GetComponent<Draggable> ().typeOfItem == Type.WHILELOOP) {
+			// if the parent is a while loop, then make drop area smaller
+			if (eventData.pointerDrag.transform.parent.parent.gameObject.GetComponent<Draggable>().typeOfItem == Type.WHILELOOP)
+			{
 
- int num_children = eventData.pointerDrag.transform.parent.childCount;
- float curr_width = eventData.pointerDrag.transform.parent.GetComponent<RectTransform> ().sizeDelta.x;
- // float curr_height = eventData.pointerDrag.transform.parent.GetComponent<RectTransform> ().sizeDelta.y;
- float new_height = (num_children * 25);
+				int num_children = eventData.pointerDrag.transform.parent.childCount;
+				float curr_width = eventData.pointerDrag.transform.parent.GetComponent<RectTransform>().sizeDelta.x;
+				// float curr_height = eventData.pointerDrag.transform.parent.GetComponent<RectTransform> ().sizeDelta.y;
+				float new_height = (num_children * 25);
 
- //Debug.Log("num_children: " + num_children);
+				//Debug.Log("num_children: " + num_children);
 
- float parent_curr_width = eventData.pointerDrag.transform.parent.parent.GetComponent<RectTransform> ().sizeDelta.x;
- // float parent_curr_height = eventData.pointerDrag.transform.parent.parent.GetComponent<RectTransform> ().sizeDelta.y;
- float parent_new_height = new_height + 25;
+				float parent_curr_width = eventData.pointerDrag.transform.parent.parent.GetComponent<RectTransform>().sizeDelta.x;
+				// float parent_curr_height = eventData.pointerDrag.transform.parent.parent.GetComponent<RectTransform> ().sizeDelta.y;
+				float parent_new_height = new_height + 25;
 
- eventData.pointerDrag.transform.parent.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (parent_curr_width, parent_new_height);
- eventData.pointerDrag.transform.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (curr_width, new_height);
+				eventData.pointerDrag.transform.parent.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(parent_curr_width, parent_new_height);
+				eventData.pointerDrag.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(curr_width, new_height);
 
- //Debug.Log("parent_curr_width: " + parent_curr_width);
- //Debug.Log("parent_curr_height: " + parent_curr_height);
- //Debug.Log("parent_new_height: " + parent_new_height);
+				//Debug.Log("parent_curr_width: " + parent_curr_width);
+				//Debug.Log("parent_curr_height: " + parent_curr_height);
+				//Debug.Log("parent_new_height: " + parent_new_height);
 			}
 
-		} catch { }
+		}
+		catch { }
 
 		//create new placeholder object and parent it to the draggable object's parent
 		placeholder = new GameObject ();

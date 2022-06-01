@@ -11,7 +11,7 @@ public class dropDownManager : MonoBehaviour {
 	public string selected;
 	public bool isGetDropdown;
 
-	List<string> options = new List<string> () { "[null]", "brush", "clippers", "cond.", "dryer", "scissors", "shampoo", "station", "towel" };
+	public List<string> options = new List<string> () { "[null]", "brush", "clippers", "cond.", "dryer", "scissors", "shampoo", "station", "towel" };
 
 	public void indexChanged (int index) { // takes selected option index
 
