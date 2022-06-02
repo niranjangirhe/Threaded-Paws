@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 using Random = UnityEngine.Random;
 
 public class ExecuteThreadsLevel3_5 : MonoBehaviour
@@ -18,17 +19,27 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         public List<GameObject> ticks;
         public List<GameObject> innerTicks;
 
-        //stores the bool for all works
+        //ThreadData (Niranjan's Datastructure (New oops))
         public WorkList workList = new WorkList();
-        public int f = 5;
-        public Dictionary<string, bool> hasItems = new Dictionary<string, bool>();
-        public Dictionary<string, bool> needsTo = new Dictionary<string, bool>();
-        public Dictionary<string, bool> did = new Dictionary<string, bool>();
+        public List<SimBlock> simBlocks = new List<SimBlock>();
+
+        //to get block from FE
+        [HideInInspector] public Transform[] blocks;
+
+        //Tab (Grandparent of blocks)
+        public GameObject tab;
+
+        //stores the bool for all works
+        [HideInInspector] public bool isCheckedIn;
+        [HideInInspector] public bool isCheckedOut;
+        [HideInInspector] public Dictionary<string, bool> hasItems = new Dictionary<string, bool>();
+        [HideInInspector] public Dictionary<string, bool> needsTo = new Dictionary<string, bool>();
+        [HideInInspector] public Dictionary<string, bool> did = new Dictionary<string, bool>();
     }
 
 
     public List<Thread> threads;
-    public dropDownManager dropDownManager = new dropDownManager();
+    private dropDownManager dropDownManager = new dropDownManager();
 
 
 
@@ -77,8 +88,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     bool paused;
     bool lost;
 
-    bool t1_checkedin;
-    bool t1_checkedout;
+
     bool t1_has_brush;
     bool t1_has_clippers;
     bool t1_has_conditioner;
@@ -88,8 +98,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     bool t1_has_station;
     bool t1_has_towel;
 
-    bool t2_checkedin;
-    bool t2_checkedout;
+
     bool t2_has_brush;
     bool t2_has_clippers;
     bool t2_has_conditioner;
@@ -99,11 +108,12 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     bool t2_has_station;
     bool t2_has_towel;
 
+
     bool t1_did_cut;
     bool t1_did_dry;
     bool t1_did_wash;
     bool t1_did_groom;
-
+    
     bool t2_needs_cut;
     bool t2_needs_dry;
     bool t2_needs_wash;
@@ -112,6 +122,10 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     bool t2_did_dry;
     bool t2_did_wash;
     bool t2_did_groom;
+    bool t1_checkedin;
+    bool t1_checkedout;
+    bool t2_checkedin;
+    bool t2_checkedout;
 
     string returnErrMsg = "> ERROR: You are trying to return a resource you don't have.";
     string acquireErrMsg = "> ERROR: You are trying to acquire a resource you already have.";
@@ -137,43 +151,25 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         //fill needsToDictionary from inspector.
         foreach (Thread t in threads)
         {
-            Debug.Log("InConstructor" + t.workList.Wash + t.workList.Dry);
-            System.Reflection.FieldInfo[] variables = t.workList.GetType().GetFields();
-
-            foreach (System.Reflection.FieldInfo v in variables)
+            System.Reflection.FieldInfo[] varWorklist = t.workList.GetType().GetFields();
+            foreach (System.Reflection.FieldInfo v in varWorklist)
             {
                 t.needsTo.Add(v.Name, (bool)v.GetValue(t.workList));
-                Debug.Log("Name : " + v.Name + "\nBool Value : " + (bool)v.GetValue(t.workList));
+                t.did.Add(v.Name, false);
+            }
+            foreach(string key in dropDownManager.options)
+            {
+                t.hasItems.Add(key, false);
             }
         }
+
+
+
 
         stop = false;
         err = false;
         paused = false;
         lost = false;
-
-        t1_checkedin = false;
-        t1_checkedout = false;
-        t2_checkedin = false;
-        t2_checkedout = false;
-
-        t1_has_brush = false;
-        t1_has_clippers = false;
-        t1_has_conditioner = false;
-        t1_has_dryer = false;
-        t1_has_scissors = false;
-        t1_has_shampoo = false;
-        t1_has_station = false;
-        t1_has_towel = false;
-
-        t2_has_brush = false;
-        t2_has_clippers = false;
-        t2_has_conditioner = false;
-        t2_has_dryer = false;
-        t2_has_scissors = false;
-        t2_has_shampoo = false;
-        t2_has_station = false;
-        t2_has_towel = false;
 
         manager = GameObject.Find("_SCRIPTS_").GetComponent<ToolboxManager>();
         // timer = GameObject.FindObjectOfType<Timer> ();
@@ -231,34 +227,21 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         LogManager.instance.logger.sendChronologicalLogs("RunLevel03Thread", "", LogManager.instance.UniEndTime().ToString());
 
 
-
-
-        //Niranjan's Piece of code ;)
-       
-
-
-
-
-
-
-
-
-
-
         scrollToTop();
 
         clearAllClones();
         clearVerticalLayouts();
 
-        t1_did_cut = false;
-        t1_did_dry = false;
-        t1_did_wash = false;
-        t1_did_groom = false;
+        //t1_did_cut = false;
+        //t1_did_dry = false;
+        //t1_did_wash = false;
+        //t1_did_groom = false;
 
-        t2_did_cut = false;
-        t2_did_dry = false;
-        t2_did_wash = false;
-        t2_did_groom = false;
+        //t2_did_cut = false;
+        //t2_did_dry = false;
+        //t2_did_wash = false;
+        //t2_did_groom = false;
+
 
         // ----- SET UP FOR LOLA AND ROCKY, CUSTOMERS FOR LEVEL 3 -----
 
@@ -294,29 +277,27 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         paused = false;
         lost = false;
 
-        t1_checkedin = false;
-        t1_checkedout = false;
 
-        t1_has_brush = false;
-        t1_has_clippers = false;
-        t1_has_conditioner = false;
-        t1_has_dryer = false;
-        t1_has_scissors = false;
-        t1_has_shampoo = false;
-        t1_has_station = false;
-        t1_has_towel = false;
 
-        t2_checkedin = false;
-        t2_checkedout = false;
+        //t1_has_brush = false;
+        //t1_has_clippers = false;
+        //t1_has_conditioner = false;
+        //t1_has_dryer = false;
+        //t1_has_scissors = false;
+        //t1_has_shampoo = false;
+        //t1_has_station = false;
+        //t1_has_towel = false;
 
-        t2_has_brush = false;
-        t2_has_clippers = false;
-        t2_has_conditioner = false;
-        t2_has_dryer = false;
-        t2_has_scissors = false;
-        t2_has_shampoo = false;
-        t2_has_station = false;
-        t2_has_towel = false;
+        //t2_has_brush = false;
+        //t2_has_clippers = false;
+        //t2_has_conditioner = false;
+        //t2_has_dryer = false;
+        //t2_has_scissors = false;
+        //t2_has_shampoo = false;
+        //t2_has_station = false;
+        //t2_has_towel = false;
+
+
 
         try
         {
@@ -331,19 +312,42 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         // switch to stop button
         runButton.transform.SetAsFirstSibling();
 
+        
+        foreach (Thread t in threads)
+        {
+
+            //--- Reseting previous Sim ---
+            t.isCheckedIn = false;
+            t.isCheckedOut = false;
+            foreach(string key in dropDownManager.options)
+            {
+                t.hasItems[key] = false;
+            }
+            foreach (string key in dropDownManager.options)
+            {
+                t.did[key] = false;
+            }
+
+
+            //Gettings block from FE
+            t.blocks = GetActionBlocks_MultiThreads("1");
+        }
+
         // ------------------------ READING THREAD 1 ------------------------
 
         // int thread1_whilesChildren = 0;
 
         // retrieving the objects (blocks) current in thread 1
-        blocks_t1 = GetActionBlocks_MultiThreads("1");
+
+        blocks_t1 = GetActionBlocks_MultiThreads("1"); 
+            
 
         // this structure will store the text lines to display
-        List<string> blocks_names_t1 = new List<string>();
+        //List<string> blocks_names_t1 = new List<string>();
         List<GameObject> simulationImagesToDisplay_T1 = new List<GameObject>();
 
-        int i = 0;
 
+        int i = 0;
         foreach (Transform child in blocks_t1)
         {
 
@@ -367,8 +371,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                     }
                     else
                     {
-
-                        blocks_names_t1.Add("[thread 1] acquire ( " + resource + " );");
+                        threads[0].simBlocks.Add(new SimBlock(SimBlock.ACQUIIRE,resource));
+                        //blocks_names_t1.Add("[thread 1] acquire ( " + resource + " );");
                         InputWorkerData inpt = new InputWorkerData { action = resource, typeOf = "Acquire" };
                         LogManager.instance.logger.sendInputWorkerOne(resource, "Acquire", LogManager.instance.UniEndTime().ToString());
                         GameLogData.inputList_t1.Add(inpt);
@@ -424,8 +428,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                     }
                     else
                     {
-
-                        blocks_names_t1.Add("[thread 1] return ( " + resource + " );");
+                        threads[0].simBlocks.Add(new SimBlock(SimBlock.RETURN, resource));
+                        //blocks_names_t1.Add("[thread 1] return ( " + resource + " );");
                         InputWorkerData inpt = new InputWorkerData { action = resource, typeOf = "Return" };
                         LogManager.instance.logger.sendInputWorkerOne(resource, "Return", LogManager.instance.UniEndTime().ToString());
                         GameLogData.inputList_t1.Add(inpt);
@@ -471,7 +475,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                 {
 
                     String action = blocks_t1[i].transform.GetComponentInChildren<Text>().text;
-                    blocks_names_t1.Add("[thread 1] " + action + ";");
+                    //blocks_names_t1.Add("[thread 1] " + action + ";");
                     InputWorkerData inpt = new InputWorkerData { action = action, typeOf = "Action" };
                     LogManager.instance.logger.sendInputWorkerOne(action, "Action", LogManager.instance.UniEndTime().ToString());
                     GameLogData.inputList_t1.Add(inpt);
@@ -485,7 +489,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                     {
 
                         // Debug.Log ("CHECKING IN");
-
+                        threads[0].simBlocks.Add(new SimBlock(SimBlock.CHECKIN, ""));
                         newItem.transform.Find("Icon").GetComponent<Image>().sprite = workerSprite1;
                         newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = dogSprite1;
                         newItem.transform.Find("AcqRet").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/acquire");
@@ -495,7 +499,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                     {
 
                         // Debug.Log ("CHECKING OUT");
-
+                        threads[0].simBlocks.Add(new SimBlock(SimBlock.CHECKOUT, ""));
                         newItem.transform.Find("Icon").GetComponent<Image>().sprite = workerSprite1;
                         newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = dogSprite1;
                         newItem.transform.Find("AcqRet").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/return");
@@ -506,7 +510,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                         // create new object from prefab (single action)
                         newItem.transform.Find("Icon").GetComponent<Image>().sprite = dogSprite1;
-
+                        threads[0].simBlocks.Add(new SimBlock(SimBlock.WORK, action));
                         Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
 
                         /*
@@ -551,7 +555,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         blocks_t2 = GetActionBlocks_MultiThreads("2");
 
         // this structure will store the text lines to display
-        List<string> blocks_names_t2 = new List<string>();
+        //List<string> blocks_names_t2 = new List<string>();
         List<GameObject> simulationImagesToDisplay_T2 = new List<GameObject>();
 
         i = 0;
@@ -580,8 +584,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                     }
                     else
                     {
-
-                        blocks_names_t2.Add("[thread 2] acquire ( " + resource + " );");
+                        threads[1].simBlocks.Add(new SimBlock(SimBlock.ACQUIIRE, resource));
+                        //blocks_names_t2.Add("[thread 2] acquire ( " + resource + " );");
                         InputWorkerData inpt = new InputWorkerData { action = resource, typeOf = "Acquire" };
                         LogManager.instance.logger.sendInputWorkerTwo(resource, "Acquire", LogManager.instance.UniEndTime().ToString());
                         GameLogData.inputList_t2.Add(inpt);
@@ -639,8 +643,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                     }
                     else
                     {
-
-                        blocks_names_t2.Add("[thread 2] return ( " + resource + " );");
+                        threads[1].simBlocks.Add(new SimBlock(SimBlock.RETURN, resource));
+                        //blocks_names_t2.Add("[thread 2] return ( " + resource + " );");
                         InputWorkerData inpt = new InputWorkerData { action = resource, typeOf = "Return" };
                         LogManager.instance.logger.sendInputWorkerTwo(resource, "Return", LogManager.instance.UniEndTime().ToString());
                         GameLogData.inputList_t2.Add(inpt);
@@ -685,8 +689,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                 {
 
                     String action = blocks_t2[i].transform.GetComponentInChildren<Text>().text;
-
-                    blocks_names_t2.Add("[thread 2] " + action + ";");
+                    
+                    //blocks_names_t2.Add("[thread 2] " + action + ";");
                     InputWorkerData inpt = new InputWorkerData { action = action, typeOf = "Action" };
                     LogManager.instance.logger.sendInputWorkerTwo(action, "Action", LogManager.instance.UniEndTime().ToString());
                     GameLogData.inputList_t2.Add(inpt);
@@ -698,7 +702,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                     if (action == "checkin")
                     {
-
+                        threads[1].simBlocks.Add(new SimBlock(SimBlock.CHECKIN, ""));
                         //Debug.Log ("CHECKING IN");
 
                         newItem.transform.Find("Icon").GetComponent<Image>().sprite = workerSprite2;
@@ -710,7 +714,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                     {
 
                         // Debug.Log ("CHECKING OUT");
-
+                        threads[1].simBlocks.Add(new SimBlock(SimBlock.CHECKOUT, ""));
                         newItem.transform.Find("Icon").GetComponent<Image>().sprite = workerSprite2;
                         newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = dogSprite2;
                         newItem.transform.Find("AcqRet").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/return");
@@ -721,7 +725,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                         // create new object from prefab (single action)
                         newItem.transform.Find("Icon").GetComponent<Image>().sprite = dogSprite2;
-
+                        threads[1].simBlocks.Add(new SimBlock(SimBlock.WORK, action));
                         Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
 
                         /*
@@ -777,8 +781,21 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
         try
         {
-            if ((blocks_names_t1[0].Substring(11, 7) != "checkin" /*&& blocks_names_t1 [0].Substring (11, 17) != "pickup"*/ ) ||
-                (blocks_names_t2[0].Substring(11, 7) != "checkin" /*&& blocks_names_t2 [0].Substring (11, 17) != "pickup"*/ ))
+            /*
+            if ((blocks_names_t1[0].Substring(11, 7) != "checkin"  ) || (blocks_names_t2[0].Substring(11, 7) != "checkin"  ))
+            {
+                manager.showError("Remember to always check-in your costumer first!");
+                terminateSimulation("Remember to always check-in your costumer first!");
+                return;
+            }
+            */
+
+
+            //Check If Checkin block is present
+            Debug.Log("spd: "+ threads[0].simBlocks[0].type);
+            Debug.Log("spd: " + threads[1].simBlocks[0].type);
+
+            if ((threads[0].simBlocks[0].type != SimBlock.CHECKIN ) || (threads[1].simBlocks[0].type != SimBlock.CHECKIN))
             {
 
                 manager.showError("Remember to always check-in your costumer first!");
@@ -789,7 +806,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         }
         catch
         {
-
+            Debug.Log("spd: catched");
             manager.showError("Remember to always check-in your costumer first!");
             terminateSimulation("Remember to always check-in your costumer first!");
             return;
@@ -798,8 +815,19 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         try
         {
 
+            /*
             if ((blocks_names_t1[blocks_names_t1.Count - 1].Substring(11, 8) != "checkout") ||
                 (blocks_names_t2[blocks_names_t2.Count - 1].Substring(11, 8) != "checkout"))
+            {
+
+                manager.showError("Remember to always check-out your costumer when you're done!");
+                terminateSimulation("Remember to always check-out your costumer when you're done!");
+                return;
+            }*/
+
+
+            //Check If Checkout block is present
+            if ((threads[0].simBlocks.Last().type != SimBlock.CHECKOUT) || (threads[1].simBlocks.Last().type != SimBlock.CHECKOUT))
             {
 
                 manager.showError("Remember to always check-out your costumer when you're done!");
@@ -818,7 +846,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
         if (!err)
         {
-            StartCoroutine(printThreads(blocks_names_t1, blocks_names_t2, simulationImagesToDisplay_T1, simulationImagesToDisplay_T2, 5));
+            StartCoroutine(printThreads(simulationImagesToDisplay_T1, simulationImagesToDisplay_T2, 5));
         }
     }
 
@@ -858,7 +886,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         }
     }
 
-    IEnumerator printThreads(List<string> b1, List<string> b2, List<GameObject> s1, List<GameObject> s2, int speed)
+    IEnumerator printThreads(List<GameObject> s1, List<GameObject> s2, int speed)
     {
 
         // waitOneSecond ();
@@ -876,7 +904,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
         int j = 0;
 
-        while ((t1_curr_index < b1.Count) || (t2_curr_index < b2.Count))
+        while ((t1_curr_index < threads[0].simBlocks.Count) || (t2_curr_index < threads[1].simBlocks.Count))
         {
 
             if (bar.currentAmount < 100)
@@ -950,19 +978,20 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                 try
                 {
+                    //Debug.Log("spd: " + b1[t1_curr_index]);
 
                     // {"[null]", "brush" ,"clippers" , "cond.", "dryer", "scissors", "shampoo", "station", "towel"};
 
-                    if (b1[t1_curr_index].Substring(11, 3) == "acq")
+                    if (threads[0].simBlocks[t1_curr_index].type == SimBlock.ACQUIIRE)
                     {
 
                         // acquiring resource
-                        switch (b1[t1_curr_index].Substring(21, 5))
+                        switch (threads[0].simBlocks[t1_curr_index].name)
                         {
 
                             case "brush":
 
-                                if (!t1_has_brush && t2_has_brush)
+                                if (!threads[0].hasItems["brush"] && threads[1].hasItems["brush"])
                                 { // need to wait for resource
 
                                     GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
@@ -979,7 +1008,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 else
                                 {
 
-                                    int output = acquire(ref t1_has_brush);
+                                    int output = acquire(ref threads[0].hasItems,"brush");
                                     t1_canPrint = true;
 
                                     if (output < 0)
@@ -990,9 +1019,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 break;
 
-                            case "clipp":
+                            case "clippers":
 
-                                if (!t1_has_clippers && t2_has_clippers)
+                                if (!threads[0].hasItems["clippers"] && threads[1].hasItems["clippers"])
                                 { // need to wait for resource
 
                                     GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
@@ -1009,7 +1038,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 else
                                 {
 
-                                    int output = acquire(ref t1_has_clippers);
+                                    int output = acquire(ref threads[0].hasItems, "clippers");
                                     t1_canPrint = true;
 
                                     if (output < 0)
@@ -1022,7 +1051,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                             case "cond.":
 
-                                if (!t1_has_conditioner && t2_has_conditioner)
+                                if (!threads[0].hasItems["cond."] && threads[1].hasItems["cond."])
                                 { // need to wait for resource
 
                                     GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
@@ -1039,7 +1068,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 else
                                 {
 
-                                    int output = acquire(ref t1_has_conditioner);
+                                    int output = acquire(ref threads[0].hasItems, "cond.");
                                     t1_canPrint = true;
 
                                     if (output < 0)
@@ -1052,7 +1081,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                             case "dryer":
 
-                                if (!t1_has_dryer && t2_has_dryer)
+                                if (!threads[0].hasItems["dryer"] && threads[1].hasItems["dryer"])
                                 { // need to wait for resource
 
                                     GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
@@ -1069,7 +1098,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 else
                                 {
 
-                                    int output = acquire(ref t1_has_dryer);
+                                    int output = acquire(ref threads[0].hasItems, "dryer");
                                     t1_canPrint = true;
 
                                     if (output < 0)
@@ -1080,9 +1109,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 break;
 
-                            case "sciss":
+                            case "scissors":
 
-                                if (!t1_has_scissors && t2_has_scissors)
+                                if (!threads[0].hasItems["scissors"] && threads[1].hasItems["scissors"])
                                 { // need to wait for resource
 
                                     GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
@@ -1099,7 +1128,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 else
                                 {
 
-                                    int output = acquire(ref t1_has_scissors);
+                                    int output = acquire(ref threads[0].hasItems, "scissors");
                                     t1_canPrint = true;
 
                                     if (output < 0)
@@ -1110,9 +1139,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 break;
 
-                            case "shamp":
+                            case "shampoo":
 
-                                if (!t1_has_shampoo && t2_has_shampoo)
+                                if (!threads[0].hasItems["shampoo"] && threads[1].hasItems["shampoo"])
                                 { // need to wait for resource
 
                                     GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
@@ -1128,7 +1157,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 }
                                 else
                                 {
-                                    int output = acquire(ref t1_has_shampoo);
+                                    int output = acquire(ref threads[0].hasItems, "shampoo");
                                     t1_canPrint = true;
 
                                     if (output < 0)
@@ -1139,9 +1168,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 break;
 
-                            case "stati":
+                            case "station":
 
-                                if (!t1_has_station && t2_has_station)
+                                if (!threads[0].hasItems["station"] && threads[1].hasItems["station"])
                                 { // need to wait for resource
 
                                     GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
@@ -1157,7 +1186,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 }
                                 else
                                 {
-                                    int output = acquire(ref t1_has_station);
+                                    int output = acquire(ref threads[0].hasItems, "station");
                                     t1_canPrint = true;
 
                                     if (output < 0)
@@ -1170,7 +1199,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                             case "towel":
 
-                                if (!t1_has_towel && t2_has_towel)
+                                if (!threads[0].hasItems["towel"] && threads[1].hasItems["towel"])
                                 { // need to wait for resource
 
                                     GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
@@ -1187,7 +1216,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 else
                                 {
 
-                                    int output = acquire(ref t1_has_towel);
+                                    int output = acquire(ref threads[0].hasItems, "towel");
                                     t1_canPrint = true;
 
                                     if (output < 0)
@@ -1200,16 +1229,16 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                         }
 
                     }
-                    else if (b1[t1_curr_index].Substring(11, 3) == "ret")
+                    else if (threads[0].simBlocks[t1_curr_index].type == SimBlock.RETURN)
                     {
 
                         // returning resource
-                        switch (b1[t1_curr_index].Substring(20, 5))
+                        switch (threads[0].simBlocks[t1_curr_index].name)
                         {
 
                             case "brush":
 
-                                int output1 = return_res(ref t1_has_brush);
+                                int output1 = return_res(ref threads[0].hasItems,"brush");
 
                                 if (output1 < 0)
                                 {
@@ -1218,9 +1247,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 break;
 
-                            case "clipp":
+                            case "clippers":
 
-                                int output2 = return_res(ref t1_has_clippers);
+                                int output2 = return_res(ref threads[0].hasItems, "clippers");
 
                                 if (output2 < 0)
                                 {
@@ -1231,7 +1260,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                             case "cond.":
 
-                                int output3 = return_res(ref t1_has_conditioner);
+                                int output3 = return_res(ref threads[0].hasItems, "cond.");
 
                                 if (output3 < 0)
                                 {
@@ -1242,7 +1271,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                             case "dryer":
 
-                                int output4 = return_res(ref t1_has_dryer);
+                                int output4 = return_res(ref threads[0].hasItems, "dryer");
 
                                 if (output4 < 0)
                                 {
@@ -1251,9 +1280,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 break;
 
-                            case "sciss":
+                            case "scissors":
 
-                                int output5 = return_res(ref t1_has_scissors);
+                                int output5 = return_res(ref threads[0].hasItems, "scissors");
 
                                 if (output5 < 0)
                                 {
@@ -1262,9 +1291,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 break;
 
-                            case "shamp":
+                            case "shampoo":
 
-                                int output6 = return_res(ref t1_has_shampoo);
+                                int output6 = return_res(ref threads[0].hasItems, "shampoo");
 
                                 if (output6 < 0)
                                 {
@@ -1273,9 +1302,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 break;
 
-                            case "stati":
+                            case "station":
 
-                                int output7 = return_res(ref t1_has_station);
+                                int output7 = return_res(ref threads[0].hasItems, "station");
 
                                 if (output7 < 0)
                                 {
@@ -1286,7 +1315,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                             case "towel":
 
-                                int output8 = return_res(ref t1_has_towel);
+                                int output8 = return_res(ref threads[0].hasItems, "towel");
 
                                 if (output8 < 0)
                                 {
@@ -1297,101 +1326,108 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                         }
 
                     }
-                    else if (b1[t1_curr_index].Substring(11, 3) == "cut")
+                    else if(threads[0].simBlocks[t1_curr_index].type == SimBlock.WORK)
                     {
-
-                        if (!t1_has_brush || !t1_has_scissors)
+                        if (threads[0].simBlocks[t1_curr_index].name == "Cut")
                         {
 
-                            String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
-                            s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                            s1[t1_curr_index].transform.SetParent(layoutPanel1.transform);
-                            s1[t1_curr_index].transform.localScale = Vector3.one;
+                            if (!threads[0].hasItems["brush"] || !threads[0].hasItems["scissors"])
+                            {
 
-                            resError("> ERROR: You can't cut without a brush and some scissors.", 1);
-                            scrollToBottom();
+                                String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
+                                s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                s1[t1_curr_index].transform.SetParent(layoutPanel1.transform);
+                                s1[t1_curr_index].transform.localScale = Vector3.one;
+
+                                resError("> ERROR: You can't cut without a brush and some scissors.", 1);
+                                scrollToBottom();
+
+                            }
+                            else
+                            {
+
+                                // perform cut
+                                threads[0].did["Cut"] = true;
+                                t1_did_cut = true;
+                            }
+                        }
+                        else if (threads[0].simBlocks[t1_curr_index].name == "Dry")
+                        {
+
+                            if (!threads[0].hasItems["station"] || !threads[0].hasItems["dryer"] || !threads[0].hasItems["towel"])
+                            {
+
+                                String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
+                                s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                s1[t1_curr_index].transform.SetParent(layoutPanel1.transform);
+                                s1[t1_curr_index].transform.localScale = Vector3.one;
+
+                                resError("> ERROR: You can't dry without a station, a dryer and a towel.", 1);
+                                scrollToBottom();
+
+                            }
+                            else
+                            {
+
+                                // perform dry
+                                threads[0].did["Dry"] = true;
+                                t1_did_dry = true;
+                            }
 
                         }
-                        else
+                        else if (threads[0].simBlocks[t1_curr_index].name == "Wash")
                         {
 
-                            // perform cut
-                            t1_did_cut = true;
+                            if (!threads[0].hasItems["station"] || !threads[0].hasItems["shampoo"] || !threads[0].hasItems["towel"] || !threads[0].hasItems["cond."])
+                            {
+
+                                String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
+                                s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                s1[t1_curr_index].transform.SetParent(layoutPanel1.transform);
+                                s1[t1_curr_index].transform.localScale = Vector3.one;
+
+                                resError("> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.", 1);
+                                scrollToBottom();
+
+                            }
+                            else
+                            {
+
+                                // perform wash
+                                threads[0].did["Wash"] = true;
+                                t1_did_wash = true;
+                            }
+
+                        }
+                        else if (threads[0].simBlocks[t1_curr_index].name == "Groom")
+                        {
+
+                            if (!threads[0].hasItems["brush"] || !threads[0].hasItems["clippers"])
+                            {
+
+                                String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
+                                s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                s1[t1_curr_index].transform.SetParent(layoutPanel1.transform);
+                                s1[t1_curr_index].transform.localScale = Vector3.one;
+
+                                resError("> ERROR: You can't groom without a brush and some nail clippers.", 1);
+                                scrollToBottom();
+
+                            }
+                            else
+                            {
+
+                                // perform groom
+                                threads[0].did["Groom"] = true;
+                                t1_did_groom = true;
+                            }
+
                         }
                     }
-                    else if (b1[t1_curr_index].Substring(11, 3) == "dry")
+                    else if (threads[0].simBlocks[t1_curr_index].type == SimBlock.CHECKIN)
                     {
 
-                        if (!t1_has_station || !t1_has_dryer || !t1_has_towel)
-                        {
-
-                            String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
-                            s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                            s1[t1_curr_index].transform.SetParent(layoutPanel1.transform);
-                            s1[t1_curr_index].transform.localScale = Vector3.one;
-
-                            resError("> ERROR: You can't dry without a station, a dryer and a towel.", 1);
-                            scrollToBottom();
-
-                        }
-                        else
-                        {
-
-                            // perform dry
-                            t1_did_dry = true;
-                        }
-
-                    }
-                    else if (b1[t1_curr_index].Substring(11, 4) == "wash")
-                    {
-
-                        if (!t1_has_station || !t1_has_shampoo || !t1_has_towel || !t1_has_conditioner)
-                        {
-
-                            String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
-                            s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                            s1[t1_curr_index].transform.SetParent(layoutPanel1.transform);
-                            s1[t1_curr_index].transform.localScale = Vector3.one;
-
-                            resError("> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.", 1);
-                            scrollToBottom();
-
-                        }
-                        else
-                        {
-
-                            // perform wash
-                            t1_did_wash = true;
-                        }
-
-                    }
-                    else if (b1[t1_curr_index].Substring(11, 5) == "groom")
-                    {
-
-                        if (!t1_has_brush || !t1_has_clippers)
-                        {
-
-                            String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
-                            s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                            s1[t1_curr_index].transform.SetParent(layoutPanel1.transform);
-                            s1[t1_curr_index].transform.localScale = Vector3.one;
-
-                            resError("> ERROR: You can't groom without a brush and some nail clippers.", 1);
-                            scrollToBottom();
-
-                        }
-                        else
-                        {
-
-                            // perform groom
-                            t1_did_groom = true;
-                        }
-
-                    }
-                    else if (b1[t1_curr_index].Substring(11, 7) == "checkin")
-                    {
-
-                        if (t1_checkedin)
+                        if (threads[0].isCheckedIn)
                         {
 
                             String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
@@ -1407,18 +1443,18 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                         {
 
                             // perform check-in
-                            t1_checkedin = true;
-                            t1_checkedout = false;
+                            threads[0].isCheckedIn = true;
+                            threads[0].isCheckedOut = false;
                         }
 
                     }
-                    else if (b1[t1_curr_index].Substring(11, 8) == "checkout")
+                    else if (threads[0].simBlocks[t1_curr_index].type == SimBlock.CHECKOUT)
                     {
                         foreach(KeyValuePair<string,bool> b in threads[0].needsTo)
                         {
                             Debug.Log(b.Key + b.Value + "<----");
                         }
-                        if ((threads[0].needsTo["Haircut"] && !t1_did_cut) || (threads[0].needsTo["Dry"] && !t1_did_dry) || (threads[0].needsTo["Wash"] && !t1_did_wash) || (threads[0].needsTo["Groom"] && !t1_did_groom))
+                        if ((threads[0].needsTo["Cut"] && !threads[0].did["Cut"]) || (threads[0].needsTo["Dry"] && !threads[0].did["Dry"]) || (threads[0].needsTo["Wash"] && !threads[0].did["Wash"]) || (threads[0].needsTo["Groom"] && !threads[0].did["Groom"]))
                         {
 
                             String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
@@ -1431,7 +1467,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                             scrollToBottom();
 
                         }
-                        else if (t1_has_brush || t1_has_clippers || t1_has_conditioner || t1_has_dryer || t1_has_scissors || t1_has_shampoo || t1_has_station || t1_has_towel)
+                        else if (threads[0].hasItems["brush"] || threads[0].hasItems["clippers"] || threads[0].hasItems["cond."] || threads[0].hasItems["dryer"] || threads[0].hasItems["scissors"] || threads[0].hasItems["shampoo"] || threads[0].hasItems["station"] || threads[0].hasItems["towel"])
                         {
 
                             String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
@@ -1443,7 +1479,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                             scrollToBottom();
 
                         }
-                        else if (t1_checkedout)
+                        else if (threads[0].isCheckedOut)
                         {
 
                             String actionText = s1[t1_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
@@ -1459,8 +1495,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                         {
 
                             // perform check-out
-                            t1_checkedin = false;
-                            t1_checkedout = true;
+                            threads[0].isCheckedIn = false;
+                            threads[0].isCheckedOut = true;
                         }
                     }
 
@@ -1494,16 +1530,16 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                     // {"[null]", "brush" ,"clippers" , "cond.", "dryer", "scissors", "shampoo", "station", "towel"};
 
-                    if (b2[t2_curr_index].Substring(11, 3) == "acq")
+                    if (threads[1].simBlocks[t1_curr_index].type == SimBlock.ACQUIIRE)
                     {
 
                         // acquiring resource
-                        switch (b2[t2_curr_index].Substring(21, 5))
+                        switch (threads[1].simBlocks[t1_curr_index].name)
                         {
 
                             case "brush":
 
-                                if (!t2_has_brush && t1_has_brush)
+                                if (!threads[1].hasItems["brush"] && threads[0].hasItems["brush"])
                                 { // need to wait for resource
 
                                     GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
@@ -1520,7 +1556,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 else
                                 {
 
-                                    int output1 = acquire(ref t2_has_brush);
+                                    int output1 = acquire(ref threads[1].hasItems, "brush");
                                     t2_canPrint = true;
 
                                     if (output1 < 0)
@@ -1531,9 +1567,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 break;
 
-                            case "clipp":
+                            case "clippers":
 
-                                if (!t2_has_clippers && t1_has_clippers)
+                                if (!threads[1].hasItems["clippers"] && threads[0].hasItems["clippers"])
                                 { // need to wait for resource
 
                                     GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
@@ -1550,7 +1586,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 else
                                 {
 
-                                    int output2 = acquire(ref t2_has_clippers);
+                                    int output2 = acquire(ref threads[1].hasItems, "clippers");
                                     t2_canPrint = true;
 
                                     if (output2 < 0)
@@ -1563,7 +1599,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                             case "cond.":
 
-                                if (!t2_has_conditioner && t1_has_conditioner)
+                                if (!threads[1].hasItems["cond."] && threads[0].hasItems["cond."])
                                 { // need to wait for resource
 
                                     GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
@@ -1580,7 +1616,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 else
                                 {
 
-                                    int output3 = acquire(ref t2_has_conditioner);
+                                    int output3 = acquire(ref threads[1].hasItems, "cond.");
                                     t2_canPrint = true;
 
                                     if (output3 < 0)
@@ -1593,7 +1629,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                             case "dryer":
 
-                                if (!t2_has_dryer && t1_has_dryer)
+                                if (!threads[1].hasItems["dryer"] && threads[0].hasItems["dryer"])
                                 { // need to wait for resource
 
                                     GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
@@ -1610,7 +1646,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 else
                                 {
 
-                                    int output4 = acquire(ref t2_has_dryer);
+                                    int output4 = acquire(ref threads[1].hasItems, "dryer");
                                     t2_canPrint = true;
 
                                     if (output4 < 0)
@@ -1621,9 +1657,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 break;
 
-                            case "sciss":
+                            case "scissors":
 
-                                if (!t2_has_scissors && t1_has_scissors)
+                                if (!threads[1].hasItems["scissors"] && threads[0].hasItems["scissors"])
                                 { // need to wait for resource
 
                                     GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
@@ -1640,7 +1676,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 else
                                 {
 
-                                    int output5 = acquire(ref t2_has_scissors);
+                                    int output5 = acquire(ref threads[1].hasItems, "scissors");
                                     t2_canPrint = true;
 
                                     if (output5 < 0)
@@ -1651,9 +1687,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 break;
 
-                            case "shamp":
+                            case "shampoo":
 
-                                if (!t2_has_shampoo && t1_has_shampoo)
+                                if (!threads[1].hasItems["shampoo"] && threads[0].hasItems["shampoo"])
                                 { // need to wait for resource
 
                                     GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
@@ -1670,7 +1706,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 else
                                 {
 
-                                    int output6 = acquire(ref t2_has_shampoo);
+                                    int output6 = acquire(ref threads[1].hasItems, "shampoo");
                                     t2_canPrint = true;
 
                                     if (output6 < 0)
@@ -1681,9 +1717,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 break;
 
-                            case "stati":
+                            case "station":
 
-                                if (!t2_has_station && t1_has_station)
+                                if (!threads[1].hasItems["station"] && threads[0].hasItems["station"])
                                 { // need to wait for resource
 
                                     GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
@@ -1700,7 +1736,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 else
                                 {
 
-                                    int output7 = acquire(ref t2_has_station);
+                                    int output7 = acquire(ref threads[1].hasItems, "station");
                                     t2_canPrint = true;
 
                                     if (output7 < 0)
@@ -1713,7 +1749,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                             case "towel":
 
-                                if (!t2_has_towel && t1_has_towel)
+                                if (!threads[1].hasItems["towel"] && threads[0].hasItems["towel"])
                                 { // need to wait for resource
 
                                     GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
@@ -1729,7 +1765,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 }
                                 else
                                 {
-                                    int output8 = acquire(ref t2_has_towel);
+                                    int output8 = acquire(ref threads[1].hasItems, "towel");
                                     t2_canPrint = true;
 
                                     if (output8 < 0)
@@ -1742,16 +1778,16 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                         }
 
                     }
-                    else if (b2[t2_curr_index].Substring(11, 3) == "ret")
+                    else if (threads[1].simBlocks[t1_curr_index].type == SimBlock.RETURN)
                     {
 
                         // returning resource
-                        switch (b2[t2_curr_index].Substring(20, 5))
+                        switch (threads[1].simBlocks[t1_curr_index].name)
                         {
 
                             case "brush":
 
-                                int output1 = return_res(ref t2_has_brush);
+                                int output1 = return_res(ref threads[1].hasItems, "brush");
 
                                 if (output1 < 0)
                                 {
@@ -1760,9 +1796,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 break;
 
-                            case "clipp":
+                            case "clippers":
 
-                                int output2 = return_res(ref t2_has_clippers);
+                                int output2 = return_res(ref threads[1].hasItems, "clippers");
 
                                 if (output2 < 0)
                                 {
@@ -1773,7 +1809,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                             case "cond.":
 
-                                int output3 = return_res(ref t2_has_conditioner);
+                                int output3 = return_res(ref threads[1].hasItems, "cond.");
 
                                 if (output3 < 0)
                                 {
@@ -1784,7 +1820,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                             case "dryer":
 
-                                int output4 = return_res(ref t2_has_dryer);
+                                int output4 = return_res(ref threads[1].hasItems, "dryer");
 
                                 if (output4 < 0)
                                 {
@@ -1793,9 +1829,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 break;
 
-                            case "sciss":
+                            case "scissors":
 
-                                int output5 = return_res(ref t2_has_scissors);
+                                int output5 = return_res(ref threads[1].hasItems, "scissors");
 
                                 if (output5 < 0)
                                 {
@@ -1804,9 +1840,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 break;
 
-                            case "shamp":
+                            case "shampoo":
 
-                                int output6 = return_res(ref t2_has_shampoo);
+                                int output6 = return_res(ref threads[1].hasItems, "shampoo");
 
                                 if (output6 < 0)
                                 {
@@ -1815,9 +1851,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 break;
 
-                            case "stati":
+                            case "station":
 
-                                int output7 = return_res(ref t2_has_station);
+                                int output7 = return_res(ref threads[1].hasItems, "station");
 
                                 if (output7 < 0)
                                 {
@@ -1828,7 +1864,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                             case "towel":
 
-                                int output8 = return_res(ref t2_has_towel);
+                                int output8 = return_res(ref threads[1].hasItems, "towel");
 
                                 if (output8 < 0)
                                 {
@@ -1839,102 +1875,109 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                         }
 
                     }
-                    else if (b2[t2_curr_index].Substring(11, 3) == "cut")
+                    else if(threads[1].simBlocks[t1_curr_index].type == SimBlock.WORK)
                     {
-
-                        if (!t2_has_brush || !t2_has_scissors)
+                        if (threads[1].simBlocks[t1_curr_index].name == "Cut")
                         {
 
-                            String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
-                            s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                            s2[t2_curr_index].transform.SetParent(layoutPanel2.transform);
-                            s2[t2_curr_index].transform.localScale = Vector3.one;
+                            if (!threads[1].hasItems["brush"] || !threads[1].hasItems["scissors"])
+                            {
 
-                            resError("> ERROR: You can't cut without a brush and some scissors.", 2);
-                            scrollToBottom();
+                                String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
+                                s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                s2[t2_curr_index].transform.SetParent(layoutPanel2.transform);
+                                s2[t2_curr_index].transform.localScale = Vector3.one;
+
+                                resError("> ERROR: You can't cut without a brush and some scissors.", 2);
+                                scrollToBottom();
+
+                            }
+                            else
+                            {
+
+                                // perform cut
+                                threads[1].did["Cut"] = true;
+                                t2_did_cut = true;
+                            }
 
                         }
-                        else
+                        else if (threads[1].simBlocks[t1_curr_index].name == "Dry")
                         {
 
-                            // perform cut
-                            t2_did_cut = true;
-                        }
+                            if (!threads[1].hasItems["station"] || !threads[1].hasItems["dryer"] || !threads[1].hasItems["towel"])
+                            {
 
+                                String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
+                                s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                s2[t2_curr_index].transform.SetParent(layoutPanel2.transform);
+                                s2[t2_curr_index].transform.localScale = Vector3.one;
+
+                                resError("> ERROR: You can't dry without a station, a dryer and a towel.", 2);
+                                scrollToBottom();
+
+                            }
+                            else
+                            {
+
+                                // perform dry
+                                threads[1].did["Dry"] = true;
+                                t2_did_dry = true;
+                            }
+
+                        }
+                        else if (threads[1].simBlocks[t1_curr_index].name == "Wash")
+                        {
+
+                            if (!threads[1].hasItems["station"] || !threads[1].hasItems["shampoo"] || !threads[1].hasItems["towel"] || !threads[1].hasItems["cond."])
+                            {
+
+                                String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
+                                s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                s2[t2_curr_index].transform.SetParent(layoutPanel2.transform);
+                                s2[t2_curr_index].transform.localScale = Vector3.one;
+
+                                resError("> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.", 2);
+                                scrollToBottom();
+
+                            }
+                            else
+                            {
+
+                                // perform wash
+                                threads[1].did["Wash"] = true;
+                                t2_did_wash = true;
+                            }
+
+                        }
+                        else if (threads[1].simBlocks[t1_curr_index].name == "Groom")
+                        {
+
+                            if (!threads[1].hasItems["brush"] || !threads[1].hasItems["clippers"])
+                            {
+
+                                String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
+                                s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                s2[t2_curr_index].transform.SetParent(layoutPanel2.transform);
+                                s2[t2_curr_index].transform.localScale = Vector3.one;
+
+                                resError("> ERROR: You can't groom without a brush and some nail clippers.", 2);
+                                scrollToBottom();
+
+                            }
+                            else
+                            {
+
+                                // perform groom
+                                threads[1].did["Groom"] = true;
+                                t2_did_groom = true;
+                            }
+
+                        }
                     }
-                    else if (b2[t2_curr_index].Substring(11, 3) == "dry")
+                    else if (threads[1].simBlocks[t1_curr_index].type == SimBlock.CHECKIN)
                     {
 
-                        if (!t2_has_station || !t2_has_dryer || !t2_has_towel)
-                        {
-
-                            String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
-                            s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                            s2[t2_curr_index].transform.SetParent(layoutPanel2.transform);
-                            s2[t2_curr_index].transform.localScale = Vector3.one;
-
-                            resError("> ERROR: You can't dry without a station, a dryer and a towel.", 2);
-                            scrollToBottom();
-
-                        }
-                        else
-                        {
-
-                            // perform dry
-                            t2_did_dry = true;
-                        }
-
-                    }
-                    else if (b2[t2_curr_index].Substring(11, 4) == "wash")
-                    {
-
-                        if (!t2_has_station || !t2_has_shampoo || !t2_has_towel || !t2_has_conditioner)
-                        {
-
-                            String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
-                            s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                            s2[t2_curr_index].transform.SetParent(layoutPanel2.transform);
-                            s2[t2_curr_index].transform.localScale = Vector3.one;
-
-                            resError("> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.", 2);
-                            scrollToBottom();
-
-                        }
-                        else
-                        {
-
-                            // perform wash
-                            t2_did_wash = true;
-                        }
-
-                    }
-                    else if (b2[t2_curr_index].Substring(11, 5) == "groom")
-                    {
-
-                        if (!t2_has_brush || !t2_has_clippers)
-                        {
-
-                            String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
-                            s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                            s2[t2_curr_index].transform.SetParent(layoutPanel2.transform);
-                            s2[t2_curr_index].transform.localScale = Vector3.one;
-
-                            resError("> ERROR: You can't groom without a brush and some nail clippers.", 2);
-                            scrollToBottom();
-
-                        }
-                        else
-                        {
-
-                            // perform groom
-                            t2_did_groom = true;
-                        }
-
-                    }
-                    else if (b2[t2_curr_index].Substring(11, 7) == "checkin")
-                    {
-
-                        if (t2_checkedin)
+                        if (threads[1].isCheckedIn)
                         {
 
                             String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
@@ -1950,15 +1993,15 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                         {
 
                             // perform check-in
-                            t2_checkedin = true;
-                            t2_checkedout = false;
+                            threads[1].isCheckedIn = true;
+                            threads[1].isCheckedOut = false;
                         }
 
                     }
-                    else if (b2[t2_curr_index].Substring(11, 8) == "checkout")
+                    else if (threads[1].simBlocks[t1_curr_index].type == SimBlock.CHECKOUT)
                     {
 
-                        if ((t2_needs_cut && !t2_did_cut) || (t2_needs_dry && !t2_did_dry) || (t2_needs_wash && !t2_did_wash) || (t2_needs_groom && !t2_did_groom))
+                        if ((threads[1].needsTo["Cut"] && !threads[1].did["Cut"]) || (threads[1].needsTo["Dry"] && !threads[1].did["Dry"]) || (threads[1].needsTo["Wash"] && !threads[1].did["Wash"]) || (threads[1].needsTo["Groom"] && !threads[1].did["Groom"]))
                         {
 
                             String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
@@ -1971,7 +2014,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                             scrollToBottom();
 
                         }
-                        else if (t2_has_brush || t2_has_clippers || t2_has_conditioner || t2_has_dryer || t2_has_scissors || t2_has_shampoo || t2_has_station || t2_has_towel)
+                        else if (threads[1].hasItems["brush"] || threads[1].hasItems["clippers"] || threads[1].hasItems["cond."] || threads[1].hasItems["dryer"] || threads[1].hasItems["scissors"] || threads[1].hasItems["shampoo"] || threads[1].hasItems["station"] || threads[1].hasItems["towel"])
                         {
 
                             String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
@@ -1983,7 +2026,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                             scrollToBottom();
 
                         }
-                        else if (t2_checkedout)
+                        else if (threads[1].isCheckedOut)
                         {
 
                             String actionText = s2[t2_curr_index].transform.Find("ActionText").GetComponent<Text>().text;
@@ -1999,8 +2042,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                         {
 
                             // perform check-out
-                            t2_checkedin = false;
-                            t2_checkedout = true;
+                            threads[1].isCheckedIn = false;
+                            threads[1].isCheckedOut = true;
                         }
                     }
 
@@ -2112,10 +2155,10 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         terminateSimulation(msg);
     }
 
-    int acquire(ref bool resource)
+    int acquire(ref Dictionary<string,bool> dict, string name)
     {
 
-        if (resource)
+        if (dict[name])
         {
 
             err = true;
@@ -2129,16 +2172,16 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         else
         {
 
-            resource = true;
+            dict[name] = true;
             return 0;
         }
 
     }
 
-    int return_res(ref bool resource)
+    int return_res(ref Dictionary<string, bool> dict, string name)
     {
 
-        if (!resource)
+        if (!dict[name])
         {
 
             err = true;
@@ -2151,7 +2194,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         }
         else
         {
-            resource = false;
+            dict[name] = false;
 
             return 0;
         }
