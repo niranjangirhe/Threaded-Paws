@@ -260,14 +260,12 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
             if (child.GetComponent<Draggable>().typeOfItem == Draggable.Type.ACTION)
             {
 
-                //Debug.Log ("TYPE ACTION");
 
                 // action block is a GET action
                 if (threads[0].blocks[i].transform.GetComponentInChildren<Text>().text == "get")
                 {
 
                     string resource = threads[0].blocks[i].transform.Find("Dropdown").Find("Label").GetComponent<Text>().text;
-
                     if (resource == "[null]")
                     {
                         terminateSimulation("Please select a resource to acquire in thread 1.");
@@ -471,15 +469,10 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
             if (child.GetComponent<Draggable>().typeOfItem == Draggable.Type.ACTION)
             {
-
-                //Debug.Log ("TYPE ACTION");
-
                 // action block is a GET action
                 if (threads[1].blocks[i].transform.GetComponentInChildren<Text>().text == "get")
                 {
-
                     string resource = threads[1].blocks[i].transform.Find("Dropdown").Find("Label").GetComponent<Text>().text;
-
                     if (resource == "[null]")
                     {
 
@@ -902,7 +895,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                     GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
                                     newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/brush"); 
+                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/brush");
                                     newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for brush...</color>";
                                     newItem.transform.SetParent(threads[0].layoutPanel.transform);
                                     newItem.transform.localScale = Vector3.one;
@@ -914,7 +907,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 else
                                 {
 
-                                    int output = acquire(ref threads[0].hasItems,"brush");
+                                    int output = acquire(ref threads[0].hasItems, "brush");
                                     t1_canPrint = true;
 
                                     if (output < 0)
@@ -1144,7 +1137,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                             case "brush":
 
-                                int output1 = return_res(ref threads[0].hasItems,"brush");
+                                int output1 = return_res(ref threads[0].hasItems, "brush");
 
                                 if (output1 < 0)
                                 {
@@ -1232,7 +1225,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                         }
 
                     }
-                    else if(threads[0].simBlocks[t1_curr_index].type == SimBlock.WORK)
+                    else if (threads[0].simBlocks[t1_curr_index].type == SimBlock.WORK)
                     {
                         if (threads[0].simBlocks[t1_curr_index].name == "Cut")
                         {
@@ -1352,7 +1345,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                     }
                     else if (threads[0].simBlocks[t1_curr_index].type == SimBlock.CHECKOUT)
                     {
-                        foreach(KeyValuePair<string,bool> b in threads[0].needsTo)
+                        foreach (KeyValuePair<string, bool> b in threads[0].needsTo)
                         {
                             Debug.Log(b.Key + b.Value + "<----");
                         }
@@ -1432,11 +1425,11 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                     // {"[null]", "brush" ,"clippers" , "cond.", "dryer", "scissors", "shampoo", "station", "towel"};
 
-                    if (threads[1].simBlocks[t1_curr_index].type == SimBlock.ACQUIIRE)
+                    if (threads[1].simBlocks[t2_curr_index].type == SimBlock.ACQUIIRE)
                     {
 
                         // acquiring resource
-                        switch (threads[1].simBlocks[t1_curr_index].name)
+                        switch (threads[1].simBlocks[t2_curr_index].name)
                         {
 
                             case "brush":
@@ -1680,11 +1673,11 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                         }
 
                     }
-                    else if (threads[1].simBlocks[t1_curr_index].type == SimBlock.RETURN)
+                    else if (threads[1].simBlocks[t2_curr_index].type == SimBlock.RETURN)
                     {
 
                         // returning resource
-                        switch (threads[1].simBlocks[t1_curr_index].name)
+                        switch (threads[1].simBlocks[t2_curr_index].name)
                         {
 
                             case "brush":
@@ -1777,9 +1770,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                         }
 
                     }
-                    else if(threads[1].simBlocks[t1_curr_index].type == SimBlock.WORK)
+                    else if (threads[1].simBlocks[t2_curr_index].type == SimBlock.WORK)
                     {
-                        if (threads[1].simBlocks[t1_curr_index].name == "Cut")
+                        if (threads[1].simBlocks[t2_curr_index].name == "Cut")
                         {
 
                             if (!threads[1].hasItems["brush"] || !threads[1].hasItems["scissors"])
@@ -1802,7 +1795,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                             }
 
                         }
-                        else if (threads[1].simBlocks[t1_curr_index].name == "Dry")
+                        else if (threads[1].simBlocks[t2_curr_index].name == "Dry")
                         {
 
                             if (!threads[1].hasItems["station"] || !threads[1].hasItems["dryer"] || !threads[1].hasItems["towel"])
@@ -1825,7 +1818,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                             }
 
                         }
-                        else if (threads[1].simBlocks[t1_curr_index].name == "Wash")
+                        else if (threads[1].simBlocks[t2_curr_index].name == "Wash")
                         {
 
                             if (!threads[1].hasItems["station"] || !threads[1].hasItems["shampoo"] || !threads[1].hasItems["towel"] || !threads[1].hasItems["cond."])
@@ -1848,7 +1841,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                             }
 
                         }
-                        else if (threads[1].simBlocks[t1_curr_index].name == "Groom")
+                        else if (threads[1].simBlocks[t2_curr_index].name == "Groom")
                         {
 
                             if (!threads[1].hasItems["brush"] || !threads[1].hasItems["clippers"])
