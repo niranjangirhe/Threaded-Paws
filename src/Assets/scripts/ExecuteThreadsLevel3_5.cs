@@ -10,7 +10,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 {
 
 
-    //----- Niranjan Variables ------
 
     [System.Serializable]
     public class Thread
@@ -19,7 +18,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         public List<GameObject> ticks;
         public List<GameObject> innerTicks;
 
-        //ThreadData (Niranjan's Datastructure (New oops))
+        //ThreadData
         public WorkList workList = new WorkList();
         public List<SimBlock> simBlocks = new List<SimBlock>();
 
@@ -27,7 +26,12 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         [HideInInspector] public Transform[] blocks;
 
         //Tab (Grandparent of blocks)
+        public GameObject layout;
         public GameObject tab;
+
+        //sprites Dog and worker
+        [HideInInspector] public Sprite dogSprite;
+        [HideInInspector] public Sprite workerSprite;
 
         //stores the bool for all works
         [HideInInspector] public bool isCheckedIn;
@@ -58,11 +62,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     public GameObject layoutPanel2;
     public Text stepsIndicator;
 
-    //Privatized (Dogs and workers will be randomly picked. Done to reduce script attachments)
-    private Sprite dogSprite1;
-    private Sprite dogSprite2;
-    private Sprite workerSprite1;
-    private Sprite workerSprite2;
 
     //Remove as it had no use
     //private Sprite displayErrorSprite;
@@ -79,53 +78,11 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     public GameObject runButton;
     public GameObject stopButton;
 
-
-    Transform[] blocks_t1;
-    Transform[] blocks_t2;
-
     bool stop;
     bool err;
     bool paused;
     bool lost;
 
-
-    bool t1_has_brush;
-    bool t1_has_clippers;
-    bool t1_has_conditioner;
-    bool t1_has_dryer;
-    bool t1_has_scissors;
-    bool t1_has_shampoo;
-    bool t1_has_station;
-    bool t1_has_towel;
-
-
-    bool t2_has_brush;
-    bool t2_has_clippers;
-    bool t2_has_conditioner;
-    bool t2_has_dryer;
-    bool t2_has_scissors;
-    bool t2_has_shampoo;
-    bool t2_has_station;
-    bool t2_has_towel;
-
-
-    bool t1_did_cut;
-    bool t1_did_dry;
-    bool t1_did_wash;
-    bool t1_did_groom;
-    
-    bool t2_needs_cut;
-    bool t2_needs_dry;
-    bool t2_needs_wash;
-    bool t2_needs_groom;
-    bool t2_did_cut;
-    bool t2_did_dry;
-    bool t2_did_wash;
-    bool t2_did_groom;
-    bool t1_checkedin;
-    bool t1_checkedout;
-    bool t2_checkedin;
-    bool t2_checkedout;
 
     string returnErrMsg = "> ERROR: You are trying to return a resource you don't have.";
     string acquireErrMsg = "> ERROR: You are trying to acquire a resource you already have.";
@@ -136,14 +93,14 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         //Initilize a Random dogs from each halves;
         UnityEngine.Object[] s = Resources.LoadAll("sprites/dogs", typeof(Sprite));
         int len = s.Length;
-        dogSprite1 = (Sprite)s[Random.Range(0, len / 2 - 1)];
-        dogSprite2 = (Sprite)s[Random.Range(len / 2, len - 1)];
+        threads[0].dogSprite = (Sprite)s[Random.Range(0, len / 2 - 1)];
+        threads[1].dogSprite = (Sprite)s[Random.Range(len / 2, len - 1)];
 
         //Initilize a Random worker from each halves;
         s = Resources.LoadAll("sprites/workers", typeof(Sprite));
         len = s.Length;
-        workerSprite1 = (Sprite)s[Random.Range(0, len / 2 - 1)];
-        workerSprite2 = (Sprite)s[Random.Range(len / 2, len - 1)];
+        threads[0].workerSprite = (Sprite)s[Random.Range(0, len / 2 - 1)];
+        threads[1].workerSprite = (Sprite)s[Random.Range(len / 2, len - 1)];
 
         //Initilize display error image (no need if project doesn't have error)
         //displayErrorSprite = Resources.Load<Sprite>("sprites/error");
@@ -154,7 +111,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
             System.Reflection.FieldInfo[] varWorklist = t.workList.GetType().GetFields();
             foreach (System.Reflection.FieldInfo v in varWorklist)
             {
-                t.needsTo.Add(v.Name, (bool)v.GetValue(t.workList));
+                t.needsTo.Add(v.Name, ((Action)v.GetValue(t.workList)).isneeded);
                 t.did.Add(v.Name, false);
             }
             foreach(string key in dropDownManager.options)
@@ -232,33 +189,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         clearAllClones();
         clearVerticalLayouts();
 
-        //t1_did_cut = false;
-        //t1_did_dry = false;
-        //t1_did_wash = false;
-        //t1_did_groom = false;
-
-        //t2_did_cut = false;
-        //t2_did_dry = false;
-        //t2_did_wash = false;
-        //t2_did_groom = false;
-
-
-        // ----- SET UP FOR LOLA AND ROCKY, CUSTOMERS FOR LEVEL 3 -----
-
-        /*
-        t1_needs_cut = true;
-        t1_needs_dry = false;
-        t1_needs_wash = true;
-        t1_needs_groom = false;
-
-        t2_needs_cut = true;
-        t2_needs_dry = true;
-        t2_needs_wash = false;
-        t2_needs_groom = false;
-        */
-
-        // ------ START EXECUTE THREADS -------
-
         try
         {
             GameObject.Find("InformationPanel").SetActive(false);
@@ -276,28 +206,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         err = false;
         paused = false;
         lost = false;
-
-
-
-        //t1_has_brush = false;
-        //t1_has_clippers = false;
-        //t1_has_conditioner = false;
-        //t1_has_dryer = false;
-        //t1_has_scissors = false;
-        //t1_has_shampoo = false;
-        //t1_has_station = false;
-        //t1_has_towel = false;
-
-        //t2_has_brush = false;
-        //t2_has_clippers = false;
-        //t2_has_conditioner = false;
-        //t2_has_dryer = false;
-        //t2_has_scissors = false;
-        //t2_has_shampoo = false;
-        //t2_has_station = false;
-        //t2_has_towel = false;
-
-
 
         try
         {
@@ -339,7 +247,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
         // retrieving the objects (blocks) current in thread 1
 
-        blocks_t1 = GetActionBlocks_MultiThreads("1"); 
+        threads[0].blocks = GetActionBlocks_MultiThreads("1"); 
             
 
         // this structure will store the text lines to display
@@ -348,7 +256,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
 
         int i = 0;
-        foreach (Transform child in blocks_t1)
+        foreach (Transform child in threads[0].blocks)
         {
 
             if (child.GetComponent<Draggable>().typeOfItem == Draggable.Type.ACTION)
@@ -357,10 +265,10 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                 //Debug.Log ("TYPE ACTION");
 
                 // action block is a GET action
-                if (blocks_t1[i].transform.GetComponentInChildren<Text>().text == "get")
+                if (threads[0].blocks[i].transform.GetComponentInChildren<Text>().text == "get")
                 {
 
-                    string resource = blocks_t1[i].transform.Find("Dropdown").Find("Label").GetComponent<Text>().text;
+                    string resource = threads[0].blocks[i].transform.Find("Dropdown").Find("Label").GetComponent<Text>().text;
 
                     if (resource == "[null]")
                     {
@@ -382,7 +290,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                         // create new object from prefab
                         GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = workerSprite1;
+                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = threads[0].workerSprite;
                         newItem.transform.Find("AcqRet").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/acquire");
 
                         Sprite item;
@@ -415,10 +323,10 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                     // action block is a RETURN action
                 }
-                else if (blocks_t1[i].transform.GetComponentInChildren<Text>().text == "ret")
+                else if (threads[0].blocks[i].transform.GetComponentInChildren<Text>().text == "ret")
                 {
 
-                    string resource = blocks_t1[i].transform.Find("Dropdown").Find("Label").GetComponent<Text>().text;
+                    string resource = threads[0].blocks[i].transform.Find("Dropdown").Find("Label").GetComponent<Text>().text;
 
                     if (resource == "[null]")
                     {
@@ -439,7 +347,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                         // create new object from prefab
                         GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = workerSprite1;
+                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = threads[0].workerSprite;
                         newItem.transform.Find("AcqRet").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/return");
 
                         Sprite item;
@@ -474,7 +382,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                 else
                 {
 
-                    String action = blocks_t1[i].transform.GetComponentInChildren<Text>().text;
+                    String action = threads[0].blocks[i].transform.GetComponentInChildren<Text>().text;
                     //blocks_names_t1.Add("[thread 1] " + action + ";");
                     InputWorkerData inpt = new InputWorkerData { action = action, typeOf = "Action" };
                     LogManager.instance.logger.sendInputWorkerOne(action, "Action", LogManager.instance.UniEndTime().ToString());
@@ -490,8 +398,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                         // Debug.Log ("CHECKING IN");
                         threads[0].simBlocks.Add(new SimBlock(SimBlock.CHECKIN, ""));
-                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = workerSprite1;
-                        newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = dogSprite1;
+                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = threads[0].workerSprite;
+                        newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = threads[0].dogSprite;
                         newItem.transform.Find("AcqRet").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/acquire");
 
                     }
@@ -500,8 +408,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                         // Debug.Log ("CHECKING OUT");
                         threads[0].simBlocks.Add(new SimBlock(SimBlock.CHECKOUT, ""));
-                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = workerSprite1;
-                        newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = dogSprite1;
+                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = threads[0].workerSprite;
+                        newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = threads[0].dogSprite;
                         newItem.transform.Find("AcqRet").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/return");
 
                     }
@@ -509,7 +417,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                     {
 
                         // create new object from prefab (single action)
-                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = dogSprite1;
+                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = threads[0].dogSprite;
                         threads[0].simBlocks.Add(new SimBlock(SimBlock.WORK, action));
                         Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
 
@@ -552,7 +460,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         // int thread2_whilesChildren = 0;
 
         // retrieving the objects (blocks) current in thread 1
-        blocks_t2 = GetActionBlocks_MultiThreads("2");
+        threads[1].blocks = GetActionBlocks_MultiThreads("2");
 
         // this structure will store the text lines to display
         //List<string> blocks_names_t2 = new List<string>();
@@ -560,7 +468,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
         i = 0;
 
-        foreach (Transform child in blocks_t2)
+        foreach (Transform child in threads[1].blocks)
         {
 
             if (child.GetComponent<Draggable>().typeOfItem == Draggable.Type.ACTION)
@@ -569,10 +477,10 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                 //Debug.Log ("TYPE ACTION");
 
                 // action block is a GET action
-                if (blocks_t2[i].transform.GetComponentInChildren<Text>().text == "get")
+                if (threads[1].blocks[i].transform.GetComponentInChildren<Text>().text == "get")
                 {
 
-                    string resource = blocks_t2[i].transform.Find("Dropdown").Find("Label").GetComponent<Text>().text;
+                    string resource = threads[1].blocks[i].transform.Find("Dropdown").Find("Label").GetComponent<Text>().text;
 
                     if (resource == "[null]")
                     {
@@ -595,7 +503,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                         // create new object from prefab
                         GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = workerSprite2;
+                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = threads[1].workerSprite;
                         newItem.transform.Find("AcqRet").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/acquire");
 
                         Sprite item;
@@ -628,10 +536,10 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                     // action block is a RETURN action
                 }
-                else if (blocks_t2[i].transform.GetComponentInChildren<Text>().text == "ret")
+                else if (threads[1].blocks[i].transform.GetComponentInChildren<Text>().text == "ret")
                 {
 
-                    string resource = blocks_t2[i].transform.Find("Dropdown").Find("Label").GetComponent<Text>().text;
+                    string resource = threads[1].blocks[i].transform.Find("Dropdown").Find("Label").GetComponent<Text>().text;
 
                     if (resource == "[null]")
                     {
@@ -654,7 +562,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                         // create new object from prefab
                         GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = workerSprite2;
+                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = threads[1].workerSprite;
                         newItem.transform.Find("AcqRet").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/return");
 
                         Sprite item;
@@ -688,7 +596,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                 else
                 {
 
-                    String action = blocks_t2[i].transform.GetComponentInChildren<Text>().text;
+                    String action = threads[1].blocks[i].transform.GetComponentInChildren<Text>().text;
                     
                     //blocks_names_t2.Add("[thread 2] " + action + ";");
                     InputWorkerData inpt = new InputWorkerData { action = action, typeOf = "Action" };
@@ -705,8 +613,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                         threads[1].simBlocks.Add(new SimBlock(SimBlock.CHECKIN, ""));
                         //Debug.Log ("CHECKING IN");
 
-                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = workerSprite2;
-                        newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = dogSprite2;
+                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = threads[1].workerSprite;
+                        newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = threads[1].dogSprite;
                         newItem.transform.Find("AcqRet").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/acquire");
 
                     }
@@ -715,8 +623,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                         // Debug.Log ("CHECKING OUT");
                         threads[1].simBlocks.Add(new SimBlock(SimBlock.CHECKOUT, ""));
-                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = workerSprite2;
-                        newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = dogSprite2;
+                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = threads[1].workerSprite;
+                        newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = threads[1].dogSprite;
                         newItem.transform.Find("AcqRet").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/return");
 
                     }
@@ -724,7 +632,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                     {
 
                         // create new object from prefab (single action)
-                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = dogSprite2;
+                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = threads[1].dogSprite;
                         threads[1].simBlocks.Add(new SimBlock(SimBlock.WORK, action));
                         Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
 
@@ -763,7 +671,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
             }
         }
 
-        if (blocks_t1.Length < 1)
+        if (threads[0].blocks.Length < 1)
         {
 
             manager.showError("There are no actions to run in thread 1.");
@@ -771,7 +679,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
             return;
         }
 
-        if (blocks_t2.Length < 1)
+        if (threads[1].blocks.Length < 1)
         {
 
             manager.showError("There are no actions to run in thread 2.");
@@ -860,7 +768,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                 try
                 {
                    
-                    g.SetActive((bool)t.workList.GetType().GetField(g.name).GetValue(t.workList)) ;
+                    g.SetActive(((Action)t.workList.GetType().GetField(g.name).GetValue(t.workList)).isneeded) ;
                     
                 }
                 catch(Exception e)
@@ -874,7 +782,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                 try
                 {
 
-                    g.SetActive((bool)t.workList.GetType().GetField(g.name).GetValue(t.workList));
+                    g.SetActive(((Action)t.workList.GetType().GetField(g.name).GetValue(t.workList)).isneeded);
 
                 }
                 catch (Exception e)
@@ -1348,7 +1256,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 // perform cut
                                 threads[0].did["Cut"] = true;
-                                t1_did_cut = true;
                             }
                         }
                         else if (threads[0].simBlocks[t1_curr_index].name == "Dry")
@@ -1371,7 +1278,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 // perform dry
                                 threads[0].did["Dry"] = true;
-                                t1_did_dry = true;
                             }
 
                         }
@@ -1395,7 +1301,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 // perform wash
                                 threads[0].did["Wash"] = true;
-                                t1_did_wash = true;
                             }
 
                         }
@@ -1419,7 +1324,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 // perform groom
                                 threads[0].did["Groom"] = true;
-                                t1_did_groom = true;
                             }
 
                         }
@@ -1897,7 +1801,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 // perform cut
                                 threads[1].did["Cut"] = true;
-                                t2_did_cut = true;
                             }
 
                         }
@@ -1921,7 +1824,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 // perform dry
                                 threads[1].did["Dry"] = true;
-                                t2_did_dry = true;
                             }
 
                         }
@@ -1945,7 +1847,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 // perform wash
                                 threads[1].did["Wash"] = true;
-                                t2_did_wash = true;
                             }
 
                         }
@@ -1969,7 +1870,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 // perform groom
                                 threads[1].did["Groom"] = true;
-                                t2_did_groom = true;
                             }
 
                         }

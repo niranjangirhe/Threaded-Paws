@@ -12,10 +12,10 @@ using UnityEngine;
 [System.Serializable]
 public class WorkList
 {
-    public bool Dry;
-    public bool Wash;
-    public bool Cut;
-    public bool Groom;
+    public Action Dry = new Action("Dry",new List<string> { "station","towel","dryer"});
+    public Action Wash = new Action("Wash", new List<string> { "station", "towel","shampoo","cond." });
+    public Action Cut = new Action("Cut", new List<string> { "scissors", "brush" });
+    public Action Groom = new Action("Groom", new List<string> { "clippers", "brush" });
 }
 
 public class SimBlock
