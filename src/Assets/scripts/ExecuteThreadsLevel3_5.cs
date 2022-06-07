@@ -218,8 +218,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
             lost = false;
         }
 
-
         //------------- Extract block sequence from FE ---------
+        int count = 0;
         foreach (Thread t in threads)
         {
             int i = 0;
@@ -237,19 +237,17 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                         string resource = t.blocks[i].transform.Find("Dropdown").Find("Label").GetComponent<Text>().text;
                         if (resource == "[null]")
                         {
-                            terminateSimulation("Please select a resource to acquire in thread 1.");
-                            manager.showError("Please select a resource to acquire in thread 1.");
+                            terminateSimulation("Please select a resource to acquire in thread "+count);
+                            manager.showError("Please select a resource to acquire in thread "+count);
                             return;
 
                         }
                         else
                         {
                             t.simBlocks.Add(new SimBlock(SimBlock.ACQUIIRE, resource));
-                            //blocks_names_t1.Add("[thread 1] acquire ( " + resource + " );");
                             InputWorkerData inpt = new InputWorkerData { action = resource, typeOf = "Acquire" };
                             LogManager.instance.logger.sendInputWorkerOne(resource, "Acquire", LogManager.instance.UniEndTime().ToString());
                             GameLogData.inputList_t1.Add(inpt);
-                            //						LogData.inputList_t1.Add ("Acquire: " + resource);
 
                             i++;
 
@@ -275,18 +273,16 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                         if (resource == "[null]")
                         {
-                            terminateSimulation("Please select a resource to return in thread 1.");
-                            manager.showError("Please select a resource to return in thread 1.");
+                            terminateSimulation("Please select a resource to return in thread "+count);
+                            manager.showError("Please select a resource to return in thread "+count);
                             return;
                         }
                         else
                         {
                             t.simBlocks.Add(new SimBlock(SimBlock.RETURN, resource));
-                            //blocks_names_t1.Add("[thread 1] return ( " + resource + " );");
                             InputWorkerData inpt = new InputWorkerData { action = resource, typeOf = "Return" };
                             LogManager.instance.logger.sendInputWorkerOne(resource, "Return", LogManager.instance.UniEndTime().ToString());
                             GameLogData.inputList_t1.Add(inpt);
-                            //						LogData.inputList_t1.Add ("Return: " + resource);
 
                             i++;
 
@@ -308,11 +304,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                     {
 
                         String action = t.blocks[i].transform.GetComponentInChildren<Text>().text;
-                        //blocks_names_t1.Add("[thread 1] " + action + ";");
                         InputWorkerData inpt = new InputWorkerData { action = action, typeOf = "Action" };
                         LogManager.instance.logger.sendInputWorkerOne(action, "Action", LogManager.instance.UniEndTime().ToString());
                         GameLogData.inputList_t1.Add(inpt);
-                        //					LogData.inputList_t1.Add ("Action: " + action);
 
                         i++;
 
@@ -353,88 +347,32 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                     }
                 }
             }
-        }
-        if (threads[0].blocks.Length < 1)
-        {
-
-            manager.showError("There are no actions to run in thread 1.");
-            terminateSimulation("There are no actions to run in thread 1.");
-            return;
-        }
-
-        if (threads[1].blocks.Length < 1)
-        {
-
-            manager.showError("There are no actions to run in thread 2.");
-            terminateSimulation("There are no actions to run in thread 2.");
-            return;
-        }
-
-        try
-        {
-            /*
-            if ((blocks_names_t1[0].Substring(11, 7) != "checkin"  ) || (blocks_names_t2[0].Substring(11, 7) != "checkin"  ))
+            if (t.blocks.Length < 1)
             {
-                manager.showError("Remember to always check-in your costumer first!");
-                terminateSimulation("Remember to always check-in your costumer first!");
+
+                manager.showError("There are no actions to run in thread "+count);
+                terminateSimulation("There are no actions to run in thread "+count);
                 return;
             }
-            */
 
-
-            //Check If Checkin block is present
-            Debug.Log("spd: "+ threads[0].simBlocks[0].type);
-            Debug.Log("spd: " + threads[1].simBlocks[0].type);
-
-            if ((threads[0].simBlocks[0].type != SimBlock.CHECKIN ) || (threads[1].simBlocks[0].type != SimBlock.CHECKIN))
+            try
             {
+                if ((t.simBlocks[0].type != SimBlock.CHECKIN) || (t.simBlocks[0].type != SimBlock.CHECKIN))
+                {
+                    manager.showError("Remember to always check-in your costumer first!");
+                    terminateSimulation("Remember to always check-in your costumer first!");
+                    return;
+                }
 
+            }
+            catch
+            {
                 manager.showError("Remember to always check-in your costumer first!");
                 terminateSimulation("Remember to always check-in your costumer first!");
                 return;
             }
 
         }
-        catch
-        {
-            Debug.Log("spd: catched");
-            manager.showError("Remember to always check-in your costumer first!");
-            terminateSimulation("Remember to always check-in your costumer first!");
-            return;
-        }
-
-        try
-        {
-
-            /*
-            if ((blocks_names_t1[blocks_names_t1.Count - 1].Substring(11, 8) != "checkout") ||
-                (blocks_names_t2[blocks_names_t2.Count - 1].Substring(11, 8) != "checkout"))
-            {
-
-                manager.showError("Remember to always check-out your costumer when you're done!");
-                terminateSimulation("Remember to always check-out your costumer when you're done!");
-                return;
-            }*/
-
-
-            //Check If Checkout block is present
-            if ((threads[0].simBlocks.Last().type != SimBlock.CHECKOUT) || (threads[1].simBlocks.Last().type != SimBlock.CHECKOUT))
-            {
-
-                manager.showError("Remember to always check-out your costumer when you're done!");
-                terminateSimulation("Remember to always check-out your costumer when you're done!");
-                return;
-            }
-
-        }
-        catch
-        {
-
-            manager.showError("Remember to always check-out your costumer when you're done!");
-            terminateSimulation("Remember to always check-out your costumer when you're done!");
-            return;
-        }
-
         if (!err)
         {
             StartCoroutine(printThreads(threads[0].simulationImages, threads[1].simulationImages, 5));
@@ -480,23 +418,30 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     IEnumerator printThreads(List<GameObject> s1, List<GameObject> s2, int speed)
     {
 
-        // waitOneSecond ();
-
-        // scrollToTop ();
+        
 
         bar.currentAmount = 0;
 
-        // int step_counter = 1;
-        threads[0].currIndex = 0;
-        threads[1].currIndex = 0;
 
-        threads[0].canPrint = true;
-        threads[1].canPrint = true;
+        foreach (Thread t in threads)
+        {
+            t.currIndex = 0;
+            t.canPrint = true;
+        }
 
         int j = 0;
-
-        while ((threads[0].currIndex < threads[0].simBlocks.Count) || (threads[1].currIndex < threads[1].simBlocks.Count))
+        bool whileStop = false;
+        while (!whileStop)
         {
+            whileStop = true;
+            foreach (Thread t in threads)
+            {
+                if(t.currIndex<t.simBlocks.Count)
+                {
+                    whileStop = false;
+                    break;
+                }
+            }
 
             if (bar.currentAmount < 100)
             {
@@ -510,1146 +455,206 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                 LogManager.instance.logger.sendChronologicalLogs("Level03Lost", "", LogManager.instance.UniEndTime().ToString());
                 manager.gameLost();
 
-                //logging
+                //------- logging -----------
                 GameLogData.isLevelCleared = false;
-                //	LogData.levelSteps = j;
                 GameLogData.levelClearedTime = LogManager.instance.EndTimer();
                 GameLogData.levelClearAmount = bar.currentAmount;
                 GameLogData.failedReason = "Times up! GameLost";
                 LogManager.instance.failCount++;
                 GameLogData.failedAttempts = LogManager.instance.failCount;
                 LogManager.instance.CreateLogData();
-
                 LogManager.instance.isQuitLogNeed = false;
-
                 stop = true;
                 paused = true;
                 lost = true;
-
                 stopButton.transform.GetComponent<Button>().interactable = false;
-
                 yield return 0;
             }
 
             if (stop)
             {
-
                 if (!paused)
                 {
-
                     try
                     {
-
                         disablePanel.SetActive(false);
-
                     }
                     catch
                     {
-
                         Debug.Log("Cannot disable DisablePanel");
                     }
-
                     runButton.transform.SetAsLastSibling();
-
                 }
-
                 bar.LoadingBar.GetComponent<Image>().fillAmount = 0;
-
                 break;
-                // yield break;
-                // yield return 0;
-
             }
             else
             {
 
                 stepsIndicator.text = "" + (j + 1);
 
-                // ------------------------------  THREAD 1 ------------------------------
+                // ------------------------------  Sim Thread ------------------------------
 
-                try
+                foreach(Thread t in threads)
                 {
-                    //Debug.Log("spd: " + b1[threads[0].t_curr_index]);
-
-                    // {"[null]", "brush" ,"clippers" , "cond.", "dryer", "scissors", "shampoo", "station", "towel"};
-
-                    if (threads[0].simBlocks[threads[0].currIndex].type == SimBlock.ACQUIIRE)
+                    try
                     {
-
-                        // acquiring resource
-                        switch (threads[0].simBlocks[threads[0].currIndex].name)
+                        //------------ Acquire -------------
+                        if (t.simBlocks[t.currIndex].type == SimBlock.ACQUIIRE)
                         {
+                            //If t don't have the obj but some other thread has it then it will return true;
+                            if(MeNotSomeOneHas(t.simBlocks[t.currIndex].name,t))
+                            {
+                                GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
+                                newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
+                                newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/"+ t.simBlocks[t.currIndex].name);
+                                newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for "+ t.simBlocks[t.currIndex].name + "...</color>";
+                                newItem.transform.SetParent(t.layoutPanel.transform);
+                                newItem.transform.localScale = Vector3.one;
+                                scrollToBottom();
 
-                            case "brush":
+                                t.canPrint = false;
+                            }
+                            else
+                            {
+                                int output = acquire(ref t.hasItems, t.simBlocks[t.currIndex].name);
+                                t.canPrint = true;
 
-                                if (!threads[0].hasItems["brush"] && threads[1].hasItems["brush"])
-                                { // need to wait for resource
-
-                                    GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/brush");
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for brush...</color>";
-                                    newItem.transform.SetParent(threads[0].layoutPanel.transform);
-                                    newItem.transform.localScale = Vector3.one;
-                                    scrollToBottom();
-
-                                    threads[0].canPrint = false;
-
-                                }
-                                else
+                                if (output < 0)
                                 {
-
-                                    int output = acquire(ref threads[0].hasItems, "brush");
-                                    threads[0].canPrint = true;
-
-                                    if (output < 0)
-                                    {
-                                        resError(acquireErrMsg, 1); // ERROR: You are trying to acquire a resource you already have.";
-                                    }
+                                    resError(acquireErrMsg, 1); // ERROR: You are trying to acquire a resource you already have.";
                                 }
-
-                                break;
-
-                            case "clippers":
-
-                                if (!threads[0].hasItems["clippers"] && threads[1].hasItems["clippers"])
-                                { // need to wait for resource
-
-                                    GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/clippers");
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for nail clippers...</color>";
-                                    newItem.transform.SetParent(threads[0].layoutPanel.transform);
-                                    newItem.transform.localScale = Vector3.one;
-                                    scrollToBottom();
-
-                                    threads[0].canPrint = false;
-
-                                }
-                                else
-                                {
-
-                                    int output = acquire(ref threads[0].hasItems, "clippers");
-                                    threads[0].canPrint = true;
-
-                                    if (output < 0)
-                                    {
-                                        resError(acquireErrMsg, 1);
-                                    }
-                                }
-
-                                break;
-
-                            case "cond.":
-
-                                if (!threads[0].hasItems["cond."] && threads[1].hasItems["cond."])
-                                { // need to wait for resource
-
-                                    GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/cond.");
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for conditioner...</color>";
-                                    newItem.transform.SetParent(threads[0].layoutPanel.transform);
-                                    newItem.transform.localScale = Vector3.one;
-                                    scrollToBottom();
-
-                                    threads[0].canPrint = false;
-
-                                }
-                                else
-                                {
-
-                                    int output = acquire(ref threads[0].hasItems, "cond.");
-                                    threads[0].canPrint = true;
-
-                                    if (output < 0)
-                                    {
-                                        resError(acquireErrMsg, 1);
-                                    }
-                                }
-
-                                break;
-
-                            case "dryer":
-
-                                if (!threads[0].hasItems["dryer"] && threads[1].hasItems["dryer"])
-                                { // need to wait for resource
-
-                                    GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/dryer");
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for dryer...</color>";
-                                    newItem.transform.SetParent(threads[0].layoutPanel.transform);
-                                    newItem.transform.localScale = Vector3.one;
-                                    scrollToBottom();
-
-                                    threads[0].canPrint = false;
-
-                                }
-                                else
-                                {
-
-                                    int output = acquire(ref threads[0].hasItems, "dryer");
-                                    threads[0].canPrint = true;
-
-                                    if (output < 0)
-                                    {
-                                        resError(acquireErrMsg, 1);
-                                    }
-                                }
-
-                                break;
-
-                            case "scissors":
-
-                                if (!threads[0].hasItems["scissors"] && threads[1].hasItems["scissors"])
-                                { // need to wait for resource
-
-                                    GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/scissors");
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for scissors...</color>";
-                                    newItem.transform.SetParent(threads[0].layoutPanel.transform);
-                                    newItem.transform.localScale = Vector3.one;
-                                    scrollToBottom();
-
-                                    threads[0].canPrint = false;
-
-                                }
-                                else
-                                {
-
-                                    int output = acquire(ref threads[0].hasItems, "scissors");
-                                    threads[0].canPrint = true;
-
-                                    if (output < 0)
-                                    {
-                                        resError(acquireErrMsg, 1);
-                                    }
-                                }
-
-                                break;
-
-                            case "shampoo":
-
-                                if (!threads[0].hasItems["shampoo"] && threads[1].hasItems["shampoo"])
-                                { // need to wait for resource
-
-                                    GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/shampoo");
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for shampoo...</color>";
-                                    newItem.transform.SetParent(threads[0].layoutPanel.transform);
-                                    newItem.transform.localScale = Vector3.one;
-                                    scrollToBottom();
-
-                                    threads[0].canPrint = false;
-
-                                }
-                                else
-                                {
-                                    int output = acquire(ref threads[0].hasItems, "shampoo");
-                                    threads[0].canPrint = true;
-
-                                    if (output < 0)
-                                    {
-                                        resError(acquireErrMsg, 1);
-                                    }
-                                }
-
-                                break;
-
-                            case "station":
-
-                                if (!threads[0].hasItems["station"] && threads[1].hasItems["station"])
-                                { // need to wait for resource
-
-                                    GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/station");
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for station...</color>";
-                                    newItem.transform.SetParent(threads[0].layoutPanel.transform);
-                                    newItem.transform.localScale = Vector3.one;
-                                    scrollToBottom();
-
-                                    threads[0].canPrint = false;
-
-                                }
-                                else
-                                {
-                                    int output = acquire(ref threads[0].hasItems, "station");
-                                    threads[0].canPrint = true;
-
-                                    if (output < 0)
-                                    {
-                                        resError(acquireErrMsg, 1);
-                                    }
-                                }
-
-                                break;
-
-                            case "towel":
-
-                                if (!threads[0].hasItems["towel"] && threads[1].hasItems["towel"])
-                                { // need to wait for resource
-
-                                    GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/towel");
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for towel...</color>";
-                                    newItem.transform.SetParent(threads[0].layoutPanel.transform);
-                                    newItem.transform.localScale = Vector3.one;
-                                    scrollToBottom();
-
-                                    threads[0].canPrint = false;
-
-                                }
-                                else
-                                {
-
-                                    int output = acquire(ref threads[0].hasItems, "towel");
-                                    threads[0].canPrint = true;
-
-                                    if (output < 0)
-                                    {
-                                        resError(acquireErrMsg, 1);
-                                    }
-                                }
-
-                                break;
+                            }
                         }
+                        //------------ Return -------------
+                        else if (t.simBlocks[t.currIndex].type == SimBlock.RETURN)
+                        { 
+                            int output1 = return_res(ref t.hasItems, t.simBlocks[t.currIndex].name);
 
-                    }
-                    else if (threads[0].simBlocks[threads[0].currIndex].type == SimBlock.RETURN)
-                    {
-
-                        // returning resource
-                        switch (threads[0].simBlocks[threads[0].currIndex].name)
-                        {
-
-                            case "brush":
-
-                                int output1 = return_res(ref threads[0].hasItems, "brush");
-
-                                if (output1 < 0)
-                                {
-                                    resError(returnErrMsg, 1);
-                                }
-
-                                break;
-
-                            case "clippers":
-
-                                int output2 = return_res(ref threads[0].hasItems, "clippers");
-
-                                if (output2 < 0)
-                                {
-                                    resError(returnErrMsg, 1);
-                                }
-
-                                break;
-
-                            case "cond.":
-
-                                int output3 = return_res(ref threads[0].hasItems, "cond.");
-
-                                if (output3 < 0)
-                                {
-                                    resError(returnErrMsg, 1);
-                                }
-
-                                break;
-
-                            case "dryer":
-
-                                int output4 = return_res(ref threads[0].hasItems, "dryer");
-
-                                if (output4 < 0)
-                                {
-                                    resError(returnErrMsg, 1);
-                                }
-
-                                break;
-
-                            case "scissors":
-
-                                int output5 = return_res(ref threads[0].hasItems, "scissors");
-
-                                if (output5 < 0)
-                                {
-                                    resError(returnErrMsg, 1);
-                                }
-
-                                break;
-
-                            case "shampoo":
-
-                                int output6 = return_res(ref threads[0].hasItems, "shampoo");
-
-                                if (output6 < 0)
-                                {
-                                    resError(returnErrMsg, 1);
-                                }
-
-                                break;
-
-                            case "station":
-
-                                int output7 = return_res(ref threads[0].hasItems, "station");
-
-                                if (output7 < 0)
-                                {
-                                    resError(returnErrMsg, 1);
-                                }
-
-                                break;
-
-                            case "towel":
-
-                                int output8 = return_res(ref threads[0].hasItems, "towel");
-
-                                if (output8 < 0)
-                                {
-                                    resError(returnErrMsg, 1);
-                                }
-
-                                break;
+                            if (output1 < 0)
+                            {
+                                resError(returnErrMsg, 1);
+                            } 
                         }
-
-                    }
-                    else if (threads[0].simBlocks[threads[0].currIndex].type == SimBlock.WORK)
-                    {
-                        if (threads[0].simBlocks[threads[0].currIndex].name == "Cut")
+                        //------------ Work/Action block -------------
+                        else if (t.simBlocks[t.currIndex].type == SimBlock.WORK)
                         {
 
-                            if (!threads[0].hasItems["brush"] || !threads[0].hasItems["scissors"])
+                            if (IHaveAllThings(t.simBlocks[t.currIndex].name, t))
+                            {
+                               
+                                t.did[t.simBlocks[t.currIndex].name] = true;
+                            }
+                            else
+                            {
+                                
+                                String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
+                                t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
+                                t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
+
+                                resError("> ERROR: You can't "+ t.simBlocks[t.currIndex].name.ToLower() + " without "+RequirementList(t.simBlocks[t.currIndex].name,t), 1);
+                                scrollToBottom();
+
+                            }
+                        }
+                        else if (t.simBlocks[t.currIndex].type == SimBlock.CHECKIN)
+                        {
+
+                            if (t.isCheckedIn)
                             {
 
-                                String actionText = s1[threads[0].currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                s1[threads[0].currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                s1[threads[0].currIndex].transform.SetParent(threads[0].layoutPanel.transform);
-                                s1[threads[0].currIndex].transform.localScale = Vector3.one;
+                                String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
+                                t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
+                                t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
 
-                                resError("> ERROR: You can't cut without a brush and some scissors.", 1);
+                                resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.", 1);
                                 scrollToBottom();
 
                             }
                             else
                             {
 
-                                // perform cut
-                                threads[0].did["Cut"] = true;
+                                // perform check-in
+                                t.isCheckedIn = true;
+                                t.isCheckedOut = false;
                             }
-                        }
-                        else if (threads[0].simBlocks[threads[0].currIndex].name == "Dry")
-                        {
 
-                            if (!threads[0].hasItems["station"] || !threads[0].hasItems["dryer"] || !threads[0].hasItems["towel"])
+                        }
+                        else if (t.simBlocks[t.currIndex].type == SimBlock.CHECKOUT)
+                        {
+                            foreach (KeyValuePair<string, bool> b in t.needsTo)
+                            {
+                               // Debug.Log(b.Key + b.Value + "<----");
+                            }
+                            if ((t.needsTo["Cut"] && !t.did["Cut"]) || (t.needsTo["Dry"] && !t.did["Dry"]) || (t.needsTo["Wash"] && !t.did["Wash"]) || (t.needsTo["Groom"] && !t.did["Groom"]))
                             {
 
-                                String actionText = s1[threads[0].currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                s1[threads[0].currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                s1[threads[0].currIndex].transform.SetParent(threads[0].layoutPanel.transform);
-                                s1[threads[0].currIndex].transform.localScale = Vector3.one;
+                                String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
+                                t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
+                                t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
+                                scrollToBottom();
 
-                                resError("> ERROR: You can't dry without a station, a dryer and a towel.", 1);
+                                resError("> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.", 1);
+                                scrollToBottom();
+
+                            }
+                            else if (t.hasItems["brush"] || t.hasItems["clippers"] || t.hasItems["cond."] || t.hasItems["dryer"] || t.hasItems["scissors"] || t.hasItems["shampoo"] || t.hasItems["station"] || t.hasItems["towel"])
+                            {
+
+                                String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
+                                t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
+                                t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
+
+                                resError("> ERROR: You need to return all the resources you acquired before checking out.", 1);
+                                scrollToBottom();
+
+                            }
+                            else if (t.isCheckedOut)
+                            {
+
+                                String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
+                                t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
+                                t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
+
+                                resError("> ERROR: You have to check in before attempting to check out a customer.", 1);
                                 scrollToBottom();
 
                             }
                             else
                             {
 
-                                // perform dry
-                                threads[0].did["Dry"] = true;
+                                // perform check-out
+                                t.isCheckedIn = false;
+                                t.isCheckedOut = true;
                             }
-
                         }
-                        else if (threads[0].simBlocks[threads[0].currIndex].name == "Wash")
-                        {
 
-                            if (!threads[0].hasItems["station"] || !threads[0].hasItems["shampoo"] || !threads[0].hasItems["towel"] || !threads[0].hasItems["cond."])
-                            {
-
-                                String actionText = s1[threads[0].currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                s1[threads[0].currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                s1[threads[0].currIndex].transform.SetParent(threads[0].layoutPanel.transform);
-                                s1[threads[0].currIndex].transform.localScale = Vector3.one;
-
-                                resError("> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.", 1);
-                                scrollToBottom();
-
-                            }
-                            else
-                            {
-
-                                // perform wash
-                                threads[0].did["Wash"] = true;
-                            }
-
-                        }
-                        else if (threads[0].simBlocks[threads[0].currIndex].name == "Groom")
-                        {
-
-                            if (!threads[0].hasItems["brush"] || !threads[0].hasItems["clippers"])
-                            {
-
-                                String actionText = s1[threads[0].currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                s1[threads[0].currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                s1[threads[0].currIndex].transform.SetParent(threads[0].layoutPanel.transform);
-                                s1[threads[0].currIndex].transform.localScale = Vector3.one;
-
-                                resError("> ERROR: You can't groom without a brush and some nail clippers.", 1);
-                                scrollToBottom();
-
-                            }
-                            else
-                            {
-
-                                // perform groom
-                                threads[0].did["Groom"] = true;
-                            }
-
-                        }
                     }
-                    else if (threads[0].simBlocks[threads[0].currIndex].type == SimBlock.CHECKIN)
+                    catch { }
+
+                    try
                     {
 
-                        if (threads[0].isCheckedIn)
+                        if (t.canPrint)
                         {
 
-                            String actionText = s1[threads[0].currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                            s1[threads[0].currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                            s1[threads[0].currIndex].transform.SetParent(threads[0].layoutPanel.transform);
-                            s1[threads[0].currIndex].transform.localScale = Vector3.one;
-
-                            resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.", 1);
-                            scrollToBottom();
-
-                        }
-                        else
-                        {
-
-                            // perform check-in
-                            threads[0].isCheckedIn = true;
-                            threads[0].isCheckedOut = false;
-                        }
-
-                    }
-                    else if (threads[0].simBlocks[threads[0].currIndex].type == SimBlock.CHECKOUT)
-                    {
-                        foreach (KeyValuePair<string, bool> b in threads[0].needsTo)
-                        {
-                            Debug.Log(b.Key + b.Value + "<----");
-                        }
-                        if ((threads[0].needsTo["Cut"] && !threads[0].did["Cut"]) || (threads[0].needsTo["Dry"] && !threads[0].did["Dry"]) || (threads[0].needsTo["Wash"] && !threads[0].did["Wash"]) || (threads[0].needsTo["Groom"] && !threads[0].did["Groom"]))
-                        {
-
-                            String actionText = s1[threads[0].currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                            s1[threads[0].currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                            s1[threads[0].currIndex].transform.SetParent(threads[0].layoutPanel.transform);
-                            s1[threads[0].currIndex].transform.localScale = Vector3.one;
-                            scrollToBottom();
-
-                            resError("> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.", 1);
-                            scrollToBottom();
-
-                        }
-                        else if (threads[0].hasItems["brush"] || threads[0].hasItems["clippers"] || threads[0].hasItems["cond."] || threads[0].hasItems["dryer"] || threads[0].hasItems["scissors"] || threads[0].hasItems["shampoo"] || threads[0].hasItems["station"] || threads[0].hasItems["towel"])
-                        {
-
-                            String actionText = s1[threads[0].currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                            s1[threads[0].currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                            s1[threads[0].currIndex].transform.SetParent(threads[0].layoutPanel.transform);
-                            s1[threads[0].currIndex].transform.localScale = Vector3.one;
-
-                            resError("> ERROR: You need to return all the resources you acquired before checking out.", 1);
-                            scrollToBottom();
-
-                        }
-                        else if (threads[0].isCheckedOut)
-                        {
-
-                            String actionText = s1[threads[0].currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                            s1[threads[0].currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                            s1[threads[0].currIndex].transform.SetParent(threads[0].layoutPanel.transform);
-                            s1[threads[0].currIndex].transform.localScale = Vector3.one;
-
-                            resError("> ERROR: You have to check in before attempting to check out a customer.", 1);
-                            scrollToBottom();
-
-                        }
-                        else
-                        {
-
-                            // perform check-out
-                            threads[0].isCheckedIn = false;
-                            threads[0].isCheckedOut = true;
-                        }
-                    }
-
-                }
-                catch { }
-
-                try
-                {
-
-                    if (threads[0].canPrint)
-                    {
-
-                        if (!err)
-                        {
-                            s1[threads[0].currIndex].transform.SetParent(threads[0].layoutPanel.transform);
-                            s1[threads[0].currIndex].transform.localScale = Vector3.one;
-                        }
-                        threads[0].currIndex++;
-                    }
-                    scrollToBottom();
-
-                }
-                catch { }
-
-                scrollToBottom();
-
-                // ------------------------------  THREAD 2 ------------------------------
-
-                try
-                {
-
-                    // {"[null]", "brush" ,"clippers" , "cond.", "dryer", "scissors", "shampoo", "station", "towel"};
-
-                    if (threads[1].simBlocks[threads[1].currIndex].type == SimBlock.ACQUIIRE)
-                    {
-
-                        // acquiring resource
-                        switch (threads[1].simBlocks[threads[1].currIndex].name)
-                        {
-
-                            case "brush":
-
-                                if (!threads[1].hasItems["brush"] && threads[0].hasItems["brush"])
-                                { // need to wait for resource
-
-                                    GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/brush");
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for brush...</color>";
-                                    newItem.transform.SetParent(threads[1].layoutPanel.transform);
-                                    newItem.transform.localScale = Vector3.one;
-                                    scrollToBottom();
-
-                                    threads[1].canPrint = false;
-
-                                }
-                                else
-                                {
-
-                                    int output1 = acquire(ref threads[1].hasItems, "brush");
-                                    threads[1].canPrint = true;
-
-                                    if (output1 < 0)
-                                    {
-                                        resError(acquireErrMsg, 2);
-                                    }
-                                }
-
-                                break;
-
-                            case "clippers":
-
-                                if (!threads[1].hasItems["clippers"] && threads[0].hasItems["clippers"])
-                                { // need to wait for resource
-
-                                    GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/clippers");
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for nail clippers...</color>";
-                                    newItem.transform.SetParent(threads[1].layoutPanel.transform);
-                                    newItem.transform.localScale = Vector3.one;
-                                    scrollToBottom();
-
-                                    threads[1].canPrint = false;
-
-                                }
-                                else
-                                {
-
-                                    int output2 = acquire(ref threads[1].hasItems, "clippers");
-                                    threads[1].canPrint = true;
-
-                                    if (output2 < 0)
-                                    {
-                                        resError(acquireErrMsg, 2);
-                                    }
-                                }
-
-                                break;
-
-                            case "cond.":
-
-                                if (!threads[1].hasItems["cond."] && threads[0].hasItems["cond."])
-                                { // need to wait for resource
-
-                                    GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/cond.");
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for conditioner...</color>";
-                                    newItem.transform.SetParent(threads[1].layoutPanel.transform);
-                                    newItem.transform.localScale = Vector3.one;
-                                    scrollToBottom();
-
-                                    threads[1].canPrint = false;
-
-                                }
-                                else
-                                {
-
-                                    int output3 = acquire(ref threads[1].hasItems, "cond.");
-                                    threads[1].canPrint = true;
-
-                                    if (output3 < 0)
-                                    {
-                                        resError(acquireErrMsg, 2);
-                                    }
-                                }
-
-                                break;
-
-                            case "dryer":
-
-                                if (!threads[1].hasItems["dryer"] && threads[0].hasItems["dryer"])
-                                { // need to wait for resource
-
-                                    GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/dryer");
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for dryer...</color>";
-                                    newItem.transform.SetParent(threads[1].layoutPanel.transform);
-                                    newItem.transform.localScale = Vector3.one;
-                                    scrollToBottom();
-
-                                    threads[1].canPrint = false;
-
-                                }
-                                else
-                                {
-
-                                    int output4 = acquire(ref threads[1].hasItems, "dryer");
-                                    threads[1].canPrint = true;
-
-                                    if (output4 < 0)
-                                    {
-                                        resError(acquireErrMsg, 2);
-                                    }
-                                }
-
-                                break;
-
-                            case "scissors":
-
-                                if (!threads[1].hasItems["scissors"] && threads[0].hasItems["scissors"])
-                                { // need to wait for resource
-
-                                    GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/scissors");
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for scissors...</color>";
-                                    newItem.transform.SetParent(threads[1].layoutPanel.transform);
-                                    newItem.transform.localScale = Vector3.one;
-                                    scrollToBottom();
-
-                                    threads[1].canPrint = false;
-
-                                }
-                                else
-                                {
-
-                                    int output5 = acquire(ref threads[1].hasItems, "scissors");
-                                    threads[1].canPrint = true;
-
-                                    if (output5 < 0)
-                                    {
-                                        resError(acquireErrMsg, 2);
-                                    }
-                                }
-
-                                break;
-
-                            case "shampoo":
-
-                                if (!threads[1].hasItems["shampoo"] && threads[0].hasItems["shampoo"])
-                                { // need to wait for resource
-
-                                    GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/shampoo");
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for shampoo...</color>";
-                                    newItem.transform.SetParent(threads[1].layoutPanel.transform);
-                                    newItem.transform.localScale = Vector3.one;
-                                    scrollToBottom();
-
-                                    threads[1].canPrint = false;
-
-                                }
-                                else
-                                {
-
-                                    int output6 = acquire(ref threads[1].hasItems, "shampoo");
-                                    threads[1].canPrint = true;
-
-                                    if (output6 < 0)
-                                    {
-                                        resError(acquireErrMsg, 2);
-                                    }
-                                }
-
-                                break;
-
-                            case "station":
-
-                                if (!threads[1].hasItems["station"] && threads[0].hasItems["station"])
-                                { // need to wait for resource
-
-                                    GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/station");
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for station...</color>";
-                                    newItem.transform.SetParent(threads[1].layoutPanel.transform);
-                                    newItem.transform.localScale = Vector3.one;
-                                    scrollToBottom();
-
-                                    threads[1].canPrint = false;
-
-                                }
-                                else
-                                {
-
-                                    int output7 = acquire(ref threads[1].hasItems, "station");
-                                    threads[1].canPrint = true;
-
-                                    if (output7 < 0)
-                                    {
-                                        resError(acquireErrMsg, 2);
-                                    }
-                                }
-
-                                break;
-
-                            case "towel":
-
-                                if (!threads[1].hasItems["towel"] && threads[0].hasItems["towel"])
-                                { // need to wait for resource
-
-                                    GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/towel");
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for towel...</color>";
-                                    newItem.transform.SetParent(threads[1].layoutPanel.transform);
-                                    newItem.transform.localScale = Vector3.one;
-                                    scrollToBottom();
-
-                                    threads[1].canPrint = false;
-
-                                }
-                                else
-                                {
-                                    int output8 = acquire(ref threads[1].hasItems, "towel");
-                                    threads[1].canPrint = true;
-
-                                    if (output8 < 0)
-                                    {
-                                        resError(acquireErrMsg, 2);
-                                    }
-                                }
-
-                                break;
-                        }
-
-                    }
-                    else if (threads[1].simBlocks[threads[1].currIndex].type == SimBlock.RETURN)
-                    {
-
-                        // returning resource
-                        switch (threads[1].simBlocks[threads[1].currIndex].name)
-                        {
-
-                            case "brush":
-
-                                int output1 = return_res(ref threads[1].hasItems, "brush");
-
-                                if (output1 < 0)
-                                {
-                                    resError(returnErrMsg, 2);
-                                }
-
-                                break;
-
-                            case "clippers":
-
-                                int output2 = return_res(ref threads[1].hasItems, "clippers");
-
-                                if (output2 < 0)
-                                {
-                                    resError(returnErrMsg, 2);
-                                }
-
-                                break;
-
-                            case "cond.":
-
-                                int output3 = return_res(ref threads[1].hasItems, "cond.");
-
-                                if (output3 < 0)
-                                {
-                                    resError(returnErrMsg, 2);
-                                }
-
-                                break;
-
-                            case "dryer":
-
-                                int output4 = return_res(ref threads[1].hasItems, "dryer");
-
-                                if (output4 < 0)
-                                {
-                                    resError(returnErrMsg, 2);
-                                }
-
-                                break;
-
-                            case "scissors":
-
-                                int output5 = return_res(ref threads[1].hasItems, "scissors");
-
-                                if (output5 < 0)
-                                {
-                                    resError(returnErrMsg, 2);
-                                }
-
-                                break;
-
-                            case "shampoo":
-
-                                int output6 = return_res(ref threads[1].hasItems, "shampoo");
-
-                                if (output6 < 0)
-                                {
-                                    resError(returnErrMsg, 2);
-                                }
-
-                                break;
-
-                            case "station":
-
-                                int output7 = return_res(ref threads[1].hasItems, "station");
-
-                                if (output7 < 0)
-                                {
-                                    resError(returnErrMsg, 2);
-                                }
-
-                                break;
-
-                            case "towel":
-
-                                int output8 = return_res(ref threads[1].hasItems, "towel");
-
-                                if (output8 < 0)
-                                {
-                                    resError(returnErrMsg, 2);
-                                }
-
-                                break;
-                        }
-
-                    }
-                    else if (threads[1].simBlocks[threads[1].currIndex].type == SimBlock.WORK)
-                    {
-                        if (threads[1].simBlocks[threads[1].currIndex].name == "Cut")
-                        {
-
-                            if (!threads[1].hasItems["brush"] || !threads[1].hasItems["scissors"])
+                            if (!err)
                             {
-
-                                String actionText = s2[threads[1].currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                s2[threads[1].currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                s2[threads[1].currIndex].transform.SetParent(threads[1].layoutPanel.transform);
-                                s2[threads[1].currIndex].transform.localScale = Vector3.one;
-
-                                resError("> ERROR: You can't cut without a brush and some scissors.", 2);
-                                scrollToBottom();
-
+                                t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
+                                t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
                             }
-                            else
-                            {
-
-                                // perform cut
-                                threads[1].did["Cut"] = true;
-                            }
-
+                            t.currIndex++;
                         }
-                        else if (threads[1].simBlocks[threads[1].currIndex].name == "Dry")
-                        {
-
-                            if (!threads[1].hasItems["station"] || !threads[1].hasItems["dryer"] || !threads[1].hasItems["towel"])
-                            {
-
-                                String actionText = s2[threads[1].currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                s2[threads[1].currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                s2[threads[1].currIndex].transform.SetParent(threads[1].layoutPanel.transform);
-                                s2[threads[1].currIndex].transform.localScale = Vector3.one;
-
-                                resError("> ERROR: You can't dry without a station, a dryer and a towel.", 2);
-                                scrollToBottom();
-
-                            }
-                            else
-                            {
-
-                                // perform dry
-                                threads[1].did["Dry"] = true;
-                            }
-
-                        }
-                        else if (threads[1].simBlocks[threads[1].currIndex].name == "Wash")
-                        {
-
-                            if (!threads[1].hasItems["station"] || !threads[1].hasItems["shampoo"] || !threads[1].hasItems["towel"] || !threads[1].hasItems["cond."])
-                            {
-
-                                String actionText = s2[threads[1].currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                s2[threads[1].currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                s2[threads[1].currIndex].transform.SetParent(threads[1].layoutPanel.transform);
-                                s2[threads[1].currIndex].transform.localScale = Vector3.one;
-
-                                resError("> ERROR: You can't wash without a station, shampoo, conditioner, and a towel.", 2);
-                                scrollToBottom();
-
-                            }
-                            else
-                            {
-
-                                // perform wash
-                                threads[1].did["Wash"] = true;
-                            }
-
-                        }
-                        else if (threads[1].simBlocks[threads[1].currIndex].name == "Groom")
-                        {
-
-                            if (!threads[1].hasItems["brush"] || !threads[1].hasItems["clippers"])
-                            {
-
-                                String actionText = s2[threads[1].currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                s2[threads[1].currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                s2[threads[1].currIndex].transform.SetParent(threads[1].layoutPanel.transform);
-                                s2[threads[1].currIndex].transform.localScale = Vector3.one;
-
-                                resError("> ERROR: You can't groom without a brush and some nail clippers.", 2);
-                                scrollToBottom();
-
-                            }
-                            else
-                            {
-
-                                // perform groom
-                                threads[1].did["Groom"] = true;
-                            }
-
-                        }
-                    }
-                    else if (threads[1].simBlocks[threads[0].currIndex].type == SimBlock.CHECKIN)
-                    {
-
-                        if (threads[1].isCheckedIn)
-                        {
-
-                            String actionText = s2[threads[1].currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                            s2[threads[1].currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                            s2[threads[1].currIndex].transform.SetParent(threads[1].layoutPanel.transform);
-                            s2[threads[1].currIndex].transform.localScale = Vector3.one;
-
-                            resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.", 2);
-                            scrollToBottom();
-
-                        }
-                        else
-                        {
-
-                            // perform check-in
-                            threads[1].isCheckedIn = true;
-                            threads[1].isCheckedOut = false;
-                        }
+                        scrollToBottom();
 
                     }
-                    else if (threads[1].simBlocks[threads[0].currIndex].type == SimBlock.CHECKOUT)
-                    {
+                    catch { }
 
-                        if ((threads[1].needsTo["Cut"] && !threads[1].did["Cut"]) || (threads[1].needsTo["Dry"] && !threads[1].did["Dry"]) || (threads[1].needsTo["Wash"] && !threads[1].did["Wash"]) || (threads[1].needsTo["Groom"] && !threads[1].did["Groom"]))
-                        {
-
-                            String actionText = s2[threads[1].currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                            s2[threads[1].currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                            s2[threads[1].currIndex].transform.SetParent(threads[1].layoutPanel.transform);
-                            s2[threads[1].currIndex].transform.localScale = Vector3.one;
-                            scrollToBottom();
-
-                            resError("> ERROR: Seems like worker 2 didn't fulfill all of the customer's requests. Please try again.", 2);
-                            scrollToBottom();
-
-                        }
-                        else if (threads[1].hasItems["brush"] || threads[1].hasItems["clippers"] || threads[1].hasItems["cond."] || threads[1].hasItems["dryer"] || threads[1].hasItems["scissors"] || threads[1].hasItems["shampoo"] || threads[1].hasItems["station"] || threads[1].hasItems["towel"])
-                        {
-
-                            String actionText = s2[threads[1].currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                            s2[threads[1].currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                            s2[threads[1].currIndex].transform.SetParent(threads[1].layoutPanel.transform);
-                            s2[threads[1].currIndex].transform.localScale = Vector3.one;
-
-                            resError("> ERROR: You need to return all the resources you acquired before checking out.", 2);
-                            scrollToBottom();
-
-                        }
-                        else if (threads[1].isCheckedOut)
-                        {
-
-                            String actionText = s2[threads[1].currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                            s2[threads[1].currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                            s2[threads[1].currIndex].transform.SetParent(threads[1].layoutPanel.transform);
-                            s2[threads[1].currIndex].transform.localScale = Vector3.one;
-
-                            resError("> ERROR: You have to check in before attempting to check out a customer.", 2);
-                            scrollToBottom();
-
-                        }
-                        else
-                        {
-
-                            // perform check-out
-                            threads[1].isCheckedIn = false;
-                            threads[1].isCheckedOut = true;
-                        }
-                    }
-
-                }
-                catch { }
-
-                try
-                {
-
-                    if (threads[1].canPrint)
-                    {
-                        if (!err)
-                        {
-                            s2[threads[1].currIndex].transform.SetParent(threads[1].layoutPanel.transform);
-                            s2[threads[1].currIndex].transform.localScale = Vector3.one;
-                        }
-
-                        threads[1].currIndex++;
-                    }
-
-                }
-                catch
-                {
                     scrollToBottom();
                 }
 
@@ -1659,6 +664,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
             }
         }
 
+       
         if (!lost)
         {
             LogManager.instance.logger.sendChronologicalLogs("Level03Won", "", LogManager.instance.UniEndTime().ToString());
@@ -1681,6 +687,55 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
         Canvas.ForceUpdateCanvases();
         scrollToBottom();
+    }
+
+    private string RequirementList(string name,Thread t)
+    {
+        string list = "";
+        List<string> r = ((Action)t.workList.GetType().GetField(name).GetValue(t.workList)).requirements;
+        for (int i = 0; i < r.Count; i++)
+        {
+            if (i == r.Count - 1)
+            {
+                list += r[i] + ".";
+            }
+            else if (i == r.Count - 2)
+            {
+                list += r[i] + " and ";
+            }
+            else
+            {
+                list += r[i] + ", ";
+            }
+        }
+        return list;
+    }
+
+    private bool IHaveAllThings(string name, Thread t)
+    {
+        bool iDoHave = true;
+        foreach (string s in ((Action)t.workList.GetType().GetField(name).GetValue(t.workList)).requirements)
+        {
+            if (!t.hasItems[s])
+            {
+                iDoHave = false;
+            }
+        }
+        return iDoHave;
+    }
+
+    //If t don't have the obj but some other thread has it then it will return true;
+    private bool MeNotSomeOneHas(string name, Thread me)
+    {
+        bool someOneHas = false;
+        foreach (Thread t in threads)
+        {
+            if(t!=me && t.hasItems[name])
+            {
+                someOneHas = true;
+            }
+        }
+        return someOneHas;
     }
 
     public void terminateSimulation(string error)
@@ -1712,8 +767,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         runButton.transform.SetAsLastSibling();
         bar.LoadingBar.GetComponent<Image>().fillAmount = 0;
 
-        // StartCoroutine (waitOneSecond());
-        // scrollToBottom ();
     }
 
     void resError(String msg, int thread_num)
@@ -1729,12 +782,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
         GameObject newItem = Instantiate(simulationErrorPrefab) as GameObject;
         newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + msg + "</color>";
-        // newItem.transform.parent = newItemParent;
         newItem.transform.SetParent(newItemParent);
         newItem.transform.localScale = Vector3.one;
-        // scrollToBottom ();
-
-        // terminate simulation
         terminateSimulation(msg);
     }
 
