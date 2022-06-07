@@ -494,7 +494,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                 stepsIndicator.text = "" + (j + 1);
 
                 // ------------------------------  Sim Thread ------------------------------
-
                 foreach(Thread t in threads)
                 {
                     try
@@ -522,7 +521,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                 if (output < 0)
                                 {
-                                    resError(acquireErrMsg, 1); // ERROR: You are trying to acquire a resource you already have.";
+                                    resError(acquireErrMsg, t.layoutPanel); // ERROR: You are trying to acquire a resource you already have.";
                                 }
                             }
                         }
@@ -533,7 +532,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                             if (output1 < 0)
                             {
-                                resError(returnErrMsg, 1);
+                                resError(returnErrMsg, t.layoutPanel);
                             } 
                         }
                         //------------ Work/Action block -------------
@@ -553,7 +552,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
                                 t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
 
-                                resError("> ERROR: You can't "+ t.simBlocks[t.currIndex].name.ToLower() + " without "+RequirementList(t.simBlocks[t.currIndex].name,t), 1);
+                                resError("> ERROR: You can't "+ t.simBlocks[t.currIndex].name.ToLower() + " without "+RequirementList(t.simBlocks[t.currIndex].name,t), t.layoutPanel);
                                 scrollToBottom();
 
                             }
@@ -569,7 +568,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
                                 t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
 
-                                resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.", 1);
+                                resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.", t.layoutPanel);
                                 scrollToBottom();
 
                             }
@@ -597,7 +596,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
                                 scrollToBottom();
 
-                                resError("> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.", 1);
+                                resError("> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.", t.layoutPanel);
                                 scrollToBottom();
 
                             }
@@ -609,7 +608,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
                                 t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
 
-                                resError("> ERROR: You need to return all the resources you acquired before checking out.", 1);
+                                resError("> ERROR: You need to return all the resources you acquired before checking out.", t.layoutPanel);
                                 scrollToBottom();
 
                             }
@@ -621,7 +620,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
                                 t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
 
-                                resError("> ERROR: You have to check in before attempting to check out a customer.", 1);
+                                resError("> ERROR: You have to check in before attempting to check out a customer.", t.layoutPanel);
                                 scrollToBottom();
 
                             }
@@ -769,16 +768,11 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     }
 
-    void resError(String msg, int thread_num)
+    void resError(String msg, GameObject layout)
     {
 
         // display error
-        Transform newItemParent;
-
-        if (thread_num == 1)
-            newItemParent = threads[0].layoutPanel.transform;
-        else
-            newItemParent = threads[1].layoutPanel.transform;
+        Transform newItemParent = layout.transform;
 
         GameObject newItem = Instantiate(simulationErrorPrefab) as GameObject;
         newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + msg + "</color>";

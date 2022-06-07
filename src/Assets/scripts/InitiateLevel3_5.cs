@@ -17,57 +17,55 @@ public class InitiateLevel3_5 : MonoBehaviour {
 
 		GameObject box;
 
-		// ---------- IN THREAD 1 ----------
+        // ---------- IN THREAD 1 ----------
+        newBox(actionPrefab, "checkin", t1);
+        box = newBox(acquirePrefab, "get", t1); // acquire (brush);
+        box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "brush";
 
-		newBox (actionPrefab, "checkin", t1);
-		/*
-		box = newBox (acquirePrefab, "get", t1); // acquire (brush);
-		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "brush";
+        box = newBox(acquirePrefab, "get", t1); // acquire (brush);
+        box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "scissors";
 
-		box = newBox (acquirePrefab, "get", t1); // acquire (brush);
-		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "scissors";
+        newBox(actionPrefab, "cut", t1);
 
-		newBox (actionPrefab, "cut", t1);
+        box = newBox(returnPrefab, "ret", t1);
+        box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "brush";
 
-		box = newBox (returnPrefab, "ret", t1);
-		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "brush";
+        box = newBox(returnPrefab, "ret", t1);
+        box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "scissors";
 
-		box = newBox (returnPrefab, "ret", t1);
-		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "scissors";
+        // acquire (station);
+        // acquire (towel);
+        // acquire (shampoo);
+        // acquire (conditioner);
+        // wash
+        // return (station);
+        // return (towel);
+        // return (shampoo);
+        // return (conditioner);
 
-		// acquire (station);
-		// acquire (towel);
-		// acquire (shampoo);
-		// acquire (conditioner);
-		// wash
-		// return (station);
-		// return (towel);
-		// return (shampoo);
-		// return (conditioner);
-		*/
-		newBox (actionPrefab, "checkout", t1);
+        newBox(actionPrefab, "checkout", t1);
 
-		// ---------- IN THREAD 2 ----------
-		
-		newBox (actionPrefab, "checkin", t2);
-		/*
-		box = newBox (acquirePrefab, "get", t2); // acquire (brush);
-		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "scissors";
+        // ---------- IN THREAD 2 ----------
 
-		box = newBox (acquirePrefab, "get", t2); // acquire (brush);
-		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "brush";
+        newBox(actionPrefab, "checkin", t2);
 
-		newBox (actionPrefab, "cut", t2);
+        box = newBox(acquirePrefab, "get", t2); // acquire (brush);
+        box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "scissors";
 
-		box = newBox (returnPrefab, "ret", t2);
-		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "scissors";
+        box = newBox(acquirePrefab, "get", t2); // acquire (brush);
+        box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "brush";
 
-		box = newBox (returnPrefab, "ret", t2);
-		box.gameObject.transform.Find ("Dropdown").GetComponent<dropDownManager> ().selected = "brush";
-		*/
-		newBox (actionPrefab, "checkout", t2);
-	
-	}
+        newBox(actionPrefab, "cut", t2);
+
+        box = newBox(returnPrefab, "ret", t2);
+        box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "scissors";
+
+        box = newBox(returnPrefab, "ret", t2);
+        box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "brush";
+
+        newBox(actionPrefab, "checkout", t2);
+
+    }
 		
 	GameObject newBox(GameObject boxPrefab, string actionName, GameObject threadParent) {
 		
