@@ -493,21 +493,22 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                 stepsIndicator.text = "" + (j + 1);
 
-                // ------------------------------  Sim Thread ------------------------------
-                foreach(Thread t in threads)
+                System.Random r = new System.Random();
+                foreach (int i in Enumerable.Range(0, threads.Count).OrderBy(x => r.Next()))
                 {
+                    Thread t = threads[i];
                     try
                     {
                         //------------ Acquire -------------
                         if (t.simBlocks[t.currIndex].type == SimBlock.ACQUIIRE)
                         {
                             //If t don't have the obj but some other thread has it then it will return true;
-                            if(MeNotSomeOneHas(t.simBlocks[t.currIndex].name,t))
+                            if (MeNotSomeOneHas(t.simBlocks[t.currIndex].name, t))
                             {
                                 GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
                                 newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/"+ t.simBlocks[t.currIndex].name);
-                                newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for "+ t.simBlocks[t.currIndex].name + "...</color>";
+                                newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
+                                newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for " + t.simBlocks[t.currIndex].name + "...</color>";
                                 newItem.transform.SetParent(t.layoutPanel.transform);
                                 newItem.transform.localScale = Vector3.one;
                                 scrollToBottom();
@@ -527,13 +528,13 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                         }
                         //------------ Return -------------
                         else if (t.simBlocks[t.currIndex].type == SimBlock.RETURN)
-                        { 
+                        {
                             int output1 = return_res(ref t.hasItems, t.simBlocks[t.currIndex].name);
 
                             if (output1 < 0)
                             {
                                 resError(returnErrMsg, t.layoutPanel);
-                            } 
+                            }
                         }
                         //------------ Work/Action block -------------
                         else if (t.simBlocks[t.currIndex].type == SimBlock.WORK)
@@ -541,18 +542,18 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                             if (IHaveAllThings(t.simBlocks[t.currIndex].name, t))
                             {
-                               
+
                                 t.did[t.simBlocks[t.currIndex].name] = true;
                             }
                             else
                             {
-                                
+
                                 String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
                                 t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
                                 t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
                                 t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
 
-                                resError("> ERROR: You can't "+ t.simBlocks[t.currIndex].name.ToLower() + " without "+RequirementList(t.simBlocks[t.currIndex].name,t), t.layoutPanel);
+                                resError("> ERROR: You can't " + t.simBlocks[t.currIndex].name.ToLower() + " without " + RequirementList(t.simBlocks[t.currIndex].name, t), t.layoutPanel);
                                 scrollToBottom();
 
                             }
@@ -585,7 +586,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                         {
                             foreach (KeyValuePair<string, bool> b in t.needsTo)
                             {
-                               // Debug.Log(b.Key + b.Value + "<----");
+                                // Debug.Log(b.Key + b.Value + "<----");
                             }
                             if ((t.needsTo["Cut"] && !t.did["Cut"]) || (t.needsTo["Dry"] && !t.did["Dry"]) || (t.needsTo["Wash"] && !t.did["Wash"]) || (t.needsTo["Groom"] && !t.did["Groom"]))
                             {
@@ -655,6 +656,12 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                     catch { }
 
                     scrollToBottom();
+                }
+
+                // ------------------------------  Sim Thread ------------------------------
+                foreach (Thread t in threads)
+                {
+                    
                 }
 
                 j++; // increment step
