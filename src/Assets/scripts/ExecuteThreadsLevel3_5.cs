@@ -50,7 +50,10 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     }
 
     [SerializeField] private GameObject tab;
+    [SerializeField] private GameObject label;
     [SerializeField] private Transform tabParent;
+    [SerializeField] private Transform labelParent;
+
     public List<Thread> threads;
     private dropDownManager dropDownManager = new dropDownManager();
     [SerializeField] private bool isRetAllCompulsion;
@@ -166,8 +169,14 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     {
         foreach(Thread t in threads)
         {
-            GameObject tabtemp = Instantiate(tab, new Vector3(0, 0, 0), Quaternion.identity);
+            GameObject tabtemp = Instantiate(tab);// new Vector3(0, 0, 0), Quaternion.identity);
             tabtemp.transform.SetParent(tabParent,false);
+            GameObject labeltemp = Instantiate(label);// new Vector3(0, 0, 0), Quaternion.identity);
+            labeltemp.transform.SetParent(labelParent, false);
+            labeltemp.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = t.name;
+            labeltemp.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = t.profilePic;
+            Debug.Log("Nira"+labeltemp.transform.GetChild(0).GetChild(1).name);
+
         }
     }
 
