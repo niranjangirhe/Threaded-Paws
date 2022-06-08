@@ -26,6 +26,10 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         public GameObject layoutPanel;
         public GameObject tabDropArea;
 
+        //Thread personal data
+        public string name;
+        public Sprite profilePic;
+
         //sprites Dog and worker
         [HideInInspector] public Sprite dogSprite;
         [HideInInspector] public Sprite workerSprite;
@@ -45,7 +49,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         [HideInInspector] public List<GameObject> simulationImages;
     }
 
-
+    [SerializeField] private GameObject tab;
+    [SerializeField] private Transform tabParent;
     public List<Thread> threads;
     private dropDownManager dropDownManager = new dropDownManager();
     [SerializeField] private bool isRetAllCompulsion;
@@ -152,8 +157,20 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     public void Awake()
     {
+        
         ApplyTicks();
+        AddTabs();
     }
+
+    private void AddTabs()
+    {
+        foreach(Thread t in threads)
+        {
+            GameObject tabtemp = Instantiate(tab, new Vector3(0, 0, 0), Quaternion.identity);
+            tabtemp.transform.SetParent(tabParent,false);
+        }
+    }
+
     public void ExecuteThreads()
     {
 
