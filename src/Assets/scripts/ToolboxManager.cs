@@ -5,73 +5,73 @@ using UnityEngine.UI;
 
 public class ToolboxManager : MonoBehaviour {
 
-	//	THREAD 1
+    //	THREAD 1
 
-	public int checkinLeft_thread1;
-	public int cutLeft_thread1;
-	public int dryLeft_thread1;
-	public int washLeft_thread1;
-	public int whileLeft_thread1;
-	public int ifLeft_thread1;
-	public int resourcesLeft_thread1;
-	public int checkoutLeft_thread1;
-	public int returnLeft_thread1;
-	public int groomLeft_thread1;
-	public int pickupLeft_thread1;
+    public int checkinLeft_thread1;
+    public int cutLeft_thread1;
+    public int dryLeft_thread1;
+    public int washLeft_thread1;
+    public int whileLeft_thread1;
+    public int ifLeft_thread1;
+    public int resourcesLeft_thread1;
+    public int checkoutLeft_thread1;
+    public int returnLeft_thread1;
+    public int groomLeft_thread1;
+    public int pickupLeft_thread1;
 
-	public Text txt_checkinLeft_thread1;
-	public Text txt_cutLeft_thread1;
-	public Text txt_dryLeft_thread1;
-	public Text txt_washLeft_thread1;
-	public Text txt_whileLeft_thread1;
-	public Text txt_ifLeft_thread1;
-	public Text txt_resourcesLeft_thread1;
-	public Text txt_checkoutLeft_thread1;
-	public Text txt_returnLeft_thread1;
-	public Text txt_groomLeft_thread1;
-	public Text txt_pickupLeft_thread1;
+    public Text txt_checkinLeft_thread1;
+    public Text txt_cutLeft_thread1;
+    public Text txt_dryLeft_thread1;
+    public Text txt_washLeft_thread1;
+    public Text txt_whileLeft_thread1;
+    public Text txt_ifLeft_thread1;
+    public Text txt_resourcesLeft_thread1;
+    public Text txt_checkoutLeft_thread1;
+    public Text txt_returnLeft_thread1;
+    public Text txt_groomLeft_thread1;
+    public Text txt_pickupLeft_thread1;
 
-	//	THREAD 2
+    //	THREAD 2
 
-	public int checkinLeft_thread2;
-	public int cutLeft_thread2;
-	public int dryLeft_thread2;
-	public int washLeft_thread2;
-	public int whileLeft_thread2;
-	public int ifLeft_thread2;
-	public int resourcesLeft_thread2;
-	public int checkoutLeft_thread2;
-	public int returnLeft_thread2;
-	public int groomLeft_thread2;
-	public int pickupLeft_thread2;
+    public int checkinLeft_thread2;
+    public int cutLeft_thread2;
+    public int dryLeft_thread2;
+    public int washLeft_thread2;
+    public int whileLeft_thread2;
+    public int ifLeft_thread2;
+    public int resourcesLeft_thread2;
+    public int checkoutLeft_thread2;
+    public int returnLeft_thread2;
+    public int groomLeft_thread2;
+    public int pickupLeft_thread2;
 
-	public Text txt_checkinLeft_thread2;
-	public Text txt_cutLeft_thread2;
-	public Text txt_dryLeft_thread2;
-	public Text txt_washLeft_thread2;
-	public Text txt_whileLeft_thread2;
-	public Text txt_ifLeft_thread2;
-	public Text txt_resourcesLeft_thread2;
-	public Text txt_checkoutLeft_thread2;
-	public Text txt_returnLeft_thread2;
-	public Text txt_groomLeft_thread2;
-	public Text txt_pickupLeft_thread2;
+    public Text txt_checkinLeft_thread2;
+    public Text txt_cutLeft_thread2;
+    public Text txt_dryLeft_thread2;
+    public Text txt_washLeft_thread2;
+    public Text txt_whileLeft_thread2;
+    public Text txt_ifLeft_thread2;
+    public Text txt_resourcesLeft_thread2;
+    public Text txt_checkoutLeft_thread2;
+    public Text txt_returnLeft_thread2;
+    public Text txt_groomLeft_thread2;
+    public Text txt_pickupLeft_thread2;
 
-	public Text txtErrorMsg;
-	public GameObject LostPanel;
-	public GameObject WonPanel;
-	public GameObject InstructionsPanel;
-	public bool isLevel4;
+    public Text txtErrorMsg;
+    public GameObject LostPanel;
+    public GameObject WonPanel;
+    public GameObject InstructionsPanel;
+    public bool isLevel4;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 
 		try {
 			//Debug.Log ("Start in manager called");
 			txtErrorMsg.enabled = false;
 			LostPanel.SetActive (false);
 
-			updateValues ();
+			//updateValues ();
 
 			CreateNewBlock.canCreate = true;
 		} catch { }

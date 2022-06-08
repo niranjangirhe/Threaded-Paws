@@ -20,6 +20,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
         //ThreadData
         public WorkList workList = new WorkList();
+        public ToolBoxValues toolBoxValues = new ToolBoxValues();
 
 
         //Tab (Grandparent of blocks)
@@ -160,6 +161,10 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         
         ApplyTicks();
         AddTabs();
+        foreach(Thread t in threads)
+        {
+            t.toolBoxValues.updateValues();
+        }
     }
 
     private void AddTabs()

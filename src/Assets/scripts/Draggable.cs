@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler {
+public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
+{
 
 	public Transform parentToReturnTo = null;
 	GameObject placeholder = null;
@@ -18,15 +20,16 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	GameObject threadArea2;
 
 
-	ToolboxManager manager;
+	ToolBoxValues manager;
 
 	public enum Type { IFNEEDED, WHILELOOP, IFSTAT, ACTION, ALL, INVENTORY };
- public Type typeOfItem = Type.ALL; //default
+	public Type typeOfItem = Type.ALL; //default
 
- public void OnBeginDrag (PointerEventData eventData) {
- //Debug.Log ("OnBeginDrag called: " + eventData.pointerDrag.name);
+	public void OnBeginDrag(PointerEventData eventData)
+	{
+		//Debug.Log ("OnBeginDrag called: " + eventData.pointerDrag.name);
 
- this.transform.Find ("Halo").gameObject.SetActive (false);
+		this.transform.Find("Halo").gameObject.SetActive(false);
 
 		try
 		{
@@ -58,22 +61,22 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		catch { }
 
 		//create new placeholder object and parent it to the draggable object's parent
-		placeholder = new GameObject ();
-		placeholder.transform.SetParent (this.transform.parent); //places it at the end of the list by default
-		//want the placeholder to have the same dimensions as the draggable object removed
-		LayoutElement le = placeholder.AddComponent<LayoutElement> ();
-		placeholder.GetComponent<RectTransform> ().sizeDelta = new Vector2 (75, 35); //width, height
-		//le.preferredWidth = this.GetComponent<LayoutElement> ().preferredWidth;
-		//le.preferredHeight = this.GetComponent<LayoutElement> ().preferredHeight;
-		//le.preferredHeight = 5;
-		//le.minHeight = 5;
+		placeholder = new GameObject();
+		placeholder.transform.SetParent(this.transform.parent); //places it at the end of the list by default
+																//want the placeholder to have the same dimensions as the draggable object removed
+		LayoutElement le = placeholder.AddComponent<LayoutElement>();
+		placeholder.GetComponent<RectTransform>().sizeDelta = new Vector2(75, 35); //width, height
+																				   //le.preferredWidth = this.GetComponent<LayoutElement> ().preferredWidth;
+																				   //le.preferredHeight = this.GetComponent<LayoutElement> ().preferredHeight;
+																				   //le.preferredHeight = 5;
+																				   //le.minHeight = 5;
 		le.flexibleWidth = 0; //not flexible
 		le.flexibleHeight = 0;
 
 		//Debug.Log (">>> HEIGHT: " + le.preferredHeight);
 
 		//want the placeholder to also be in the same spot as the object we just removed
-		placeholder.transform.SetSiblingIndex (this.transform.GetSiblingIndex ());
+		placeholder.transform.SetSiblingIndex(this.transform.GetSiblingIndex());
 
 		//save old parent
 		//parentToReturnTo = this.transform.parent;
@@ -83,14 +86,14 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		placeholderParent = parentToReturnTo;
 
 		//instead of the toolbox, wanna set parent to canvas
-		this.transform.SetParent (canvas.transform);
+		this.transform.SetParent(canvas.transform);
 
-		GetComponent<CanvasGroup> ().blocksRaycasts = false;
+		GetComponent<CanvasGroup>().blocksRaycasts = false;
 
 		//highlight threadArea
 		//threadArea.transform.GetComponent<Image> ().color = Color.green;
-		threadArea1.transform.GetComponent<Image> ().color = Color.green;
-		threadArea2.transform.GetComponent<Image> ().color = Color.green;
+		threadArea1.transform.GetComponent<Image>().color = Color.green;
+		threadArea2.transform.GetComponent<Image>().color = Color.green;
 
 		//highlight corresponding children
 		//Transform[] threadChildren = new Transform[threadArea.transform.childCount];
@@ -101,44 +104,53 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		// Debug.Log ("childCount: " + thread1Children.Length);
 		// Debug.Log("Dragging: " + this.transform.name + " , Block Type: " + this.typeOfItem);
 
-		for (int i = 0; i < thread1Children.Length; i++) {
+		for (int i = 0; i < thread1Children.Length; i++)
+		{
 			//threadChildren [i] = this.transform.Find("DropAreaThread").GetChild (i).gameObject;
-			thread1Children[i] = threadArea1.transform.GetChild (i);
+			thread1Children[i] = threadArea1.transform.GetChild(i);
 			//Debug.Log ( timer.GetCurrentTime() + " -> " + threadChildren [i]);
 
-			try {
+			try
+			{
 
 				//Debug.Log (thread1Children [i].name + ", DropZone Type: " + thread1Children [i].GetComponentInChildren<DropZone>().typeOfArea);
-				if ((thread1Children[i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == this.typeOfItem) ||
-					(thread1Children[i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == Type.ALL)) {
+				if ((thread1Children[i].gameObject.GetComponentInChildren<DropZone>().typeOfArea == this.typeOfItem) ||
+					(thread1Children[i].gameObject.GetComponentInChildren<DropZone>().typeOfArea == Type.ALL))
+				{
 
-					string zoneName = thread1Children[i].gameObject.GetComponentInChildren<DropZone> ().name;
+					string zoneName = thread1Children[i].gameObject.GetComponentInChildren<DropZone>().name;
 					//Debug.Log("Theres a dropzone!: " + zoneName);
-					thread1Children[i].Find (zoneName).GetComponent<Image> ().color = Color.green;
+					thread1Children[i].Find(zoneName).GetComponent<Image>().color = Color.green;
 				}
 
-			} catch { }
+			}
+			catch { }
 
 		}
 
-		for (int i = 0; i < thread2Children.Length; i++) {
+		for (int i = 0; i < thread2Children.Length; i++)
+		{
 			//threadChildren [i] = this.transform.Find("DropAreaThread").GetChild (i).gameObject;
-			thread2Children[i] = threadArea2.transform.GetChild (i);
+			thread2Children[i] = threadArea2.transform.GetChild(i);
 			//Debug.Log (threadChildren [i].name);
 			//Debug.Log ( timer.GetCurrentTime() + " -> " + threadChildren [i]);
-			try {
-				if ((thread2Children[i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == this.typeOfItem) ||
-					(thread2Children[i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == Type.ALL)) {
+			try
+			{
+				if ((thread2Children[i].gameObject.GetComponentInChildren<DropZone>().typeOfArea == this.typeOfItem) ||
+					(thread2Children[i].gameObject.GetComponentInChildren<DropZone>().typeOfArea == Type.ALL))
+				{
 
-					string zoneName = thread2Children[i].gameObject.GetComponentInChildren<DropZone> ().name;
+					string zoneName = thread2Children[i].gameObject.GetComponentInChildren<DropZone>().name;
 					//Debug.Log("Theres a dropzone!: " + zoneName);
-					thread2Children[i].Find (zoneName).GetComponent<Image> ().color = Color.green;
+					thread2Children[i].Find(zoneName).GetComponent<Image>().color = Color.green;
 				}
-			} catch { }
+			}
+			catch { }
 		}
 	}
 
-	public void OnDrag (PointerEventData eventData) {
+	public void OnDrag(PointerEventData eventData)
+	{
 
 		//Debug.Log ("OnDrag called");
 		//physically move the card
@@ -149,58 +161,65 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		this.GetComponent<RectTransform>().localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
 		// do not shift items in the toolbox
-		if ((parentToReturnTo.transform.name != toolbox.transform.name) && (placeholder.transform.parent.name != toolbox.transform.name) && (placeholderParent.transform.name != toolbox.transform.name)) {
+		if ((parentToReturnTo.transform.name != toolbox.transform.name) && (placeholder.transform.parent.name != toolbox.transform.name) && (placeholderParent.transform.name != toolbox.transform.name))
+		{
 
 			//Debug.Log ("SHIFTING!! \n\ntoolbox.transform.name: " + toolbox.transform.name + "\nparentToReturnTo: " + parentToReturnTo + "\nplaceholder.transform.parent.name:  " + placeholder.transform.parent.name);
 
 			if (placeholder.transform.parent != placeholderParent)
-				placeholder.transform.SetParent (placeholderParent);
+				placeholder.transform.SetParent(placeholderParent);
 
 			int newSiblingIndex = placeholderParent.childCount; //initialized to what it currently is
 
 			//adjust where the placeholder is, depending on what the object is hover over (using y coordinates)
 			//iterate through all the children in the original parent, and check if the box is up or down to the box under it
 
-			try {
+			try
+			{
 
-				for (int i = 0; i < placeholderParent.childCount; i++) {
+				for (int i = 0; i < placeholderParent.childCount; i++)
+				{
 
 					newSiblingIndex = i;
 
-					if (this.transform.position.y > parentToReturnTo.GetChild (i).position.y) {
+					if (this.transform.position.y > parentToReturnTo.GetChild(i).position.y)
+					{
 
 						//if the placeholder is actually already below the sibling index
-						if (placeholder.transform.GetSiblingIndex () > newSiblingIndex)
+						if (placeholder.transform.GetSiblingIndex() > newSiblingIndex)
 							newSiblingIndex--; //ignore the placeholder in the list
 
-						placeholder.transform.SetSiblingIndex (i); //make the placeholder be in this position instead
+						placeholder.transform.SetSiblingIndex(i); //make the placeholder be in this position instead
 						break; //since we'll obviously be in the same position in respect to the rest of the boxes afterwards
 					}
 
 				}
 
-			} catch {
+			}
+			catch
+			{
 				//Debug.Log ("An exception occured: " + e.GetBaseException());
 				//Debug.Log (e.Message);
 			}
 		}
 	}
 
-	public void OnEndDrag (PointerEventData eventData) {
+	public void OnEndDrag(PointerEventData eventData)
+	{
 
-		Debug.Log ("OnEndDrag called");
+		Debug.Log("OnEndDrag called");
 
-        //to end the visualization of selection
-        this.GetComponent<CanvasGroup>().alpha = 1;
-        this.GetComponent<RectTransform>().localScale= new Vector3(1,1,1);
+		//to end the visualization of selection
+		this.GetComponent<CanvasGroup>().alpha = 1;
+		this.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
 
-        //set parent back to where we came from (at the end of the list)
-        this.transform.SetParent (parentToReturnTo);
+		//set parent back to where we came from (at the end of the list)
+		this.transform.SetParent(parentToReturnTo);
 
 		//bounce back the object to where the placeholder is
-		this.transform.SetSiblingIndex (placeholder.transform.GetSiblingIndex ());
+		this.transform.SetSiblingIndex(placeholder.transform.GetSiblingIndex());
 
-        GetComponent<CanvasGroup> ().blocksRaycasts = true;
+		GetComponent<CanvasGroup>().blocksRaycasts = true;
 
 		//iterate through corresponding zones and remove highlights, if any
 		//		threadArea1.transform.GetComponent<Image>().color = Color.magenta;
@@ -209,304 +228,93 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		Transform[] thread1Children = new Transform[threadArea1.transform.childCount];
 		Transform[] thread2Children = new Transform[threadArea2.transform.childCount];
 
-		for (int i = 0; i < thread1Children.Length; i++) {
+		for (int i = 0; i < thread1Children.Length; i++)
+		{
 
-			try {
-				thread1Children[i] = threadArea1.transform.GetChild (i);
-				if ((thread1Children[i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == this.typeOfItem) ||
-					(thread1Children[i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == Type.ALL)) {
-					string zoneName = thread1Children[i].gameObject.GetComponentInChildren<DropZone> ().name;
+			try
+			{
+				thread1Children[i] = threadArea1.transform.GetChild(i);
+				if ((thread1Children[i].gameObject.GetComponentInChildren<DropZone>().typeOfArea == this.typeOfItem) ||
+					(thread1Children[i].gameObject.GetComponentInChildren<DropZone>().typeOfArea == Type.ALL))
+				{
+					string zoneName = thread1Children[i].gameObject.GetComponentInChildren<DropZone>().name;
 					//Debug.Log ("De-colouring: " + thread1Children [i].gameObject.GetComponentInChildren<DropZone> ().name);
 
-					thread1Children[i].Find (zoneName).GetComponent<Image> ().color = Color.white;
+					thread1Children[i].Find(zoneName).GetComponent<Image>().color = Color.white;
 				}
 
-			} catch { }
+			}
+			catch { }
 		}
 
-		if (manager.isLevel4) {
+		//if (manager.isLevel4)
+		//{
 
-			threadArea1.transform.GetComponent<Image> ().color = Color.white;
-			threadArea2.transform.GetComponent<Image> ().color = Color.white;
+		//	threadArea1.transform.GetComponent<Image>().color = Color.white;
+		//	threadArea2.transform.GetComponent<Image>().color = Color.white;
 
-		} else {
+		//}
+		//else
+		//{
 
-			threadArea1.transform.GetComponent<Image> ().color = new Vector4 (0.9F, 0.9F, 0.9F, 1);
-			threadArea2.transform.GetComponent<Image> ().color = new Vector4 (0.9F, 0.9F, 0.9F, 1);
-		}
+		//	threadArea1.transform.GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1);
+		//	threadArea2.transform.GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1);
+		//}
 
-		for (int i = 0; i < thread2Children.Length; i++) {
+		for (int i = 0; i < thread2Children.Length; i++)
+		{
 
-			try {
-				thread2Children[i] = threadArea2.transform.GetChild (i);
-				if ((thread2Children[i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == this.typeOfItem) ||
-					(thread2Children[i].gameObject.GetComponentInChildren<DropZone> ().typeOfArea == Type.ALL)) {
-					string zoneName = thread2Children[i].gameObject.GetComponentInChildren<DropZone> ().name;
+			try
+			{
+				thread2Children[i] = threadArea2.transform.GetChild(i);
+				if ((thread2Children[i].gameObject.GetComponentInChildren<DropZone>().typeOfArea == this.typeOfItem) ||
+					(thread2Children[i].gameObject.GetComponentInChildren<DropZone>().typeOfArea == Type.ALL))
+				{
+					string zoneName = thread2Children[i].gameObject.GetComponentInChildren<DropZone>().name;
 					//Debug.Log ("De-colouring: " + thread2Children [i].gameObject.GetComponentInChildren<DropZone> ().name);
-					thread2Children[i].Find (zoneName).GetComponent<Image> ().color = Color.white;
+					thread2Children[i].Find(zoneName).GetComponent<Image>().color = Color.white;
 
 				}
 
-			} catch { }
+			}
+			catch { }
 		}
 
-		if (this.transform.parent.name == "DropAreaTools") {
-			Debug.Log ("Dropped in the toolbox");
+		if (this.transform.parent.name == "DropAreaTools")
+		{
+			Debug.Log("Dropped in the toolbox");
 
 			// if tab 1 is the active panel
-			if (GameObject.Find ("Tab0").transform.GetSiblingIndex () > GameObject.Find ("Tab1").transform.GetSiblingIndex ()) {
+			int activeTab = Int32.Parse(Regex.Match(GameObject.Find("TabParent").transform.GetChild(GameObject.Find("TabParent").transform.childCount - 1).gameObject.name, @"\d+").Value);
+			manager = GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads[activeTab].toolBoxValues;
 
-				if (this.typeOfItem == Type.ACTION) {
-					LogManager.chronoInputCount++;
-					if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "checkin") {
-						LogManager.instance.logger.sendChronologicalLogs("DropW1-checkin_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-						manager.checkinLeft_thread1 += 1;
+			LogManager.instance.logger.sendChronologicalLogs("DropW1-"+ this.transform.GetChild(0).GetComponentInChildren<Text>().text + "_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
+			Debug.Log("Nira" + this.transform.name);
+			int val = (int)manager.GetType().GetField(this.transform.name).GetValue(manager);
+			Debug.Log("Nira" + val);
+			manager.GetType().GetField(this.transform.name).SetValue(manager,val+1);
 
-					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "wash") {
-						LogManager.instance.logger.sendChronologicalLogs("DropW1-wash_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-						manager.washLeft_thread1 += 1;
-
-					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "cut") {
-						LogManager.instance.logger.sendChronologicalLogs("DropW1-cut_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-						manager.cutLeft_thread1 += 1;
-
-					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "dry") {
-						LogManager.instance.logger.sendChronologicalLogs("DropW1-dry_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-						manager.dryLeft_thread1 += 1;
-
-					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "get") {
-						LogManager.instance.logger.sendChronologicalLogs("DropW1-get_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-						manager.resourcesLeft_thread1 += 1;
-
-					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "ret") {
-						LogManager.instance.logger.sendChronologicalLogs("DropW1-ret_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-						manager.returnLeft_thread1 += 1;
-
-					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "checkout") {
-						LogManager.instance.logger.sendChronologicalLogs("DropW1-checkout_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-						manager.checkoutLeft_thread1 += 1;
-					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "groom") {
-						LogManager.instance.logger.sendChronologicalLogs("DropW1-groom_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-						manager.groomLeft_thread1 += 1;
-					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "pickup") {
-						LogManager.instance.logger.sendChronologicalLogs("DropW1-pickup_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-						manager.pickupLeft_thread1 += 1;
-					}
-
-					// Debug.Log ("An action was dropped in the toolbox");
-
-				} else if (this.typeOfItem == Type.WHILELOOP) {
-					print ("B");
-					manager.whileLeft_thread1 += 1;
-
-					//Debug.Log (this.transform.Find("DropArea").childCount);
-
-					if (this.transform.Find ("DropArea").childCount > 0) {
-
-						//Debug.Log ("While loop is NOT empty");
-
-						GameObject[] children = new GameObject[this.transform.Find ("DropArea").childCount];
-
-						for (int j = 0; j < this.transform.Find ("DropArea").childCount; j++) {
-
-							children[j] = this.transform.Find ("DropArea").GetChild (j).gameObject;
-
-							//Debug.Log ("Child " + j + ": " + children [j].transform.name);
-
-							if (children[j].transform.GetComponentInChildren<Text> ().text == "wash") {
-								manager.washLeft_thread1++;
-							} else if (children[j].transform.GetComponentInChildren<Text> ().text == "checkin") {
-								manager.checkinLeft_thread1++;
-							} else if (children[j].transform.GetComponentInChildren<Text> ().text == "cut") {
-								manager.cutLeft_thread1++;
-							} else if (children[j].transform.GetComponentInChildren<Text> ().text == "dry") {
-								manager.dryLeft_thread1++;
-							} else if (children[j].transform.GetComponentInChildren<Text> ().text == "get") {
-								manager.resourcesLeft_thread1 += 1;
-							} else if (children[j].transform.GetComponentInChildren<Text> ().text == "ret") {
-								manager.returnLeft_thread1 += 1;
-							} else if (children[j].transform.GetComponentInChildren<Text> ().text == "checkout") {
-								manager.checkoutLeft_thread1 += 1;
-							} else if (children[j].transform.GetComponentInChildren<Text> ().text == "groom") {
-								manager.groomLeft_thread1 += 1;
-							} else if (children[j].transform.GetComponentInChildren<Text> ().text == "pickup") {
-								manager.pickupLeft_thread1 += 1;
-							}
-						}
-
-					}
-
-					Debug.Log ("A loop was dropped in the toolbox");
-
-				} else if (this.typeOfItem == Type.IFSTAT) {
-					manager.ifLeft_thread1 += 1;
-					print ("C");
-					if (this.transform.Find ("DropArea").childCount > 0) {
-						if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "wash") {
-							manager.washLeft_thread1++;
-						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "checkin") {
-							manager.checkinLeft_thread1++;
-						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "cut") {
-							manager.cutLeft_thread1++;
-						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "dry") {
-							manager.dryLeft_thread1++;
-						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "get") {
-							manager.resourcesLeft_thread1 += 1;
-						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "ret") {
-							manager.returnLeft_thread1 += 1;
-						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "checkout") {
-							manager.checkoutLeft_thread1 += 1;
-						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "groom") {
-							manager.groomLeft_thread1 += 1;
-						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "pickup") {
-							manager.pickupLeft_thread1 += 1;
-						}
-					}
-
-					Debug.Log ("An if statement was dropped in the toolbox");
-
-				} else if (this.typeOfItem == Type.IFNEEDED) {
-					Debug.Log ("An \"if needed\" tool was dropped in the toolbox");
-				}
-			} else {
-				if (this.typeOfItem == Type.ACTION) {
-					LogManager.chronoInputCount++;
-					if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "checkin") {
-						LogManager.instance.logger.sendChronologicalLogs("DropW2-checkin_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-						manager.checkinLeft_thread2 += 1;
-
-					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "wash") {
-						LogManager.instance.logger.sendChronologicalLogs("DropW2-wash" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-						manager.washLeft_thread2 += 1;
-
-					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "cut") {
-						LogManager.instance.logger.sendChronologicalLogs("DropW2-cut" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-
-						manager.cutLeft_thread2 += 1;
-
-					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "dry") {
-						LogManager.instance.logger.sendChronologicalLogs("DropW2-dry_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-
-						manager.dryLeft_thread2 += 1;
-
-					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "get") {
-						LogManager.instance.logger.sendChronologicalLogs("DropW2-get_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-
-						manager.resourcesLeft_thread2 += 1;
-
-					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "ret") {
-						LogManager.instance.logger.sendChronologicalLogs("DropW2-ret_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-
-						manager.returnLeft_thread2 += 1;
-
-					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "checkout") {
-						LogManager.instance.logger.sendChronologicalLogs("DropW2-checkout_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-
-						manager.checkoutLeft_thread2 += 1;
-					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "groom") {
-						LogManager.instance.logger.sendChronologicalLogs("DropW2-groom_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-
-						manager.groomLeft_thread2 += 1;
-					} else if (this.transform.GetChild (0).GetComponentInChildren<Text> ().text == "pickup") {
-						LogManager.instance.logger.sendChronologicalLogs("DropW2-pickup_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-
-						manager.pickupLeft_thread2 += 1;
-					}
-
-					// Debug.Log ("An action was dropped in the toolbox");
-
-				} else if (this.typeOfItem == Type.WHILELOOP) {
-
-					manager.whileLeft_thread2 += 1;
-
-					//Debug.Log (this.transform.Find("DropArea").childCount);
-
-					if (this.transform.Find ("DropArea").childCount > 0) {
-
-						//Debug.Log ("While loop is NOT empty");
-
-						GameObject[] children = new GameObject[this.transform.Find ("DropArea").childCount];
-
-						for (int j = 0; j < this.transform.Find ("DropArea").childCount; j++) {
-
-							children[j] = this.transform.Find ("DropArea").GetChild (j).gameObject;
-
-							//Debug.Log ("Child " + j + ": " + children [j].transform.name);
-
-							if (children[j].transform.GetComponentInChildren<Text> ().text == "wash") {
-								manager.washLeft_thread2++;
-							} else if (children[j].transform.GetComponentInChildren<Text> ().text == "checkin") {
-								manager.checkinLeft_thread2++;
-							} else if (children[j].transform.GetComponentInChildren<Text> ().text == "cut") {
-								manager.cutLeft_thread2++;
-							} else if (children[j].transform.GetComponentInChildren<Text> ().text == "dry") {
-								manager.dryLeft_thread2++;
-							} else if (children[j].transform.GetComponentInChildren<Text> ().text == "get") {
-								manager.resourcesLeft_thread2++;
-							} else if (children[j].transform.GetComponentInChildren<Text> ().text == "ret") {
-								manager.returnLeft_thread2++;
-							} else if (children[j].transform.GetComponentInChildren<Text> ().text == "checkout") {
-								manager.checkoutLeft_thread2++;
-							} else if (children[j].transform.GetComponentInChildren<Text> ().text == "groom") {
-								manager.groomLeft_thread2++;
-							} else if (children[j].transform.GetComponentInChildren<Text> ().text == "pickup") {
-								manager.pickupLeft_thread2++;
-							}
-						}
-
-					}
-
-					Debug.Log ("A loop was dropped in the toolbox");
-
-				} else if (this.typeOfItem == Type.IFSTAT) {
-
-					manager.ifLeft_thread2 += 1;
-
-					if (this.transform.Find ("DropArea").childCount > 0) {
-						if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "wash") {
-							manager.washLeft_thread2++;
-						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "checkin") {
-							manager.checkinLeft_thread2++;
-						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "cut") {
-							manager.cutLeft_thread2++;
-						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "dry") {
-							manager.dryLeft_thread2++;
-						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "get") {
-							manager.resourcesLeft_thread2++;
-						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "ret") {
-							manager.returnLeft_thread2++;
-						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "checkout") {
-							manager.checkoutLeft_thread2++;
-						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "groom") {
-							manager.groomLeft_thread2++;
-						} else if (this.transform.Find ("DropArea").GetChild (0).transform.GetComponentInChildren<Text> ().text == "pickup") {
-							manager.pickupLeft_thread2++;
-						}
-					}
-
-					Debug.Log ("An if statement was dropped in the toolbox");
-
-				} else if (this.typeOfItem == Type.IFNEEDED) {
-					Debug.Log ("An \"if needed\" tool was dropped in the toolbox");
-				}
-			}
-
-			manager.updateValues ();
+			manager.updateValues();
 			//self-destroy
-			Destroy (this.gameObject);
+			Destroy(this.gameObject);
 
-		} else if (this.transform.parent.gameObject == canvas) {
+		}
+		else if (this.transform.parent.gameObject == canvas)
+		{
 
-			this.transform.SetParent (toolbox.transform);
+			this.transform.SetParent(toolbox.transform);
 
-		} else {
+		}
+		else
+		{
 
 			//Debug.Log ("Dropped within another box... probably");
 			//Debug.Log ("Parent: " + this.transform.parent.name);
 			LogManager.chronoInputCount++;
 			LogManager.instance.logger.sendChronologicalLogs("Put_" + LogManager.chronoInputCount + this.GetComponentInChildren<Text>().text, "", LogManager.instance.UniEndTime().ToString());
 			//new parent is inside an if statement or a look
-			if (this.transform.parent.name == "DropArea") {
+			if (this.transform.parent.name == "DropArea")
+			{
 				//this.transform.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (this.GetComponent<RectTransform> ().sizeDelta.x, this.GetComponent<RectTransform> ().sizeDelta.y + 45);
 
 				//this.transform.GetComponent<RectTransform> ().sizeDelta = new Vector2(75, 25);
@@ -514,42 +322,50 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 		}
 
-		if (this.typeOfItem == Type.IFSTAT) {
-			this.GetComponent<Image> ().color = new Vector4 (0.3F, 0.8F, 0.83F, 1);
+		if (this.typeOfItem == Type.IFSTAT)
+		{
+			this.GetComponent<Image>().color = new Vector4(0.3F, 0.8F, 0.83F, 1);
 
-		} else if (this.typeOfItem == Type.ACTION && (this.GetComponentInChildren<Text> ().text == "get")) {
+		}
+		else if (this.typeOfItem == Type.ACTION && (this.GetComponentInChildren<Text>().text == "get"))
+		{
 			//			LogData.chronologicalLogs.Add ("Put-get: " + LogManager.instance.UniEndTime ());
-			this.GetComponent<Image> ().color = new Vector4 (0.94F, 0.28F, 0.94F, 1);
+			this.GetComponent<Image>().color = new Vector4(0.94F, 0.28F, 0.94F, 1);
 
-		} else if (this.typeOfItem == Type.ACTION && (this.GetComponentInChildren<Text> ().text == "ret")) {
+		}
+		else if (this.typeOfItem == Type.ACTION && (this.GetComponentInChildren<Text>().text == "ret"))
+		{
 			//			LogData.chronologicalLogs.Add ("Put-ret: " + LogManager.instance.UniEndTime ());
-			this.GetComponent<Image> ().color = new Vector4 (0.56F, 0.82F, 0.44F, 1);
+			this.GetComponent<Image>().color = new Vector4(0.56F, 0.82F, 0.44F, 1);
 
-		} else if (this.typeOfItem == Type.ACTION) {
-		//	print (this.GetComponentInChildren<Text> ().text);
+		}
+		else if (this.typeOfItem == Type.ACTION)
+		{
+			//	print (this.GetComponentInChildren<Text> ().text);
 			//			LogData.chronologicalLogs.Add ("Put-"+this.GetComponentInChildren<Text> ().text+": " + LogManager.instance.UniEndTime ());
-			this.GetComponent<Image> ().color = new Vector4 (1, 0.76F, 0.24F, 1);
+			this.GetComponent<Image>().color = new Vector4(1, 0.76F, 0.24F, 1);
 
-		} else if (this.typeOfItem == Type.WHILELOOP) {
-			this.GetComponent<Image> ().color = new Vector4 (0.77F, 0.71F, 0.6F, 1);
+		}
+		else if (this.typeOfItem == Type.WHILELOOP)
+		{
+			this.GetComponent<Image>().color = new Vector4(0.77F, 0.71F, 0.6F, 1);
 		}
 
 		// this.GetComponent<Image> ().color = Color.white;
 
-		Destroy (placeholder);
+		Destroy(placeholder);
 
 		CreateNewBlock.canCreate = true;
 	}
 
-	void Start () {
+	void Start()
+	{
 		// threadArea = GameObject.Find("DropAreaThread");
 
 		threadArea1 = GameObject.Find("Tab0").transform.GetChild(0).GetChild(0).GetChild(1).gameObject;
 		threadArea2 = GameObject.Find("Tab1").transform.GetChild(0).GetChild(0).GetChild(1).gameObject;
 
-		canvas = GameObject.Find ("Canvas");
-		toolbox = GameObject.Find ("DropAreaTools");
-
-		manager = GameObject.Find ("_SCRIPTS_").GetComponent<ToolboxManager> ();
+		canvas = GameObject.Find("Canvas");
+		toolbox = GameObject.Find("DropAreaTools");
 	}
 }
