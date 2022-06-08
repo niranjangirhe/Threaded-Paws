@@ -48,7 +48,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     public List<Thread> threads;
     private dropDownManager dropDownManager = new dropDownManager();
-
+    [SerializeField] private bool isRetAllCompulsion;
 
 
 
@@ -583,35 +583,37 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                         }
                         else if (t.simBlocks[t.currIndex].type == SimBlock.CHECKOUT)
-                        {
-                            foreach (KeyValuePair<string, bool> b in t.needsTo)
+                        { 
+                            foreach(KeyValuePair<string,bool> k in t.needsTo)
                             {
-                                // Debug.Log(b.Key + b.Value + "<----");
+                                if (k.Value && !t.did[k.Key])
+                                {
+                                    String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
+                                    t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                    t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
+                                    t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
+                                    scrollToBottom();
+
+                                    resError("> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.", t.layoutPanel);
+                                    scrollToBottom();
+                                    break;
+                                }
                             }
-                            if ((t.needsTo["Cut"] && !t.did["Cut"]) || (t.needsTo["Dry"] && !t.did["Dry"]) || (t.needsTo["Wash"] && !t.did["Wash"]) || (t.needsTo["Groom"] && !t.did["Groom"]))
+                            if(isRetAllCompulsion)
                             {
+                                foreach (KeyValuePair<string, bool> k in t.hasItems)
+                                {
+                                    if(k.Value)
+                                    {
+                                        String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
+                                        t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                        t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
+                                        t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
 
-                                String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
-                                scrollToBottom();
-
-                                resError("> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.", t.layoutPanel);
-                                scrollToBottom();
-
-                            }
-                            else if (t.hasItems["brush"] || t.hasItems["clippers"] || t.hasItems["cond."] || t.hasItems["dryer"] || t.hasItems["scissors"] || t.hasItems["shampoo"] || t.hasItems["station"] || t.hasItems["towel"])
-                            {
-
-                                String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
-
-                                resError("> ERROR: You need to return all the resources you acquired before checking out.", t.layoutPanel);
-                                scrollToBottom();
-
+                                        resError("> ERROR: You need to return all the resources you acquired before checking out.", t.layoutPanel);
+                                        scrollToBottom();
+                                    }
+                                }
                             }
                             else if (t.isCheckedOut)
                             {
