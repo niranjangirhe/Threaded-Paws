@@ -14,7 +14,8 @@ public class CreateNewBlock : MonoBehaviour {
 	public void NewActionBlock() {
 
 		// if tab 1 is the active panel
-		if (GameObject.Find ("Tab1").transform.GetSiblingIndex () > GameObject.Find ("Tab2").transform.GetSiblingIndex ()) {
+	
+		if (GameObject.Find ("Tab06").transform.GetSiblingIndex () > GameObject.Find ("Tab1").transform.GetSiblingIndex ()) {
 
 			if (this.transform.name == "WashBox") {
 				Debug.Log ("This is a wash box");

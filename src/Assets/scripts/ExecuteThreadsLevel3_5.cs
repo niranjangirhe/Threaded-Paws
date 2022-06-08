@@ -24,15 +24,14 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
         //Tab (Grandparent of blocks)
         public GameObject layoutPanel;
-        public GameObject tabDropArea;
+        [HideInInspector] public GameObject tabDropArea;
 
         //Thread personal data
         public string name;
-        public Sprite profilePic;
 
         //sprites Dog and worker
         [HideInInspector] public Sprite dogSprite;
-        [HideInInspector] public Sprite workerSprite;
+        public Sprite workerSprite;
 
         //stores the bool for all works and action
         [HideInInspector] public bool isCheckedIn;
@@ -109,8 +108,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         //Initilize a Random worker from each halves;
         s = Resources.LoadAll("sprites/workers", typeof(Sprite));
         len = s.Length;
-        threads[0].workerSprite = (Sprite)s[Random.Range(0, len / 2 - 1)];
-        threads[1].workerSprite = (Sprite)s[Random.Range(len / 2, len - 1)];
 
 
         //Fill needsto Dict
@@ -167,17 +164,24 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     private void AddTabs()
     {
+        int count=0;
         foreach(Thread t in threads)
         {
             GameObject tabtemp = Instantiate(tab);// new Vector3(0, 0, 0), Quaternion.identity);
             tabtemp.transform.SetParent(tabParent,false);
+            tabtemp.name = "Tab"+count.ToString();
             GameObject labeltemp = Instantiate(label);// new Vector3(0, 0, 0), Quaternion.identity);
             labeltemp.transform.SetParent(labelParent, false);
+            labeltemp.transform.GetChild(0).GetComponent<SwitchTab>().index = count;
+            labeltemp.transform.GetChild(0).GetComponent<SwitchTab>().totalCount = threads.Count;    
+            labeltemp.name = "Label"+count.ToString();
             labeltemp.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = t.name;
-            labeltemp.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = t.profilePic;
-            Debug.Log("Nira"+labeltemp.transform.GetChild(0).GetChild(1).name);
-
+            labeltemp.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = t.workerSprite;
+            t.tabDropArea = tabtemp.transform.GetChild(0).GetChild(0).GetChild(1).gameObject;
+            count++;
         }
+        GameObject.Find("Tab0").transform.SetAsLastSibling();
+        GameObject.Find("Label0").transform.GetChild(0).GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1); 
     }
 
     public void ExecuteThreads()

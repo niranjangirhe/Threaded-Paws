@@ -9,13 +9,15 @@ public class InitiateLevel3_5 : MonoBehaviour {
 	public GameObject acquirePrefab;
 	public GameObject returnPrefab;
 
-	public GameObject t1; // drop area thread
-	public GameObject t2; // drop area thread
+	[HideInInspector] public GameObject t1; // drop area thread
+    [HideInInspector] public GameObject t2; // drop area thread
 
 	// Use this for initialization
 	void Start () {
 
-		GameObject box;
+        t1 = GameObject.Find("Tab0").transform.GetChild(0).GetChild(0).GetChild(1).gameObject;
+        t2 = GameObject.Find("Tab1").transform.GetChild(0).GetChild(0).GetChild(1).gameObject;
+        GameObject box;
 
         // ---------- IN THREAD 1 ----------
         newBox(actionPrefab, "checkin", t1);
@@ -25,7 +27,7 @@ public class InitiateLevel3_5 : MonoBehaviour {
         box = newBox(acquirePrefab, "get", t1); // acquire (brush);
         box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "scissors";
 
-        newBox(actionPrefab, "cut", t1);
+        newBox(actionPrefab, "Cut", t1);
 
         box = newBox(returnPrefab, "ret", t1);
         box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "brush";
@@ -55,7 +57,7 @@ public class InitiateLevel3_5 : MonoBehaviour {
         box = newBox(acquirePrefab, "get", t2); // acquire (brush);
         box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "brush";
 
-        newBox(actionPrefab, "cut", t2);
+        newBox(actionPrefab, "Cut", t2);
 
         box = newBox(returnPrefab, "ret", t2);
         box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "scissors";

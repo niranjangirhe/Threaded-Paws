@@ -254,7 +254,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			Debug.Log ("Dropped in the toolbox");
 
 			// if tab 1 is the active panel
-			if (GameObject.Find ("Tab1").transform.GetSiblingIndex () > GameObject.Find ("Tab2").transform.GetSiblingIndex ()) {
+			if (GameObject.Find ("Tab0").transform.GetSiblingIndex () > GameObject.Find ("Tab1").transform.GetSiblingIndex ()) {
 
 				if (this.typeOfItem == Type.ACTION) {
 					LogManager.chronoInputCount++;
@@ -544,8 +544,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	void Start () {
 		// threadArea = GameObject.Find("DropAreaThread");
 
-		threadArea1 = GameObject.Find ("DropAreaThread1");
-		threadArea2 = GameObject.Find ("DropAreaThread2");
+		threadArea1 = GameObject.Find("Tab0").transform.GetChild(0).GetChild(0).GetChild(1).gameObject;
+		threadArea2 = GameObject.Find("Tab1").transform.GetChild(0).GetChild(0).GetChild(1).gameObject;
 
 		canvas = GameObject.Find ("Canvas");
 		toolbox = GameObject.Find ("DropAreaTools");
