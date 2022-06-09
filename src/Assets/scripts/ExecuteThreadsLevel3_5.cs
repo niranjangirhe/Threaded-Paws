@@ -16,7 +16,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     {
         //This is list of ticks(UI) which can be set on/off
         public List<GameObject> ticks;
-        public List<GameObject> innerTicks;
+        private List<GameObject> innerTicks;
 
         //ThreadData
         public WorkList workList = new WorkList();
@@ -58,9 +58,12 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     [SerializeField] private GameObject tab;
     [SerializeField] private GameObject label;
     [SerializeField] private GameObject agenda;
+    [SerializeField] private GameObject agendaTick;
     [SerializeField] private Transform tabParent;
     [SerializeField] private Transform labelParent;
     [SerializeField] private Transform agendaParent;
+    [SerializeField] private Transform agendaTickParent;
+
 
 
 
@@ -188,10 +191,12 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         int count=0;
         foreach(Thread t in threads)
         {
+            //------- Add Tab --------
             GameObject tabtemp = Instantiate(tab);
             tabtemp.transform.SetParent(tabParent,false);
             tabtemp.name = "Tab"+count.ToString();
 
+            //------- Add Label --------
             GameObject labeltemp = Instantiate(label);
             labeltemp.transform.SetParent(labelParent, false);
             labeltemp.transform.GetChild(0).GetComponent<SwitchTab>().index = count;
@@ -202,16 +207,42 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
             t.tabDropArea = tabtemp.transform.GetChild(0).GetChild(0).GetChild(1).gameObject;
 
-            //GameObject agendatemp = Instantiate(agenda);
-            //agendatemp.transform.SetParent(agendaParent, false);
-            //agendatemp.name = "Agenda" + count.ToString();
-            //agendatemp.transform.GetChild(0).GetComponent<SwitchTab>().index = count;
-            //agendatemp.transform.GetChild(0).GetComponent<SwitchTab>().totalCount = threads.Count;
+            //------- Add Agenda --------
+            GameObject agendatemp = Instantiate(agenda);
+            agendatemp.transform.SetParent(agendaParent, false);
+            agendatemp.name = "Agenda" + count.ToString();
+
+            // ------- Enable inner tick --------
+            System.Reflection.FieldInfo[] varWorklist = t.workList.GetType().GetFields();
+            foreach (System.Reflection.FieldInfo v in varWorklist)
+            {
+                agendatemp.transform.Find(v.Name).gameObject.SetActive(((Action)v.GetValue(t.workList)).isneeded);
+            }
+            
+
+            //------- Add Agenda Tick --------
+            GameObject agendaTicktemp = Instantiate(agendaTick);
+            agendaTicktemp.transform.SetParent(agendaTickParent, false);
+            agendaTicktemp.name = "AgendaTick" + count.ToString();
+            Color c = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+            if (count == 0)
+            {
+                agendaTicktemp.GetComponent<Image>().color = c;
+            }
+            else
+            {
+                agendaTicktemp.GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1);
+            }
+            agendaTicktemp.transform.GetChild(0).GetComponent<Image>().color = c;
+            agendaTicktemp.transform.GetChild(1).GetComponent<Text>().text = "w" + (count + 1);
+            agendaTicktemp.GetComponent<SwitchTab>().index = count;
+            agendaTicktemp.GetComponent<SwitchTab>().totalCount = threads.Count;
 
             count++;
         }
         GameObject.Find("Tab0").transform.SetAsLastSibling();
-        GameObject.Find("Label0").transform.GetChild(0).GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1); 
+        GameObject.Find("Agenda0").transform.SetAsLastSibling();
+        GameObject.Find("Label0").transform.GetChild(0).GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1);
     }
 
     public void ExecuteThreads()
@@ -456,20 +487,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                 {
                     
                     Debug.Log(e.Message+" Name The Tick as same as work "+ g.name);
-                }
-            }
-            foreach (GameObject g in t.innerTicks)
-            {
-                try
-                {
-
-                    g.SetActive(((Action)t.workList.GetType().GetField(g.name).GetValue(t.workList)).isneeded);
-
-                }
-                catch (Exception e)
-                {
-
-                    Debug.Log(e.Message + " Name The Tick as same as work " + g.name);
                 }
             }
         }

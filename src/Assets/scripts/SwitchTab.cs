@@ -21,7 +21,7 @@ public class SwitchTab : MonoBehaviour
         {
             GameObject.Find("Label" + i).transform.GetChild(0).GetComponent<Image>().color = Color.white;
             try { 
-                GameObject.Find("Agenda" + (i + 1)).transform.GetChild(0).GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1); 
+                GameObject.Find("AgendaTick" + i).GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1); 
             }
             catch 
             { }
@@ -32,9 +32,10 @@ public class SwitchTab : MonoBehaviour
         //To Switch Agenda Tab
         try
         {
-            Transform agenda = GameObject.Find("Agenda" + (index + 1)).transform;
+            Transform agendaTick = GameObject.Find("AgendaTick" + index).transform;
+            Transform agenda = GameObject.Find("Agenda" + index).transform;
             agenda.SetAsLastSibling();
-            agenda.GetChild(0).GetComponent<Image>().color = agenda.GetChild(0).GetChild(0).GetComponent<Image>().color;
+            agendaTick.GetComponent<Image>().color = agendaTick.GetChild(0).GetComponent<Image>().color;
         }
         catch { }
        
