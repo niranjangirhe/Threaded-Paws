@@ -28,11 +28,12 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         [HideInInspector] public GameObject tabDropArea;
 
         //Thread personal data
-        public string name;
+        [HideInInspector] public string workerName;
+        [HideInInspector] public string dogName;
 
         //sprites Dog and worker
         [HideInInspector] public Sprite dogSprite;
-        public Sprite workerSprite;
+        [HideInInspector] public Sprite workerSprite;
 
         //stores the bool for all works and action
         [HideInInspector] public bool isCheckedIn;
@@ -97,19 +98,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     string returnErrMsg = "> ERROR: You are trying to return a resource you don't have.";
     string acquireErrMsg = "> ERROR: You are trying to acquire a resource you already have.";
 
+
     void Start()
     {
-
-        //Initilize a Random dogs from each halves;
-        UnityEngine.Object[] s = Resources.LoadAll("sprites/dogs", typeof(Sprite));
-        int len = s.Length;
-        threads[0].dogSprite = (Sprite)s[Random.Range(0, len / 2 - 1)];
-        threads[1].dogSprite = (Sprite)s[Random.Range(len / 2, len - 1)];
-
-        //Initilize a Random worker from each halves;
-        s = Resources.LoadAll("sprites/workers", typeof(Sprite));
-        len = s.Length;
-
 
         //Fill needsto Dict
         foreach (Thread t in threads)
@@ -118,7 +109,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
             foreach (System.Reflection.FieldInfo v in varWorklist)
             {
                 t.needsTo.Add(v.Name, ((Action)v.GetValue(t.workList)).isneeded);
-            }
+            } 
         }
         manager = GameObject.Find("_SCRIPTS_").GetComponent<ToolboxManager>();
         disablePanel = GameObject.Find("DisablePanel");
@@ -158,7 +149,31 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     public void Awake()
     {
-        
+        int count = 0;
+        System.Random r = new System.Random();
+        UnityEngine.Object[] s = Resources.LoadAll("sprites/workers", typeof(Sprite));
+        foreach (int i in Enumerable.Range(0, s.Length).OrderBy(x => r.Next()))
+        {
+            if (count < threads.Count)
+            {
+                threads[count].workerName = s[i].name;
+                threads[count].workerSprite = (Sprite)s[i];
+            }
+            count++;
+        }
+
+        count = 0;
+        UnityEngine.Object[] d = Resources.LoadAll("sprites/dogs", typeof(Sprite));
+        foreach (int i in Enumerable.Range(0, d.Length).OrderBy(x => r.Next()))
+        {
+            if (count < threads.Count)
+            {
+                threads[count].dogName = d[i].name;
+                threads[count].dogSprite = (Sprite)d[i];
+            }
+            count++;
+        }
+
         ApplyTicks();
         AddTabs();
         foreach(Thread t in threads)
@@ -180,7 +195,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
             labeltemp.transform.GetChild(0).GetComponent<SwitchTab>().index = count;
             labeltemp.transform.GetChild(0).GetComponent<SwitchTab>().totalCount = threads.Count;    
             labeltemp.name = "Label"+count.ToString();
-            labeltemp.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = t.name;
+            labeltemp.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = t.workerName;
             labeltemp.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = t.workerSprite;
             t.tabDropArea = tabtemp.transform.GetChild(0).GetChild(0).GetChild(1).gameObject;
             count++;
