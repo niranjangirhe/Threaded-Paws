@@ -49,16 +49,17 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         [HideInInspector] public List<GameObject> simulationImages;
     }
 
-    [SerializeField] private GameObject tab;
-    [SerializeField] private GameObject label;
-    [SerializeField] private Transform tabParent;
-    [SerializeField] private Transform labelParent;
-
     public List<Thread> threads;
     private dropDownManager dropDownManager = new dropDownManager();
     [SerializeField] private bool isRetAllCompulsion;
 
-
+    // --- For Dynamic UI ---
+    [SerializeField] private GameObject tab;
+    [SerializeField] private GameObject label;
+    [SerializeField] private GameObject agenda;
+    [SerializeField] private Transform tabParent;
+    [SerializeField] private Transform labelParent;
+    [SerializeField] private Transform agendaParent;
 
 
 
@@ -172,17 +173,26 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         int count=0;
         foreach(Thread t in threads)
         {
-            GameObject tabtemp = Instantiate(tab);// new Vector3(0, 0, 0), Quaternion.identity);
+            GameObject tabtemp = Instantiate(tab);
             tabtemp.transform.SetParent(tabParent,false);
             tabtemp.name = "Tab"+count.ToString();
-            GameObject labeltemp = Instantiate(label);// new Vector3(0, 0, 0), Quaternion.identity);
+
+            GameObject labeltemp = Instantiate(label);
             labeltemp.transform.SetParent(labelParent, false);
             labeltemp.transform.GetChild(0).GetComponent<SwitchTab>().index = count;
             labeltemp.transform.GetChild(0).GetComponent<SwitchTab>().totalCount = threads.Count;    
             labeltemp.name = "Label"+count.ToString();
             labeltemp.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = t.name;
             labeltemp.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = t.workerSprite;
+
             t.tabDropArea = tabtemp.transform.GetChild(0).GetChild(0).GetChild(1).gameObject;
+
+            //GameObject agendatemp = Instantiate(agenda);
+            //agendatemp.transform.SetParent(agendaParent, false);
+            //agendatemp.name = "Agenda" + count.ToString();
+            //agendatemp.transform.GetChild(0).GetComponent<SwitchTab>().index = count;
+            //agendatemp.transform.GetChild(0).GetComponent<SwitchTab>().totalCount = threads.Count;
+
             count++;
         }
         GameObject.Find("Tab0").transform.SetAsLastSibling();
