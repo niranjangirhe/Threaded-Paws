@@ -14,58 +14,113 @@ public class InitiateLevel3_5 : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+ 
+        
 
-        t1 = GameObject.Find("Tab0").transform.GetChild(0).GetChild(0).GetChild(1).gameObject;
-        t2 = GameObject.Find("Tab1").transform.GetChild(0).GetChild(0).GetChild(1).gameObject;
         GameObject box;
 
-        // ---------- IN THREAD 1 ----------
-        newBox(actionPrefab, "checkin", t1, "CheckInBox");
-        box = newBox(acquirePrefab, "get", t1, "ResourceBox"); // acquire (brush);
-        box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "brush";
+        foreach (Thread t in GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads)
+        {
+            foreach(BlockInfo bi in t.blockInfo)
+            {
+                switch(bi.actionEnum)
+                {
+                    case ActionEnum.CheckIn:
+                        newBox(actionPrefab, "checkin", t.tabDropArea, "CheckInBox");
+                        break;
+                    case ActionEnum.CheckOut:
+                        newBox(actionPrefab, "checkout", t.tabDropArea, "CheckOutBox");
+                        break;
+                    case ActionEnum.Cut:
+                        newBox(actionPrefab, "Cut", t.tabDropArea, "CutBox");
+                        break;
+                    case ActionEnum.Dry:
+                        newBox(actionPrefab, "Dry", t.tabDropArea, "DryBox");
+                        break;
+                    case ActionEnum.Get:
+                        box = newBox(acquirePrefab, "get", t.tabDropArea, "ResourceBox");
 
-        box = newBox(acquirePrefab, "get", t1, "ResourceBox"); // acquire (brush);
-        box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "scissors";
+                        switch(bi.itemsEnum)
+                        {
+                            case ItemsEnum.Null:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "[null]";
+                                box.gameObject.transform.Find("Label").GetComponent<Text>().color = Color.red;
+                                break;
+                            case ItemsEnum.brush:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "brush";
+                                break;
+                            case ItemsEnum.clippers:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "clippers";
+                                break;
+                            case ItemsEnum.conditioner:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "cond.";
+                                break;
+                            case ItemsEnum.dryer:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "dryer";
+                                break;
+                            case ItemsEnum.scissors:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "scissors";
+                                break;
+                            case ItemsEnum.shampoo:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "shampoo";
+                                break;
+                            case ItemsEnum.station:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "station";
+                                break;
+                            case ItemsEnum.towel:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "towel";
+                                break;
+                        }
 
-        newBox(actionPrefab, "Cut", t1, "CutBox");
+                        break;
+                    case ActionEnum.Groom:
+                        newBox(actionPrefab, "Groom", t.tabDropArea, "GroomBox");
+                        break;
+                    case ActionEnum.Return:
+                        box = newBox(returnPrefab, "ret", t.tabDropArea, "ReturnBox");
 
-        box = newBox(returnPrefab, "ret", t1, "ReturnBox");
-        box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "brush";
+                        switch (bi.itemsEnum)
+                        {
+                            case ItemsEnum.Null:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "[null]";
+                                box.gameObject.transform.Find("Label").GetComponent<Text>().color = Color.red;
+                                break;
+                            case ItemsEnum.brush:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "brush";
+                                break;
+                            case ItemsEnum.clippers:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "clippers";
+                                break;
+                            case ItemsEnum.conditioner:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "cond.";
+                                break;
+                            case ItemsEnum.dryer:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "dryer";
+                                break;
+                            case ItemsEnum.scissors:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "scissors";
+                                break;
+                            case ItemsEnum.shampoo:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "shampoo";
+                                break;
+                            case ItemsEnum.station:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "station";
+                                break;
+                            case ItemsEnum.towel:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "towel";
+                                break;
+                        }
+                        break;
+                    case ActionEnum.Wash:
+                        newBox(actionPrefab, "Wash", t.tabDropArea, "WashBox");
+                        break;
+                }
+           
+            }
+        }
 
-        box = newBox(returnPrefab, "ret", t1, "ReturnBox");
-        box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "scissors";
-
-        // acquire (station);
-        // acquire (towel);
-        // acquire (shampoo);
-        // acquire (conditioner);
-        // wash
-        // return (station);
-        // return (towel);
-        // return (shampoo);
-        // return (conditioner);
-
-        newBox(actionPrefab, "checkout", t1, "CheckOutBox");
-
-        // ---------- IN THREAD 2 ----------
-
-        newBox(actionPrefab, "checkin", t2, "CheckInBox");
-
-        box = newBox(acquirePrefab, "get", t2, "ResourceBox"); // acquire (brush);
-        box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "scissors";
-
-        box = newBox(acquirePrefab, "get", t2, "ResourceBox"); // acquire (brush);
-        box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "brush";
-
-        newBox(actionPrefab, "Cut", t2, "CutBox");
-
-        box = newBox(returnPrefab, "ret", t2, "ReturnBox");
-        box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "scissors";
-
-        box = newBox(returnPrefab, "ret", t2, "ReturnBox");
-        box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "brush";
-
-        newBox(actionPrefab, "checkout", t2, "CheckOutBox");
+        
+        
 
     }
 		
@@ -75,13 +130,9 @@ public class InitiateLevel3_5 : MonoBehaviour {
 
         newActionBox.name = boxName;
 		newActionBox.transform.SetParent (threadParent.transform);
-		//newActionBox.transform.SetParent (canvas.GetComponent<Canvas> ().transform); //invisible otherwise
-		//newActionBox.GetComponent<RectTransform> ().sizeDelta = new Vector2 (85, 40); //width, height
-		//newActionBox.AddComponent<Draggable>();
 		newActionBox.transform.localScale = Vector3.one;
 		newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = actionName;
-		//newActionBox.GetComponent<Image> ().color = Color.magenta;
-		newActionBox.transform.Find ("Halo").gameObject.SetActive (false);
+		newActionBox.transform.Find("Halo").gameObject.SetActive (false);
 
 		return newActionBox;
 	}

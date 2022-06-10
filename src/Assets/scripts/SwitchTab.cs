@@ -14,7 +14,6 @@ public class SwitchTab : MonoBehaviour
     }
     public void SwitchTabBtn()
     {
-
         //To Switch Tab
         GameObject.Find("Tab" + index).transform.SetAsLastSibling();
         for (int i = 0; i < totalCount; i++)

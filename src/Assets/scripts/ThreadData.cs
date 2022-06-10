@@ -70,3 +70,79 @@ public class ToolBoxValues
 		txt_groomLeft_thread.text = "x " + GroomBox;
 	}
 }
+[System.Serializable]
+public enum ActionEnum
+{
+	Cut,
+	Wash,
+	Groom,
+	Dry,
+	CheckIn,
+	CheckOut,
+	Return,
+	Get
+}
+[System.Serializable]
+public enum ItemsEnum
+{
+	Null,
+	brush,
+	scissors,
+	towel,
+	shampoo,
+	conditioner,
+	station,
+	clippers,
+	dryer
+}
+[System.Serializable]
+public class BlockInfo
+{
+	public ActionEnum actionEnum;
+	[Tooltip("Select only for Return and Get")]
+	public ItemsEnum itemsEnum;
+}
+
+[System.Serializable]
+public class Thread
+{
+    //This is list of ticks(UI) which can be set on/off
+    public List<GameObject> ticks;
+    private List<GameObject> innerTicks;
+
+    //ThreadData
+    public WorkList workList = new WorkList();
+    public ToolBoxValues toolBoxValues = new ToolBoxValues();
+
+
+    //Tab (Grandparent of blocks)
+    public GameObject layoutPanel;
+    [HideInInspector] public GameObject tabDropArea;
+
+    //Thread personal data
+    [HideInInspector] public string workerName;
+    [HideInInspector] public string dogName;
+
+    //sprites Dog and worker
+    [HideInInspector] public Sprite dogSprite;
+    [HideInInspector] public Sprite workerSprite;
+
+    //stores the bool for all works and action
+    [HideInInspector] public bool isCheckedIn;
+    [HideInInspector] public bool isCheckedOut;
+    [HideInInspector] public Dictionary<string, bool> hasItems = new Dictionary<string, bool>();
+    [HideInInspector] public Dictionary<string, bool> needsTo = new Dictionary<string, bool>();
+    [HideInInspector] public Dictionary<string, bool> did = new Dictionary<string, bool>();
+
+    //variables to store temp data
+    [HideInInspector] public int currIndex;
+    [HideInInspector] public bool canPrint;
+    [HideInInspector] public Transform[] blocks;
+    [HideInInspector] public List<SimBlock> simBlocks;
+    [HideInInspector] public List<GameObject> simulationImages;
+
+    // ------ for prefill -----
+
+
+    public List<BlockInfo> blockInfo;
+}
