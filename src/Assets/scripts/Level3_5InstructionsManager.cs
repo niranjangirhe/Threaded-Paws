@@ -50,11 +50,11 @@ public class Level3_5InstructionsManager : MonoBehaviour
         level3_part2.SetActive(false);
 
         level3_disableFunctionality.SetActive(true);
-        LogManager.instance.isQuitLogNeed = true;
+       // LogManager.instance.isQuitLogNeed = true;
         //GameLogData.sessionID = AnalyticsSessionInfo.sessionId;
         GameLogData.levelNo = 3;
         //GameLogData.userID = AnalyticsSessionInfo.userId;
-        LogManager.instance.StartTimer();
-        LogManager.instance.logger.startLoggingData(GameLogData.levelNo.ToString(), "", "", "", "", "", "", "", System.DateTime.Now.ToString(), "");
+        //LogManager.instance.StartTimer();
+        //LogManager.instance.logger.startLoggingData(GameLogData.levelNo.ToString(), "", "", "", "", "", "", "", System.DateTime.Now.ToString(), "");
     }
 }

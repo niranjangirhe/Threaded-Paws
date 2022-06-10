@@ -10,6 +10,7 @@ public class CreateNewBlock : MonoBehaviour {
 
 	public GameObject prefab;
 	public GameObject canvas;
+    private GameObject child;
 
     private Text txtErrorMsg;
 
@@ -30,21 +31,15 @@ public class CreateNewBlock : MonoBehaviour {
 
             if (canCreate)
             {
-
+                DeleteOtherClone();
                 GameObject newActionBox = (GameObject)Instantiate(prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
+                child = newActionBox;
                 newActionBox.name = this.transform.name;
                 newActionBox.transform.SetParent(this.transform);
                 newActionBox.transform.localScale = Vector3.one;
                 newActionBox.transform.GetChild(0).GetComponentInChildren<Text>().text = this.GetComponentInChildren<Text>().text;
                 
-                cardCount -= 1;
-                manager.GetType().GetField(this.transform.name).SetValue(manager, cardCount);
-
                 
-                manager.updateValues();
-
-                canCreate = false;
             }
             else
             {
@@ -60,7 +55,41 @@ public class CreateNewBlock : MonoBehaviour {
 
     }
 
-	public void newActionBlockMaker(ref int cardCount)
+    private void DeleteOtherClone()
+    {
+        int childCount = gameObject.transform.childCount;
+        for(int i=childCount-1; i>=0;i--)
+        {
+            if(gameObject.transform.GetChild(i).name.Equals(gameObject.name))
+            {
+                Destroy(gameObject.transform.GetChild(i));
+            }
+            
+        }
+    }
+
+    public void DeleteActionBlock()
+    {
+
+        //active tab
+
+        int activeTab = Int32.Parse(Regex.Match(GameObject.Find("TabParent").transform.GetChild(GameObject.Find("TabParent").transform.childCount - 1).gameObject.name, @"\d+").Value);
+        manager = GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads[activeTab].toolBoxValues;
+        int cardCount = (int)manager.GetType().GetField(this.transform.name).GetValue(manager);
+
+        Destroy(this);
+        cardCount += 1;
+        manager.GetType().GetField(this.transform.name).SetValue(manager, cardCount);
+
+
+        manager.updateValues();
+
+        canCreate = true;
+
+    }
+
+
+    public void newActionBlockMaker(ref int cardCount)
     {
         
     }
