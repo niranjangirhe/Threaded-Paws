@@ -246,6 +246,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			}
 			catch { }
 		}
+		threadArea1.transform.GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1);
+		threadArea2.transform.GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1);
 
 		//if (manager.isLevel4)
 		//{

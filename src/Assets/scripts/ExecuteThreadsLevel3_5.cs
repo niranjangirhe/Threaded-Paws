@@ -240,8 +240,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         }
 
 
-
-
         //-------- Reseting previous Sim --------
         foreach (Thread t in threads)
         {
