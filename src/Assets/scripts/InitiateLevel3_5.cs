@@ -132,7 +132,7 @@ public class InitiateLevel3_5 : MonoBehaviour {
 		newActionBox.transform.SetParent (threadParent.transform);
 		newActionBox.transform.localScale = Vector3.one;
 		newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = actionName;
-		newActionBox.transform.Find("Halo").gameObject.SetActive (false);
+		//newActionBox.transform.Find("Halo").gameObject.SetActive (false);
 
 		return newActionBox;
 	}

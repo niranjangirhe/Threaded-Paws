@@ -151,14 +151,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 			if (typeOfArea == d.typeOfItem || typeOfArea == Draggable.Type.ALL || typeOfArea == Draggable.Type.INVENTORY) {
 				d.parentToReturnTo = this.transform;
 				//Debug.Log ("[OnDrop] Parent to return to: " + d.parentToReturnTo.transform.name);
-				int activeTab = Int32.Parse(Regex.Match(GameObject.Find("TabParent").transform.GetChild(GameObject.Find("TabParent").transform.childCount - 1).gameObject.name, @"\d+").Value);
-				ToolBoxValues tbv = GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads[activeTab].toolBoxValues;
-				int cardCount = (int)tbv.GetType().GetField(d.name).GetValue(tbv);
-				cardCount -= 1;
-				tbv.GetType().GetField(d.name).SetValue(tbv, cardCount);
-
-
-				tbv.updateValues();
+				
 
 				CreateNewBlock.canCreate = true;
 			}

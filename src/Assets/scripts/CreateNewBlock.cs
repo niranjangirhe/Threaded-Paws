@@ -68,25 +68,6 @@ public class CreateNewBlock : MonoBehaviour {
         }
     }
 
-    public void DeleteActionBlock()
-    {
-
-        //active tab
-
-        int activeTab = Int32.Parse(Regex.Match(GameObject.Find("TabParent").transform.GetChild(GameObject.Find("TabParent").transform.childCount - 1).gameObject.name, @"\d+").Value);
-        manager = GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads[activeTab].toolBoxValues;
-        int cardCount = (int)manager.GetType().GetField(this.transform.name).GetValue(manager);
-
-        Destroy(this);
-        cardCount += 1;
-        manager.GetType().GetField(this.transform.name).SetValue(manager, cardCount);
-
-
-        manager.updateValues();
-
-        canCreate = true;
-
-    }
 
 
     public void newActionBlockMaker(ref int cardCount)
