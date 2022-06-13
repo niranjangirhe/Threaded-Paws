@@ -28,7 +28,14 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     [SerializeField] private Transform agendaParent;
     [SerializeField] private Transform agendaTickParent;
 
-
+    public Text txt_checkinLeft_thread;
+    public Text txt_cutLeft_thread;
+    public Text txt_dryLeft_thread;
+    public Text txt_washLeft_thread;
+    public Text txt_resourcesLeft_thread;
+    public Text txt_checkoutLeft_thread;
+    public Text txt_returnLeft_thread;
+    public Text txt_groomLeft_thread;
 
 
 
@@ -66,7 +73,20 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     string returnErrMsg = "> ERROR: You are trying to return a resource you don't have.";
     string acquireErrMsg = "> ERROR: You are trying to acquire a resource you already have.";
 
+    public void updateValues(int index)
+    {
+        Thread t = threads[index];
+        txt_checkinLeft_thread.text = "x " + t.toolBoxValues.CheckInBox;
+        txt_cutLeft_thread.text = "x " + t.toolBoxValues.CutBox;
+        txt_washLeft_thread.text = "x " + t.toolBoxValues.WashBox;
+        txt_dryLeft_thread.text = "x " + t.toolBoxValues.DryBox;
+        txt_resourcesLeft_thread.text = "x " + t.toolBoxValues.ResourceBox;
+        txt_checkoutLeft_thread.text = "x " + t.toolBoxValues.CheckOutBox;
+        txt_returnLeft_thread.text = "x " + t.toolBoxValues.ReturnBox;
+        txt_groomLeft_thread.text = "x " + t.toolBoxValues.GroomBox;
 
+
+    }
     void Start()
     {
 
@@ -144,7 +164,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
         ApplyTicks();
         AddTabs();
-        threads[0].toolBoxValues.updateValues();
+        updateValues(0);
     }
 
     private void AddTabs()

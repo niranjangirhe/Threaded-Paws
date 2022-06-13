@@ -15,7 +15,7 @@ public class SwitchTab : MonoBehaviour
     public void SwitchTabBtn()
     {
         //Update toolbox values UI
-        GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads[index].toolBoxValues.updateValues();
+        GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().updateValues(index);
 
         //To Switch Tab
         GameObject.Find("Tab" + index).transform.SetAsLastSibling();

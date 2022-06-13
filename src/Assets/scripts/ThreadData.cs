@@ -48,27 +48,6 @@ public class ToolBoxValues
 	public int ReturnBox;
 	public int GroomBox;
 
-	public Text txt_checkinLeft_thread;
-	public Text txt_cutLeft_thread;
-	public Text txt_dryLeft_thread;
-	public Text txt_washLeft_thread;
-	public Text txt_resourcesLeft_thread;
-	public Text txt_checkoutLeft_thread;
-	public Text txt_returnLeft_thread;
-	public Text txt_groomLeft_thread;
-	
-	public void updateValues()
-	{
-
-		txt_checkinLeft_thread.text = "x " + CheckInBox;
-		txt_cutLeft_thread.text = "x " + CutBox;
-		txt_washLeft_thread.text = "x " + WashBox;
-		txt_dryLeft_thread.text = "x " + DryBox;
-		txt_resourcesLeft_thread.text = "x " + ResourceBox;
-		txt_checkoutLeft_thread.text = "x " + CheckOutBox;
-		txt_returnLeft_thread.text = "x " + ReturnBox;
-		txt_groomLeft_thread.text = "x " + GroomBox;
-	}
 }
 [System.Serializable]
 public enum ActionEnum
