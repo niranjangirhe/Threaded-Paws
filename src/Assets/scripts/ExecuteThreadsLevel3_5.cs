@@ -39,12 +39,22 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     public GameObject simulationImagePrefab;
     public GameObject simulationErrorPrefab;
+    public GameObject simPanel;
     public Text stepsIndicator;
+
+    public Text txt_checkinLeft_thread;
+    public Text txt_cutLeft_thread;
+    public Text txt_dryLeft_thread;
+    public Text txt_washLeft_thread;
+    public Text txt_resourcesLeft_thread;
+    public Text txt_checkoutLeft_thread;
+    public Text txt_returnLeft_thread;
+    public Text txt_groomLeft_thread;
 
 
     //Remove as it had no use
     //private Sprite displayErrorSprite;
-    
+
     // GameObject contentContainer;
 
     // ------------------------
@@ -66,14 +76,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     string returnErrMsg = "> ERROR: You are trying to return a resource you don't have.";
     string acquireErrMsg = "> ERROR: You are trying to acquire a resource you already have.";
 
-    public Text txt_checkinLeft_thread;
-    public Text txt_cutLeft_thread;
-    public Text txt_dryLeft_thread;
-    public Text txt_washLeft_thread;
-    public Text txt_resourcesLeft_thread;
-    public Text txt_checkoutLeft_thread;
-    public Text txt_returnLeft_thread;
-    public Text txt_groomLeft_thread;
+   
 
     public void updateValues(int index)
     {
@@ -97,11 +100,21 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
             foreach (System.Reflection.FieldInfo v in varWorklist)
             {
                 t.needsTo.Add(v.Name, ((Action)v.GetValue(t.workList)).isneeded);
-            } 
+            }
+
+            GameObject layoutTemp = Instantiate(simPanel);
+            layoutTemp.transform.SetParent(GameObject.Find("Simulation").transform.Find("ScrollRect").Find("Panel"), false);
+            t.layoutPanel = layoutTemp;
         }
+
+        //Assign Values
         manager = GameObject.Find("_SCRIPTS_").GetComponent<ToolboxManager>();
         disablePanel = GameObject.Find("DisablePanel");
         bar = GameObject.Find("RadialProgressBar").GetComponent<ProgressBar>();
+
+       
+
+
         try
         {
             simulationScrollRect = scrollRect.transform.GetComponent<ScrollRect>();
@@ -448,7 +461,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         }
         if (!err)
         {
-            StartCoroutine(printThreads(threads[0].simulationImages, threads[1].simulationImages, 5));
+            StartCoroutine(printThreads(5));
         }
     }
 
@@ -474,7 +487,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         }
     }
 
-    IEnumerator printThreads(List<GameObject> s1, List<GameObject> s2, int speed)
+    IEnumerator printThreads(int speed)
     {
 
         
@@ -897,18 +910,14 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     void clearVerticalLayouts()
     {
         stepsIndicator.text = "0";
-
-        //threads[0].layoutPanel
-        foreach (Transform child in threads[0].layoutPanel.transform)
+        foreach(Thread t in threads)
         {
-            GameObject.Destroy(child.gameObject);
+            foreach (Transform child in t.layoutPanel.transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
         }
-
-        //threads[1].layoutPanel
-        foreach (Transform child in threads[1].layoutPanel.transform)
-        {
-            GameObject.Destroy(child.gameObject);
-        }
+       
     }
 
     void scrollToBottom()
