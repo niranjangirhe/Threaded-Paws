@@ -94,7 +94,7 @@ public class Thread
 
 
     //Tab (Grandparent of blocks)
-    public GameObject layoutPanel;
+    [HideInInspector] public GameObject layoutPanel;
     [HideInInspector] public GameObject tabDropArea;
 
     //Thread personal data
