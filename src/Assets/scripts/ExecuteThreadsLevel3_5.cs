@@ -144,9 +144,10 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
         ApplyTicks();
         AddTabs();
-
-        threads[0].toolBoxValues.updateValues();
-
+        foreach(Thread t in threads)
+        {
+            t.toolBoxValues.updateValues();
+        }
     }
 
     private void AddTabs()
