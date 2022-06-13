@@ -127,7 +127,7 @@ public class InitiateLevel3_5 : MonoBehaviour {
 	GameObject newBox(GameObject boxPrefab, string actionName, GameObject threadParent, string boxName) {
 		
 		GameObject newActionBox = (GameObject)Instantiate (boxPrefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-
+        newActionBox.GetComponent<Draggable>().isFrom = Draggable.THREAD;
         newActionBox.name = boxName;
 		newActionBox.transform.SetParent (threadParent.transform);
 		newActionBox.transform.localScale = Vector3.one;

@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class ToolBox : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
 
 	public Draggable.Type typeOfArea = Draggable.Type.INVENTORY;
-
+	public static bool onToolBox;
 	//usually only triggered for the mouse pointer only
 	public void OnPointerEnter(PointerEventData eventData) {
 		//Debug.Log ("OnPointerEnter to " + gameObject.name);
@@ -47,5 +48,13 @@ public class ToolBox : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoint
 				d.parentToReturnTo = this.transform;
 			}
 		}
+	}
+	public void OnPointerEnter()
+    {
+		onToolBox = true;
+    }
+	public void OnPointerExit()
+	{
+		onToolBox = false;
 	}
 }

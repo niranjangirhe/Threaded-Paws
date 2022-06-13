@@ -15,6 +15,10 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	// GameObject threadArea;
 	GameObject canvas;
 	GameObject toolbox;
+	public static byte TOOLBOX = 0;
+	public static byte THREAD = 1;
+
+	public byte isFrom = TOOLBOX;
 
 
 	ToolBoxValues manager;
@@ -24,14 +28,15 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
-
-		int activeTab = Int32.Parse(Regex.Match(GameObject.Find("TabParent").transform.GetChild(GameObject.Find("TabParent").transform.childCount - 1).gameObject.name, @"\d+").Value);
-		ToolBoxValues tbv = GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads[activeTab].toolBoxValues;
-		int cardCount = (int)tbv.GetType().GetField(gameObject.name).GetValue(tbv);
-		cardCount -= 1;
-		tbv.GetType().GetField(gameObject.name).SetValue(tbv, cardCount);
-		tbv.updateValues();
-
+		if (isFrom == TOOLBOX)
+		{
+			int activeTab = Int32.Parse(Regex.Match(GameObject.Find("TabParent").transform.GetChild(GameObject.Find("TabParent").transform.childCount - 1).gameObject.name, @"\d+").Value);
+			ToolBoxValues tbv = GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads[activeTab].toolBoxValues;
+			int cardCount = (int)tbv.GetType().GetField(gameObject.name).GetValue(tbv);
+			cardCount -= 1;
+			tbv.GetType().GetField(gameObject.name).SetValue(tbv, cardCount);
+			tbv.updateValues();
+		}
 		try
 		{
 
@@ -51,17 +56,17 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		}
 		catch { }
 
-		
+
 		placeholder = new GameObject();
 		placeholder.transform.SetParent(this.transform.parent); //places it at the end of the list by default
 																//want the placeholder to have the same dimensions as the draggable object removed
 		LayoutElement le = placeholder.AddComponent<LayoutElement>();
-		placeholder.GetComponent<RectTransform>().sizeDelta = new Vector2(75, 35); 
+		placeholder.GetComponent<RectTransform>().sizeDelta = new Vector2(75, 35);
 
 		le.flexibleWidth = 0; //not flexible
 		le.flexibleHeight = 0;
 
-	
+
 
 		//want the placeholder to also be in the same spot as the object we just removed
 		placeholder.transform.SetSiblingIndex(this.transform.GetSiblingIndex());
@@ -81,8 +86,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		//highlight threadArea
 		//threadArea.transform.GetComponent<Image> ().color = Color.green;
 
-		foreach(Thread t in GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads)
-        {
+		foreach (Thread t in GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads)
+		{
 			t.tabDropArea.GetComponent<Image>().color = Color.green;
 			Transform[] threadChildren = new Transform[t.tabDropArea.transform.childCount];
 			for (int i = 0; i < threadChildren.Length; i++)
@@ -119,6 +124,32 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		//to visualize that the selection is active
 		this.GetComponent<CanvasGroup>().alpha = 0.5f;
 		this.GetComponent<RectTransform>().localScale = new Vector3(0.8f, 0.8f, 0.8f);
+
+		if (ToolBox.onToolBox && isFrom == THREAD)
+		{
+			foreach (Thread t in GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads)
+			{
+				t.tabDropArea.GetComponent<Image>().color = Color.red;
+			}
+		}
+		else if (ToolBox.onToolBox && isFrom == TOOLBOX)
+		{
+			foreach (Thread t in GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads)
+			{
+				t.tabDropArea.GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1);
+			}
+		}
+		else if(!ToolBox.onToolBox)
+        {
+			foreach (Thread t in GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads)
+			{
+				t.tabDropArea.GetComponent<Image>().color = Color.green;
+			}
+		}
+
+
+
+
 
 		// do not shift items in the toolbox
 		if ((parentToReturnTo.transform.name != toolbox.transform.name) && (placeholder.transform.parent.name != toolbox.transform.name) && (placeholderParent.transform.name != toolbox.transform.name))
@@ -164,6 +195,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		}
 	}
 
+
 	public void OnEndDrag(PointerEventData eventData)
 	{
 
@@ -182,7 +214,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		GetComponent<CanvasGroup>().blocksRaycasts = true;
 
 		//iterate through corresponding zones and remove highlights, if any
-		
+
 
 		foreach (Thread t in GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads)
 		{
@@ -209,9 +241,9 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		}
 
 
-		
 
-		
+
+
 
 		if (this.transform.parent.name == "DropAreaTools")
 		{
@@ -220,11 +252,12 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			int activeTab = Int32.Parse(Regex.Match(GameObject.Find("TabParent").transform.GetChild(GameObject.Find("TabParent").transform.childCount - 1).gameObject.name, @"\d+").Value);
 			manager = GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads[activeTab].toolBoxValues;
 
-			LogManager.instance.logger.sendChronologicalLogs("DropW1-"+ this.transform.GetChild(0).GetComponentInChildren<Text>().text + "_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
+			LogManager.instance.logger.sendChronologicalLogs("DropW1-" + this.transform.GetChild(0).GetComponentInChildren<Text>().text + "_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
 			int val = (int)manager.GetType().GetField(this.transform.name).GetValue(manager);
-			manager.GetType().GetField(this.transform.name).SetValue(manager,val+1);
+			manager.GetType().GetField(this.transform.name).SetValue(manager, val + 1);
 
 			manager.updateValues();
+
 			//self-destroy
 			Destroy(this.gameObject);
 
@@ -294,13 +327,15 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		toolbox = GameObject.Find("DropAreaTools");
 	}
 
-    public void OnPointerExit(PointerEventData eventData)
+	public void OnPointerExit(PointerEventData eventData)
 	{
-		if(gameObject.name==transform.parent.name)
-        {
+		if (gameObject.name == transform.parent.name)
+		{
 			Debug.Log("Destroyed");
 			Destroy(gameObject);
 			CreateNewBlock.canCreate = true;
 		}
-    }
+	}
+
+
 }
