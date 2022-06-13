@@ -66,7 +66,27 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     string returnErrMsg = "> ERROR: You are trying to return a resource you don't have.";
     string acquireErrMsg = "> ERROR: You are trying to acquire a resource you already have.";
 
+    public Text txt_checkinLeft_thread;
+    public Text txt_cutLeft_thread;
+    public Text txt_dryLeft_thread;
+    public Text txt_washLeft_thread;
+    public Text txt_resourcesLeft_thread;
+    public Text txt_checkoutLeft_thread;
+    public Text txt_returnLeft_thread;
+    public Text txt_groomLeft_thread;
 
+    public void updateValues(int index)
+    {
+
+        txt_checkinLeft_thread.text = "x " + threads[index].toolBoxValues.CheckInBox;
+        txt_cutLeft_thread.text = "x " + threads[index].toolBoxValues.CutBox;
+        txt_washLeft_thread.text = "x " + threads[index].toolBoxValues.WashBox;
+        txt_dryLeft_thread.text = "x " + threads[index].toolBoxValues.DryBox;
+        txt_resourcesLeft_thread.text = "x " + threads[index].toolBoxValues.ResourceBox;
+        txt_checkoutLeft_thread.text = "x " + threads[index].toolBoxValues.CheckOutBox;
+        txt_returnLeft_thread.text = "x " + threads[index].toolBoxValues.ReturnBox;
+        txt_groomLeft_thread.text = "x " + threads[index].toolBoxValues.GroomBox;
+    }
     void Start()
     {
 
@@ -144,10 +164,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
         ApplyTicks();
         AddTabs();
-        foreach(Thread t in threads)
-        {
-            t.toolBoxValues.updateValues();
-        }
+        updateValues(0);
     }
 
     private void AddTabs()

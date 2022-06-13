@@ -31,11 +31,14 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		if (isFrom == TOOLBOX)
 		{
 			int activeTab = Int32.Parse(Regex.Match(GameObject.Find("TabParent").transform.GetChild(GameObject.Find("TabParent").transform.childCount - 1).gameObject.name, @"\d+").Value);
-			ToolBoxValues tbv = GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads[activeTab].toolBoxValues;
+			ExecuteThreadsLevel3_5 exeThread = GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>();
+			ToolBoxValues tbv = exeThread.threads[activeTab].toolBoxValues;
 			int cardCount = (int)tbv.GetType().GetField(gameObject.name).GetValue(tbv);
 			cardCount -= 1;
 			tbv.GetType().GetField(gameObject.name).SetValue(tbv, cardCount);
-			tbv.updateValues();
+
+			//update toolbox value (UI)
+			exeThread.updateValues(activeTab);
 		}
 		try
 		{
@@ -250,13 +253,15 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			Debug.Log("Dropped in the toolbox");
 
 			int activeTab = Int32.Parse(Regex.Match(GameObject.Find("TabParent").transform.GetChild(GameObject.Find("TabParent").transform.childCount - 1).gameObject.name, @"\d+").Value);
-			manager = GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads[activeTab].toolBoxValues;
+			ExecuteThreadsLevel3_5 exeThread = GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>();
+			ToolBoxValues tbv = exeThread.threads[activeTab].toolBoxValues;
 
 			LogManager.instance.logger.sendChronologicalLogs("DropW1-" + this.transform.GetChild(0).GetComponentInChildren<Text>().text + "_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-			int val = (int)manager.GetType().GetField(this.transform.name).GetValue(manager);
-			manager.GetType().GetField(this.transform.name).SetValue(manager, val + 1);
+			int val = (int)tbv.GetType().GetField(this.transform.name).GetValue(tbv);
+			tbv.GetType().GetField(this.transform.name).SetValue(tbv, val + 1);
 
-			manager.updateValues();
+			//update toolbox value (UI)
+			exeThread.updateValues(activeTab);
 
 			//self-destroy
 			Destroy(this.gameObject);
