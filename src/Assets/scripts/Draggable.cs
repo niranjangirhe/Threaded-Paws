@@ -256,7 +256,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			ExecuteThreadsLevel3_5 exeThread = GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>();
 			ToolBoxValues tbv = exeThread.threads[activeTab].toolBoxValues;
 
-			LogManager.instance.logger.sendChronologicalLogs("DropW1-" + this.transform.GetChild(0).GetComponentInChildren<Text>().text + "_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
+			//LogManager.instance.logger.sendChronologicalLogs("DropW1-" + this.transform.GetChild(0).GetComponentInChildren<Text>().text + "_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
 			int val = (int)tbv.GetType().GetField(this.transform.name).GetValue(tbv);
 			tbv.GetType().GetField(this.transform.name).SetValue(tbv, val + 1);
 
