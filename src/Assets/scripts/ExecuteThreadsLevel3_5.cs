@@ -214,8 +214,11 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         //-------- UI Updates and Logging --------
         LogManager.instance.logger.sendChronologicalLogs("RunLevel03Thread", "", LogManager.instance.UniEndTime().ToString());
         scrollToTop();
+        scrollToLeft();
+        scrollToRight();
         clearAllClones();
         clearVerticalLayouts();
+
         try
         {
             GameObject.Find("InformationPanel").SetActive(false);
@@ -907,6 +910,26 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         Canvas.ForceUpdateCanvases();
         waitOneFrame();
         simulationScrollRect.verticalNormalizedPosition = 1f;
+        Canvas.ForceUpdateCanvases();
+    }
+
+    void scrollToRight()
+    {
+
+        // Debug.Log ("scrollToBottom()");
+        Canvas.ForceUpdateCanvases();
+        waitOneFrame();
+        simulationScrollRect.horizontalNormalizedPosition = 0f;
+        Canvas.ForceUpdateCanvases();
+    }
+
+    void scrollToLeft()
+    {
+
+        // Debug.Log ("scrollToBottom()");
+        Canvas.ForceUpdateCanvases();
+        waitOneFrame();
+        simulationScrollRect.horizontalNormalizedPosition = 1f;
         Canvas.ForceUpdateCanvases();
     }
 
