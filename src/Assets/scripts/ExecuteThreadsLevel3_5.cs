@@ -173,7 +173,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
             count++;
         }
 
-        ApplyTicks();
         AddTabs();
         updateValues(0);
     }
@@ -185,6 +184,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         Transform labelParent = GameObject.Find("LabelParent").transform;
         Transform agendaParent = GameObject.Find("AgendaParent").transform;
         Transform agendaTickParent = GameObject.Find("AgendaTickParent").transform;
+        Transform boardParent = GameObject.Find("boardParent").transform;
 
         foreach (Thread t in threads)
         {
@@ -212,14 +212,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
             agendatemp.transform.Find("Name-fillin").GetComponent<Text>().text = t.dogName;
 
 
-            // ------- Enable inner tick --------
-            System.Reflection.FieldInfo[] varWorklist = t.workList.GetType().GetFields();
-            foreach (System.Reflection.FieldInfo v in varWorklist)
-            {
-                agendatemp.transform.Find(v.Name).gameObject.SetActive(((Action)v.GetValue(t.workList)).isneeded);
-            }
-            
-
             //------- Add Agenda Tick --------
             GameObject agendaTicktemp = Instantiate(agendaTick);
             agendaTicktemp.transform.SetParent(agendaTickParent, false);
@@ -238,6 +230,22 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
             agendaTicktemp.transform.GetChild(1).GetComponent<Text>().text = "w" + (count + 1);
             agendaTicktemp.GetComponent<SwitchTab>().index = count;
             agendaTicktemp.GetComponent<SwitchTab>().totalCount = threads.Count;
+
+
+            //--------- Add Board ----------
+            GameObject boardTemp = Instantiate(board);
+            boardTemp.transform.SetParent(agendaTickParent, false);
+            boardTemp.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>().sprite = t.dogSprite;
+            boardTemp.transform.GetChild(0).Find("Name-fillin").GetComponent<Text>().text = t.dogName;
+
+
+            // ------- Enable inner and outer tick --------
+            System.Reflection.FieldInfo[] varWorklist = t.workList.GetType().GetFields();
+            foreach (System.Reflection.FieldInfo v in varWorklist)
+            {
+                boardTemp.transform.GetChild(0).Find(v.Name).gameObject.SetActive(((Action)v.GetValue(t.workList)).isneeded);
+                agendatemp.transform.Find(v.Name).gameObject.SetActive(((Action)v.GetValue(t.workList)).isneeded);
+            }
 
             count++;
         }
@@ -469,28 +477,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         if (!err)
         {
             StartCoroutine(printThreads(5));
-        }
-    }
-
-    private void ApplyTicks()
-    {
-        foreach (Thread t in threads)
-        {
-            
-            foreach (GameObject g in t.ticks)
-            {              
-                try
-                {
-                   
-                    g.SetActive(((Action)t.workList.GetType().GetField(g.name).GetValue(t.workList)).isneeded) ;
-                    
-                }
-                catch(Exception e)
-                {
-                    
-                    Debug.Log(e.Message+" Name The Tick as same as work "+ g.name);
-                }
-            }
         }
     }
 

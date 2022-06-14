@@ -85,7 +85,7 @@ public class BlockInfo
 public class Thread
 {
     //This is list of ticks(UI) which can be set on/off
-    public List<GameObject> ticks;
+    private List<GameObject> ticks;
     private List<GameObject> innerTicks;
 
     //ThreadData
