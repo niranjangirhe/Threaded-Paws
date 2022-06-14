@@ -10,6 +10,7 @@ public class CreateNewBlock : MonoBehaviour {
 
 	public GameObject prefab;
 	public GameObject canvas;
+    private GameObject child;
 
     private Text txtErrorMsg;
 
