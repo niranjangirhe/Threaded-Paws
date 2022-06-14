@@ -23,10 +23,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     [SerializeField] private GameObject label;
     [SerializeField] private GameObject agenda;
     [SerializeField] private GameObject agendaTick;
-    [SerializeField] private Transform tabParent;
-    [SerializeField] private Transform labelParent;
-    [SerializeField] private Transform agendaParent;
-    [SerializeField] private Transform agendaTickParent;
+    [SerializeField] private GameObject board;
+
 
 
 
@@ -183,7 +181,12 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     private void AddTabs()
     {
         int count=0;
-        foreach(Thread t in threads)
+        Transform tabParent = GameObject.Find("TabParent").transform;
+        Transform labelParent = GameObject.Find("LabelParent").transform;
+        Transform agendaParent = GameObject.Find("AgendaParent").transform;
+        Transform agendaTickParent = GameObject.Find("AgendaTickParent").transform;
+
+        foreach (Thread t in threads)
         {
             //------- Add Tab --------
             GameObject tabtemp = Instantiate(tab);
