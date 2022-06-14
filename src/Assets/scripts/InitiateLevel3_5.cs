@@ -9,9 +9,6 @@ public class InitiateLevel3_5 : MonoBehaviour {
 	public GameObject acquirePrefab;
 	public GameObject returnPrefab;
 
-	[HideInInspector] public GameObject t1; // drop area thread
-    [HideInInspector] public GameObject t2; // drop area thread
-
 	// Use this for initialization
 	void Start () {
  
