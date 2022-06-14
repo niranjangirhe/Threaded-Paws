@@ -234,9 +234,10 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
             //--------- Add Board ----------
             GameObject boardTemp = Instantiate(board);
-            boardTemp.transform.SetParent(agendaTickParent, false);
+            boardTemp.transform.SetParent(boardParent, false);
             boardTemp.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>().sprite = t.dogSprite;
             boardTemp.transform.GetChild(0).Find("Name-fillin").GetComponent<Text>().text = t.dogName;
+            boardTemp.transform.Find("WorkerName").GetComponent<Text>().text = t.workerName;
 
 
             // ------- Enable inner and outer tick --------

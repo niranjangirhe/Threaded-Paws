@@ -84,10 +84,6 @@ public class BlockInfo
 [System.Serializable]
 public class Thread
 {
-    //This is list of ticks(UI) which can be set on/off
-    private List<GameObject> ticks;
-    private List<GameObject> innerTicks;
-
     //ThreadData
     public WorkList workList = new WorkList();
     public ToolBoxValues toolBoxValues = new ToolBoxValues();
