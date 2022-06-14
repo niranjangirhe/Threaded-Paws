@@ -88,7 +88,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 				//Debug.Log ("[OnPointerExit] Placeholder parent: " + d.parentToReturnTo.transform.name);
 
 				//int activeTab = Int32.Parse(Regex.Match(GameObject.Find("TabParent").transform.GetChild(GameObject.Find("TabParent").transform.childCount - 1).gameObject.name, @"\d+").Value);
-				//ToolBoxValues tbv = GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads[activeTab].toolBoxValues;
+				//ToolBoxValues tbv = GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel3_5>().threads[activeTab].toolBoxValues;
 				//int cardCount = (int)tbv.GetType().GetField(d.name).GetValue(tbv);
 				//cardCount -= 1;
 				//tbv.GetType().GetField(d.name).SetValue(tbv, cardCount);

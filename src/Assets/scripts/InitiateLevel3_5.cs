@@ -16,7 +16,7 @@ public class InitiateLevel3_5 : MonoBehaviour {
 
         GameObject box;
 
-        foreach (Thread t in GameObject.Find("Threads").GetComponent<ExecuteThreadsLevel3_5>().threads)
+        foreach (Thread t in GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel3_5>().threads)
         {
             foreach(BlockInfo bi in t.blockInfo)
             {
