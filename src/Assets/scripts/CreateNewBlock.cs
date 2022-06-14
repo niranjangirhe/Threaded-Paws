@@ -10,7 +10,6 @@ public class CreateNewBlock : MonoBehaviour {
 
 	public GameObject prefab;
 	public GameObject canvas;
-    private GameObject child;
 
     private Text txtErrorMsg;
 
@@ -33,7 +32,6 @@ public class CreateNewBlock : MonoBehaviour {
             {
                 DeleteOtherClone();
                 GameObject newActionBox = (GameObject)Instantiate(prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-                child = newActionBox;
                 newActionBox.name = this.transform.name;
                 newActionBox.transform.SetParent(this.transform);
                 newActionBox.transform.localScale = Vector3.one;
