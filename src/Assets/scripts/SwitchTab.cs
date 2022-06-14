@@ -22,7 +22,7 @@ public class SwitchTab : MonoBehaviour
         {
             GameObject.Find("Label" + i).transform.GetChild(0).GetComponent<Image>().color = Color.white;
             try { 
-                GameObject.Find("AgendaTick" + i).GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1); 
+                GameObject.Find("AgendaTick" + i).GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 0); 
             }
             catch 
             { }

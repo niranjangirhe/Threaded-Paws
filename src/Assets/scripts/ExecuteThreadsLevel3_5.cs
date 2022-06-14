@@ -205,6 +205,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
             GameObject agendatemp = Instantiate(agenda);
             agendatemp.transform.SetParent(agendaParent, false);
             agendatemp.name = "Agenda" + count.ToString();
+            agendatemp.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = t.dogSprite;
+            agendatemp.transform.Find("Name-fillin").GetComponent<Text>().text = t.dogName;
+
 
             // ------- Enable inner tick --------
             System.Reflection.FieldInfo[] varWorklist = t.workList.GetType().GetFields();
@@ -218,14 +221,15 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
             GameObject agendaTicktemp = Instantiate(agendaTick);
             agendaTicktemp.transform.SetParent(agendaTickParent, false);
             agendaTicktemp.name = "AgendaTick" + count.ToString();
-            Color c = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+            Color c = Random.ColorHSV(0f, 1f, 0.2f, 0.7f, 0.9f, 1f);
+            agendatemp.transform.GetChild(0).GetComponent<Image>().color = c;
             if (count == 0)
             {
                 agendaTicktemp.GetComponent<Image>().color = c;
             }
             else
             {
-                agendaTicktemp.GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1);
+                agendaTicktemp.GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 0);
             }
             agendaTicktemp.transform.GetChild(0).GetComponent<Image>().color = c;
             agendaTicktemp.transform.GetChild(1).GetComponent<Text>().text = "w" + (count + 1);
