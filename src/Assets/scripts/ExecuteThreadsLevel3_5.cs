@@ -264,6 +264,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         GameObject.Find("Tab0").transform.SetAsLastSibling();
         GameObject.Find("Agenda0").transform.SetAsLastSibling();
         GameObject.Find("Label0").transform.GetChild(0).GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1);
+        GameObject.Find("Label0").GetComponent<LayoutElement>().minWidth = 60;
     }
 
     public void ExecuteThreads()

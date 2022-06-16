@@ -21,6 +21,7 @@ public class SwitchTab : MonoBehaviour
         for (int i = 0; i < totalCount; i++)
         {
             GameObject.Find("Label" + i).transform.GetChild(0).GetComponent<Image>().color = Color.white;
+            GameObject.Find("Label" + i).GetComponent<LayoutElement>().minWidth = 20;
             try { 
                 GameObject.Find("AgendaTick" + i).GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 0); 
             }
@@ -29,6 +30,7 @@ public class SwitchTab : MonoBehaviour
 
         }
         GameObject.Find("Label" + index).transform.GetChild(0).GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1);
+        GameObject.Find("Label" + index).GetComponent<LayoutElement>().minWidth = 60;
 
         //To Switch Agenda Tab
         try
