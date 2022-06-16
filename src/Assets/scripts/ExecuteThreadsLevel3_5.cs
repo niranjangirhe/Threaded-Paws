@@ -35,27 +35,22 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     public GameObject scrollRect;
 
-    public GameObject simulationImagePrefab;
-    public GameObject simulationErrorPrefab;
-    public GameObject simPanel;
+    private GameObject simulationImagePrefab;
+    private GameObject simulationErrorPrefab;
+    private GameObject simPanel;
     public Text stepsIndicator;
 
-    public Text txt_checkinLeft_thread;
-    public Text txt_cutLeft_thread;
-    public Text txt_dryLeft_thread;
-    public Text txt_washLeft_thread;
-    public Text txt_resourcesLeft_thread;
-    public Text txt_checkoutLeft_thread;
-    public Text txt_returnLeft_thread;
-    public Text txt_groomLeft_thread;
+    [SerializeField] private Text txt_checkinLeft_thread;
+    [SerializeField] private Text txt_cutLeft_thread;
+    [SerializeField] private Text txt_dryLeft_thread;
+    [SerializeField] private Text txt_washLeft_thread;
+    [SerializeField] private Text txt_resourcesLeft_thread;
+    [SerializeField] private Text txt_checkoutLeft_thread;
+    [SerializeField] private Text txt_returnLeft_thread;
+    [SerializeField] private Text txt_groomLeft_thread;
 
 
-    //Remove as it had no use
-    //private Sprite displayErrorSprite;
-
-    // GameObject contentContainer;
-
-    // ------------------------
+   
 
     ToolboxManager manager;
     GameObject disablePanel;
@@ -92,6 +87,11 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     {
         // -------- Initialize Description text --------
         GameObject.Find("InstructionsPanel").transform.Find("Part2").Find("Background").GetChild(0).GetChild(0).GetComponent<Text>().text = descriptionText;
+
+        // --------Intialize Prefabs -------
+         simulationImagePrefab = Resources.Load<GameObject>("prefabs/SimulationImage");
+        simulationErrorPrefab = Resources.Load<GameObject>("prefabs/ErrorSimulationImage");
+        simPanel = Resources.Load<GameObject>("prefabs/ThreadSimPanel");
 
         //Fill needsto Dict
         foreach (Thread t in threads)
