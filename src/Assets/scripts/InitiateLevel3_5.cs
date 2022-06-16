@@ -1,16 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
 
 public class InitiateLevel3_5 : MonoBehaviour {
 
 	public GameObject actionPrefab;
 	public GameObject acquirePrefab;
 	public GameObject returnPrefab;
-
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
  
         
 

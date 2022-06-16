@@ -9,10 +9,6 @@ using Random = UnityEngine.Random;
 public class ExecuteThreadsLevel3_5 : MonoBehaviour
 {
 
-
-
-   
-
     public List<Thread> threads;
     private dropDownManager dropDownManager = new dropDownManager();
     [SerializeField] private bool isRetAllCompulsion;
@@ -210,7 +206,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
             labeltemp.transform.GetChild(0).GetComponent<SwitchTab>().index = count;
             labeltemp.transform.GetChild(0).GetComponent<SwitchTab>().totalCount = threads.Count;    
             labeltemp.name = "Label"+count.ToString();
-            labeltemp.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = t.workerName;
+            labeltemp.transform.GetChild(0).GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = t.workerName;
             labeltemp.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = t.workerSprite;
 
             t.tabDropArea = tabtemp.transform.GetChild(0).GetChild(0).GetChild(1).gameObject;
