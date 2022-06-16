@@ -21,7 +21,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     private GameObject agendaTick;
     private GameObject board;
 
-    [TextArea(5, 20)] public string descriptionText;
+    [TextArea(5, 20)][SerializeField] private string descriptionText;
+    [SerializeField] private int idleMomentPercent;
 
 
 
@@ -36,6 +37,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     private GameObject simPanel;
     public Text stepsIndicator;
 
+
+    // ------- Tool box value text object--------
     [SerializeField] private Text txt_checkinLeft_thread;
     [SerializeField] private Text txt_cutLeft_thread;
     [SerializeField] private Text txt_dryLeft_thread;
@@ -46,7 +49,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     [SerializeField] private Text txt_groomLeft_thread;
 
 
-   
+
 
     ToolboxManager manager;
     GameObject disablePanel;
@@ -85,7 +88,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         GameObject.Find("InstructionsPanel").transform.Find("Part2").Find("Background").GetChild(0).GetChild(0).GetComponent<Text>().text = descriptionText;
 
         // --------Intialize Prefabs -------
-         simulationImagePrefab = Resources.Load<GameObject>("prefabs/SimulationImage");
+        simulationImagePrefab = Resources.Load<GameObject>("prefabs/SimulationImage");
         simulationErrorPrefab = Resources.Load<GameObject>("prefabs/ErrorSimulationImage");
         simPanel = Resources.Load<GameObject>("prefabs/ThreadSimPanel");
 
@@ -511,6 +514,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         bool whileStop = false;
         while (!whileStop)
         {
+            
             whileStop = true;
             foreach (Thread t in threads)
             {
@@ -574,175 +578,202 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                 System.Random r = new System.Random();
                 foreach (int i in Enumerable.Range(0, threads.Count).OrderBy(x => r.Next()))
                 {
+                    int idleInt = Random.Range(0, 100);
+                    bool isIdle = (idleInt < idleMomentPercent);
+                    Debug.Log("Nira" + idleInt + (idleInt < idleMomentPercent));
                     Thread t = threads[i];
-                    try
+                    if (!isIdle)
                     {
-                        //------------ Acquire -------------
-                        if (t.simBlocks[t.currIndex].type == SimBlock.ACQUIIRE)
+                        try
                         {
-                            //If t don't have the obj but some other thread has it then it will return true;
-                            if (MeNotSomeOneHas(t.simBlocks[t.currIndex].name, t))
+                            //------------ Acquire -------------
+                            if (t.simBlocks[t.currIndex].type == SimBlock.ACQUIIRE)
                             {
-                                GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                                newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
-                                newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for " + t.simBlocks[t.currIndex].name + "...</color>";
-                                newItem.transform.SetParent(t.layoutPanel.transform);
-                                newItem.transform.localScale = Vector3.one;
-                                scrollToBottom();
-
-                                t.canPrint = false;
-                            }
-                            else
-                            {
-                                int output = acquire(ref t.hasItems, t.simBlocks[t.currIndex].name);
-                                t.canPrint = true;
-
-                                if (output < 0)
+                                //If t don't have the obj but some other thread has it then it will return true;
+                                if (MeNotSomeOneHas(t.simBlocks[t.currIndex].name, t))
                                 {
-                                    resError(acquireErrMsg, t.layoutPanel); // ERROR: You are trying to acquire a resource you already have.";
+                                    GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
+                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
+                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
+                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for " + t.simBlocks[t.currIndex].name + "...</color>";
+                                    newItem.transform.SetParent(t.layoutPanel.transform);
+                                    newItem.transform.localScale = Vector3.one;
+                                    scrollToBottom();
+
+                                    t.canPrint = false;
+                                }
+                                else
+                                {
+                                    int output = acquire(ref t.hasItems, t.simBlocks[t.currIndex].name);
+                                    t.canPrint = true;
+
+                                    if (output < 0)
+                                    {
+                                        resError(acquireErrMsg, t.layoutPanel); // ERROR: You are trying to acquire a resource you already have.";
+                                    }
                                 }
                             }
-                        }
-                        //------------ Return -------------
-                        else if (t.simBlocks[t.currIndex].type == SimBlock.RETURN)
-                        {
-                            int output1 = return_res(ref t.hasItems, t.simBlocks[t.currIndex].name);
-
-                            if (output1 < 0)
+                            //------------ Return -------------
+                            else if (t.simBlocks[t.currIndex].type == SimBlock.RETURN)
                             {
-                                resError(returnErrMsg, t.layoutPanel);
-                            }
-                        }
-                        //------------ Work/Action block -------------
-                        else if (t.simBlocks[t.currIndex].type == SimBlock.WORK)
-                        {
+                                int output1 = return_res(ref t.hasItems, t.simBlocks[t.currIndex].name);
 
-                            if (IHaveAllThings(t.simBlocks[t.currIndex].name, t))
-                            {
-
-                                t.did[t.simBlocks[t.currIndex].name] = true;
-                            }
-                            else
-                            {
-
-                                String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
-
-                                resError("> ERROR: You can't " + t.simBlocks[t.currIndex].name.ToLower() + " without " + RequirementList(t.simBlocks[t.currIndex].name, t), t.layoutPanel);
-                                scrollToBottom();
-
-                            }
-                        }
-                        else if (t.simBlocks[t.currIndex].type == SimBlock.CHECKIN)
-                        {
-
-                            if (t.isCheckedIn)
-                            {
-
-                                String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
-
-                                resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.", t.layoutPanel);
-                                scrollToBottom();
-
-                            }
-                            else
-                            {
-
-                                // perform check-in
-                                t.isCheckedIn = true;
-                                t.isCheckedOut = false;
-                            }
-
-                        }
-                        else if (t.simBlocks[t.currIndex].type == SimBlock.CHECKOUT)
-                        { 
-                            foreach(KeyValuePair<string,bool> k in t.needsTo)
-                            {
-                                if (k.Value && !t.did[k.Key])
+                                if (output1 < 0)
                                 {
+                                    resError(returnErrMsg, t.layoutPanel);
+                                }
+                            }
+                            //------------ Work/Action block -------------
+                            else if (t.simBlocks[t.currIndex].type == SimBlock.WORK)
+                            {
+
+                                if (IHaveAllThings(t.simBlocks[t.currIndex].name, t))
+                                {
+
+                                    t.did[t.simBlocks[t.currIndex].name] = true;
+                                }
+                                else
+                                {
+
                                     String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
                                     t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
                                     t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
                                     t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
+
+                                    resError("> ERROR: You can't " + t.simBlocks[t.currIndex].name.ToLower() + " without " + RequirementList(t.simBlocks[t.currIndex].name, t), t.layoutPanel);
                                     scrollToBottom();
 
-                                    resError("> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.", t.layoutPanel);
-                                    scrollToBottom();
-                                    break;
                                 }
                             }
-                            if(isRetAllCompulsion)
+                            else if (t.simBlocks[t.currIndex].type == SimBlock.CHECKIN)
                             {
-                                foreach (KeyValuePair<string, bool> k in t.hasItems)
+
+                                if (t.isCheckedIn)
                                 {
-                                    if(k.Value)
+
+                                    String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
+                                    t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                    t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
+                                    t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
+
+                                    resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.", t.layoutPanel);
+                                    scrollToBottom();
+
+                                }
+                                else
+                                {
+
+                                    // perform check-in
+                                    t.isCheckedIn = true;
+                                    t.isCheckedOut = false;
+                                }
+
+                            }
+                            else if (t.simBlocks[t.currIndex].type == SimBlock.CHECKOUT)
+                            {
+                                foreach (KeyValuePair<string, bool> k in t.needsTo)
+                                {
+                                    if (k.Value && !t.did[k.Key])
                                     {
                                         String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
                                         t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
                                         t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
                                         t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
-
-                                        resError("> ERROR: You need to return all the resources you acquired before checking out.", t.layoutPanel);
                                         scrollToBottom();
+
+                                        resError("> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.", t.layoutPanel);
+                                        scrollToBottom();
+                                        break;
                                     }
                                 }
+                                if (isRetAllCompulsion)
+                                {
+                                    foreach (KeyValuePair<string, bool> k in t.hasItems)
+                                    {
+                                        if (k.Value)
+                                        {
+                                            String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
+                                            t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                            t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
+                                            t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
+
+                                            resError("> ERROR: You need to return all the resources you acquired before checking out.", t.layoutPanel);
+                                            scrollToBottom();
+                                        }
+                                    }
+                                }
+                                else if (t.isCheckedOut)
+                                {
+
+                                    String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
+                                    t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                    t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
+                                    t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
+
+                                    resError("> ERROR: You have to check in before attempting to check out a customer.", t.layoutPanel);
+                                    scrollToBottom();
+
+                                }
+                                else
+                                {
+
+                                    // perform check-out
+                                    t.isCheckedIn = false;
+                                    t.isCheckedOut = true;
+                                }
                             }
-                            else if (t.isCheckedOut)
-                            {
 
-                                String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
-
-                                resError("> ERROR: You have to check in before attempting to check out a customer.", t.layoutPanel);
-                                scrollToBottom();
-
-                            }
-                            else
-                            {
-
-                                // perform check-out
-                                t.isCheckedIn = false;
-                                t.isCheckedOut = true;
-                            }
                         }
+                        catch { }
 
-                    }
-                    catch { }
-
-                    try
-                    {
-
-                        if (t.canPrint)
+                        try
                         {
 
-                            if (!err)
+                            if (t.canPrint)
                             {
-                                t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
-                            }
-                            t.currIndex++;
-                        }
-                        scrollToBottom();
 
+                                if (!err)
+                                {
+                                    t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
+                                    t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
+                                }
+                                t.currIndex++;
+                            }
+
+
+                        }
+                        catch { }
                     }
-                    catch { }
+                    else
+                    {
+
+                        //---------------- IDLE -----------------
+                        try
+                        {
+
+                            GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
+                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = t.workerSprite;
+
+
+                            UnityEngine.Object[] s = Resources.LoadAll("sprites/items/idle", typeof(Sprite));
+                            int randomIndex = Random.Range(0, s.Length);
+
+                            newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = (Sprite)s[randomIndex];
+                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red> Busy...</color>";
+                            newItem.transform.SetParent(t.layoutPanel.transform);
+                            newItem.transform.localScale = Vector3.one;
+
+                        }
+                        catch
+                        {
+                            
+                        }
+                    }
+
 
                     scrollToBottom();
                 }
 
-                // ------------------------------  Sim Thread ------------------------------
-                foreach (Thread t in threads)
-                {
-                    
-                }
 
                 j++; // increment step
                 yield return new WaitForSeconds(1);
