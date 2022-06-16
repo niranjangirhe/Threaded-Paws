@@ -22,6 +22,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     private GameObject board;
 
     [TextArea(5, 20)][SerializeField] private string descriptionText;
+    [TextArea(5, 20)] [SerializeField] private string bubbleText;
     [SerializeField] private int idleMomentPercent;
 
 
@@ -86,6 +87,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     {
         // -------- Initialize Description text --------
         GameObject.Find("InstructionsPanel").transform.Find("Part2").Find("Background").GetChild(0).GetChild(0).GetComponent<Text>().text = descriptionText;
+        GameObject.Find("InstructionsPanel").transform.Find("Part1").Find("SpeechBox").GetChild(0).GetComponent<Text>().text = bubbleText;
 
         // --------Intialize Prefabs -------
         simulationImagePrefab = Resources.Load<GameObject>("prefabs/SimulationImage");
