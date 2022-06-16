@@ -21,7 +21,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     private GameObject agendaTick;
     private GameObject board;
 
-    public string descriptionText;
+    [TextArea(5, 20)] public string descriptionText;
 
 
 
