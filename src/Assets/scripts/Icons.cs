@@ -61,4 +61,21 @@ public class Icons : MonoBehaviour {
 		}
 
 	}
+
+	public void closeAll()
+    {
+		try
+		{
+			if (agendaPanel.activeSelf)
+			{
+				agendaPanel.SetActive(false);
+			}
+			else if (informationPanel.activeSelf)
+			{
+				informationPanel.SetActive(false);
+			}
+		}
+		catch
+		{ }
+	}
 }

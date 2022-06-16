@@ -12,8 +12,9 @@ public class InitiateLevel3_5 : MonoBehaviour {
 	public GameObject returnPrefab;
     // Use this for initialization
     void Start () {
- 
-        
+
+
+        GameObject.Find("Canvas").transform.Find("InstructionsPanel").gameObject.SetActive(true);
 
         GameObject box;
 

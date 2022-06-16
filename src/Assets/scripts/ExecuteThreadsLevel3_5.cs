@@ -186,6 +186,10 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         int count=0;
 
 
+        //Just caution so we won't get null ref error
+        GameObject.Find("Canvas").transform.Find("InstructionsPanel").gameObject.SetActive(true);
+        GameObject.Find("Canvas").transform.Find("AgendaPanel").gameObject.SetActive(true);
+
         // --------Intialize Prefabs -------
         Transform tabParent = GameObject.Find("TabParent").transform;
         Transform labelParent = GameObject.Find("LabelParent").transform;
