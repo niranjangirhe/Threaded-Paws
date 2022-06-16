@@ -19,13 +19,13 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
 
     // --- For Dynamic UI ---
-    [SerializeField] private GameObject tab;
-    [SerializeField] private GameObject label;
-    [SerializeField] private GameObject agenda;
-    [SerializeField] private GameObject agendaTick;
-    [SerializeField] private GameObject board;
+    private GameObject tab;
+    private GameObject label;
+    private GameObject agenda;
+    private GameObject agendaTick;
+    private GameObject board;
 
-
+    public string descriptionText;
 
 
 
@@ -90,6 +90,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     }
     void Start()
     {
+        // -------- Initialize Description text --------
+        GameObject.Find("InstructionsPanel").transform.Find("Part2").Find("Background").GetChild(0).GetChild(0).GetComponent<Text>().text = descriptionText;
 
         //Fill needsto Dict
         foreach (Thread t in threads)
@@ -148,6 +150,12 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     public void Awake()
     {
+        tab = Resources.Load<GameObject>("prefabs/Tab");
+        agenda = Resources.Load<GameObject>("prefabs/Agenda");
+        agendaTick = Resources.Load<GameObject>("prefabs/Tick");
+        label = Resources.Load<GameObject>("prefabs/Label");
+        board = Resources.Load<GameObject>("prefabs/Board");
+
         int count = 0;
         System.Random r = new System.Random();
         UnityEngine.Object[] s = Resources.LoadAll("sprites/workers", typeof(Sprite));
@@ -180,6 +188,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     private void AddTabs()
     {
         int count=0;
+
+
+        // --------Intialize Prefabs -------
         Transform tabParent = GameObject.Find("TabParent").transform;
         Transform labelParent = GameObject.Find("LabelParent").transform;
         Transform agendaParent = GameObject.Find("AgendaParent").transform;
