@@ -243,7 +243,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                 agendaTicktemp.GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 0);
             }
             agendaTicktemp.transform.GetChild(0).GetComponent<Image>().color = c;
-            agendaTicktemp.transform.GetChild(1).GetComponent<Text>().text = "w" + (count + 1);
+            agendaTicktemp.transform.GetChild(1).GetComponent<Image>().sprite = t.workerSprite;
             agendaTicktemp.GetComponent<SwitchTab>().index = count;
             agendaTicktemp.GetComponent<SwitchTab>().totalCount = threads.Count;
 
