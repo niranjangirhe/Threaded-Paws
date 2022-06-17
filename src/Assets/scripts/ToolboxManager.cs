@@ -23,7 +23,6 @@ public class ToolboxManager : MonoBehaviour {
 
 			//updateValues ();
 
-			CreateNewBlock.canCreate = true;
 		} catch { }
 	}
 

@@ -152,8 +152,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 				d.parentToReturnTo = this.transform;
 				//Debug.Log ("[OnDrop] Parent to return to: " + d.parentToReturnTo.transform.name);
 				d.isFrom = Draggable.THREAD;
-
-				CreateNewBlock.canCreate = true;
+				
 			}
 
 			/*

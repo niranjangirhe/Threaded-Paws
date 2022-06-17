@@ -336,9 +336,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	{
 		if (gameObject.name == transform.parent.name)
 		{
-			Debug.Log("Destroyed");
 			Destroy(gameObject);
-			CreateNewBlock.canCreate = true;
 		}
 	}
 

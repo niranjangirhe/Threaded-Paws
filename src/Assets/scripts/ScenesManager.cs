@@ -9,7 +9,6 @@ public class ScenesManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		CreateNewBlock.canCreate = true;
 	}
 
 	// Update is called once per frame
@@ -26,7 +25,6 @@ public class ScenesManager : MonoBehaviour {
 		LogManager.instance.logger.sendChronologicalMenuLogs("TryAgain", LogManager.instance.UniEndTime().ToString());
 
 		SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
-		CreateNewBlock.canCreate = true;
 
 		// instructionsPanel.SetActive (false);
 	}

@@ -15,7 +15,6 @@ public class CreateNewBlock : MonoBehaviour {
 
     ToolBoxValues manager;
 
-	public static bool canCreate;
 
     public void NewActionBlock()
     {
@@ -28,21 +27,16 @@ public class CreateNewBlock : MonoBehaviour {
         if (cardCount > 0)
         {
 
-            if (canCreate)
-            {
-                DeleteOtherClone();
-                GameObject newActionBox = (GameObject)Instantiate(prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-                newActionBox.name = this.transform.name;
-                newActionBox.transform.SetParent(this.transform);
-                newActionBox.transform.localScale = Vector3.one;
-                newActionBox.transform.GetChild(0).GetComponentInChildren<Text>().text = this.GetComponentInChildren<Text>().text;
-                
-                
-            }
-            else
-            {
-                showError("Use or discard your current object first");
-            }
+
+            DeleteOtherClone();
+            GameObject newActionBox = (GameObject)Instantiate(prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
+            newActionBox.name = this.transform.name;
+            newActionBox.transform.SetParent(this.transform);
+            newActionBox.transform.localScale = Vector3.one;
+            newActionBox.transform.GetChild(0).GetComponentInChildren<Text>().text = this.GetComponentInChildren<Text>().text;
+            newActionBox.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+
+
 
         }
         else
@@ -55,14 +49,19 @@ public class CreateNewBlock : MonoBehaviour {
 
     private void DeleteOtherClone()
     {
-        int childCount = gameObject.transform.childCount;
-        for(int i=childCount-1; i>=0;i--)
+        int parentChildCount = gameObject.transform.parent.childCount;
+        for(int i = parentChildCount - 1; i>=0;i--)
         {
-            if(gameObject.transform.GetChild(i).name.Equals(gameObject.name))
+            int childCount = gameObject.transform.parent.GetChild(i).childCount;
+            for (int j = childCount - 1; j >= 0; j--)
             {
-                Destroy(gameObject.transform.GetChild(i));
+                if (gameObject.transform.parent.GetChild(i).GetChild(j).name.Equals(gameObject.transform.parent.GetChild(i).name))
+                {
+                    Destroy(gameObject.transform.parent.GetChild(i).GetChild(j));
+                }
+
             }
-            
+
         }
     }
 
@@ -84,7 +83,6 @@ public class CreateNewBlock : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		canCreate = true;
         txtErrorMsg = GameObject.Find("ErrorMsg").GetComponent<Text>();
 	}
 
