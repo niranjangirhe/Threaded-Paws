@@ -6,6 +6,11 @@ public class Icons : MonoBehaviour {
 
 	public GameObject informationPanel;
 	public GameObject agendaPanel;
+	private bool agendaFadeIn;
+	private bool agendaFadeOut;
+	private bool infoFadeIn;
+	private bool infoFadeOut;
+	private float speed = 8;
 
 	// Use this for initialization
 	void Start () {
@@ -13,13 +18,15 @@ public class Icons : MonoBehaviour {
 		// informationWindow = GameObject.Find ("InformationPanel");
 
 		try {
-			informationPanel.SetActive (false);
+			infoFadeOut = true;
+			infoFadeIn = false;
 		} catch {
 			Debug.Log ("Information Panel can't be found.");
 		}
 
 		try {
-			agendaPanel.SetActive (false);
+			agendaFadeOut = true;
+			agendaFadeOut = false;
 		} catch {
 			Debug.Log ("Agenda Panel can't be found.");
 		}
@@ -31,9 +38,11 @@ public class Icons : MonoBehaviour {
 
 		try {
 			if (informationPanel.activeSelf) {
-				informationPanel.SetActive (false);
+				infoFadeOut = true;
+				infoFadeIn = false;
 			} else {
-				informationPanel.SetActive (true);
+				infoFadeOut = false; ;
+				infoFadeIn = true;
 
 				LogManager.instance.logger.sendChronologicalLogs("InfoButton", "", LogManager.instance.UniEndTime().ToString());
 				LogManager.instance.infoCount++;
@@ -48,13 +57,16 @@ public class Icons : MonoBehaviour {
 
 		try {
 			if (agendaPanel.activeSelf) {
-				agendaPanel.SetActive (false);
+				agendaFadeOut = true;
+				agendaFadeIn = false;
 			} else {
-				agendaPanel.SetActive (true);
+				agendaFadeIn = true;
+				agendaFadeOut = false;
 				LogManager.instance.logger.sendChronologicalLogs("AgendaButton", "", LogManager.instance.UniEndTime().ToString());
 
 				LogManager.instance.agendaCount++;
-				informationPanel.SetActive (false);
+				infoFadeOut = true;
+				infoFadeIn = false;
 			}
 		} catch {
 			Debug.Log ("Agenda Panel can't be found.");
@@ -68,14 +80,83 @@ public class Icons : MonoBehaviour {
 		{
 			if (agendaPanel.activeSelf)
 			{
-				agendaPanel.SetActive(false);
+				//agendaPanel.SetActive(false);
+				agendaFadeOut = true;
+				agendaFadeIn = false;
 			}
-			else if (informationPanel.activeSelf)
+			if (informationPanel.activeSelf)
 			{
-				informationPanel.SetActive(false);
+				infoFadeOut = true;
+				infoFadeIn = false;
 			}
 		}
 		catch
 		{ }
+	}
+	public void Update()
+	{
+		//Fadeout Agenda
+		if(agendaFadeOut)
+        {
+			agendaFadeIn = false;
+			CanvasGroup cg = agendaPanel.GetComponent<CanvasGroup>();
+			if(cg.alpha>0)
+            {
+				cg.alpha -= Time.deltaTime*speed;
+            }
+			else
+            {
+				cg.alpha = 0;
+				agendaFadeOut = false;
+				agendaPanel.SetActive(false);
+            }
+        }
+		//Fadein Agenda
+		else if (agendaFadeIn)
+		{ 
+			agendaPanel.SetActive(true);
+			CanvasGroup cg = agendaPanel.GetComponent<CanvasGroup>();
+			if (cg.alpha < 1)
+			{
+				cg.alpha += Time.deltaTime * speed;
+			}
+			else
+			{
+				cg.alpha = 1;
+				agendaFadeIn = false;
+			}
+		}
+
+		//Fadeout InfoPanel
+		if (infoFadeOut)
+		{
+			infoFadeIn = false;
+			CanvasGroup cg = informationPanel.GetComponent<CanvasGroup>();
+			if (cg.alpha > 0)
+			{
+				cg.alpha -= Time.deltaTime * speed;
+			}
+			else
+			{
+				cg.alpha = 0;
+				infoFadeOut = false;
+				informationPanel.SetActive(false);
+			}
+		}
+		//Fadein InfoPanel
+		else if (infoFadeIn)
+		{
+			informationPanel.SetActive(true);
+			CanvasGroup cg = informationPanel.GetComponent<CanvasGroup>();
+			if (cg.alpha < 1)
+			{
+				cg.alpha += Time.deltaTime * speed;
+			}
+			else
+			{
+				cg.alpha = 1;
+				infoFadeIn = false;
+			}
+		}
 	}
 }
