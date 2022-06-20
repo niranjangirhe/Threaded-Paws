@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
 
 public class ExecuteThreadsLevel3_5 : MonoBehaviour
 {
@@ -88,6 +89,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         // -------- Initialize Description text --------
         GameObject.Find("InstructionsPanel").transform.Find("Part2").Find("Background").GetChild(0).GetChild(0).GetComponent<Text>().text = descriptionText;
         GameObject.Find("InstructionsPanel").transform.Find("Part1").Find("SpeechBox").GetChild(0).GetComponent<Text>().text = bubbleText;
+            GameObject.Find("InstructionsPanel").transform.Find("Part1").Find("Level").GetComponent<Text>().text = SceneManager.GetActiveScene().name;
+
 
         // --------Intialize Prefabs -------
         simulationImagePrefab = Resources.Load<GameObject>("prefabs/SimulationImage");
