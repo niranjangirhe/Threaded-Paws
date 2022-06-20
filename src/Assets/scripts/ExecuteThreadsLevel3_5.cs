@@ -589,7 +589,6 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                 {
                     int idleInt = Random.Range(0, 100);
                     bool isIdle = (idleInt < idleMomentPercent);
-                    Debug.Log("Nira" + idleInt + (idleInt < idleMomentPercent));
                     Thread t = threads[i];
                     if (!isIdle)
                     {
@@ -708,6 +707,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                                             resError("> ERROR: You need to return all the resources you acquired before checking out.", t.layoutPanel);
                                             scrollToBottom();
+                                            break;
                                         }
                                     }
                                 }
@@ -1023,4 +1023,5 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     {
         yield return 0;
     }
+    
 }

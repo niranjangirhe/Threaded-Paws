@@ -24,10 +24,12 @@ public class SwitchTab : MonoBehaviour
             GameObject.Find("Label" + i).transform.GetChild(0).Find("Text (TMP)").gameObject.SetActive(false);
             GameObject.Find("Label" + i).GetComponent<LayoutElement>().preferredWidth = 0;
             try { 
-                GameObject.Find("AgendaTick" + i).GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 0); 
+                GameObject.Find("Canvas").transform.Find("AgendaPanel").Find("AgendaTickParent").Find("AgendaTick" + i).GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 0); 
             }
-            catch 
-            { }
+            catch
+            {
+                Debug.Log("Idiot");
+            }
 
         }
         GameObject.Find("Label" + index).transform.GetChild(0).GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1);
@@ -37,12 +39,15 @@ public class SwitchTab : MonoBehaviour
         //To Switch Agenda Tab
         try
         {
-            Transform agendaTick = GameObject.Find("AgendaTick" + index).transform;
-            Transform agenda = GameObject.Find("Agenda" + index).transform;
+            Transform agendaTick = GameObject.Find("Canvas").transform.Find("AgendaPanel").Find("AgendaTickParent").Find("AgendaTick" + index).transform;
+            Transform agenda = GameObject.Find("Canvas").transform.Find("AgendaPanel").Find("AgendaParent").Find("Agenda" + index).transform;
             agenda.SetAsLastSibling();
             agendaTick.GetComponent<Image>().color = agendaTick.GetChild(0).GetComponent<Image>().color;
         }
-        catch { }
+        catch 
+        {
+            Debug.Log("Riddhi");
+        }
        
 
     }

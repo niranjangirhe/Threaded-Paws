@@ -13,10 +13,10 @@ using UnityEngine.UI;
 [System.Serializable]
 public class WorkList
 {
-    public Action Dry = new Action("Dry",new List<string> { "station","towel","dryer"});
-    public Action Wash = new Action("Wash", new List<string> { "station", "towel","shampoo","cond." });
-    public Action Cut = new Action("Cut", new List<string> { "scissors", "brush" });
-    public Action Groom = new Action("Groom", new List<string> { "clippers", "brush" });
+    public Action dry = new Action("Dry",new List<string> { "station","towel","dryer"});
+    public Action wash = new Action("Wash", new List<string> { "station", "towel","shampoo","cond." });
+    public Action cut = new Action("Cut", new List<string> { "scissors", "brush" });
+    public Action groom = new Action("Groom", new List<string> { "clippers", "brush" });
 }
 
 public class SimBlock

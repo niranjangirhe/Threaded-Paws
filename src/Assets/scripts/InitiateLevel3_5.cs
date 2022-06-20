@@ -31,10 +31,10 @@ public class InitiateLevel3_5 : MonoBehaviour {
                         newBox(actionPrefab, "checkout", t.tabDropArea, "CheckOutBox");
                         break;
                     case ActionEnum.Cut:
-                        newBox(actionPrefab, "Cut", t.tabDropArea, "CutBox");
+                        newBox(actionPrefab, "cut", t.tabDropArea, "CutBox");
                         break;
                     case ActionEnum.Dry:
-                        newBox(actionPrefab, "Dry", t.tabDropArea, "DryBox");
+                        newBox(actionPrefab, "dry", t.tabDropArea, "DryBox");
                         break;
                     case ActionEnum.Get:
                         box = newBox(acquirePrefab, "get", t.tabDropArea, "ResourceBox");
@@ -73,7 +73,7 @@ public class InitiateLevel3_5 : MonoBehaviour {
 
                         break;
                     case ActionEnum.Groom:
-                        newBox(actionPrefab, "Groom", t.tabDropArea, "GroomBox");
+                        newBox(actionPrefab, "groom", t.tabDropArea, "GroomBox");
                         break;
                     case ActionEnum.Return:
                         box = newBox(returnPrefab, "ret", t.tabDropArea, "ReturnBox");
@@ -111,7 +111,7 @@ public class InitiateLevel3_5 : MonoBehaviour {
                         }
                         break;
                     case ActionEnum.Wash:
-                        newBox(actionPrefab, "Wash", t.tabDropArea, "WashBox");
+                        newBox(actionPrefab, "wash", t.tabDropArea, "WashBox");
                         break;
                 }
            

@@ -24,7 +24,7 @@ public class ScenesManager : MonoBehaviour {
 	public void tryAgain () {
 		LogManager.instance.logger.sendChronologicalMenuLogs("TryAgain", LogManager.instance.UniEndTime().ToString());
 
-		SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
+		SceneManager.LoadScene (SceneManager.GetActiveScene().buildIndex);
 
 		// instructionsPanel.SetActive (false);
 	}
@@ -42,5 +42,10 @@ public class ScenesManager : MonoBehaviour {
 	public void getLevel4 () {
 		LogManager.instance.logger.sendChronologicalMenuLogs("StartLevel04", LogManager.instance.UniEndTime().ToString());
 		SceneManager.LoadScene ("Level4");
+	}
+
+	public void NextLevel()
+	{
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 	}
 }
