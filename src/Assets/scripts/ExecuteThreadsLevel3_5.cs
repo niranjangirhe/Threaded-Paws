@@ -473,26 +473,29 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
             if (t.blocks.Length < 1)
             {
 
-                manager.showError("There are no actions to run in thread "+count);
-                terminateSimulation("There are no actions to run in thread "+count);
+                manager.showError("There are no actions to run in Stylist "+(count+1)+" tab.");
+                terminateSimulation("There are no actions to run in Stylist " + (count+1)+" tab.");
                 return;
             }
 
             try
             {
-                if ((t.simBlocks[0].type != SimBlock.CHECKIN) || (t.simBlocks[0].type != SimBlock.CHECKIN))
+                if (t.simBlocks[0].type != SimBlock.CHECKIN)
                 {
                     manager.showError("Remember to always check-in your costumer first!");
                     terminateSimulation("Remember to always check-in your costumer first!");
                     return;
                 }
-
+                if (t.simBlocks[t.simBlocks.Count-1].type != SimBlock.CHECKOUT)
+                {
+                    manager.showError("Remember to always check-out your costumer");
+                    terminateSimulation("Remember to always check-out your costumer");
+                    return;
+                }
             }
             catch
             {
-                manager.showError("Remember to always check-in your costumer first!");
-                terminateSimulation("Remember to always check-in your costumer first!");
-                return;
+                
             }
 
         }
