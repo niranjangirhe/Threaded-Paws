@@ -21,8 +21,6 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	public byte isFrom = TOOLBOX;
 
 
-	ToolBoxValues manager;
-
 	public enum Type { IFNEEDED, WHILELOOP, IFSTAT, ACTION, ALL, INVENTORY };
 	public Type typeOfItem = Type.ALL; //default
 
@@ -40,24 +38,6 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			//update toolbox value (UI)
 			exeThread.updateValues(activeTab);
 		}
-		try
-		{
-
-			if (eventData.pointerDrag.transform.parent.parent.gameObject.GetComponent<Draggable>().typeOfItem == Type.WHILELOOP)
-			{
-
-				int num_children = eventData.pointerDrag.transform.parent.childCount;
-				float curr_width = eventData.pointerDrag.transform.parent.GetComponent<RectTransform>().sizeDelta.x;
-				float new_height = (num_children * 25);
-				float parent_curr_width = eventData.pointerDrag.transform.parent.parent.GetComponent<RectTransform>().sizeDelta.x;
-				float parent_new_height = new_height + 25;
-
-				eventData.pointerDrag.transform.parent.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(parent_curr_width, parent_new_height);
-				eventData.pointerDrag.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(curr_width, new_height);
-			}
-
-		}
-		catch { }
 
 
 		placeholder = new GameObject();

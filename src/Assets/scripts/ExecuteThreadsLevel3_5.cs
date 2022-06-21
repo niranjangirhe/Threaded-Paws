@@ -83,13 +83,26 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         txt_checkoutLeft_thread.text = "x " + threads[index].toolBoxValues.CheckOutBox;
         txt_returnLeft_thread.text = "x " + threads[index].toolBoxValues.ReturnBox;
         txt_groomLeft_thread.text = "x " + threads[index].toolBoxValues.GroomBox;
+
+        System.Reflection.FieldInfo[] boxList = threads[index].toolBoxValues.GetType().GetFields();
+        foreach (System.Reflection.FieldInfo bl in boxList)
+        {
+            if ((int)bl.GetValue(threads[index].toolBoxValues) == 0)
+            {
+                GameObject.Find(bl.Name).GetComponent<CanvasGroup>().alpha = 0.5f;
+            }
+            else
+            {
+                GameObject.Find(bl.Name).GetComponent<CanvasGroup>().alpha = 1;
+            }
+        }
     }
     void Start()
     {
         // -------- Initialize Description text --------
         GameObject.Find("InstructionsPanel").transform.Find("Part2").Find("Background").GetChild(0).GetChild(0).GetComponent<Text>().text = descriptionText;
         GameObject.Find("InstructionsPanel").transform.Find("Part1").Find("SpeechBox").GetChild(0).GetComponent<Text>().text = bubbleText;
-            GameObject.Find("InstructionsPanel").transform.Find("Part1").Find("Level").GetComponent<Text>().text = SceneManager.GetActiveScene().name;
+        GameObject.Find("InstructionsPanel").transform.Find("Part1").Find("Level").GetComponent<Text>().text = SceneManager.GetActiveScene().name;
 
 
         // --------Intialize Prefabs -------
@@ -356,14 +369,12 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                     // action block is a GET action
                     if (t.blocks[i].transform.GetComponentInChildren<Text>().text == "get")
                     {
-
                         string resource = t.blocks[i].transform.Find("Dropdown").Find("Label").GetComponent<Text>().text;
                         if (resource == "[null]")
                         {
                             terminateSimulation("Please select a resource to acquire in thread "+count);
                             manager.showError("Please select a resource to acquire in thread "+count);
                             return;
-
                         }
                         else
                         {
@@ -383,10 +394,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                             item = Resources.Load<Sprite>("sprites/items/" + resource);
                             newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = item;
-                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "get(" + resource + ");";
+                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "get " + resource;
                             t.simulationImages.Add(newItem);
                         }
-
                         // action block is a RETURN action
                     }
                     else if (t.blocks[i].transform.GetComponentInChildren<Text>().text == "ret")
@@ -417,7 +427,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                             Sprite item;
                             item = Resources.Load<Sprite>("sprites/items/" + resource);
                             newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = item;
-                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "return(" + resource + ");";
+                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "return " + resource;
                             t.simulationImages.Add(newItem);
 
                         }
@@ -464,7 +474,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                             Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
                             newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = item;
                         }
-                        newItem.transform.Find("ActionText").GetComponent<Text>().text = action + ";";
+                        newItem.transform.Find("ActionText").GetComponent<Text>().text = action;
                         t.simulationImages.Add(newItem);
 
                     }
