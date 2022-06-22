@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class ExecuteThreadsLevel3_5 : MonoBehaviour
 {
-
+    
     public List<Thread> threads;
     private dropDownManager dropDownManager = new dropDownManager();
     [SerializeField] private bool isRetAllCompulsion;
@@ -291,7 +291,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     public void ExecuteThreads()
     {
-
+        
         //-------- UI Updates and Logging --------
         LogManager.instance.logger.sendChronologicalLogs("RunLevel03Thread", "", LogManager.instance.UniEndTime().ToString());
         scrollToTop();
