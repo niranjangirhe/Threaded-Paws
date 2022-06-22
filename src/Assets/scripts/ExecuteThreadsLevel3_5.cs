@@ -60,6 +60,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     public GameObject playButton;
     public GameObject stopButton;
+    public GameObject nextButton;
 
     bool stop;
     bool err;
@@ -293,6 +294,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         GameObject.Find("Label0").transform.GetChild(0).GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1);
         GameObject.Find("Label0").transform.GetChild(0).Find("Text (TMP)").gameObject.SetActive(true);
         GameObject.Find("Label0").GetComponent<LayoutElement>().preferredWidth = 1000;
+        GameObject.Find("Canvas").transform.Find("AgendaPanel").gameObject.SetActive(false);
     }
 
     public void ExecuteThreads()
@@ -823,6 +825,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         if (!lost)
         {
             LogManager.instance.logger.sendChronologicalLogs("Level03Won", "", LogManager.instance.UniEndTime().ToString());
+            CloseBtn(stopButton);
+            OpenBtn(playButton);
+            OpenBtn(nextButton);
             manager.gameWon();
             Debug.Log("Finished in " + j + " steps.");
 

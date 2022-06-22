@@ -48,4 +48,8 @@ public class ScenesManager : MonoBehaviour {
 	{
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 	}
+	public void Review(GameObject wonPanel)
+    {
+		wonPanel.SetActive(false);
+    }
 }
