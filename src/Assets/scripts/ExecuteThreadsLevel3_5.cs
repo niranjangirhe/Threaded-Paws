@@ -58,7 +58,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     ProgressBar bar;
     ScrollRect simulationScrollRect;
 
-    public GameObject runButton;
+    public GameObject playButton;
     public GameObject stopButton;
 
     bool stop;
@@ -172,6 +172,12 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         agendaTick = Resources.Load<GameObject>("prefabs/Tick");
         label = Resources.Load<GameObject>("prefabs/Label");
         board = Resources.Load<GameObject>("prefabs/Board");
+
+
+        //enable Play button
+        CloseBtn(stopButton);
+        OpenBtn(playButton);
+
 
         int count = 0;
         System.Random r = new System.Random();
@@ -311,7 +317,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         }
         catch { }
         // switch to stop button
-        runButton.transform.SetAsFirstSibling();
+        CloseBtn(playButton);
+        OpenBtn(stopButton);
         try
         {
             // disable all other functionalities
@@ -515,6 +522,16 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         }
     }
 
+    private void OpenBtn(GameObject btn)
+    {
+        btn.transform.Find("overlay").gameObject.SetActive(false);
+    }
+
+    private void CloseBtn(GameObject btn)
+    {
+        btn.transform.Find("overlay").gameObject.SetActive(true);
+    }
+
     IEnumerator printThreads(int speed)
     {
 
@@ -568,7 +585,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                 stop = true;
                 paused = true;
                 lost = true;
-                stopButton.transform.GetComponent<Button>().interactable = false;
+                CloseBtn(stopButton);
+                OpenBtn(playButton);
                 yield return 0;
             }
 
@@ -584,7 +602,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                     {
                         Debug.Log("Cannot disable DisablePanel");
                     }
-                    runButton.transform.SetAsLastSibling();
+                    CloseBtn(stopButton);
+                    OpenBtn(playButton);
                 }
                 bar.LoadingBar.GetComponent<Image>().fillAmount = 0;
                 break;
@@ -900,7 +919,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
             Debug.Log("Cannot disable DisablePanel.");
         }
 
-        runButton.transform.SetAsLastSibling();
+        CloseBtn(stopButton);
+        OpenBtn(playButton);
         bar.LoadingBar.GetComponent<Image>().fillAmount = 0;
 
     }

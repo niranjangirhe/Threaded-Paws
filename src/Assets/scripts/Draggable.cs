@@ -15,7 +15,11 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	// GameObject threadArea;
 	GameObject canvas;
 	GameObject toolbox;
+
 	private AudioSource audioSource;
+	private AudioClip select, drop;
+
+
 	public static byte TOOLBOX = 0;
 	public static byte THREAD = 1;
 
@@ -27,7 +31,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
-		audioSource.clip = Resources.Load<AudioClip>("prefabs/audio/select");
+		audioSource.clip = select;
 		audioSource.Play();
 		if (isFrom == TOOLBOX)
 		{
@@ -185,7 +189,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	public void OnEndDrag(PointerEventData eventData)
 	{
 
-		audioSource.clip = Resources.Load<AudioClip>("prefabs/audio/drop");
+		audioSource.clip = drop;
 		audioSource.Play();
 		Debug.Log("OnEndDrag called");
 
@@ -313,6 +317,10 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	{
 		// threadArea = GameObject.Find("DropAreaThread");
 		audioSource = GameObject.Find("_SCRIPTS_").GetComponent<AudioSource>();
+		select = Resources.Load<AudioClip>("audio/select");
+		drop = Resources.Load<AudioClip>("audio/drop");
+
+
 		canvas = GameObject.Find("Canvas");
 		toolbox = GameObject.Find("DropAreaTools");
 	}

@@ -8,12 +8,18 @@ public class SwitchTab : MonoBehaviour
 
     public int index;
     public int totalCount;
+    private AudioSource audioSource;
+    private AudioClip audioClip;
     void Start()
     {
+        audioClip = Resources.Load<AudioClip>("audio/selectTab");
+        audioSource = GameObject.Find("_SCRIPTS_").GetComponent<AudioSource>();
 
     }
     public void SwitchTabBtn()
     {
+        audioSource.clip = audioClip;
+        audioSource.Play();
         //update toolbox value (UI)
         GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel3_5>().updateValues(index);
         //To Switch Tab
@@ -51,9 +57,5 @@ public class SwitchTab : MonoBehaviour
        
 
     }
-    // Update is called once per frame
-    void Update()
-    {
 
-    }
 }

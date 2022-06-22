@@ -15,6 +15,9 @@ public class CreateNewBlock : MonoBehaviour {
 
     ToolBoxValues manager;
 
+    private AudioSource audioSource;
+    private AudioClip audioClip;
+
 
     public void NewActionBlock()
     {
@@ -46,7 +49,15 @@ public class CreateNewBlock : MonoBehaviour {
         }
 
     }
+    public void ErrorSound()
+    {
+        if(gameObject.GetComponent<CanvasGroup>().alpha<1)
+        {
+            audioSource.clip = audioClip;
+            audioSource.Play();
+        }
 
+    }
     private void DeleteOtherClone()
     {
         int parentChildCount = gameObject.transform.parent.childCount;
@@ -84,10 +95,9 @@ public class CreateNewBlock : MonoBehaviour {
     // Use this for initialization
     void Start () {
         txtErrorMsg = GameObject.Find("ErrorMsg").GetComponent<Text>();
-	}
+        audioClip = Resources.Load<AudioClip>("audio/error");
+        audioSource = GameObject.Find("_SCRIPTS_").GetComponent<AudioSource>();
+    }
 
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
 }
