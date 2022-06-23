@@ -84,7 +84,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         txt_resourcesLeft_thread.text = "x " + threads[index].toolBoxValues.ResourceBox;
         txt_checkoutLeft_thread.text = "x " + threads[index].toolBoxValues.CheckOutBox;
         txt_returnLeft_thread.text = "x " + threads[index].toolBoxValues.ReturnBox;
-        txt_groomLeft_thread.text = "x " + threads[index].toolBoxValues.GroomBox;
+        txt_groomLeft_thread.text = "x " + threads[index].toolBoxValues.BrushBox;
 
         System.Reflection.FieldInfo[] boxList = threads[index].toolBoxValues.GetType().GetFields();
         foreach (System.Reflection.FieldInfo bl in boxList)

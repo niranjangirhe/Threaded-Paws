@@ -63,17 +63,20 @@ public class InitiateLevel3_5 : MonoBehaviour {
                             case ItemsEnum.shampoo:
                                 box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "shampoo";
                                 break;
-                            case ItemsEnum.station:
-                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "station";
+                            case ItemsEnum.spray:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "spray";
                                 break;
                             case ItemsEnum.towel:
                                 box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "towel";
                                 break;
+                            case ItemsEnum.sponge:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "sponge";
+                                break;
                         }
 
                         break;
-                    case ActionEnum.Groom:
-                        newBox(actionPrefab, "groom", t.tabDropArea, "GroomBox");
+                    case ActionEnum.Brush:
+                        newBox(actionPrefab, "brush", t.tabDropArea, "BrushBox");
                         break;
                     case ActionEnum.Return:
                         box = newBox(returnPrefab, "ret", t.tabDropArea, "ReturnBox");
@@ -102,11 +105,14 @@ public class InitiateLevel3_5 : MonoBehaviour {
                             case ItemsEnum.shampoo:
                                 box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "shampoo";
                                 break;
-                            case ItemsEnum.station:
-                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "station";
+                            case ItemsEnum.spray:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "spray";
                                 break;
                             case ItemsEnum.towel:
                                 box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "towel";
+                                break;
+                            case ItemsEnum.sponge:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "sponge";
                                 break;
                         }
                         break;

@@ -13,10 +13,10 @@ using UnityEngine.UI;
 [System.Serializable]
 public class WorkList
 {
-    public Action dry = new Action("Dry",new List<string> { "station","towel","dryer"});
-    public Action wash = new Action("Wash", new List<string> { "station", "towel","shampoo","cond." });
-    public Action cut = new Action("Cut", new List<string> { "scissors", "brush" });
-    public Action groom = new Action("Groom", new List<string> { "clippers", "brush" });
+    public Action dry = new Action("Dry",new List<string> { "towel","dryer"});
+    public Action wash = new Action("Wash", new List<string> { "sponge","shampoo","cond." });
+    public Action cut = new Action("Cut", new List<string> { "scissors", "brush", "clippers" });
+    public Action brush = new Action("Brush", new List<string> { "spray", "brush" });
 }
 
 public class SimBlock
@@ -46,14 +46,14 @@ public class ToolBoxValues
 	public int ResourceBox;
 	public int CheckOutBox;
 	public int ReturnBox;
-	public int GroomBox;
+	public int BrushBox;
 }
 [System.Serializable]
 public enum ActionEnum
 {
 	Cut,
 	Wash,
-	Groom,
+	Brush,
 	Dry,
 	CheckIn,
 	CheckOut,
@@ -69,9 +69,10 @@ public enum ItemsEnum
 	towel,
 	shampoo,
 	conditioner,
-	station,
 	clippers,
-	dryer
+	dryer,
+    sponge,
+    spray
 }
 [System.Serializable]
 public class BlockInfo
