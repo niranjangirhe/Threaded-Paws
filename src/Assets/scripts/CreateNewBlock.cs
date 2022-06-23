@@ -10,9 +10,8 @@ public class CreateNewBlock : MonoBehaviour {
 
 	public GameObject prefab;
 	public GameObject canvas;
-
-    private Text txtErrorMsg;
-
+    public GameObject errorMsgHolder;
+    public Text txtErrorMsg;
     ToolBoxValues manager;
 
     private AudioSource audioSource;
@@ -42,11 +41,7 @@ public class CreateNewBlock : MonoBehaviour {
 
 
         }
-        else
-        {
-            //display error message to user
-            showError("You don\'t have any more of those left!");
-        }
+        
 
     }
     public void ErrorSound()
@@ -55,6 +50,7 @@ public class CreateNewBlock : MonoBehaviour {
         {
             audioSource.clip = audioClip;
             audioSource.Play();
+            showError("You don\'t have any more of those left!");
         }
 
     }
@@ -79,22 +75,16 @@ public class CreateNewBlock : MonoBehaviour {
 
     public void showError(string msg)
     {
-        StartCoroutine(ErrorMsg(msg));
-
-    }
-
-    IEnumerator ErrorMsg(string msg)
-    {
-
+        errorMsgHolder.SetActive(true);
         txtErrorMsg.enabled = true;
         txtErrorMsg.text = msg;
-        yield return new WaitForSeconds(2.0f);
-        txtErrorMsg.enabled = false;
     }
+
+   
 
     // Use this for initialization
     void Start () {
-        txtErrorMsg = GameObject.Find("ErrorMsg").GetComponent<Text>();
+        
         audioClip = Resources.Load<AudioClip>("audio/error");
         audioSource = GameObject.Find("_SCRIPTS_").GetComponent<AudioSource>();
     }

@@ -301,7 +301,11 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     public void ExecuteThreads()
     {
-        
+        if (!isAllowed(playButton))
+        {
+            return;
+        }
+
         //-------- UI Updates and Logging --------
         LogManager.instance.logger.sendChronologicalLogs("RunLevel03Thread", "", LogManager.instance.UniEndTime().ToString());
         scrollToTop();
@@ -894,6 +898,11 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     public void terminateSimulation(string error)
     {
+        if (!isAllowed(stopButton))
+        {
+            return;
+        }
+            
         GameLogData.chronologicalLogs.Add("TerminateLevel3: " + LogManager.instance.UniEndTime());
         LogManager.instance.logger.sendChronologicalLogs("TerminateLevel3", "", LogManager.instance.UniEndTime().ToString());
 
@@ -922,6 +931,11 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
         OpenBtn(playButton);
         bar.LoadingBar.GetComponent<Image>().fillAmount = 0;
 
+    }
+
+    private bool isAllowed(GameObject g)
+    {
+        return g.transform.Find("overlay").gameObject.active;
     }
 
     void resError(String msg, GameObject layout)

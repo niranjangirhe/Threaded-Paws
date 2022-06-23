@@ -66,6 +66,6 @@ public class ToolboxManager : MonoBehaviour {
 	public void BackButton()
 	{
 		LogManager.instance.logger.sendChronologicalLogs("BackToMain", "", LogManager.instance.UniEndTime().ToString());
-	SceneManager.LoadScene("MainMenu");
+		SceneManager.LoadScene("MainMenu");
 	}
 }
