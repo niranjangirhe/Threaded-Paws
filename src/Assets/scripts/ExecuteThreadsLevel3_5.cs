@@ -867,7 +867,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     private string RequirementList(string name,Thread t)
     {
         string list = "";
-        List<string> r = ((Action)t.workList.GetType().GetField(name).GetValue(t.workList)).requirements;
+        List<string> r = ((Action)t.workList.GetType().GetField(name).GetValue(t.workList)).GetRequirementList();
         for (int i = 0; i < r.Count; i++)
         {
             if (i == r.Count - 1)
@@ -889,15 +889,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     private bool IHaveAllThings(string name, Thread t)
     {
         bool iDoHave = true;
-        Debug.Log("Here~~NO" + name);
-        foreach (string s in ((Action)t.workList.GetType().GetField(name).GetValue(t.workList)).requirements)
+        foreach (string s in ((Action)t.workList.GetType().GetField(name).GetValue(t.workList)).GetRequirementList())
         {
-            if (name.Equals("dry"))
-                Debug.Log("HereTTTT" + s);
-        }
-        foreach (string s in ((Action)t.workList.GetType().GetField(name).GetValue(t.workList)).requirements)
-        {
-            Debug.Log("Here~~" + name + s);
             if (!t.hasItems[s])
             {
                 iDoHave = false;
