@@ -301,7 +301,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     public void ExecuteThreads()
     {
-        if (isAllowed(playButton))
+        if (!isAllowed(playButton))
         {
             return;
         }
@@ -407,7 +407,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                             item = Resources.Load<Sprite>("sprites/items/" + resource);
                             newItem.transform.Find("Icon").GetComponent<Image>().sprite = item;
-                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "Get " + resource;
+                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "get";
                             t.simulationImages.Add(newItem);
                         }
                         // action block is a RETURN action
@@ -438,7 +438,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                             Sprite item;
                             item = Resources.Load<Sprite>("sprites/items/" + resource);
                             newItem.transform.Find("Icon").GetComponent<Image>().sprite = item;
-                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "Return " + resource;
+                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "return";
                             t.simulationImages.Add(newItem);
 
                         }
@@ -462,7 +462,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                             newItem.GetComponent<Image>().color = new Color32(255, 196, 61, 141);
                             t.simBlocks.Add(new SimBlock(SimBlock.CHECKIN, ""));
                             newItem.transform.Find("Icon").GetComponent<Image>().sprite = t.dogSprite;
-                           
+                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "check-in";
+
 
                         }
                         else if (action == "checkout")
@@ -471,7 +472,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                             newItem.GetComponent<Image>().color = new Color32(255, 196, 61, 141);
                             t.simBlocks.Add(new SimBlock(SimBlock.CHECKOUT, ""));
                             newItem.transform.Find("Icon").GetComponent<Image>().sprite = t.dogSprite;
-                           
+                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "check-out";
+
 
                         }
                         else
@@ -481,8 +483,9 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                             t.simBlocks.Add(new SimBlock(SimBlock.WORK, action));
                             Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
                             newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = item;
+                            newItem.transform.Find("ActionText").GetComponent<Text>().text = action;
                         }
-                        newItem.transform.Find("ActionText").GetComponent<Text>().text = action;
+                        
                         t.simulationImages.Add(newItem);
 
                     }
@@ -634,7 +637,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                     newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
                                     newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
                                     newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for " + t.simBlocks[t.currIndex].name + "...</color>";
+                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
                                     newItem.transform.SetParent(t.layoutPanel.transform);
                                     newItem.transform.localScale = Vector3.one;
                                     scrollToBottom();
@@ -898,7 +901,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     public void terminateSimulation(string error)
     {
-        if (isAllowed(stopButton))
+        if (!isAllowed(stopButton))
         {
             return;
         }
@@ -935,7 +938,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     private bool isAllowed(GameObject g)
     {
-        return g.transform.Find("overlay").gameObject.active;
+        return !g.transform.Find("overlay").gameObject.active;
     }
 
     void resError(String msg, GameObject layout)
