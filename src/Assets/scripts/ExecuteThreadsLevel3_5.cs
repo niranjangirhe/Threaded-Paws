@@ -34,7 +34,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     public GameObject scrollRect;
 
-    private GameObject simulationImagePrefab;
+    private GameObject actionSimulationImagePrefab;
+    private GameObject singleSimulationImagePrefab;
     private GameObject simulationErrorPrefab;
     private GameObject simPanel;
     public Text stepsIndicator;
@@ -107,7 +108,8 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
 
         // --------Intialize Prefabs -------
-        simulationImagePrefab = Resources.Load<GameObject>("prefabs/SimulationImage");
+        actionSimulationImagePrefab = Resources.Load<GameObject>("prefabs/ActionSim");
+        singleSimulationImagePrefab = Resources.Load<GameObject>("prefabs/singleIconSimulation");
         simulationErrorPrefab = Resources.Load<GameObject>("prefabs/ErrorSimulationImage");
         simPanel = Resources.Load<GameObject>("prefabs/ThreadSimPanel");
 
@@ -395,15 +397,13 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                             i++;
 
                             // create new object from prefab
-                            GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = t.workerSprite;
-                            newItem.transform.Find("AcqRet").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/acquire");
-
+                            GameObject newItem = Instantiate(singleSimulationImagePrefab) as GameObject;
+                            newItem.GetComponent<Image>().color = new Color32(239, 71, 239, 141);
                             Sprite item;
 
                             item = Resources.Load<Sprite>("sprites/items/" + resource);
-                            newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = item;
-                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "get " + resource;
+                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = item;
+                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "Get " + resource;
                             t.simulationImages.Add(newItem);
                         }
                         // action block is a RETURN action
@@ -429,14 +429,12 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                             i++;
 
                             // create new object from prefab
-                            GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = t.workerSprite;
-                            newItem.transform.Find("AcqRet").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/return");
-
+                            GameObject newItem = Instantiate(singleSimulationImagePrefab) as GameObject;
+                            newItem.GetComponent<Image>().color = new Color32(144, 208, 113, 141);
                             Sprite item;
                             item = Resources.Load<Sprite>("sprites/items/" + resource);
-                            newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = item;
-                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "return " + resource;
+                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = item;
+                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "Return " + resource;
                             t.simulationImages.Add(newItem);
 
                         }
@@ -452,32 +450,29 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
                         i++;
 
-                        GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
 
+                        GameObject newItem;
                         if (action == "checkin")
                         {
-
-                            // Debug.Log ("CHECKING IN");
+                            newItem = Instantiate(singleSimulationImagePrefab) as GameObject;
+                            newItem.GetComponent<Image>().color = new Color32(255, 196, 61, 141);
                             t.simBlocks.Add(new SimBlock(SimBlock.CHECKIN, ""));
-                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = t.workerSprite;
-                            newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = t.dogSprite;
-                            newItem.transform.Find("AcqRet").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/acquire");
+                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = t.dogSprite;
+                           
 
                         }
                         else if (action == "checkout")
                         {
-
-                            // Debug.Log ("CHECKING OUT");
+                            newItem = Instantiate(singleSimulationImagePrefab) as GameObject;
+                            newItem.GetComponent<Image>().color = new Color32(255, 196, 61, 141);
                             t.simBlocks.Add(new SimBlock(SimBlock.CHECKOUT, ""));
-                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = t.workerSprite;
-                            newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = t.dogSprite;
-                            newItem.transform.Find("AcqRet").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/return");
+                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = t.dogSprite;
+                           
 
                         }
                         else
                         {
-
-                            // create new object from prefab (single action)
+                            newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
                             newItem.transform.Find("Icon").GetComponent<Image>().sprite = t.dogSprite;
                             t.simBlocks.Add(new SimBlock(SimBlock.WORK, action));
                             Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
@@ -631,9 +626,10 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                                 //If t don't have the obj but some other thread has it then it will return true;
                                 if (MeNotSomeOneHas(t.simBlocks[t.currIndex].name, t))
                                 {
-                                    GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
+                                    GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
+                                    newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
+                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
                                     newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting for " + t.simBlocks[t.currIndex].name + "...</color>";
                                     newItem.transform.SetParent(t.layoutPanel.transform);
                                     newItem.transform.localScale = Vector3.one;
@@ -791,15 +787,13 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                         try
                         {
 
-                            GameObject newItem = Instantiate(simulationImagePrefab) as GameObject;
-                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = t.workerSprite;
-
-
+                            GameObject newItem = Instantiate(singleSimulationImagePrefab) as GameObject;
+                           
                             UnityEngine.Object[] s = Resources.LoadAll("sprites/items/idle", typeof(Sprite));
                             int randomIndex = Random.Range(0, s.Length);
 
-                            newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = (Sprite)s[randomIndex];
-                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red> Busy...</color>";
+                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = (Sprite)s[randomIndex];
+                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "Busy";
                             newItem.transform.SetParent(t.layoutPanel.transform);
                             newItem.transform.localScale = Vector3.one;
 
