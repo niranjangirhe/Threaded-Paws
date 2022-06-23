@@ -8,28 +8,25 @@ public class ToolboxManager : MonoBehaviour {
 
 
     public Text txtErrorMsg;
-    public GameObject LostPanel;
-    public GameObject WonPanel;
-    public GameObject InstructionsPanel;
-    public bool isLevel4;
+    public GameObject lostPanel;
+    public GameObject wonPanel;
+	public GameObject errorMsgHolder;
+	public bool isLevel4;
 
     // Use this for initialization
     void Start () {
 
 		try {
-			//Debug.Log ("Start in manager called");
+			errorMsgHolder.SetActive(false);
 			txtErrorMsg.enabled = false;
-			LostPanel.SetActive (false);
+			lostPanel.SetActive (false);
 
 			//updateValues ();
 
 		} catch { }
 	}
 
-	// Update is called once per frame
-	void Update () {
 
-	}
 
 	public void getMainMenu () {
 		LogManager.instance.logger.sendChronologicalLogs("MainMenuBtn", "", LogManager.instance.UniEndTime().ToString());
@@ -38,21 +35,16 @@ public class ToolboxManager : MonoBehaviour {
 	}
 
 	public void showError (string msg) {
-		StartCoroutine (ErrorMsg (msg));
 
-	}
-
-	IEnumerator ErrorMsg (string msg) {
-
+		errorMsgHolder.SetActive(true);
 		txtErrorMsg.enabled = true;
-		txtErrorMsg.text = msg;
-		yield return new WaitForSeconds (2.0f);
-		txtErrorMsg.enabled = false;
+		txtErrorMsg.text = msg;	
 	}
+
 
 	public void gameLost () {
 		try {
-			LostPanel.SetActive (true);
+			lostPanel.SetActive (true);
 		} catch {
 			Debug.Log ("Could not find LostPanel");
 		}
@@ -64,7 +56,7 @@ public class ToolboxManager : MonoBehaviour {
 
 		try {
 
-			WonPanel.SetActive (true);
+			wonPanel.SetActive (true);
 
 		} catch {
 			Debug.Log ("Could not find WonPanel");
