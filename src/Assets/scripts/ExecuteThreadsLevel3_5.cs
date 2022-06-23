@@ -627,6 +627,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                     {
                         try
                         {
+                            Debug.Log("Sank" + t.workerName + t.simBlocks[t.currIndex].type + t.simBlocks[t.currIndex].name);
                             //------------ Acquire -------------
                             if (t.simBlocks[t.currIndex].type == SimBlock.ACQUIIRE)
                             {
@@ -668,15 +669,16 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                             //------------ Work/Action block -------------
                             else if (t.simBlocks[t.currIndex].type == SimBlock.WORK)
                             {
-
+                                Debug.Log("Here"+ t.simBlocks[t.currIndex].name);
+                                Debug.Log("Here->"+IHaveAllThings(t.simBlocks[t.currIndex].name, t));
                                 if (IHaveAllThings(t.simBlocks[t.currIndex].name, t))
                                 {
-
+                                    Debug.Log("Nira" + t.simBlocks[t.currIndex].name);
                                     t.did[t.simBlocks[t.currIndex].name] = true;
                                 }
                                 else
                                 {
-
+                                    Debug.Log("Nira" + t.simBlocks[t.currIndex].name);
                                     String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
                                     t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
                                     t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
@@ -713,8 +715,20 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
                             }
                             else if (t.simBlocks[t.currIndex].type == SimBlock.CHECKOUT)
                             {
+                                Debug.Log(t.workerName);
                                 foreach (KeyValuePair<string, bool> k in t.needsTo)
                                 {
+                                    Debug.Log(k.Key + k.Value);
+                                }
+                                Debug.Log("----");
+                                foreach (KeyValuePair<string, bool> k in t.did)
+                                {
+                                    Debug.Log(k.Key + k.Value);
+                                }
+                                Debug.Log("----");
+                                foreach (KeyValuePair<string, bool> k in t.needsTo)
+                                {
+                                    Debug.Log("need" + k.Key + k.Value + "did" + t.did[k.Key]);
                                     if (k.Value && !t.did[k.Key])
                                     {
                                         String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
@@ -875,8 +889,15 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
     private bool IHaveAllThings(string name, Thread t)
     {
         bool iDoHave = true;
+        Debug.Log("Here~~NO" + name);
         foreach (string s in ((Action)t.workList.GetType().GetField(name).GetValue(t.workList)).requirements)
         {
+            if (name.Equals("dry"))
+                Debug.Log("HereTTTT" + s);
+        }
+        foreach (string s in ((Action)t.workList.GetType().GetField(name).GetValue(t.workList)).requirements)
+        {
+            Debug.Log("Here~~" + name + s);
             if (!t.hasItems[s])
             {
                 iDoHave = false;
