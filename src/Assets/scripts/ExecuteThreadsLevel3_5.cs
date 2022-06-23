@@ -301,7 +301,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     public void ExecuteThreads()
     {
-        if (!isAllowed(playButton))
+        if (isAllowed(playButton))
         {
             return;
         }
@@ -898,7 +898,7 @@ public class ExecuteThreadsLevel3_5 : MonoBehaviour
 
     public void terminateSimulation(string error)
     {
-        if (!isAllowed(stopButton))
+        if (isAllowed(stopButton))
         {
             return;
         }
