@@ -32,13 +32,19 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
     // --- IMAGE SIMULATION ---
 
-    public GameObject scrollRect;
+    [SerializeField] private GameObject scrollRect;
+    [SerializeField] private Transform iconPanel;
 
+
+
+    // ----- Prefab ------
     private GameObject actionSimulationImagePrefab;
     private GameObject singleSimulationImagePrefab;
     private GameObject simulationErrorPrefab;
-    private GameObject simPanel;
-    public Text stepsIndicator;
+
+
+
+    [SerializeField] private Text stepsIndicator;
 
 
     // ------- Tool box value text object--------
@@ -59,9 +65,9 @@ public class ExecuteThreadsLevel : MonoBehaviour
     ProgressBar bar;
     ScrollRect simulationScrollRect;
 
-    public GameObject playButton;
-    public GameObject stopButton;
-    public GameObject nextButton;
+    [SerializeField] private GameObject playButton;
+    [SerializeField] private GameObject stopButton;
+    [SerializeField] private GameObject nextButton;
 
     bool stop;
     bool err;
@@ -111,7 +117,6 @@ public class ExecuteThreadsLevel : MonoBehaviour
         actionSimulationImagePrefab = Resources.Load<GameObject>("prefabs/ActionSim");
         singleSimulationImagePrefab = Resources.Load<GameObject>("prefabs/singleIconSimulation");
         simulationErrorPrefab = Resources.Load<GameObject>("prefabs/ErrorSimulationImage");
-        simPanel = Resources.Load<GameObject>("prefabs/ThreadSimPanel");
 
         //Fill needsto Dict
         foreach (Thread t in threads)
@@ -121,10 +126,6 @@ public class ExecuteThreadsLevel : MonoBehaviour
             {
                 t.needsTo.Add(v.Name, ((Action)v.GetValue(t.workList)).isneeded);
             }
-
-            GameObject layoutTemp = Instantiate(simPanel);
-            layoutTemp.transform.SetParent(GameObject.Find("Simulation").transform.Find("ScrollRect").Find("Panel"), false);
-            t.layoutPanel = layoutTemp;
         }
 
         //Assign Values
@@ -226,6 +227,10 @@ public class ExecuteThreadsLevel : MonoBehaviour
         Transform agendaParent = GameObject.Find("AgendaParent").transform;
         Transform agendaTickParent = GameObject.Find("AgendaTickParent").transform;
         Transform boardParent = GameObject.Find("boardParent").transform;
+        iconPanel = GameObject.Find("IconPanel").transform;
+
+        GameObject simPanel = Resources.Load<GameObject>("prefabs/ThreadSimPanel");
+        GameObject icon = Resources.Load<GameObject>("prefabs/icon");
 
         foreach (Thread t in threads)
         {
@@ -233,6 +238,19 @@ public class ExecuteThreadsLevel : MonoBehaviour
             GameObject tabtemp = Instantiate(tab);
             tabtemp.transform.SetParent(tabParent,false);
             tabtemp.name = "Tab"+count.ToString();
+
+
+            //------- Add Sim Panel --------
+            GameObject layoutTemp = Instantiate(simPanel);
+            layoutTemp.transform.SetParent(scrollRect.transform.Find("Panel"), false);
+            t.layoutPanel = layoutTemp;
+
+
+            //------- Add Sim icon --------
+            GameObject iconTemp = Instantiate(icon);
+            iconTemp.transform.SetParent(iconPanel, false);
+            iconTemp.transform.Find("Image").GetComponent<Image>().sprite = t.workerSprite;
+
 
             //------- Add Label --------
             GameObject labeltemp = Instantiate(label);
@@ -297,6 +315,10 @@ public class ExecuteThreadsLevel : MonoBehaviour
         GameObject.Find("Label0").transform.GetChild(0).Find("Text (TMP)").gameObject.SetActive(true);
         GameObject.Find("Label0").GetComponent<LayoutElement>().preferredWidth = 1000;
         GameObject.Find("Canvas").transform.Find("AgendaPanel").gameObject.SetActive(false);
+
+
+        //Disable SimIcons till execute
+        iconPanel.gameObject.SetActive(false);
     }
 
     public void ExecuteThreads()
@@ -305,7 +327,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         {
             return;
         }
-
+        iconPanel.gameObject.SetActive(true);
         //-------- UI Updates and Logging --------
         LogManager.instance.logger.sendChronologicalLogs("RunLevel03Thread", "", LogManager.instance.UniEndTime().ToString());
         scrollToTop();
@@ -934,7 +956,13 @@ public class ExecuteThreadsLevel : MonoBehaviour
     }
     public void Review(GameObject wonPanel)
     {
-       
+
+        //Add this to game over
+        //LogManager.instance.logger.sendChronologicalMenuLogs("TryAgain", LogManager.instance.UniEndTime().ToString());
+        //-------------- IMP Above -----------
+        //Same function is used for reveiw and timeout. (Modify it later)
+
+
 
         GameLogData.chronologicalLogs.Add("TerminateLevel3: " + LogManager.instance.UniEndTime());
         LogManager.instance.logger.sendChronologicalLogs("TerminateLevel3", "", LogManager.instance.UniEndTime().ToString());
