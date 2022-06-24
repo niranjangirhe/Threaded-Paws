@@ -36,7 +36,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		if (isFrom == TOOLBOX)
 		{
 			int activeTab = Int32.Parse(Regex.Match(GameObject.Find("TabParent").transform.GetChild(GameObject.Find("TabParent").transform.childCount - 1).gameObject.name, @"\d+").Value);
-			ExecuteThreadsLevel3_5 exeThread = GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel3_5>();
+			ExecuteThreadsLevel exeThread = GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>();
 			ToolBoxValues tbv = exeThread.threads[activeTab].toolBoxValues;
 			int cardCount = (int)tbv.GetType().GetField(gameObject.name).GetValue(tbv);
 			cardCount -= 1;
@@ -76,7 +76,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		//highlight threadArea
 		//threadArea.transform.GetComponent<Image> ().color = Color.green;
 
-		foreach (Thread t in GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel3_5>().threads)
+		foreach (Thread t in GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>().threads)
 		{
 			t.tabDropArea.GetComponent<Image>().color = Color.green;
 			Transform[] threadChildren = new Transform[t.tabDropArea.transform.childCount];
@@ -117,21 +117,21 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 		if (ToolBox.onToolBox && isFrom == THREAD)
 		{
-			foreach (Thread t in GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel3_5>().threads)
+			foreach (Thread t in GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>().threads)
 			{
 				t.tabDropArea.GetComponent<Image>().color = Color.red;
 			}
 		}
 		else if (ToolBox.onToolBox && isFrom == TOOLBOX)
 		{
-			foreach (Thread t in GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel3_5>().threads)
+			foreach (Thread t in GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>().threads)
 			{
 				t.tabDropArea.GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1);
 			}
 		}
 		else if(!ToolBox.onToolBox)
         {
-			foreach (Thread t in GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel3_5>().threads)
+			foreach (Thread t in GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>().threads)
 			{
 				t.tabDropArea.GetComponent<Image>().color = Color.green;
 			}
@@ -208,7 +208,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		//iterate through corresponding zones and remove highlights, if any
 
 
-		foreach (Thread t in GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel3_5>().threads)
+		foreach (Thread t in GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>().threads)
 		{
 			t.tabDropArea.GetComponent<Image>().color = Color.green;
 			Transform[] threadChildren = new Transform[t.tabDropArea.transform.childCount];
@@ -242,7 +242,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			Debug.Log("Dropped in the toolbox");
 
 			int activeTab = Int32.Parse(Regex.Match(GameObject.Find("TabParent").transform.GetChild(GameObject.Find("TabParent").transform.childCount - 1).gameObject.name, @"\d+").Value);
-			ExecuteThreadsLevel3_5 exeThread = GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel3_5>();
+			ExecuteThreadsLevel exeThread = GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>();
 			ToolBoxValues tbv = exeThread.threads[activeTab].toolBoxValues;
 
 			//LogManager.instance.logger.sendChronologicalLogs("DropW1-" + this.transform.GetChild(0).GetComponentInChildren<Text>().text + "_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());

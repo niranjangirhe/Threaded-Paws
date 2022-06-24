@@ -5,7 +5,7 @@ using UnityEngine.Analytics;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-public class Level3_5InstructionsManager : MonoBehaviour
+public class LevelInstructionsManager : MonoBehaviour
 {
 
     public GameObject level3_part1;

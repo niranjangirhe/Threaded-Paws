@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class InitiateLevel3_5 : MonoBehaviour {
+public class InitiateLevel : MonoBehaviour {
 
 	public GameObject actionPrefab;
 	public GameObject acquirePrefab;
@@ -18,7 +18,7 @@ public class InitiateLevel3_5 : MonoBehaviour {
 
         GameObject box;
 
-        foreach (Thread t in GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel3_5>().threads)
+        foreach (Thread t in GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>().threads)
         {
             foreach(BlockInfo bi in t.blockInfo)
             {

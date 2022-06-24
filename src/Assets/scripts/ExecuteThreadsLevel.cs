@@ -7,7 +7,7 @@ using System.Linq;
 using Random = UnityEngine.Random;
 using UnityEngine.SceneManagement;
 
-public class ExecuteThreadsLevel3_5 : MonoBehaviour
+public class ExecuteThreadsLevel : MonoBehaviour
 {
     
     public List<Thread> threads;

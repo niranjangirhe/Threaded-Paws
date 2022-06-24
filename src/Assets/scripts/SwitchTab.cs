@@ -21,7 +21,7 @@ public class SwitchTab : MonoBehaviour
         audioSource.clip = audioClip;
         audioSource.Play();
         //update toolbox value (UI)
-        GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel3_5>().updateValues(index);
+        GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>().updateValues(index);
         //To Switch Tab
         GameObject.Find("Tab" + index).transform.SetAsLastSibling();
         for (int i = 0; i < totalCount; i++)

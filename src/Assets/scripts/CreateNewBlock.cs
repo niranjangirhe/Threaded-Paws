@@ -24,7 +24,7 @@ public class CreateNewBlock : MonoBehaviour {
         //active tab
 
         int activeTab = Int32.Parse(Regex.Match(GameObject.Find("TabParent").transform.GetChild(GameObject.Find("TabParent").transform.childCount - 1).gameObject.name, @"\d+").Value);
-        manager = GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel3_5>().threads[activeTab].toolBoxValues;
+        manager = GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>().threads[activeTab].toolBoxValues;
         int cardCount = (int)manager.GetType().GetField(this.transform.name).GetValue(manager);
         if (cardCount > 0)
         {
