@@ -529,11 +529,13 @@ public class ExecuteThreadsLevel : MonoBehaviour
     private void OpenBtn(GameObject btn)
     {
         btn.transform.Find("overlay").gameObject.SetActive(false);
+        btn.transform.GetComponent<Button>().interactable = true;
     }
 
     private void CloseBtn(GameObject btn)
     {
         btn.transform.Find("overlay").gameObject.SetActive(true);
+        btn.transform.GetComponent<Button>().interactable = false;
     }
 
     IEnumerator printThreads(int speed)
@@ -591,6 +593,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                 lost = true;
                 CloseBtn(stopButton);
                 OpenBtn(playButton);
+                
                 yield return 0;
             }
 
@@ -627,7 +630,6 @@ public class ExecuteThreadsLevel : MonoBehaviour
                     {
                         try
                         {
-                            Debug.Log("Sank" + t.workerName + t.simBlocks[t.currIndex].type + t.simBlocks[t.currIndex].name);
                             //------------ Acquire -------------
                             if (t.simBlocks[t.currIndex].type == SimBlock.ACQUIIRE)
                             {
@@ -669,16 +671,12 @@ public class ExecuteThreadsLevel : MonoBehaviour
                             //------------ Work/Action block -------------
                             else if (t.simBlocks[t.currIndex].type == SimBlock.WORK)
                             {
-                                Debug.Log("Here"+ t.simBlocks[t.currIndex].name);
-                                Debug.Log("Here->"+IHaveAllThings(t.simBlocks[t.currIndex].name, t));
                                 if (IHaveAllThings(t.simBlocks[t.currIndex].name, t))
                                 {
-                                    Debug.Log("Nira" + t.simBlocks[t.currIndex].name);
                                     t.did[t.simBlocks[t.currIndex].name] = true;
                                 }
                                 else
                                 {
-                                    Debug.Log("Nira" + t.simBlocks[t.currIndex].name);
                                     String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
                                     t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
                                     t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
@@ -715,20 +713,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
                             }
                             else if (t.simBlocks[t.currIndex].type == SimBlock.CHECKOUT)
                             {
-                                Debug.Log(t.workerName);
                                 foreach (KeyValuePair<string, bool> k in t.needsTo)
                                 {
-                                    Debug.Log(k.Key + k.Value);
-                                }
-                                Debug.Log("----");
-                                foreach (KeyValuePair<string, bool> k in t.did)
-                                {
-                                    Debug.Log(k.Key + k.Value);
-                                }
-                                Debug.Log("----");
-                                foreach (KeyValuePair<string, bool> k in t.needsTo)
-                                {
-                                    Debug.Log("need" + k.Key + k.Value + "did" + t.did[k.Key]);
                                     if (k.Value && !t.did[k.Key])
                                     {
                                         String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
@@ -840,9 +826,6 @@ public class ExecuteThreadsLevel : MonoBehaviour
         if (!lost)
         {
             LogManager.instance.logger.sendChronologicalLogs("Level03Won", "", LogManager.instance.UniEndTime().ToString());
-            CloseBtn(stopButton);
-            OpenBtn(playButton);
-            OpenBtn(nextButton);
             manager.gameWon();
             Debug.Log("Finished in " + j + " steps.");
 
@@ -949,7 +932,40 @@ public class ExecuteThreadsLevel : MonoBehaviour
         bar.LoadingBar.GetComponent<Image>().fillAmount = 0;
 
     }
+    public void Review(GameObject wonPanel)
+    {
+       
 
+        GameLogData.chronologicalLogs.Add("TerminateLevel3: " + LogManager.instance.UniEndTime());
+        LogManager.instance.logger.sendChronologicalLogs("TerminateLevel3", "", LogManager.instance.UniEndTime().ToString());
+
+        GameLogData.failedReason = "Review";
+        LogManager.instance.CreateLogData();
+
+        LogManager.instance.failCount++;
+
+        stepsIndicator.text = "0";
+
+        err = true;
+        lost = true;
+        stop = true;
+        paused = true;
+
+        try
+        {
+            wonPanel.SetActive(false);
+            disablePanel.SetActive(false);
+        }
+        catch
+        {
+            Debug.Log("Cannot disable DisablePanel.");
+        }
+        bar.LoadingBar.GetComponent<Image>().fillAmount = 0;
+        CloseBtn(stopButton);
+        OpenBtn(playButton);
+        OpenBtn(nextButton);
+
+    }
     private bool isAllowed(GameObject g)
     {
         return !g.transform.Find("overlay").gameObject.active;
