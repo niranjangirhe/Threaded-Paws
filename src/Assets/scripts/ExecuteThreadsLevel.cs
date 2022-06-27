@@ -954,15 +954,41 @@ public class ExecuteThreadsLevel : MonoBehaviour
         bar.LoadingBar.GetComponent<Image>().fillAmount = 0;
 
     }
+    public void GameOver(GameObject gameOverPanel)
+    {     
+        LogManager.instance.logger.sendChronologicalMenuLogs("TryAgain", LogManager.instance.UniEndTime().ToString());
+        GameLogData.chronologicalLogs.Add("TerminateLevel3: " + LogManager.instance.UniEndTime());
+        LogManager.instance.logger.sendChronologicalLogs("TerminateLevel3", "", LogManager.instance.UniEndTime().ToString());
+
+        GameLogData.failedReason = "GameOver";
+        LogManager.instance.CreateLogData();
+
+        LogManager.instance.failCount++;
+
+        stepsIndicator.text = "0";
+
+        err = true;
+        lost = true;
+        stop = true;
+        paused = true;
+
+        try
+        {
+            gameOverPanel.SetActive(false);
+            disablePanel.SetActive(false);
+        }
+        catch
+        {
+            Debug.Log("Cannot disable DisablePanel.");
+        }
+        bar.LoadingBar.GetComponent<Image>().fillAmount = 0;
+        CloseBtn(stopButton);
+        OpenBtn(playButton);
+        OpenBtn(nextButton);
+
+    }
     public void Review(GameObject wonPanel)
     {
-
-        //Add this to game over
-        //LogManager.instance.logger.sendChronologicalMenuLogs("TryAgain", LogManager.instance.UniEndTime().ToString());
-        //-------------- IMP Above -----------
-        //Same function is used for reveiw and timeout. (Modify it later)
-
-
 
         GameLogData.chronologicalLogs.Add("TerminateLevel3: " + LogManager.instance.UniEndTime());
         LogManager.instance.logger.sendChronologicalLogs("TerminateLevel3", "", LogManager.instance.UniEndTime().ToString());
