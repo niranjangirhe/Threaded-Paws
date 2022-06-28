@@ -57,6 +57,9 @@ public class ExecuteThreadsLevel : MonoBehaviour
     [SerializeField] private Text txt_returnLeft_thread;
     [SerializeField] private Text txt_groomLeft_thread;
 
+    //-------- Audio ----------
+    private AudioSource audioSource;
+    private AudioClip wonClip, gameoverClip;
 
 
 
@@ -171,6 +174,11 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
     public void Awake()
     {
+        //--- Set Audio Vars-------
+        audioSource = gameObject.GetComponent<AudioSource>();
+        wonClip = Resources.Load<AudioClip>("audio/won");
+        gameoverClip = Resources.Load<AudioClip>("audio/gameOver");
+
         tab = Resources.Load<GameObject>("prefabs/Tab");
         agenda = Resources.Load<GameObject>("prefabs/Agenda");
         agendaTick = Resources.Load<GameObject>("prefabs/Tick");
@@ -600,7 +608,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
                 LogManager.instance.logger.sendChronologicalLogs("Level03Lost", "", LogManager.instance.UniEndTime().ToString());
                 manager.gameLost();
-
+                audioSource.clip = gameoverClip;
+                audioSource.Play();
                 //------- logging -----------
                 GameLogData.isLevelCleared = false;
                 GameLogData.levelClearedTime = LogManager.instance.EndTimer();
@@ -664,7 +673,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                     newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
                                     newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
                                     newItem.transform.SetParent(t.layoutPanel.transform);
-                                    newItem.transform.localScale = Vector3.one;
+                                    newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
                                     scrollToBottom();
 
                                     t.canPrint = false;
@@ -702,7 +711,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                     String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
                                     t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
                                     t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                    t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
+                                    t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
                                     resError("> ERROR: You can't " + t.simBlocks[t.currIndex].name.ToLower() + " without " + RequirementList(t.simBlocks[t.currIndex].name, t), t.layoutPanel);
                                     scrollToBottom();
@@ -718,7 +727,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                     String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
                                     t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
                                     t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                    t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
+                                    t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
                                     resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.", t.layoutPanel);
                                     scrollToBottom();
@@ -742,7 +751,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                         String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
                                         t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
                                         t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                        t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
+                                        t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
                                         scrollToBottom();
 
                                         resError("> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.", t.layoutPanel);
@@ -759,7 +768,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                             String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
                                             t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
                                             t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                            t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
+                                            t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
                                             resError("> ERROR: You need to return all the resources you acquired before checking out.", t.layoutPanel);
                                             scrollToBottom();
@@ -773,7 +782,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                     String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
                                     t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
                                     t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                    t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
+                                    t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
                                     resError("> ERROR: You have to check in before attempting to check out a customer.", t.layoutPanel);
                                     scrollToBottom();
@@ -800,7 +809,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                 if (!err)
                                 {
                                     t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                    t.simulationImages[t.currIndex].transform.localScale = Vector3.one;
+                                    t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
                                 }
                                 t.currIndex++;
                             }
@@ -824,7 +833,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                             newItem.transform.Find("Icon").GetComponent<Image>().sprite = (Sprite)s[randomIndex];
                             newItem.transform.Find("ActionText").GetComponent<Text>().text = "Busy";
                             newItem.transform.SetParent(t.layoutPanel.transform);
-                            newItem.transform.localScale = Vector3.one;
+                            newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
                         }
                         catch
@@ -849,6 +858,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
         {
             LogManager.instance.logger.sendChronologicalLogs("Level03Won", "", LogManager.instance.UniEndTime().ToString());
             manager.gameWon();
+            audioSource.clip = wonClip;
+            audioSource.Play();
             Debug.Log("Finished in " + j + " steps.");
 
             //logging
@@ -1034,7 +1045,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         GameObject newItem = Instantiate(simulationErrorPrefab) as GameObject;
         newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + msg + "</color>";
         newItem.transform.SetParent(newItemParent);
-        newItem.transform.localScale = Vector3.one;
+        newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
         terminateSimulation(msg);
     }
 
