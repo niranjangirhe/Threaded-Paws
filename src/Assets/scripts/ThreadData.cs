@@ -89,7 +89,7 @@ public class Thread
     //ThreadData
     public WorkList workList = new WorkList();
     public ToolBoxValues toolBoxValues = new ToolBoxValues();
-
+    [HideInInspector] public bool didIdle;
 
     //Tab (Grandparent of blocks)
     [HideInInspector] public GameObject layoutPanel;

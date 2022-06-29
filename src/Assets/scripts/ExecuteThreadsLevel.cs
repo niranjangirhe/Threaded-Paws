@@ -25,8 +25,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
     [TextArea(5, 20)][SerializeField] private string descriptionText;
     [TextArea(5, 20)] [SerializeField] private string bubbleText;
     [SerializeField] private int idleMomentPercent;
-
-
+    [SerializeField] private int stepOfInterest;
 
 
 
@@ -375,6 +374,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
             t.isCheckedOut = false;
             t.currIndex = 0;
             t.canPrint = true;
+            t.didIdle = false;
 
             System.Reflection.FieldInfo[] varWorklist = t.workList.GetType().GetFields();
             foreach (System.Reflection.FieldInfo v in varWorklist)
@@ -584,6 +584,11 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
         int j = 0;
         bool whileStop = false;
+
+        //SOI: Step of Interest
+        bool doIdleBeforeSOI = (Random.Range(0, 100) < stepOfInterest * idleMomentPercent);
+
+        Debug.Log("Do Idle" + doIdleBeforeSOI);
         while (!whileStop)
         {
             
@@ -655,8 +660,35 @@ public class ExecuteThreadsLevel : MonoBehaviour
                 foreach (int i in Enumerable.Range(0, threads.Count).OrderBy(x => r.Next()))
                 {
                     int idleInt = Random.Range(0, 100);
-                    bool isIdle = (idleInt < idleMomentPercent);
                     Thread t = threads[i];
+                    bool isIdle;
+                    if (t.currIndex<stepOfInterest)
+                    {
+                        if (doIdleBeforeSOI)
+                        {
+                            if (!t.didIdle)
+                            {
+                                isIdle = (idleInt < 100 / (stepOfInterest - t.currIndex));
+                                Debug.Log("Percentage" + (100 / (stepOfInterest - t.currIndex)));
+                                if (isIdle)
+                                    t.didIdle = true;
+                            }
+                            else
+                            {
+                                isIdle = false;
+                            }
+                        }
+                        else
+                        {
+                            isIdle = false;
+                        }
+
+                    }
+                    else
+                    {
+                        isIdle = (idleInt < idleMomentPercent);
+                    }
+            
                     if (!isIdle)
                     {
                         try
@@ -818,7 +850,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                         }
                         catch { }
                     }
-                    else
+                    else if(t.currIndex<t.simBlocks.Count)
                     {
 
                         //---------------- IDLE -----------------
@@ -828,8 +860,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
                             GameObject newItem = Instantiate(singleSimulationImagePrefab) as GameObject;
                            
                             UnityEngine.Object[] s = Resources.LoadAll("sprites/items/idle", typeof(Sprite));
-                            int randomIndex = Random.Range(0, s.Length);
 
+                            int randomIndex = Random.Range(0, s.Length);
                             newItem.transform.Find("Icon").GetComponent<Image>().sprite = (Sprite)s[randomIndex];
                             newItem.transform.Find("ActionText").GetComponent<Text>().text = "Busy";
                             newItem.transform.SetParent(t.layoutPanel.transform);
