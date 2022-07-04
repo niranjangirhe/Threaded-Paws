@@ -117,6 +117,10 @@ public class Thread
     [HideInInspector] public List<SimBlock> simBlocks;
     [HideInInspector] public List<GameObject> simulationImages;
 
+
+    //---- to play sounds ---
+    [HideInInspector] public AudioSource audioSource;
+
     // ------ for prefill -----
 
 

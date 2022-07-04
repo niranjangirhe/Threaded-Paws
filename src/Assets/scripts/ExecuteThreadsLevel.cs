@@ -120,7 +120,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
         singleSimulationImagePrefab = Resources.Load<GameObject>("prefabs/singleIconSimulation");
         simulationErrorPrefab = Resources.Load<GameObject>("prefabs/ErrorSimulationImage");
 
-        //Fill needsto Dict
+        //Fill needsto Dict and assign individual audiosource 
+        int i = 0;
         foreach (Thread t in threads)
         {
             System.Reflection.FieldInfo[] varWorklist = t.workList.GetType().GetFields();
@@ -128,6 +129,11 @@ public class ExecuteThreadsLevel : MonoBehaviour
             {
                 t.needsTo.Add(v.Name, ((Action)v.GetValue(t.workList)).isneeded);
             }
+
+            //---Assign Audio Source to each thread ----
+            t.audioSource = GameObject.Find("Simulation").transform.Find("ScrollRect").Find("Panel").GetChild(i).GetComponent<AudioSource>();
+            t.audioSource.volume = 0.5f;
+            i++;
         }
 
         //Assign Values
@@ -334,7 +340,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         {
             return;
         }
-        iconPanel.gameObject.SetActive(true);
+       
         //-------- UI Updates and Logging --------
         LogManager.instance.logger.sendChronologicalLogs("RunLevel03Thread", "", LogManager.instance.UniEndTime().ToString());
         scrollToTop();
@@ -400,7 +406,6 @@ public class ExecuteThreadsLevel : MonoBehaviour
         }
 
         //------------- Extract block sequence from FE ---------
-        int count = 0;
         foreach (Thread t in threads)
         {
             int i = 0;
@@ -417,8 +422,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
                         string resource = t.blocks[i].transform.Find("Dropdown").Find("Label").GetComponent<Text>().text;
                         if (resource == "[null]")
                         {
-                            terminateSimulation("Please select a resource to acquire in thread "+count);
-                            manager.showError("Please select a resource to acquire in thread "+count);
+                            terminateSimulation(t.workerName + " has not selected resource in get");
+                            manager.showError(t.workerName + " has not selected resource in get");
                             return;
                         }
                         else
@@ -449,8 +454,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
                         if (resource == "[null]")
                         {
-                            terminateSimulation("Please select a resource to return in thread "+count);
-                            manager.showError("Please select a resource to return in thread "+count);
+                            terminateSimulation(t.workerName+" has not selected resource in return");
+                            manager.showError(t.workerName + " has not selected resource in return");
                             return;
                         }
                         else
@@ -517,15 +522,14 @@ public class ExecuteThreadsLevel : MonoBehaviour
                         }
                         
                         t.simulationImages.Add(newItem);
-
                     }
                 }
             }
             if (t.blocks.Length < 1)
             {
 
-                manager.showError("There are no actions to run in Stylist "+(count+1)+" tab.");
-                terminateSimulation("There are no actions to run in Stylist " + (count+1)+" tab.");
+                manager.showError(t.workerName+" does not have any actions");
+                terminateSimulation(t.workerName + " does not have any actions");
                 return;
             }
 
@@ -533,14 +537,14 @@ public class ExecuteThreadsLevel : MonoBehaviour
             {
                 if (t.simBlocks[0].type != SimBlock.CHECKIN)
                 {
-                    manager.showError("Remember to always check-in your costumer first!");
-                    terminateSimulation("Remember to always check-in your costumer first!");
+                    manager.showError(t.workerName + " has not check-in the customer");
+                    terminateSimulation(t.workerName + " has not check-in the customer");
                     return;
                 }
                 if (t.simBlocks[t.simBlocks.Count-1].type != SimBlock.CHECKOUT)
                 {
-                    manager.showError("Remember to always check-out your costumer");
-                    terminateSimulation("Remember to always check-out your costumer");
+                    manager.showError(t.workerName + " has not check-out the customer");
+                    terminateSimulation(t.workerName + " has not check-out the customer");
                     return;
                 }
             }
@@ -548,10 +552,11 @@ public class ExecuteThreadsLevel : MonoBehaviour
             {
                 
             }
-
+      
         }
         if (!err)
         {
+            iconPanel.gameObject.SetActive(true);
             StartCoroutine(printThreads(5));
         }
     }
@@ -662,7 +667,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                     int idleInt = Random.Range(0, 100);
                     Thread t = threads[i];
                     bool isIdle;
-                    if (t.currIndex<stepOfInterest)
+                    if (t.currIndex<stepOfInterest && t.currIndex!=0)
                     {
                         if (doIdleBeforeSOI)
                         {
@@ -686,7 +691,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                     }
                     else
                     {
-                        isIdle = (idleInt < idleMomentPercent);
+                        isIdle = (idleInt < idleMomentPercent) && t.currIndex!=0;
                     }
             
                     if (!isIdle)
@@ -718,6 +723,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                     if (output < 0)
                                     {
                                         resError(acquireErrMsg, t.layoutPanel); // ERROR: You are trying to acquire a resource you already have.";
+                                        t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
+                                        t.audioSource.Play();
                                     }
                                 }
                             }
@@ -729,6 +736,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                 if (output1 < 0)
                                 {
                                     resError(returnErrMsg, t.layoutPanel);
+                                    t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
+                                    t.audioSource.Play();
                                 }
                             }
                             //------------ Work/Action block -------------
@@ -737,6 +746,14 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                 if (IHaveAllThings(t.simBlocks[t.currIndex].name, t))
                                 {
                                     t.did[t.simBlocks[t.currIndex].name] = true;
+                                    //play music
+                                    try
+                                    { 
+                                        t.audioSource.clip = Resources.Load<AudioClip>("audio/"+ t.simBlocks[t.currIndex].name);
+                                        t.audioSource.Play();
+                                        StartCoroutine(PauseSound(t.audioSource,2));
+                                    }
+                                    catch { }
                                 }
                                 else
                                 {
@@ -746,6 +763,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                     t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
                                     resError("> ERROR: You can't " + t.simBlocks[t.currIndex].name.ToLower() + " without " + RequirementList(t.simBlocks[t.currIndex].name, t), t.layoutPanel);
+                                    t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
+                                    t.audioSource.Play();
                                     scrollToBottom();
 
                                 }
@@ -762,6 +781,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                     t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
                                     resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.", t.layoutPanel);
+                                    t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
+                                    t.audioSource.Play();
                                     scrollToBottom();
 
                                 }
@@ -787,6 +808,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                         scrollToBottom();
 
                                         resError("> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.", t.layoutPanel);
+                                        t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
+                                        t.audioSource.Play();
                                         scrollToBottom();
                                         break;
                                     }
@@ -803,6 +826,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                             t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
                                             resError("> ERROR: You need to return all the resources you acquired before checking out.", t.layoutPanel);
+                                            t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
+                                            t.audioSource.Play();
                                             scrollToBottom();
                                             break;
                                         }
@@ -817,6 +842,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                     t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
                                     resError("> ERROR: You have to check in before attempting to check out a customer.", t.layoutPanel);
+                                    t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
+                                    t.audioSource.Play();
                                     scrollToBottom();
 
                                 }
@@ -1190,6 +1217,26 @@ public class ExecuteThreadsLevel : MonoBehaviour
             if (obj.transform.name == "SimulationImage(Clone)")
                 GameObject.Destroy(obj);
         }
+    }
+    IEnumerator PauseSound(AudioSource audioSource, float sec)
+    {
+
+        yield return new WaitForSeconds(sec);
+        StartCoroutine(FadeOut(audioSource, 1+sec/2));
+    }
+    public static IEnumerator FadeOut(AudioSource audioSource, float FadeTime)
+    {
+        float startVolume = audioSource.volume;
+
+        while (audioSource.volume > 0)
+        {
+            audioSource.volume -= startVolume * Time.deltaTime / FadeTime;
+
+            yield return null;
+        }
+
+        audioSource.Stop();
+        audioSource.volume = startVolume;
     }
 
     IEnumerator waitOneFrame()
