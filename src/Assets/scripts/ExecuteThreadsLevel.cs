@@ -1054,7 +1054,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         bar.LoadingBar.GetComponent<Image>().fillAmount = 0;
         CloseBtn(stopButton);
         OpenBtn(playButton);
-        OpenBtn(nextButton);
+        CloseBtn(nextButton);
 
     }
     public void Review(GameObject wonPanel)
