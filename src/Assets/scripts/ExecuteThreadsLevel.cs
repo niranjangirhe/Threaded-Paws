@@ -591,7 +591,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         bool whileStop = false;
 
         //SOI: Step of Interest
-        bool doIdleBeforeSOI = (Random.Range(0, 100) < stepOfInterest * idleMomentPercent);
+        bool doIdleBeforeSOI = (Random.Range(0, 100) < stepOfInterest * idleMomentPercent * threads.Count);
 
         Debug.Log("Do Idle" + doIdleBeforeSOI);
         while (!whileStop)
