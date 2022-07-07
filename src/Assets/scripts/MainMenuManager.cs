@@ -35,7 +35,7 @@ public class MainMenuManager : MonoBehaviour {
 		//GameLogData.chronologicalLogs.Add ("StartGame: " + LogManager.instance.UniEndTime ());
 		LogManager.instance.logger.sendChronologicalMenuLogs("StartGame", LogManager.instance.UniEndTime().ToString());
 
-		SceneManager.LoadScene ("Level 4");
+		SceneManager.LoadScene ("debug);
 		// SceneManager.LoadScene ("LevelTemplate");
 	}
 
