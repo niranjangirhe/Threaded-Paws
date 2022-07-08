@@ -7,9 +7,16 @@ using System.Linq;
 using Random = UnityEngine.Random;
 using UnityEngine.SceneManagement;
 
-public class ExecuteThreadsLevel : MonoBehaviour
+public class DebugExe : MonoBehaviour
 {
-    
+    public class ExeData
+    {
+        public bool doIdleBeforeSOI;
+        public List<byte> sequence = new List<byte>();
+        public List<bool> isIdle = new List<bool>();
+    }
+
+
     public List<Thread> threads;
     private dropDownManager dropDownManager = new dropDownManager();
     [SerializeField] private bool isRetAllCompulsion;
@@ -34,6 +41,9 @@ public class ExecuteThreadsLevel : MonoBehaviour
     [SerializeField] private GameObject scrollRect;
     [SerializeField] private Transform iconPanel;
 
+    // ---- Simulation ----
+    [SerializeField] private int timeout;
+    [SerializeField] private int NoOfTestCase;
 
 
     // ----- Prefab ------
@@ -376,11 +386,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         //-------- Reseting previous Sim --------
         foreach (Thread t in threads)
         {
-            t.isCheckedIn = false;
-            t.isCheckedOut = false;
-            t.currIndex = 0;
-            t.canPrint = true;
-            t.didIdle = false;
+            ResetThreads();
 
             System.Reflection.FieldInfo[] varWorklist = t.workList.GetType().GetFields();
             foreach (System.Reflection.FieldInfo v in varWorklist)
@@ -557,7 +563,19 @@ public class ExecuteThreadsLevel : MonoBehaviour
         if (!err)
         {
             iconPanel.gameObject.SetActive(true);
-            StartCoroutine(printThreads(5));
+            StartCoroutine(printThreads());
+        }
+    }
+
+    private void ResetThreads()
+    {
+        foreach (Thread t in threads)
+        {
+            t.isCheckedIn = false;
+            t.isCheckedOut = false;
+            t.currIndex = 0;
+            t.canPrint = true;
+            t.didIdle = false;
         }
     }
 
@@ -573,10 +591,18 @@ public class ExecuteThreadsLevel : MonoBehaviour
         btn.transform.GetComponent<Button>().interactable = false;
     }
 
-    IEnumerator printThreads(int speed)
+    IEnumerator printThreads()
     {
 
-        
+        for(int ittr = 0; ittr< NoOfTestCase;ittr++)
+        {
+            ExeData exeData = CheckAllPossibility();
+            if(exeData == null)
+            {
+                break;
+            }
+            Debug.Log(ittr + " TestCase Pass");
+        }
 
         bar.currentAmount = 0;
 
@@ -607,10 +633,10 @@ public class ExecuteThreadsLevel : MonoBehaviour
                 }
             }
 
-            if (bar.currentAmount < 100)
+            if (bar.currentAmount < timeout)
             {
-                bar.currentAmount += speed;
-                bar.LoadingBar.GetComponent<Image>().fillAmount = bar.currentAmount / 100;
+                bar.currentAmount += 1;
+                bar.LoadingBar.GetComponent<Image>().fillAmount = bar.currentAmount / timeout;
 
             }
             else
@@ -939,6 +965,214 @@ public class ExecuteThreadsLevel : MonoBehaviour
         scrollToBottom();
     }
 
+    ExeData CheckAllPossibility()
+    {
+        ResetThreads();
+        ExeData exeData = new ExeData();
+
+        float currentAmount = 0;
+        
+
+        foreach (Thread t in threads)
+        {
+            t.currIndex = 0;
+            t.canPrint = true;
+        }
+
+        int j = 0;
+        bool whileStop = false;
+        bool lost = false;
+
+
+        bool doIdleBeforeSOI = (Random.Range(0, 100) < stepOfInterest * idleMomentPercent * threads.Count);
+        exeData.doIdleBeforeSOI = doIdleBeforeSOI;
+        
+        while (!whileStop && !lost)
+        {
+
+            whileStop = true;
+            foreach (Thread t in threads)
+            {
+                if (t.currIndex < t.simBlocks.Count)
+                {
+                    whileStop = false;
+                    break;
+                }
+            }
+
+            if (currentAmount < timeout)
+            {
+                currentAmount += 1;
+            }
+            else
+            {
+                //Send Lost game Posibility
+                return exeData;
+            }
+
+
+
+            System.Random r = new System.Random();
+            foreach (int i in Enumerable.Range(0, threads.Count).OrderBy(x => r.Next()))
+            {
+                exeData.sequence.Add((byte)i);
+                int idleInt = Random.Range(0, 100);
+                Thread t = threads[i];
+                bool isIdle;
+                if (t.currIndex < stepOfInterest && t.currIndex != 0)
+                {
+                    if (doIdleBeforeSOI)
+                    {
+                        if (!t.didIdle)
+                        {
+                            isIdle = (idleInt < 100 / (stepOfInterest - t.currIndex));
+                            if (isIdle)
+                                t.didIdle = true;
+                        }
+                        else
+                        {
+                            isIdle = false;
+                        }
+                    }
+                    else
+                    {
+                        isIdle = false;
+                    }
+
+                }
+                else
+                {
+                    isIdle = (idleInt < idleMomentPercent) && t.currIndex != 0;
+                }
+                exeData.isIdle.Add(isIdle);
+                if (!isIdle)
+                {
+
+                    //------------ Acquire -------------
+                    if (t.simBlocks[t.currIndex].type == SimBlock.ACQUIIRE)
+                    {
+                        //If I don't have the obj but some other thread has it then it will return true;
+                        if (MeNotSomeOneHas(t.simBlocks[t.currIndex].name, t))
+                        {
+
+                            //-- Waiting -- 
+
+                            t.canPrint = false;
+                        }
+                        else
+                        {
+                            int output = acquire(ref t.hasItems, t.simBlocks[t.currIndex].name);
+                            t.canPrint = true;
+
+                            if (output < 0)
+                            {
+
+                                // --- You Already have it
+
+                                lost = true;
+
+                            }
+                        }
+                    }
+                    //------------ Return -------------
+                    else if (t.simBlocks[t.currIndex].type == SimBlock.RETURN)
+                    {
+                        int output1 = return_res(ref t.hasItems, t.simBlocks[t.currIndex].name);
+
+                        if (output1 < 0)
+                        {
+                            //--- You don't have the resource
+
+                            lost = true;
+
+                        }
+                    }
+                    //------------ Work/Action block -------------
+                    else if (t.simBlocks[t.currIndex].type == SimBlock.WORK)
+                    {
+                        if (IHaveAllThings(t.simBlocks[t.currIndex].name, t))
+                        {
+                            t.did[t.simBlocks[t.currIndex].name] = true;
+
+                        }
+                        else
+                        {
+                            //don't have things
+
+                            lost = true;
+
+                        }
+                    }
+                    else if (t.simBlocks[t.currIndex].type == SimBlock.CHECKIN)
+                    {
+
+                        if (t.isCheckedIn)
+                        {
+                            // double checkin
+
+                            lost = true;
+
+
+                        }
+                        else
+                        {
+
+                            // perform check-in
+                            t.isCheckedIn = true;
+                            t.isCheckedOut = false;
+                        }
+
+                    }
+                    else if (t.simBlocks[t.currIndex].type == SimBlock.CHECKOUT)
+                    {
+                        foreach (KeyValuePair<string, bool> k in t.needsTo)
+                        {
+                            if (k.Value && !t.did[k.Key])
+                            {
+
+                                // not did all work
+
+                                lost = true;
+
+                            }
+                        }
+                        if (isRetAllCompulsion)
+                        {
+                            foreach (KeyValuePair<string, bool> k in t.hasItems)
+                            {
+                                if (k.Value)
+                                {
+                                    // not returned all
+
+                                    lost = true;
+
+                                }
+                            }
+                        }
+                        else if (t.isCheckedOut)
+                        {
+                            // check in before checkout
+
+                            lost = true;
+
+
+                        }
+                        else
+                        {
+
+                            // perform check-out
+                            t.isCheckedIn = false;
+                            t.isCheckedOut = true;
+                        }
+                    }
+
+
+                }
+            }
+            j++; // increment step
+        }
+        return null;
+    }
     private string RequirementList(string name,Thread t)
     {
         string list = "";

@@ -81,10 +81,10 @@
     <Compile Include="Assets\scripts\LogData.cs" />
     <Compile Include="Assets\scripts\Action.cs" />
     <Compile Include="Assets\SaveLoad\Scripts\GameHandler.cs" />
+    <Compile Include="Assets\scripts\DebugExe.cs" />
     <Compile Include="Assets\scripts\CreateNewBlock.cs" />
     <Compile Include="Assets\scripts\ToolBox.cs" />
     <Compile Include="Assets\scripts\MainMenuManager.cs" />
-    <Compile Include="Assets\scripts\DebugExe.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
