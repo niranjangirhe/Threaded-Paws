@@ -204,7 +204,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
         //---- Assign Buttons ------
         playButton = GameObject.Find("PlayButton");
-        stopButton = GameObject.Find("SimButtons");
+        stopButton = GameObject.Find("StopButton");
         nextButton = GameObject.Find("NextButton");
 
 
