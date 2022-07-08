@@ -37,8 +37,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
     // --- IMAGE SIMULATION ---
 
-    [SerializeField] private GameObject scrollRect;
-    [SerializeField] private Transform iconPanel;
+    private GameObject scrollRect;
+    private Transform iconPanel;
 
     // ---- Simulation ----
     [SerializeField] private int timeout;
@@ -52,18 +52,20 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
 
 
-    [SerializeField] private Text stepsIndicator;
+   
 
 
     // ------- Tool box value text object--------
-    [SerializeField] private Text txt_checkinLeft_thread;
-    [SerializeField] private Text txt_cutLeft_thread;
-    [SerializeField] private Text txt_dryLeft_thread;
-    [SerializeField] private Text txt_washLeft_thread;
-    [SerializeField] private Text txt_resourcesLeft_thread;
-    [SerializeField] private Text txt_checkoutLeft_thread;
-    [SerializeField] private Text txt_returnLeft_thread;
-    [SerializeField] private Text txt_groomLeft_thread;
+    private Text txt_checkinLeft_thread;
+    private Text txt_cutLeft_thread;
+    private Text txt_dryLeft_thread;
+    private Text txt_washLeft_thread;
+    private Text txt_resourcesLeft_thread;
+    private Text txt_checkoutLeft_thread;
+    private Text txt_returnLeft_thread;
+    private Text txt_groomLeft_thread;
+
+    private Text stepsIndicator;
 
     //-------- Audio ----------
     private AudioSource audioSource;
@@ -76,9 +78,9 @@ public class ExecuteThreadsLevel : MonoBehaviour
     ProgressBar bar;
     ScrollRect simulationScrollRect;
 
-    [SerializeField] private GameObject playButton;
-    [SerializeField] private GameObject stopButton;
-    [SerializeField] private GameObject nextButton;
+    private GameObject playButton;
+    private GameObject stopButton;
+    private GameObject nextButton;
 
     bool stop;
     bool err;
@@ -188,6 +190,24 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
     public void Awake()
     {
+        //---- Assign Text feilds ----
+        txt_checkinLeft_thread = GameObject.Find("CheckInLeft1").GetComponent<Text>();
+        txt_cutLeft_thread = GameObject.Find("CutLeft1").GetComponent<Text>();
+        txt_dryLeft_thread = GameObject.Find("DryLeft1").GetComponent<Text>();
+        txt_washLeft_thread = GameObject.Find("WashLeft1").GetComponent<Text>();
+        txt_resourcesLeft_thread = GameObject.Find("ResourceLeft1").GetComponent<Text>();
+        txt_checkoutLeft_thread = GameObject.Find("CheckOutLeft1").GetComponent<Text>();
+        txt_returnLeft_thread = GameObject.Find("ReturnLeft1").GetComponent<Text>();
+        txt_groomLeft_thread = GameObject.Find("GroomLeft1").GetComponent<Text>();
+        stepsIndicator = GameObject.Find("stepsIndicator").GetComponent<Text>();
+
+
+        //---- Assign Buttons ------
+        playButton = GameObject.Find("PlayButton");
+        stopButton = GameObject.Find("SimButtons");
+        nextButton = GameObject.Find("NextButton");
+
+
         //--- Set Audio Vars-------
         audioSource = gameObject.GetComponent<AudioSource>();
         wonClip = Resources.Load<AudioClip>("audio/won");
@@ -238,7 +258,6 @@ public class ExecuteThreadsLevel : MonoBehaviour
     {
         int count = 0;
 
-
         //Just caution so we won't get null ref error
         GameObject.Find("Canvas").transform.Find("InstructionsPanel").gameObject.SetActive(true);
         GameObject.Find("Canvas").transform.Find("AgendaPanel").gameObject.SetActive(true);
@@ -249,7 +268,10 @@ public class ExecuteThreadsLevel : MonoBehaviour
         Transform agendaParent = GameObject.Find("AgendaParent").transform;
         Transform agendaTickParent = GameObject.Find("AgendaTickParent").transform;
         Transform boardParent = GameObject.Find("boardParent").transform;
+        
+        
         iconPanel = GameObject.Find("IconPanel").transform;
+        scrollRect = GameObject.Find("Simulation").transform.Find("ScrollRect").gameObject;
 
         GameObject simPanel = Resources.Load<GameObject>("prefabs/ThreadSimPanel");
         GameObject icon = Resources.Load<GameObject>("prefabs/icon");
