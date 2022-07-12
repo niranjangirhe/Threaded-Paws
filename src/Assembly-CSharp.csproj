@@ -86,6 +86,7 @@
     <Compile Include="Assets\scripts\CreateNewBlock.cs" />
     <Compile Include="Assets\scripts\ToolBox.cs" />
     <Compile Include="Assets\scripts\MainMenuManager.cs" />
+    <Compile Include="Assets\scripts\DeleteMeIfPointerOut.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
