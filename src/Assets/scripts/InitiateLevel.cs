@@ -11,6 +11,7 @@ public class InitiateLevel : MonoBehaviour {
     public GameObject dataPrefab;
     public GameObject acquirePrefab;
 	public GameObject returnPrefab;
+    public GameObject checkinoutPrefab;
     // Use this for initialization
     void Start () {
 
@@ -26,10 +27,10 @@ public class InitiateLevel : MonoBehaviour {
                 switch(bi.actionEnum)
                 {
                     case ActionEnum.CheckIn:
-                        newBox(actionPrefab, "checkin", t.tabDropArea, "CheckInBox");
+                        newBox(checkinoutPrefab, "checkin", t.tabDropArea, "CheckInBox");
                         break;
                     case ActionEnum.CheckOut:
-                        newBox(actionPrefab, "checkout", t.tabDropArea, "CheckOutBox");
+                        newBox(checkinoutPrefab, "checkout", t.tabDropArea, "CheckOutBox");
                         break;
                     case ActionEnum.Cut:
                         newBox(actionPrefab, "cut", t.tabDropArea, "CutBox");

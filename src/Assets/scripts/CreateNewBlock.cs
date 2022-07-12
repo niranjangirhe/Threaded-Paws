@@ -39,7 +39,6 @@ public class CreateNewBlock : MonoBehaviour {
             GameObject newActionBox = (GameObject)Instantiate(prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
             newActionBox.name = this.transform.name;
             newActionBox.transform.SetParent(this.transform);
-            newActionBox.GetComponent<Image>().color = this.gameObject.GetComponent<Image>().color;
             newActionBox.transform.localScale = Vector3.one;
             newActionBox.transform.GetChild(0).GetComponentInChildren<Text>().text = this.GetComponentInChildren<Text>().text;
             newActionBox.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
