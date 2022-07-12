@@ -74,6 +74,7 @@
     <Compile Include="Assets\scripts\ProgressBar.cs" />
     <Compile Include="Assets\scripts\dropDownManager.cs" />
     <Compile Include="Assets\scripts\ToolboxManager.cs" />
+    <Compile Include="Assets\scripts\SizeChanger.cs" />
     <Compile Include="Assets\scripts\LogManager.cs" />
     <Compile Include="Assets\scripts\ExecuteThreadsLevel.cs" />
     <Compile Include="Assets\SaveLoad\Scripts\IUnit.cs" />
@@ -85,7 +86,6 @@
     <Compile Include="Assets\scripts\CreateNewBlock.cs" />
     <Compile Include="Assets\scripts\ToolBox.cs" />
     <Compile Include="Assets\scripts\MainMenuManager.cs" />
-    <Compile Include="Assets\scripts\SizeChanger.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

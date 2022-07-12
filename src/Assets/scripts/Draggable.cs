@@ -25,6 +25,9 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 	public byte isFrom = TOOLBOX;
 
+	//to fix scrolling of toolbox. ---I have used raycast trick, but might be easy solution
+	private Transform toolValueParent;
+	private int toolValueParentChildCount;
 
 	public enum Type { IFNEEDED, WHILELOOP, IFSTAT, ACTION, ALL, INVENTORY };
 	public Type typeOfItem = Type.ALL; //default
@@ -82,6 +85,13 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 		foreach (Thread t in GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>().threads)
 		{
+
+			//to fix toolbox scrolling
+			for (int i = 0; i<toolValueParentChildCount;i++)
+            {
+				toolValueParent.GetChild(i).GetComponent<Text>().raycastTarget = false;
+			}
+
 			t.tabDropArea.GetComponent<Image>().color = Color.green;
 			Transform[] threadChildren = new Transform[t.tabDropArea.transform.childCount];
 			for (int i = 0; i < threadChildren.Length; i++)
@@ -192,6 +202,11 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
+		//to fix toolbox scrolling
+		for (int i = 0; i < toolValueParentChildCount; i++)
+		{
+			toolValueParent.GetChild(i).GetComponent<Text>().raycastTarget = true;
+		}
 
 		audioSource.clip = drop;
 		audioSource.Play();
@@ -327,6 +342,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		select = Resources.Load<AudioClip>("audio/select");
 		drop = Resources.Load<AudioClip>("audio/drop");
 
+		toolValueParent = GameObject.Find("ToolValueParent").transform;
+		toolValueParentChildCount = toolValueParent.childCount;
 
 		canvas = GameObject.Find("Canvas");
 		toolbox = GameObject.Find("DropAreaTools");

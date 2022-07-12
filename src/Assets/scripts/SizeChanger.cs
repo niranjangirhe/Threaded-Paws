@@ -24,7 +24,5 @@ public class SizeChanger : MonoBehaviour
         //assign
         scrollBoxRect.sizeDelta = new Vector2(scrollBoxRect.sizeDelta.x, masterRectHeight);
         toolValueRect.sizeDelta = new Vector2(toolValueRect.sizeDelta.x, masterRectHeight);
-
-        Debug.Log(masterRectHeight);
     }
 }
