@@ -38,12 +38,16 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			int activeTab = Int32.Parse(Regex.Match(GameObject.Find("TabParent").transform.GetChild(GameObject.Find("TabParent").transform.childCount - 1).gameObject.name, @"\d+").Value);
 			ExecuteThreadsLevel exeThread = GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>();
 			ToolBoxValues tbv = exeThread.threads[activeTab].toolBoxValues;
-			int cardCount = (int)tbv.GetType().GetField(gameObject.name).GetValue(tbv);
-			cardCount -= 1;
-			tbv.GetType().GetField(gameObject.name).SetValue(tbv, cardCount);
+			try
+			{
+				int cardCount = (int)tbv.GetType().GetField(gameObject.name).GetValue(tbv);
+				cardCount -= 1;
+				tbv.GetType().GetField(gameObject.name).SetValue(tbv, cardCount);
 
-			//update toolbox value (UI)
-			exeThread.updateValues(activeTab);
+				//update toolbox value (UI)
+				exeThread.updateValues(activeTab);
+			}
+			catch { }
 		}
 
 
@@ -246,12 +250,15 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			ToolBoxValues tbv = exeThread.threads[activeTab].toolBoxValues;
 
 			//LogManager.instance.logger.sendChronologicalLogs("DropW1-" + this.transform.GetChild(0).GetComponentInChildren<Text>().text + "_" + LogManager.chronoInputCount, "", LogManager.instance.UniEndTime().ToString());
-			int val = (int)tbv.GetType().GetField(this.transform.name).GetValue(tbv);
-			tbv.GetType().GetField(this.transform.name).SetValue(tbv, val + 1);
+			try
+			{
+				int val = (int)tbv.GetType().GetField(this.transform.name).GetValue(tbv);
+				tbv.GetType().GetField(this.transform.name).SetValue(tbv, val + 1);
 
-			//update toolbox value (UI)
-			exeThread.updateValues(activeTab);
-
+				//update toolbox value (UI)
+				exeThread.updateValues(activeTab);
+			}
+            catch { }
 			//self-destroy
 			Destroy(this.gameObject);
 
@@ -277,34 +284,34 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 		}
 
-		if (this.typeOfItem == Type.IFSTAT)
-		{
-			this.GetComponent<Image>().color = new Vector4(0.3F, 0.8F, 0.83F, 1);
+		//if (this.typeOfItem == Type.IFSTAT)
+		//{
+		//	this.GetComponent<Image>().color = new Vector4(0.3F, 0.8F, 0.83F, 1);
 
-		}
-		else if (this.typeOfItem == Type.ACTION && (this.GetComponentInChildren<Text>().text == "get"))
-		{
-			//			LogData.chronologicalLogs.Add ("Put-get: " + LogManager.instance.UniEndTime ());
-			this.GetComponent<Image>().color = new Vector4(0.94F, 0.28F, 0.94F, 1);
+		//}
+		//else if (this.typeOfItem == Type.ACTION && (this.GetComponentInChildren<Text>().text == "get"))
+		//{
+		//	//			LogData.chronologicalLogs.Add ("Put-get: " + LogManager.instance.UniEndTime ());
+		//	this.GetComponent<Image>().color = new Vector4(0.94F, 0.28F, 0.94F, 1);
 
-		}
-		else if (this.typeOfItem == Type.ACTION && (this.GetComponentInChildren<Text>().text == "ret"))
-		{
-			//			LogData.chronologicalLogs.Add ("Put-ret: " + LogManager.instance.UniEndTime ());
-			this.GetComponent<Image>().color = new Vector4(0.56F, 0.82F, 0.44F, 1);
+		//}
+		//else if (this.typeOfItem == Type.ACTION && (this.GetComponentInChildren<Text>().text == "ret"))
+		//{
+		//	//			LogData.chronologicalLogs.Add ("Put-ret: " + LogManager.instance.UniEndTime ());
+		//	this.GetComponent<Image>().color = new Vector4(0.56F, 0.82F, 0.44F, 1);
 
-		}
-		else if (this.typeOfItem == Type.ACTION)
-		{
-			//	print (this.GetComponentInChildren<Text> ().text);
-			//			LogData.chronologicalLogs.Add ("Put-"+this.GetComponentInChildren<Text> ().text+": " + LogManager.instance.UniEndTime ());
-			this.GetComponent<Image>().color = new Vector4(1, 0.76F, 0.24F, 1);
+		//}
+		//else if (this.typeOfItem == Type.ACTION)
+		//{
+		//	//	print (this.GetComponentInChildren<Text> ().text);
+		//	//			LogData.chronologicalLogs.Add ("Put-"+this.GetComponentInChildren<Text> ().text+": " + LogManager.instance.UniEndTime ());
+		//	//this.GetComponent<Image>().color = new Vector4(1, 0.76F, 0.24F, 1);
 
-		}
-		else if (this.typeOfItem == Type.WHILELOOP)
-		{
-			this.GetComponent<Image>().color = new Vector4(0.77F, 0.71F, 0.6F, 1);
-		}
+		//}
+		//else if (this.typeOfItem == Type.WHILELOOP)
+		//{
+		//	this.GetComponent<Image>().color = new Vector4(0.77F, 0.71F, 0.6F, 1);
+		//}
 
 		// this.GetComponent<Image> ().color = Color.white;
 

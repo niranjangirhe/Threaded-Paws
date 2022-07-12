@@ -25,8 +25,13 @@ public class CreateNewBlock : MonoBehaviour {
 
         int activeTab = Int32.Parse(Regex.Match(GameObject.Find("TabParent").transform.GetChild(GameObject.Find("TabParent").transform.childCount - 1).gameObject.name, @"\d+").Value);
         manager = GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>().threads[activeTab].toolBoxValues;
-        int cardCount = (int)manager.GetType().GetField(this.transform.name).GetValue(manager);
-        if (cardCount > 0)
+        int cardCount = -100;
+        try
+        {
+            cardCount = (int)manager.GetType().GetField(this.transform.name).GetValue(manager);
+        }
+        catch { }
+        if (cardCount > 0 || cardCount==-100)
         {
 
 
@@ -34,12 +39,10 @@ public class CreateNewBlock : MonoBehaviour {
             GameObject newActionBox = (GameObject)Instantiate(prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
             newActionBox.name = this.transform.name;
             newActionBox.transform.SetParent(this.transform);
+            newActionBox.GetComponent<Image>().color = this.gameObject.GetComponent<Image>().color;
             newActionBox.transform.localScale = Vector3.one;
             newActionBox.transform.GetChild(0).GetComponentInChildren<Text>().text = this.GetComponentInChildren<Text>().text;
             newActionBox.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
-
-
-
         }
         
 

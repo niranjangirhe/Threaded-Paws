@@ -8,7 +8,8 @@ using UnityEngine.UI;
 public class InitiateLevel : MonoBehaviour {
 
 	public GameObject actionPrefab;
-	public GameObject acquirePrefab;
+    public GameObject dataPrefab;
+    public GameObject acquirePrefab;
 	public GameObject returnPrefab;
     // Use this for initialization
     void Start () {
@@ -118,6 +119,15 @@ public class InitiateLevel : MonoBehaviour {
                         break;
                     case ActionEnum.Wash:
                         newBox(actionPrefab, "wash", t.tabDropArea, "WashBox");
+                        break;
+                    case ActionEnum.Read:
+                        newBox(dataPrefab, "read", t.tabDropArea, "ReadBox");
+                        break;
+                    case ActionEnum.Calculate:
+                        newBox(dataPrefab, "calculate", t.tabDropArea, "CalculateBox");
+                        break;
+                    case ActionEnum.Write:
+                        newBox(dataPrefab, "write", t.tabDropArea, "WriteBox");
                         break;
                 }
            

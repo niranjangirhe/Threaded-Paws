@@ -59,7 +59,10 @@ public enum ActionEnum
 	CheckIn,
 	CheckOut,
 	Return,
-	Get
+	Get,
+    Read,
+    Write,
+    Calculate
 }
 [System.Serializable]
 public enum ItemsEnum
