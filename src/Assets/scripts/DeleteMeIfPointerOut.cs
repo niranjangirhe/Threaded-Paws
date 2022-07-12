@@ -7,6 +7,7 @@ public class DeleteMeIfPointerOut : MonoBehaviour
     // Start is called before the first frame update
     public void DeleteMe()
     {
-        Destroy(gameObject);
+        if(ToolBox.onToolBox)
+            Destroy(gameObject);
     }
 }

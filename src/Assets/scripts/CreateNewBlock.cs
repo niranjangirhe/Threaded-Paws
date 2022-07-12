@@ -41,7 +41,7 @@ public class CreateNewBlock : MonoBehaviour {
             newActionBox.transform.SetParent(this.transform);
             newActionBox.transform.localScale = Vector3.one;
             newActionBox.transform.GetChild(0).GetComponentInChildren<Text>().text = this.GetComponentInChildren<Text>().text;
-            newActionBox.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+            newActionBox.transform.localScale = new Vector3(1.05f, 1.05f, 1.05f);
         }
         
 
