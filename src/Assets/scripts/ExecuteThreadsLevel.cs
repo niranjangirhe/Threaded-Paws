@@ -43,6 +43,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
     // ---- Simulation ----
     [SerializeField] private int timeout;
     [SerializeField] private int NoOfTestCase;
+    [SerializeField] private int intialMoney;
 
 
     // ----- Prefab ------
@@ -529,6 +530,33 @@ public class ExecuteThreadsLevel : MonoBehaviour
                             newItem.transform.Find("ActionText").GetComponent<Text>().text = "check-out";
 
 
+                        }
+                        else if(action == "read")
+                        {
+                            newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
+                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = t.dogSprite;
+                            t.simBlocks.Add(new SimBlock(SimBlock.READ, action));
+                            //Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
+                            //newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = item;
+                            newItem.transform.Find("ActionText").GetComponent<Text>().text = action;
+                        }
+                        else if (action == "write")
+                        {
+                            newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
+                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = t.dogSprite;
+                            t.simBlocks.Add(new SimBlock(SimBlock.WRITE, action));
+                            //Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
+                            //newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = item;
+                            newItem.transform.Find("ActionText").GetComponent<Text>().text = action;
+                        }
+                        else if (action == "calculate")
+                        {
+                            newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
+                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = t.dogSprite;
+                            t.simBlocks.Add(new SimBlock(SimBlock.CAL, action));
+                            //Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
+                            //newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = item;
+                            newItem.transform.Find("ActionText").GetComponent<Text>().text = action;
                         }
                         else
                         {

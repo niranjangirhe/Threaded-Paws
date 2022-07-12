@@ -27,6 +27,9 @@ public class SimBlock
     public static byte ACQUIIRE = 3;
     public static byte RETURN = 4;
     public static byte WORK = 5;
+    public static byte READ = 6;
+    public static byte WRITE = 7;
+    public static byte CAL = 8;
     public byte type;
     public string name;
 
