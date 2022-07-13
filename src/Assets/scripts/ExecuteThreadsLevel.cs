@@ -949,7 +949,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                 else if (t.simBlocks[t.currIndex].type == SimBlock.READ)
                                 {
                                     //Perform Read
-                                    if (!t.hasItems["cash reg."] && !NoOneHas("cash reg."))
+                                    if (MeNotSomeOneHas("cash reg.", t))
                                     {
                                         GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
                                         newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
@@ -970,7 +970,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                 else if (t.simBlocks[t.currIndex].type == SimBlock.CAL)
                                 {
                                     //Perform Calculation
-                                    if (!t.hasItems["cash reg."] && !NoOneHas("cash reg."))
+                                    if (MeNotSomeOneHas("cash reg.", t))
                                     {
                                         GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
                                         newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
@@ -991,7 +991,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                 else if (t.simBlocks[t.currIndex].type == SimBlock.WRITE)
                                 {
                                     //Perform Write
-                                    if (!t.hasItems["cash reg."] && !NoOneHas("cash reg."))
+                                    if (MeNotSomeOneHas("cash reg.", t))
                                     {
                                         GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
                                         newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
@@ -1310,7 +1310,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                     else if (t.simBlocks[t.currIndex].type == SimBlock.READ)
                                     {
                                         //Perform Read
-                                        if (!t.hasItems["cash reg."] && !NoOneHas("cash reg."))
+                                        if (MeNotSomeOneHas("cash reg.", t))
                                         {
                                             GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
                                             newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
@@ -1331,7 +1331,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                     else if (t.simBlocks[t.currIndex].type == SimBlock.CAL)
                                     {
                                         //Perform Calculation
-                                        if (!t.hasItems["cash reg."] && !NoOneHas("cash reg."))
+                                        if (MeNotSomeOneHas("cash reg.", t))
                                         {
                                             GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
                                             newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
@@ -1352,7 +1352,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                     else if (t.simBlocks[t.currIndex].type == SimBlock.WRITE)
                                     {
                                         //Perform Write
-                                        if (!t.hasItems["cash reg."] && !NoOneHas("cash reg."))
+                                        if (MeNotSomeOneHas("cash reg.", t))
                                         {
                                             GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
                                             newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
@@ -1659,7 +1659,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                             else if (t.simBlocks[t.currIndex].type == SimBlock.READ)
                             {
                                 //Perform Read
-                                if (!t.hasItems["cash reg."] && !NoOneHas("cash reg."))
+                                if (MeNotSomeOneHas("cash reg.", t))
                                     t.canPrint=false;
                                 else
                                 {
@@ -1670,7 +1670,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                             else if (t.simBlocks[t.currIndex].type == SimBlock.CAL)
                             {
                                 //Perform Calculation
-                                if (!t.hasItems["cash reg."] && !NoOneHas("cash reg."))
+                                if (MeNotSomeOneHas("cash reg.", t))
                                     t.canPrint = false;
                                 else
                                 {
@@ -1681,7 +1681,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                             else if (t.simBlocks[t.currIndex].type == SimBlock.WRITE)
                             {
                                 //Perform Write
-                                if (!t.hasItems["cash reg."] && !NoOneHas("cash reg."))
+                                if (MeNotSomeOneHas("cash reg.", t))
                                     t.canPrint = false;
                                 else
                                 {
@@ -1756,19 +1756,6 @@ public class ExecuteThreadsLevel : MonoBehaviour
             }
         }
         return someOneHas;
-    }
-
-    private bool NoOneHas(string name)
-    {
-        bool noOneHas = true;
-        foreach (Thread t in threads)
-        {
-            if (t.hasItems[name])
-            {
-                noOneHas = false;
-            }
-        }
-        return noOneHas;
     }
 
     public void terminateSimulation(string error)
