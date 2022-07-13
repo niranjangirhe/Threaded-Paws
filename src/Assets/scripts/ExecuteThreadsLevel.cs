@@ -16,8 +16,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
         public bool timedout;
     }
 
-
     public List<Thread> threads;
+    [HideInInspector] public int amount;
     private dropDownManager dropDownManager = new dropDownManager();
     [SerializeField] private bool isRetAllCompulsion;
 
@@ -1206,6 +1206,10 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                             t.isCheckedIn = false;
                                             t.isCheckedOut = true;
                                         }
+                                    }
+                                    else if(t.simBlocks[t.currIndex].type == SimBlock.READ)
+                                    { 
+                                        //continue from here
                                     }
 
                                 }
