@@ -67,7 +67,6 @@
     <Compile Include="Assets\scripts\UITextTypeWriter.cs" />
     <Compile Include="Assets\SaveLoad\Scripts\SaveSystem.cs" />
     <Compile Include="Assets\scripts\InitiateLevel.cs" />
-    <Compile Include="Assets\scripts\DeleteMeIfPointerOut.cs" />
     <Compile Include="Assets\scripts\SwitchTab.cs" />
     <Compile Include="Assets\scripts\Timer.cs" />
     <Compile Include="Assets\scripts\Icons.cs" />

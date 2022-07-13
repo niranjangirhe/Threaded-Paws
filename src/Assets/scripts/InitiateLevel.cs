@@ -74,6 +74,9 @@ public class InitiateLevel : MonoBehaviour {
                             case ItemsEnum.sponge:
                                 box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "sponge";
                                 break;
+                            case ItemsEnum.cash_reg:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "cash reg.";
+                                break;
                         }
 
                         break;
@@ -115,6 +118,9 @@ public class InitiateLevel : MonoBehaviour {
                                 break;
                             case ItemsEnum.sponge:
                                 box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "sponge";
+                                break;
+                            case ItemsEnum.cash_reg:
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "cash reg.";
                                 break;
                         }
                         break;

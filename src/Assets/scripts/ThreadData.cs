@@ -83,7 +83,8 @@ public enum ItemsEnum
 	clippers,
 	dryer,
     sponge,
-    spray
+    spray,
+    cash_reg,
 }
 [System.Serializable]
 public class BlockInfo
@@ -143,7 +144,7 @@ public class Thread
         float cost = 0;
         foreach(KeyValuePair<string,bool> k in needsTo)
         {
-            if(k.Value)
+            if (k.Value)
             {
                 cost += ((Action)workList.GetType().GetField(k.Key).GetValue(workList)).GetCost();
             }

@@ -574,7 +574,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                         else if (action == "write")
                         {
                             newItem = Instantiate(singleSimulationImagePrefab) as GameObject;
-                            t.simBlocks.Add(new SimBlock(SimBlock.READ, action));
+                            t.simBlocks.Add(new SimBlock(SimBlock.WRITE, action));
                             Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
                             newItem.transform.Find("Icon").GetComponent<Image>().sprite = item;
                             newItem.transform.Find("ActionText").GetComponent<Text>().text = "writing";
@@ -582,7 +582,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                         else if (action == "calculate")
                         {
                             newItem = Instantiate(singleSimulationImagePrefab) as GameObject;
-                            t.simBlocks.Add(new SimBlock(SimBlock.READ, action));
+                            t.simBlocks.Add(new SimBlock(SimBlock.CAL, action));
                             Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
                             newItem.transform.Find("Icon").GetComponent<Image>().sprite = item;
                             newItem.transform.Find("ActionText").GetComponent<Text>().text = "calculating";
@@ -946,21 +946,68 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                         t.isCheckedOut = true;
                                     }
                                 }
-                                else if(t.simBlocks[t.currIndex].type == SimBlock.READ)
+                                else if (t.simBlocks[t.currIndex].type == SimBlock.READ)
                                 {
                                     //Perform Read
-                                    t.amountVar = amount;
+                                    if (!t.hasItems["cash reg."] && !NoOneHas("cash reg."))
+                                    {
+                                        GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
+                                        newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                                        newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
+                                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
+                                        newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
+                                        newItem.transform.SetParent(t.layoutPanel.transform);
+                                        newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                                        scrollToBottom();
+                                        t.canPrint = false;
+                                    }
+                                    else
+                                    {
+                                        t.canPrint = true;
+                                        t.amountVar = amount;
+                                    }
                                 }
                                 else if (t.simBlocks[t.currIndex].type == SimBlock.CAL)
                                 {
                                     //Perform Calculation
-                                    t.CalculateCost();
+                                    if (!t.hasItems["cash reg."] && !NoOneHas("cash reg."))
+                                    {
+                                        GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
+                                        newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                                        newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
+                                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
+                                        newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
+                                        newItem.transform.SetParent(t.layoutPanel.transform);
+                                        newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                                        scrollToBottom();
+                                        t.canPrint = false;
+                                    }
+                                    else
+                                    {
+                                        t.canPrint = true;
+                                        t.CalculateCost();
+                                    }
                                 }
                                 else if (t.simBlocks[t.currIndex].type == SimBlock.WRITE)
                                 {
                                     //Perform Write
-                                    amount = t.amountCalculated;
-                                    amountText.text = "$"+amount.ToString();
+                                    if (!t.hasItems["cash reg."] && !NoOneHas("cash reg."))
+                                    {
+                                        GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
+                                        newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                                        newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
+                                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
+                                        newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
+                                        newItem.transform.SetParent(t.layoutPanel.transform);
+                                        newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                                        scrollToBottom();
+                                        t.canPrint = false;
+                                    }
+                                    else
+                                    {
+                                        t.canPrint = true;
+                                        amount = t.amountCalculated;
+                                    }
                                 }
 
                             }
@@ -1263,18 +1310,65 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                     else if (t.simBlocks[t.currIndex].type == SimBlock.READ)
                                     {
                                         //Perform Read
-                                        t.amountVar = amount;
+                                        if (!t.hasItems["cash reg."] && !NoOneHas("cash reg."))
+                                        {
+                                            GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
+                                            newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                                            newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
+                                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
+                                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
+                                            newItem.transform.SetParent(t.layoutPanel.transform);
+                                            newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                                            scrollToBottom();
+                                            t.canPrint = false;
+                                        }
+                                        else
+                                        {
+                                            t.canPrint = true;
+                                            t.amountVar = amount;
+                                        }
                                     }
                                     else if (t.simBlocks[t.currIndex].type == SimBlock.CAL)
                                     {
                                         //Perform Calculation
-                                        t.CalculateCost();
+                                        if (!t.hasItems["cash reg."] && !NoOneHas("cash reg."))
+                                        {
+                                            GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
+                                            newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                                            newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
+                                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
+                                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
+                                            newItem.transform.SetParent(t.layoutPanel.transform);
+                                            newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                                            scrollToBottom();
+                                            t.canPrint = false;
+                                        }
+                                        else
+                                        {
+                                            t.canPrint = true;
+                                            t.CalculateCost();
+                                        }
                                     }
                                     else if (t.simBlocks[t.currIndex].type == SimBlock.WRITE)
                                     {
                                         //Perform Write
-                                        amount = t.amountCalculated;
-                                        amountText.text = "$"+amount.ToString();
+                                        if (!t.hasItems["cash reg."] && !NoOneHas("cash reg."))
+                                        {
+                                            GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
+                                            newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                                            newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
+                                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
+                                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
+                                            newItem.transform.SetParent(t.layoutPanel.transform);
+                                            newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                                            scrollToBottom();
+                                            t.canPrint = false;
+                                        }
+                                        else
+                                        {
+                                            t.canPrint = true;
+                                            amount = t.amountCalculated;
+                                        }
                                     }
                                 }
                                 catch { }
@@ -1565,17 +1659,35 @@ public class ExecuteThreadsLevel : MonoBehaviour
                             else if (t.simBlocks[t.currIndex].type == SimBlock.READ)
                             {
                                 //Perform Read
-                                t.amountVar = amount;
+                                if (!t.hasItems["cash reg."] && !NoOneHas("cash reg."))
+                                    t.canPrint=false;
+                                else
+                                {
+                                    t.canPrint = true;
+                                    t.amountVar = amount;
+                                }                                
                             }
                             else if (t.simBlocks[t.currIndex].type == SimBlock.CAL)
                             {
                                 //Perform Calculation
-                                t.CalculateCost();
+                                if (!t.hasItems["cash reg."] && !NoOneHas("cash reg."))
+                                    t.canPrint = false;
+                                else
+                                {
+                                    t.canPrint = true;
+                                    t.CalculateCost();
+                                } 
                             }
                             else if (t.simBlocks[t.currIndex].type == SimBlock.WRITE)
                             {
                                 //Perform Write
-                                amount = t.amountCalculated;
+                                if (!t.hasItems["cash reg."] && !NoOneHas("cash reg."))
+                                    t.canPrint = false;
+                                else
+                                {
+                                    t.canPrint = true;
+                                    amount = t.amountCalculated;
+                                }
                             }
 
                             if (t.canPrint && !lost)
@@ -1644,6 +1756,19 @@ public class ExecuteThreadsLevel : MonoBehaviour
             }
         }
         return someOneHas;
+    }
+
+    private bool NoOneHas(string name)
+    {
+        bool noOneHas = true;
+        foreach (Thread t in threads)
+        {
+            if (t.hasItems[name])
+            {
+                noOneHas = false;
+            }
+        }
+        return noOneHas;
     }
 
     public void terminateSimulation(string error)
