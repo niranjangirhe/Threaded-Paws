@@ -379,6 +379,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
         //Disable SimIcons till execute
         iconPanel.gameObject.SetActive(false);
+        GameObject.Find("RadialProgressBar").SetActive(false);
     }
 
     public void ExecuteThreads()
@@ -614,6 +615,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         if (!err)
         {
             iconPanel.gameObject.SetActive(true);
+            GameObject.Find("RadialProgressBar").SetActive(true);
             StartCoroutine(printThreads());
         }
     }
@@ -658,18 +660,20 @@ public class ExecuteThreadsLevel : MonoBehaviour
     {
         bool timedout = false;
         ExeData exeData = new ExeData();
+        ExeData tempExeData = new ExeData();
+        int testcase = 0;
         for (int ittr = 0; ittr < NoOfTestCase; ittr++)
         {
-            exeData = CheckAllPossibility();
-            if (exeData.timedout)
+            tempExeData = CheckAllPossibility();
+            if (tempExeData.timedout)
             {
-                Debug.Log(ittr + " TestCase resulted in Timeout");
+                exeData = tempExeData;
                 timedout = true;
-                break;
             }
             else
-                Debug.Log(ittr + " TestCase resulted no timeout");
+                testcase++;
         }
+        Debug.Log("Passed Percent : "+(100*testcase/NoOfTestCase)+"%");
         ResetThreads();
         bar.currentAmount = 0;
 

@@ -142,7 +142,6 @@ public class Thread
             if(k.Value)
             {
                 cost += ((Action)workList.GetType().GetField(k.Key).GetValue(workList)).GetCost();
-                Debug.Log("Cost" + cost);
             }
         }
         amountCalculated = amountVar + cost;
