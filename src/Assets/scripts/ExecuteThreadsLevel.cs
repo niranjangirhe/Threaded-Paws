@@ -118,9 +118,12 @@ public class ExecuteThreadsLevel : MonoBehaviour
         txt_checkoutLeft_thread.text = "x " + threads[index].toolBoxValues.CheckOutBox;
         txt_returnLeft_thread.text = "x " + threads[index].toolBoxValues.ReturnBox;
         txt_groomLeft_thread.text = "x " + threads[index].toolBoxValues.BrushBox;
-        txt_readLeft_thread.text = "x " + threads[index].toolBoxValues.ReadBox;
-        txt_writeLeft_thread.text = "x " + threads[index].toolBoxValues.WriteBox;
-        txt_calculateLeft_thread.text = "x " + threads[index].toolBoxValues.CalculateBox;
+        if (isDataRace)
+        {
+            txt_readLeft_thread.text = "x " + threads[index].toolBoxValues.ReadBox;
+            txt_writeLeft_thread.text = "x " + threads[index].toolBoxValues.WriteBox;
+            txt_calculateLeft_thread.text = "x " + threads[index].toolBoxValues.CalculateBox;
+        }
 
         System.Reflection.FieldInfo[] boxList = threads[index].toolBoxValues.GetType().GetFields();
         foreach (System.Reflection.FieldInfo bl in boxList)
