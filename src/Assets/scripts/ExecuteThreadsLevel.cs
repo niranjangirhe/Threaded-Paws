@@ -17,7 +17,6 @@ public class ExecuteThreadsLevel : MonoBehaviour
     }
 
     public List<Thread> threads;
-    [HideInInspector] public float amount;
     private dropDownManager dropDownManager = new dropDownManager();
     [SerializeField] private bool isRetAllCompulsion;
 
@@ -28,7 +27,13 @@ public class ExecuteThreadsLevel : MonoBehaviour
     private GameObject agenda;
     private GameObject agendaTick;
     private GameObject board;
+
+    //--- money math-----
     private Text amountText;
+    private float amount;
+    private float finalamount = 0;
+    [SerializeField] private bool isDataRace;
+
 
     [TextArea(5, 20)] [SerializeField] private string descriptionText;
     [TextArea(5, 20)] [SerializeField] private string bubbleText;
@@ -44,7 +49,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
     // ---- Simulation ----
     [SerializeField] private int timeout;
     [SerializeField] private int NoOfTestCase;
-    [SerializeField] private int intialMoney;
+  
 
 
     // ----- Prefab ------
@@ -141,7 +146,11 @@ public class ExecuteThreadsLevel : MonoBehaviour
             System.Reflection.FieldInfo[] varWorklist = t.workList.GetType().GetFields();
             foreach (System.Reflection.FieldInfo v in varWorklist)
             {
-                t.needsTo.Add(v.Name, ((Action)v.GetValue(t.workList)).isneeded);
+                Action a = ((Action)v.GetValue(t.workList));
+                t.needsTo.Add(v.Name, a.isneeded);
+                //----- Find Final Amount-----
+                if (a.isneeded)
+                    finalamount += a.GetCost();
             }
 
             //---Assign Audio Source to each thread ----
@@ -204,7 +213,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         txt_groomLeft_thread = GameObject.Find("GroomLeft1").GetComponent<Text>();
         stepsIndicator = GameObject.Find("stepsIndicator").GetComponent<Text>();
         amountText = GameObject.Find("Cash").GetComponent<Text>();
-
+    
 
         //---- Assign Buttons ------
         playButton = GameObject.Find("PlayButton");
@@ -354,6 +363,9 @@ public class ExecuteThreadsLevel : MonoBehaviour
                 boardTemp.transform.GetChild(0).Find(v.Name).gameObject.SetActive(((Action)v.GetValue(t.workList)).isneeded);
                 agendatemp.transform.Find(v.Name).gameObject.SetActive(((Action)v.GetValue(t.workList)).isneeded);
             }
+
+
+            
 
             count++;
         }
@@ -1302,6 +1314,28 @@ public class ExecuteThreadsLevel : MonoBehaviour
                 }
             }
 
+        }
+        Debug.Log("FinalAmount" + finalamount);
+        if (isDataRace && !lost && finalamount!=amount)
+        {
+            LogManager.instance.logger.sendChronologicalLogs("Level03Lost", "", LogManager.instance.UniEndTime().ToString());
+            manager.gameLost();
+            audioSource.clip = gameoverClip;
+            audioSource.Play();
+            //------- logging -----------
+            GameLogData.isLevelCleared = false;
+            GameLogData.levelClearedTime = LogManager.instance.EndTimer();
+            GameLogData.levelClearAmount = bar.currentAmount;
+            GameLogData.failedReason = "Amount Value Incorrect";
+            LogManager.instance.failCount++;
+            GameLogData.failedAttempts = LogManager.instance.failCount;
+            LogManager.instance.CreateLogData();
+            LogManager.instance.isQuitLogNeed = false;
+            stop = true;
+            paused = true;
+            lost = true;
+            CloseBtn(stopButton);
+            OpenBtn(playButton);
         }
 
         if (!lost)
