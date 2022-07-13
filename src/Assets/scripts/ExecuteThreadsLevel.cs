@@ -421,23 +421,18 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
 
         //-------- Reseting previous Sim --------
+        //General Variables
+        stop = false;
+        err = false;
+        paused = false;
+        lost = false;
+        ResetThreads();
         foreach (Thread t in threads)
         {
-            ResetThreads();
-
-            
-
             //Gettings block from FE
             t.blocks = GetActionBlocks(t.tabDropArea);
-
             t.simBlocks = new List<SimBlock>();
-            t.simulationImages = new List<GameObject>();
-
-            //General Variables
-            stop = false;
-            err = false;
-            paused = false;
-            lost = false;
+            t.simulationImages = new List<GameObject>();     
         }
 
         //------------- Extract block sequence from FE ---------
@@ -625,6 +620,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
     private void ResetThreads()
     {
+        amount = 0;
         foreach (Thread t in threads)
         {
             t.amountVar = 0;
@@ -1540,6 +1536,22 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                     t.isCheckedOut = true;
                                 }
                             }
+                            else if (t.simBlocks[t.currIndex].type == SimBlock.READ)
+                            {
+                                //Perform Read
+                                t.amountVar = amount;
+                            }
+                            else if (t.simBlocks[t.currIndex].type == SimBlock.CAL)
+                            {
+                                //Perform Calculation
+                                t.CalculateCost();
+                            }
+                            else if (t.simBlocks[t.currIndex].type == SimBlock.WRITE)
+                            {
+                                //Perform Write
+                                amount = t.amountCalculated;
+                            }
+
                             if (t.canPrint && !lost)
                                 t.currIndex++;
                         }
@@ -1550,6 +1562,12 @@ public class ExecuteThreadsLevel : MonoBehaviour
                 exeData.isIdle.Add(idlelist);
                 j++; // increment step
             }
+        }
+        if(!lost && isDataRace && amount!=finalamount)
+        {
+            //Send Lost game Posibility
+            exeData.timedout = true;
+            return exeData;
         }
         return exeData;
     }
