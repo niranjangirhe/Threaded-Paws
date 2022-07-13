@@ -45,6 +45,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
     private GameObject scrollRect;
     private Transform iconPanel;
+    private GameObject radialBar;
 
     // ---- Simulation ----
     [SerializeField] private int timeout;
@@ -162,8 +163,10 @@ public class ExecuteThreadsLevel : MonoBehaviour
         //Assign Values
         manager = GameObject.Find("_SCRIPTS_").GetComponent<ToolboxManager>();
         disablePanel = GameObject.Find("DisablePanel");
-        bar = GameObject.Find("RadialProgressBar").GetComponent<ProgressBar>();
+        radialBar = GameObject.Find("RadialProgressBar");
+        bar = radialBar.GetComponent<ProgressBar>();
 
+        
 
 
 
@@ -379,7 +382,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
         //Disable SimIcons till execute
         iconPanel.gameObject.SetActive(false);
-        GameObject.Find("RadialProgressBar").SetActive(false);
+        
     }
 
     public void ExecuteThreads()
@@ -544,30 +547,27 @@ public class ExecuteThreadsLevel : MonoBehaviour
                         }
                         else if(action == "read")
                         {
-                            newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
-                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = t.dogSprite;
+                            newItem = Instantiate(singleSimulationImagePrefab) as GameObject;
                             t.simBlocks.Add(new SimBlock(SimBlock.READ, action));
-                            //Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
-                            //newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = item;
-                            newItem.transform.Find("ActionText").GetComponent<Text>().text = action;
+                            Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
+                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = item;
+                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "reading";
                         }
                         else if (action == "write")
                         {
-                            newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
-                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = t.dogSprite;
-                            t.simBlocks.Add(new SimBlock(SimBlock.WRITE, action));
-                            //Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
-                            //newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = item;
-                            newItem.transform.Find("ActionText").GetComponent<Text>().text = action;
+                            newItem = Instantiate(singleSimulationImagePrefab) as GameObject;
+                            t.simBlocks.Add(new SimBlock(SimBlock.READ, action));
+                            Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
+                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = item;
+                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "writing";
                         }
                         else if (action == "calculate")
                         {
-                            newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
-                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = t.dogSprite;
-                            t.simBlocks.Add(new SimBlock(SimBlock.CAL, action));
-                            //Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
-                            //newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = item;
-                            newItem.transform.Find("ActionText").GetComponent<Text>().text = action;
+                            newItem = Instantiate(singleSimulationImagePrefab) as GameObject;
+                            t.simBlocks.Add(new SimBlock(SimBlock.READ, action));
+                            Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
+                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = item;
+                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "calculating";
                         }
                         else
                         {
@@ -615,7 +615,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         if (!err)
         {
             iconPanel.gameObject.SetActive(true);
-            GameObject.Find("RadialProgressBar").SetActive(true);
+            radialBar.SetActive(true);
             StartCoroutine(printThreads());
         }
     }
@@ -716,6 +716,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
                     LogManager.instance.logger.sendChronologicalLogs("Level03Lost", "", LogManager.instance.UniEndTime().ToString());
                     manager.gameLost();
+                    GameObject.Find("LostEndMsg").GetComponent<Text>().text = "Time is up! The day is over.";
                     audioSource.clip = gameoverClip;
                     audioSource.Play();
                     //------- logging -----------
@@ -978,7 +979,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
                                 int randomIndex = Random.Range(0, s.Length);
                                 newItem.transform.Find("Icon").GetComponent<Image>().sprite = (Sprite)s[randomIndex];
-                                newItem.transform.Find("ActionText").GetComponent<Text>().text = "Busy";
+                                newItem.transform.Find("ActionText").GetComponent<Text>().text = "busy";
                                 newItem.transform.SetParent(t.layoutPanel.transform);
                                 newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
@@ -1028,6 +1029,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
                         LogManager.instance.logger.sendChronologicalLogs("Level03Lost", "", LogManager.instance.UniEndTime().ToString());
                         manager.gameLost();
+                        GameObject.Find("LostEndMsg").GetComponent<Text>().text = "Time is up! The day is over.";
                         audioSource.clip = gameoverClip;
                         audioSource.Play();
                         //------- logging -----------
@@ -1290,7 +1292,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
                                     int randomIndex = Random.Range(0, s.Length);
                                     newItem.transform.Find("Icon").GetComponent<Image>().sprite = (Sprite)s[randomIndex];
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "Busy";
+                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "busy";
                                     newItem.transform.SetParent(t.layoutPanel.transform);
                                     newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
@@ -1320,6 +1322,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         {
             LogManager.instance.logger.sendChronologicalLogs("Level03Lost", "", LogManager.instance.UniEndTime().ToString());
             manager.gameLost();
+            GameObject.Find("LostEndMsg").GetComponent<Text>().text = "Error is Accounting";
             audioSource.clip = gameoverClip;
             audioSource.Play();
             //------- logging -----------
@@ -1331,6 +1334,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
             GameLogData.failedAttempts = LogManager.instance.failCount;
             LogManager.instance.CreateLogData();
             LogManager.instance.isQuitLogNeed = false;
+
             stop = true;
             paused = true;
             lost = true;
