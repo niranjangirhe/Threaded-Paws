@@ -1007,6 +1007,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                     {
                                         t.canPrint = true;
                                         amount = t.amountCalculated;
+                                        amountText.text = amount.ToString() + "$";
                                     }
                                 }
 
@@ -1368,6 +1369,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                         {
                                             t.canPrint = true;
                                             amount = t.amountCalculated;
+                                            amountText.text = amount.ToString() + "$";
                                         }
                                     }
                                 }
@@ -1435,6 +1437,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
             LogManager.instance.logger.sendChronologicalLogs("Level03Lost", "", LogManager.instance.UniEndTime().ToString());
             manager.gameLost();
             GameObject.Find("LostEndMsg").GetComponent<Text>().text = "Error is Accounting";
+            GameObject.Find("LostEndMsg").GetComponent<Text>().text = "Accuracy: "+(100 * testcase / NoOfTestCase) + "%";
+
             audioSource.clip = gameoverClip;
             audioSource.Play();
             //------- logging -----------
