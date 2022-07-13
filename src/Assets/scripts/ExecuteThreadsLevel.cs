@@ -72,6 +72,11 @@ public class ExecuteThreadsLevel : MonoBehaviour
     private Text txt_checkoutLeft_thread;
     private Text txt_returnLeft_thread;
     private Text txt_groomLeft_thread;
+    private Text txt_readLeft_thread;
+    private Text txt_writeLeft_thread;
+    private Text txt_calculateLeft_thread;
+
+
 
     private Text stepsIndicator;
 
@@ -113,18 +118,25 @@ public class ExecuteThreadsLevel : MonoBehaviour
         txt_checkoutLeft_thread.text = "x " + threads[index].toolBoxValues.CheckOutBox;
         txt_returnLeft_thread.text = "x " + threads[index].toolBoxValues.ReturnBox;
         txt_groomLeft_thread.text = "x " + threads[index].toolBoxValues.BrushBox;
+        txt_readLeft_thread.text = "x " + threads[index].toolBoxValues.ReadBox;
+        txt_writeLeft_thread.text = "x " + threads[index].toolBoxValues.WriteBox;
+        txt_calculateLeft_thread.text = "x " + threads[index].toolBoxValues.CalculateBox;
 
         System.Reflection.FieldInfo[] boxList = threads[index].toolBoxValues.GetType().GetFields();
         foreach (System.Reflection.FieldInfo bl in boxList)
         {
-            if ((int)bl.GetValue(threads[index].toolBoxValues) == 0)
+            try
             {
-                GameObject.Find(bl.Name).GetComponent<CanvasGroup>().alpha = 0.5f;
+                if ((int)bl.GetValue(threads[index].toolBoxValues) == 0)
+                {
+                    GameObject.Find(bl.Name).GetComponent<CanvasGroup>().alpha = 0.5f;
+                }
+                else
+                {
+                    GameObject.Find(bl.Name).GetComponent<CanvasGroup>().alpha = 1;
+                }
             }
-            else
-            {
-                GameObject.Find(bl.Name).GetComponent<CanvasGroup>().alpha = 1;
-            }
+            catch { }
         }
     }
     void Start()
@@ -214,6 +226,9 @@ public class ExecuteThreadsLevel : MonoBehaviour
         txt_checkoutLeft_thread = GameObject.Find("CheckOutLeft1").GetComponent<Text>();
         txt_returnLeft_thread = GameObject.Find("ReturnLeft1").GetComponent<Text>();
         txt_groomLeft_thread = GameObject.Find("GroomLeft1").GetComponent<Text>();
+        txt_readLeft_thread = GameObject.Find("ReadLeft1").GetComponent<Text>();
+        txt_writeLeft_thread = GameObject.Find("WriteLeft1").GetComponent<Text>();
+        txt_calculateLeft_thread = GameObject.Find("CalculateLeft1").GetComponent<Text>();
         stepsIndicator = GameObject.Find("stepsIndicator").GetComponent<Text>();
         amountText = GameObject.Find("Cash").GetComponent<Text>();
     
@@ -1885,4 +1900,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
         yield return 0;
     }
 
+    public bool IsDataRace()
+    {
+        return isDataRace;
+    }
 }

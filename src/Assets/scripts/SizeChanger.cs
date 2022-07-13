@@ -12,11 +12,22 @@ public class SizeChanger : MonoBehaviour
 
     void Start()
     {
+        if (!GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>().IsDataRace())
+        {
+            Destroy(GameObject.Find("ReadBox"));
+            Destroy(GameObject.Find("CalculateBox"));
+            Destroy(GameObject.Find("WriteBox"));
+            Destroy(GameObject.Find("ReadLeft1"));
+            Destroy(GameObject.Find("CalculateLeft1"));
+            Destroy(GameObject.Find("WriteLeft1"));
+            Destroy(GameObject.Find("CashParent"));
+        }
         Invoke("LateStart", 1);
     }
     void LateStart()
     {
-       //to change size of scrollbox and toolvalueparent to dropareatool
+        
+        //to change size of scrollbox and toolvalueparent to dropareatool
         float masterRectHeight = DropAreaTool.GetComponent<RectTransform>().rect.height;
         RectTransform scrollBoxRect = gameObject.GetComponent<RectTransform>();
         RectTransform toolValueRect = ToolValueParent.GetComponent<RectTransform>();

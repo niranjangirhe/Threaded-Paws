@@ -15,7 +15,7 @@ public class InitiateLevel : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-
+        bool isDataRace = GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>().IsDataRace();
         GameObject.Find("Canvas").transform.Find("InstructionsPanel").gameObject.SetActive(true);
 
         GameObject box;
@@ -122,13 +122,16 @@ public class InitiateLevel : MonoBehaviour {
                         newBox(actionPrefab, "wash", t.tabDropArea, "WashBox");
                         break;
                     case ActionEnum.Read:
-                        newBox(dataPrefab, "read", t.tabDropArea, "ReadBox");
+                        if(isDataRace)
+                            newBox(dataPrefab, "read", t.tabDropArea, "ReadBox");
                         break;
                     case ActionEnum.Calculate:
-                        newBox(dataPrefab, "calculate", t.tabDropArea, "CalculateBox");
+                        if (isDataRace)
+                            newBox(dataPrefab, "calculate", t.tabDropArea, "CalculateBox");
                         break;
                     case ActionEnum.Write:
-                        newBox(dataPrefab, "write", t.tabDropArea, "WriteBox");
+                        if (isDataRace)
+                            newBox(dataPrefab, "write", t.tabDropArea, "WriteBox");
                         break;
                 }
            

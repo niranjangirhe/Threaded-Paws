@@ -51,6 +51,10 @@ public class ToolBoxValues
 	public int CheckOutBox;
 	public int ReturnBox;
 	public int BrushBox;
+    public int ReadBox;
+    public int WriteBox;
+    public int CalculateBox;
+
 }
 [System.Serializable]
 public enum ActionEnum
