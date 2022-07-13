@@ -17,7 +17,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
     }
 
     public List<Thread> threads;
-    [HideInInspector] public int amount;
+    [HideInInspector] public float amount;
     private dropDownManager dropDownManager = new dropDownManager();
     [SerializeField] private bool isRetAllCompulsion;
 
@@ -28,6 +28,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
     private GameObject agenda;
     private GameObject agendaTick;
     private GameObject board;
+    private Text amountText;
 
     [TextArea(5, 20)] [SerializeField] private string descriptionText;
     [TextArea(5, 20)] [SerializeField] private string bubbleText;
@@ -79,6 +80,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
     ProgressBar bar;
     ScrollRect simulationScrollRect;
 
+    //----- Buttons --------
     private GameObject playButton;
     private GameObject stopButton;
     private GameObject nextButton;
@@ -201,6 +203,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         txt_returnLeft_thread = GameObject.Find("ReturnLeft1").GetComponent<Text>();
         txt_groomLeft_thread = GameObject.Find("GroomLeft1").GetComponent<Text>();
         stepsIndicator = GameObject.Find("stepsIndicator").GetComponent<Text>();
+        amountText = GameObject.Find("Cash").GetComponent<Text>();
 
 
         //---- Assign Buttons ------
@@ -612,6 +615,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
     {
         foreach (Thread t in threads)
         {
+            t.amountVar = 0;
+            t.amountCalculated = 0;
             t.isCheckedIn = false;
             t.isCheckedOut = false;
             t.currIndex = 0;
@@ -910,6 +915,22 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                         t.isCheckedOut = true;
                                     }
                                 }
+                                else if(t.simBlocks[t.currIndex].type == SimBlock.READ)
+                                {
+                                    //Perform Read
+                                    t.amountVar = amount;
+                                }
+                                else if (t.simBlocks[t.currIndex].type == SimBlock.CAL)
+                                {
+                                    //Perform Calculation
+                                    t.CalculateCost();
+                                }
+                                else if (t.simBlocks[t.currIndex].type == SimBlock.WRITE)
+                                {
+                                    //Perform Write
+                                    amount = t.amountCalculated;
+                                    amountText.text = "$"+amount.ToString();
+                                }
 
                             }
                             catch { }
@@ -1207,11 +1228,22 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                             t.isCheckedOut = true;
                                         }
                                     }
-                                    else if(t.simBlocks[t.currIndex].type == SimBlock.READ)
-                                    { 
-                                        //continue from here
+                                    else if (t.simBlocks[t.currIndex].type == SimBlock.READ)
+                                    {
+                                        //Perform Read
+                                        t.amountVar = amount;
                                     }
-
+                                    else if (t.simBlocks[t.currIndex].type == SimBlock.CAL)
+                                    {
+                                        //Perform Calculation
+                                        t.CalculateCost();
+                                    }
+                                    else if (t.simBlocks[t.currIndex].type == SimBlock.WRITE)
+                                    {
+                                        //Perform Write
+                                        amount = t.amountCalculated;
+                                        amountText.text = "$"+amount.ToString();
+                                    }
                                 }
                                 catch { }
 
@@ -1704,6 +1736,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
     void clearVerticalLayouts()
     {
         stepsIndicator.text = "0";
+        amountText.text = "$0";
         foreach (Thread t in threads)
         {
             foreach (Transform child in t.layoutPanel.transform)

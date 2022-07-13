@@ -14,7 +14,8 @@ public class Action
     public Action(string name, List<string> requirements, float cost)
     {
         this.name = name;
-        this.requirements = requirements;   
+        this.requirements = requirements;
+        this.cost = cost;
     }
     public List<string> GetRequirementList()
     {

@@ -14,10 +14,10 @@ using UnityEngine.UI;
 public class WorkList
 {
     
-    public Action wash = new Action("Wash", new List<string> { "sponge", "shampoo","cond." });
-    public Action cut = new Action("Cut", new List<string> { "scissors", "brush", "clippers" });
-    public Action brush = new Action("Brush", new List<string> { "spray", "brush" });
-    public Action dry = new Action("Dry", new List<string> { "towel", "dryer" });
+    public Action wash = new Action("Wash", new List<string> { "sponge", "shampoo","cond." },20);
+    public Action cut = new Action("Cut", new List<string> { "scissors", "brush", "clippers" },15);
+    public Action brush = new Action("Brush", new List<string> { "spray", "brush" },10);
+    public Action dry = new Action("Dry", new List<string> { "towel", "dryer" },12);
 }
 
 public class SimBlock
@@ -122,7 +122,8 @@ public class Thread
     [HideInInspector] public Transform[] blocks;
     [HideInInspector] public List<SimBlock> simBlocks;
     [HideInInspector] public List<GameObject> simulationImages;
-
+    [HideInInspector] public float amountVar;
+    [HideInInspector] public float amountCalculated;
 
     //---- to play sounds ---
     [HideInInspector] public AudioSource audioSource;
@@ -131,4 +132,21 @@ public class Thread
 
 
     public List<BlockInfo> blockInfo;
+
+    
+    public void CalculateCost()
+    {
+        float cost = 0;
+        foreach(KeyValuePair<string,bool> k in needsTo)
+        {
+            if(k.Value)
+            {
+                cost += ((Action)workList.GetType().GetField(k.Key).GetValue(workList)).GetCost();
+                Debug.Log("Cost" + cost);
+            }
+        }
+        amountCalculated = amountVar + cost;
+    }
+
+    
 }
