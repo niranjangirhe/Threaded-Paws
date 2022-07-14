@@ -139,7 +139,7 @@ public class Thread
     public List<BlockInfo> blockInfo;
 
     
-    public void CalculateCost()
+    public float CalculateCost()
     {
         float cost = 0;
         foreach(KeyValuePair<string,bool> k in needsTo)
@@ -150,6 +150,7 @@ public class Thread
             }
         }
         amountCalculated = amountVar + cost;
+        return cost;
     }
 
     
