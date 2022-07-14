@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using System.Linq;
 using Random = UnityEngine.Random;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class ExecuteThreadsLevel : MonoBehaviour
 {
@@ -57,6 +58,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
     private GameObject actionSimulationImagePrefab;
     private GameObject singleSimulationImagePrefab;
     private GameObject simulationErrorPrefab;
+    private GameObject cashActionsSimPrefab;
 
 
 
@@ -154,6 +156,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         actionSimulationImagePrefab = Resources.Load<GameObject>("prefabs/ActionSim");
         singleSimulationImagePrefab = Resources.Load<GameObject>("prefabs/singleIconSimulation");
         simulationErrorPrefab = Resources.Load<GameObject>("prefabs/ErrorSimulationImage");
+        cashActionsSimPrefab = Resources.Load<GameObject>("prefabs/cashActionsSim");
 
         //Fill needsto Dict and assign individual audiosource 
         int i = 0;
@@ -565,7 +568,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                         }
                         else if(action == "read")
                         {
-                            newItem = Instantiate(singleSimulationImagePrefab) as GameObject;
+                            newItem = Instantiate(cashActionsSimPrefab) as GameObject;
                             t.simBlocks.Add(new SimBlock(SimBlock.READ, action));
                             Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
                             newItem.transform.Find("Icon").GetComponent<Image>().sprite = item;
@@ -573,7 +576,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                         }
                         else if (action == "write")
                         {
-                            newItem = Instantiate(singleSimulationImagePrefab) as GameObject;
+                            newItem = Instantiate(cashActionsSimPrefab) as GameObject;
                             t.simBlocks.Add(new SimBlock(SimBlock.WRITE, action));
                             Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
                             newItem.transform.Find("Icon").GetComponent<Image>().sprite = item;
@@ -581,7 +584,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                         }
                         else if (action == "calculate")
                         {
-                            newItem = Instantiate(singleSimulationImagePrefab) as GameObject;
+                            newItem = Instantiate(cashActionsSimPrefab) as GameObject;
                             t.simBlocks.Add(new SimBlock(SimBlock.CAL, action));
                             Sprite item = Resources.Load<Sprite>("sprites/actions/" + action);
                             newItem.transform.Find("Icon").GetComponent<Image>().sprite = item;
@@ -965,6 +968,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                     {
                                         t.canPrint = true;
                                         t.amountVar = amount;
+                                        t.simulationImages[t.currIndex].transform.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = "$" + amount.ToString();
+
                                     }
                                 }
                                 else if (t.simBlocks[t.currIndex].type == SimBlock.CAL)
@@ -985,7 +990,9 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                     else
                                     {
                                         t.canPrint = true;
-                                        t.CalculateCost();
+                                        float cost = t.CalculateCost();
+                                        t.simulationImages[t.currIndex].transform.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = "+ $" + cost.ToString();
+
                                     }
                                 }
                                 else if (t.simBlocks[t.currIndex].type == SimBlock.WRITE)
@@ -1008,6 +1015,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                         t.canPrint = true;
                                         amount = t.amountCalculated;
                                         amountText.text = amount.ToString() + "$";
+                                        t.simulationImages[t.currIndex].transform.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = "$" + amount.ToString();
+
                                     }
                                 }
 
@@ -1327,6 +1336,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                         {
                                             t.canPrint = true;
                                             t.amountVar = amount;
+                                            t.simulationImages[t.currIndex].transform.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = "$" + amount.ToString();
+
                                         }
                                     }
                                     else if (t.simBlocks[t.currIndex].type == SimBlock.CAL)
@@ -1347,7 +1358,9 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                         else
                                         {
                                             t.canPrint = true;
-                                            t.CalculateCost();
+                                            float cost = t.CalculateCost();
+                                            t.simulationImages[t.currIndex].transform.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = "+$" + cost.ToString();
+
                                         }
                                     }
                                     else if (t.simBlocks[t.currIndex].type == SimBlock.WRITE)
@@ -1370,6 +1383,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                             t.canPrint = true;
                                             amount = t.amountCalculated;
                                             amountText.text = amount.ToString() + "$";
+                                            t.simulationImages[t.currIndex].transform.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = "$" + amount.ToString();
+
                                         }
                                     }
                                 }
