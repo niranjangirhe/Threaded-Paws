@@ -1437,7 +1437,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
             LogManager.instance.logger.sendChronologicalLogs("Level03Lost", "", LogManager.instance.UniEndTime().ToString());
             manager.gameLost();
             GameObject.Find("LostEndMsg").GetComponent<Text>().text = "Error is Accounting";
-            GameObject.Find("LostEndMsg").GetComponent<Text>().text = "Accuracy: "+(100 * testcase / NoOfTestCase) + "%";
+            GameObject.Find("accuracy").GetComponent<Text>().text = "Accuracy: "+(100 * testcase / NoOfTestCase) + "%";
 
             audioSource.clip = gameoverClip;
             audioSource.Play();
