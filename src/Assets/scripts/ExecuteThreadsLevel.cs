@@ -453,10 +453,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
         //-------- Reseting previous Sim --------
         //General Variables
-        stop = false;
-        err = false;
-        paused = false;
-        lost = false;
+        
         ResetThreads();
         foreach (Thread t in threads)
         {
@@ -649,6 +646,10 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
     private void ResetThreads()
     {
+        stop = false;
+        err = false;
+        paused = false;
+        lost = false;
         amount = 0;
         foreach (Thread t in threads)
         {
@@ -686,7 +687,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
     IEnumerator printThreads()
     {
         bool timedout = false;
-        ExeData exeData = new ExeData();
+        ExeData exeData = null;
         ExeData tempExeData = new ExeData();
         int testcase = 0;
         for (int ittr = 0; ittr < NoOfTestCase; ittr++)
@@ -695,12 +696,13 @@ public class ExecuteThreadsLevel : MonoBehaviour
             if (tempExeData.timedout)
             {
                 exeData = tempExeData;
-                timedout = true;
             }
             else
                 testcase++;
         }
-        Debug.Log("Passed Percent : "+(100*testcase/NoOfTestCase)+"%");
+        if (exeData == null)
+            exeData = tempExeData;
+        Debug.Log("Passed Percent : " + (100 * testcase / NoOfTestCase) + "%");
         ResetThreads();
         bar.currentAmount = 0;
 
@@ -714,362 +716,318 @@ public class ExecuteThreadsLevel : MonoBehaviour
         int j = 0;
         bool whileStop = false;
 
-       
-        if (!timedout)
+
+
+        while (!whileStop)
         {
 
-            
-            while (!whileStop)
+            whileStop = true;
+            foreach (Thread t in threads)
+            {
+                if (t.currIndex < t.simBlocks.Count)
+                {
+                    whileStop = false;
+                    break;
+                }
+            }
+
+            if (bar.currentAmount < timeout)
+            {
+                bar.currentAmount += 1;
+                bar.LoadingBar.GetComponent<Image>().fillAmount = bar.currentAmount / timeout;
+
+            }
+            else
             {
 
-                whileStop = true;
-                foreach (Thread t in threads)
+                LogManager.instance.logger.sendChronologicalLogs("Level03Lost", "", LogManager.instance.UniEndTime().ToString());
+                manager.gameLost();
+                GameObject.Find("LostEndMsg").GetComponent<Text>().text = "Time is up! The day is over.";
+                GameObject.Find("accuracy").GetComponent<Text>().text = "Accuracy: " + (100 * testcase / NoOfTestCase) + "%";
+                audioSource.clip = gameoverClip;
+                audioSource.Play();
+                //------- logging -----------
+                GameLogData.isLevelCleared = false;
+                GameLogData.levelClearedTime = LogManager.instance.EndTimer();
+                GameLogData.levelClearAmount = bar.currentAmount;
+                GameLogData.failedReason = "Times up! GameLost";
+                LogManager.instance.failCount++;
+                GameLogData.failedAttempts = LogManager.instance.failCount;
+                LogManager.instance.CreateLogData();
+                LogManager.instance.isQuitLogNeed = false;
+                stop = true;
+                paused = true;
+                lost = true;
+                CloseBtn(stopButton);
+                OpenBtn(playButton);
+
+                yield return 0;
+            }
+
+            if (stop)
+            {
+                if (!paused)
                 {
-                    if (t.currIndex < t.simBlocks.Count)
+                    try
                     {
-                        whileStop = false;
-                        break;
+                        disablePanel.SetActive(false);
                     }
-                }
-
-                if (bar.currentAmount < timeout)
-                {
-                    bar.currentAmount += 1;
-                    bar.LoadingBar.GetComponent<Image>().fillAmount = bar.currentAmount / timeout;
-
-                }
-                else
-                {
-
-                    LogManager.instance.logger.sendChronologicalLogs("Level03Lost", "", LogManager.instance.UniEndTime().ToString());
-                    manager.gameLost();
-                    GameObject.Find("LostEndMsg").GetComponent<Text>().text = "Time is up! The day is over.";
-                    audioSource.clip = gameoverClip;
-                    audioSource.Play();
-                    //------- logging -----------
-                    GameLogData.isLevelCleared = false;
-                    GameLogData.levelClearedTime = LogManager.instance.EndTimer();
-                    GameLogData.levelClearAmount = bar.currentAmount;
-                    GameLogData.failedReason = "Times up! GameLost";
-                    LogManager.instance.failCount++;
-                    GameLogData.failedAttempts = LogManager.instance.failCount;
-                    LogManager.instance.CreateLogData();
-                    LogManager.instance.isQuitLogNeed = false;
-                    stop = true;
-                    paused = true;
-                    lost = true;
+                    catch
+                    {
+                        Debug.Log("Cannot disable DisablePanel");
+                    }
                     CloseBtn(stopButton);
                     OpenBtn(playButton);
-
-                    yield return 0;
                 }
+                bar.LoadingBar.GetComponent<Image>().fillAmount = 0;
+                break;
+            }
+            else
+            {
 
-                if (stop)
+                stepsIndicator.text = "" + (j + 1);
+
+                System.Random r = new System.Random();
+                foreach (int i in exeData.sequence[0])
                 {
-                    if (!paused)
+
+                    Thread t = threads[i];
+                    bool isIdle = exeData.isIdle[0][0];
+                    exeData.isIdle[0].RemoveAt(0);
+
+                    if (!isIdle)
                     {
                         try
                         {
-                            disablePanel.SetActive(false);
-                        }
-                        catch
-                        {
-                            Debug.Log("Cannot disable DisablePanel");
-                        }
-                        CloseBtn(stopButton);
-                        OpenBtn(playButton);
-                    }
-                    bar.LoadingBar.GetComponent<Image>().fillAmount = 0;
-                    break;
-                }
-                else
-                {
-
-                    stepsIndicator.text = "" + (j + 1);
-
-                    System.Random r = new System.Random();
-                    foreach (int i in Enumerable.Range(0, threads.Count).OrderBy(x => r.Next()))
-                    {
-                        int idleInt = Random.Range(0, 100);
-                        Thread t = threads[i];
-                        bool isIdle = (idleInt < idleMomentPercent) && t.currIndex != 0;
-
-                        if (!isIdle)
-                        {
-                            try
+                            //------------ Acquire -------------
+                            if (t.simBlocks[t.currIndex].type == SimBlock.ACQUIIRE)
                             {
-                                //------------ Acquire -------------
-                                if (t.simBlocks[t.currIndex].type == SimBlock.ACQUIIRE)
+                                //If t don't have the obj but some other thread has it then it will return true;
+                                if (MeNotSomeOneHas(t.simBlocks[t.currIndex].name, t))
                                 {
-                                    //If t don't have the obj but some other thread has it then it will return true;
-                                    if (MeNotSomeOneHas(t.simBlocks[t.currIndex].name, t))
-                                    {
-                                        GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
-                                        newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
-                                        newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
-                                        newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
-                                        newItem.transform.SetParent(t.layoutPanel.transform);
-                                        newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-                                        scrollToBottom();
+                                    GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
+                                    newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
+                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
+                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
+                                    newItem.transform.SetParent(t.layoutPanel.transform);
+                                    newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                                    scrollToBottom();
 
-                                        t.canPrint = false;
-                                    }
-                                    else
-                                    {
-                                        int output = acquire(ref t.hasItems, t.simBlocks[t.currIndex].name);
-                                        t.canPrint = true;
-
-                                        if (output < 0)
-                                        {
-                                            resError(acquireErrMsg, t.layoutPanel); // ERROR: You are trying to acquire a resource you already have.";
-                                            t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
-                                            t.audioSource.Play();
-                                        }
-                                    }
+                                    t.canPrint = false;
                                 }
-                                //------------ Return -------------
-                                else if (t.simBlocks[t.currIndex].type == SimBlock.RETURN)
+                                else
                                 {
-                                    int output1 = return_res(ref t.hasItems, t.simBlocks[t.currIndex].name);
+                                    int output = acquire(ref t.hasItems, t.simBlocks[t.currIndex].name);
+                                    t.canPrint = true;
 
-                                    if (output1 < 0)
+                                    if (output < 0)
                                     {
-                                        resError(returnErrMsg, t.layoutPanel);
+                                        resError(acquireErrMsg, t.layoutPanel); // ERROR: You are trying to acquire a resource you already have.";
                                         t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
                                         t.audioSource.Play();
                                     }
                                 }
-                                //------------ Work/Action block -------------
-                                else if (t.simBlocks[t.currIndex].type == SimBlock.WORK)
+                            }
+                            //------------ Return -------------
+                            else if (t.simBlocks[t.currIndex].type == SimBlock.RETURN)
+                            {
+                                int output1 = return_res(ref t.hasItems, t.simBlocks[t.currIndex].name);
+
+                                if (output1 < 0)
                                 {
-                                    if (IHaveAllThings(t.simBlocks[t.currIndex].name, t))
+                                    resError(returnErrMsg, t.layoutPanel);
+                                    t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
+                                    t.audioSource.Play();
+                                }
+                            }
+                            //------------ Work/Action block -------------
+                            else if (t.simBlocks[t.currIndex].type == SimBlock.WORK)
+                            {
+                                if (IHaveAllThings(t.simBlocks[t.currIndex].name, t))
+                                {
+                                    t.did[t.simBlocks[t.currIndex].name] = true;
+                                    //play music
+                                    try
                                     {
-                                        t.did[t.simBlocks[t.currIndex].name] = true;
-                                        //play music
-                                        try
-                                        {
-                                            t.audioSource.clip = Resources.Load<AudioClip>("audio/" + t.simBlocks[t.currIndex].name);
-                                            t.audioSource.Play();
-                                            StartCoroutine(PauseSound(t.audioSource, 2));
-                                        }
-                                        catch { }
+                                        t.audioSource.clip = Resources.Load<AudioClip>("audio/" + t.simBlocks[t.currIndex].name);
+                                        t.audioSource.Play();
+                                        StartCoroutine(PauseSound(t.audioSource, 2));
                                     }
-                                    else
+                                    catch { }
+                                }
+                                else
+                                {
+                                    String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
+                                    t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                    t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
+                                    t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+
+                                    resError("> ERROR: You can't " + t.simBlocks[t.currIndex].name.ToLower() + " without " + RequirementList(t.simBlocks[t.currIndex].name, t), t.layoutPanel);
+                                    t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
+                                    t.audioSource.Play();
+                                    scrollToBottom();
+
+                                }
+                            }
+                            else if (t.simBlocks[t.currIndex].type == SimBlock.CHECKIN)
+                            {
+
+                                if (t.isCheckedIn)
+                                {
+
+                                    String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
+                                    t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                    t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
+                                    t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+
+                                    resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.", t.layoutPanel);
+                                    t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
+                                    t.audioSource.Play();
+                                    scrollToBottom();
+
+                                }
+                                else
+                                {
+
+                                    // perform check-in
+                                    t.isCheckedIn = true;
+                                    t.isCheckedOut = false;
+                                }
+
+                            }
+                            else if (t.simBlocks[t.currIndex].type == SimBlock.CHECKOUT)
+                            {
+                                foreach (KeyValuePair<string, bool> k in t.needsTo)
+                                {
+                                    if (k.Value && !t.did[k.Key])
                                     {
                                         String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
                                         t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
                                         t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
                                         t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                                        scrollToBottom();
 
-                                        resError("> ERROR: You can't " + t.simBlocks[t.currIndex].name.ToLower() + " without " + RequirementList(t.simBlocks[t.currIndex].name, t), t.layoutPanel);
+                                        resError("> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.", t.layoutPanel);
                                         t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
                                         t.audioSource.Play();
                                         scrollToBottom();
-
+                                        break;
                                     }
                                 }
-                                else if (t.simBlocks[t.currIndex].type == SimBlock.CHECKIN)
+                                if (isRetAllCompulsion)
                                 {
-
-                                    if (t.isCheckedIn)
+                                    foreach (KeyValuePair<string, bool> k in t.hasItems)
                                     {
-
-                                        String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                        t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                        t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                        t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-
-                                        resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.", t.layoutPanel);
-                                        t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
-                                        t.audioSource.Play();
-                                        scrollToBottom();
-
-                                    }
-                                    else
-                                    {
-
-                                        // perform check-in
-                                        t.isCheckedIn = true;
-                                        t.isCheckedOut = false;
-                                    }
-
-                                }
-                                else if (t.simBlocks[t.currIndex].type == SimBlock.CHECKOUT)
-                                {
-                                    foreach (KeyValuePair<string, bool> k in t.needsTo)
-                                    {
-                                        if (k.Value && !t.did[k.Key])
+                                        if (k.Value)
                                         {
                                             String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
                                             t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
                                             t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
                                             t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-                                            scrollToBottom();
 
-                                            resError("> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.", t.layoutPanel);
+                                            resError("> ERROR: You need to return all the resources you acquired before checking out.", t.layoutPanel);
                                             t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
                                             t.audioSource.Play();
                                             scrollToBottom();
                                             break;
                                         }
                                     }
-                                    if (isRetAllCompulsion)
-                                    {
-                                        foreach (KeyValuePair<string, bool> k in t.hasItems)
-                                        {
-                                            if (k.Value)
-                                            {
-                                                String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                                t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                                t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                                t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-
-                                                resError("> ERROR: You need to return all the resources you acquired before checking out.", t.layoutPanel);
-                                                t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
-                                                t.audioSource.Play();
-                                                scrollToBottom();
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    else if (t.isCheckedOut)
-                                    {
-
-                                        String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                        t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                        t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                        t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-
-                                        resError("> ERROR: You have to check in before attempting to check out a customer.", t.layoutPanel);
-                                        t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
-                                        t.audioSource.Play();
-                                        scrollToBottom();
-
-                                    }
-                                    else
-                                    {
-
-                                        // perform check-out
-                                        t.isCheckedIn = false;
-                                        t.isCheckedOut = true;
-                                    }
                                 }
-                                else if (t.simBlocks[t.currIndex].type == SimBlock.READ)
+                                else if (t.isCheckedOut)
                                 {
-                                    //Perform Read
-                                    if (MeNotSomeOneHas("cash reg.", t))
-                                    {
-                                        GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
-                                        newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
-                                        newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
-                                        newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
-                                        newItem.transform.SetParent(t.layoutPanel.transform);
-                                        newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-                                        scrollToBottom();
-                                        t.canPrint = false;
-                                    }
-                                    else
-                                    {
-                                        t.canPrint = true;
-                                        t.amountVar = amount;
-                                        t.simulationImages[t.currIndex].transform.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = "$" + amount.ToString();
 
-                                    }
+                                    String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
+                                    t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
+                                    t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
+                                    t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+
+                                    resError("> ERROR: You have to check in before attempting to check out a customer.", t.layoutPanel);
+                                    t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
+                                    t.audioSource.Play();
+                                    scrollToBottom();
+
                                 }
-                                else if (t.simBlocks[t.currIndex].type == SimBlock.CAL)
+                                else
                                 {
-                                    //Perform Calculation
-                                    if (MeNotSomeOneHas("cash reg.", t))
-                                    {
-                                        GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
-                                        newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
-                                        newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
-                                        newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
-                                        newItem.transform.SetParent(t.layoutPanel.transform);
-                                        newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-                                        scrollToBottom();
-                                        t.canPrint = false;
-                                    }
-                                    else
-                                    {
-                                        t.canPrint = true;
-                                        float cost = t.CalculateCost();
-                                        t.simulationImages[t.currIndex].transform.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = "+ $" + cost.ToString();
 
-                                    }
+                                    // perform check-out
+                                    t.isCheckedIn = false;
+                                    t.isCheckedOut = true;
                                 }
-                                else if (t.simBlocks[t.currIndex].type == SimBlock.WRITE)
-                                {
-                                    //Perform Write
-                                    if (MeNotSomeOneHas("cash reg.", t))
-                                    {
-                                        GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
-                                        newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
-                                        newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                        newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
-                                        newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
-                                        newItem.transform.SetParent(t.layoutPanel.transform);
-                                        newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-                                        scrollToBottom();
-                                        t.canPrint = false;
-                                    }
-                                    else
-                                    {
-                                        t.canPrint = true;
-                                        amount = t.amountCalculated;
-                                        amountText.text = amount.ToString() + "$";
-                                        t.simulationImages[t.currIndex].transform.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = "$" + amount.ToString();
-
-                                    }
-                                }
-
                             }
-                            catch { }
-
-                            try
+                            else if (t.simBlocks[t.currIndex].type == SimBlock.READ)
                             {
-
-                                if (t.canPrint)
+                                //Perform Read
+                                if (MeNotSomeOneHas("cash reg.", t))
                                 {
-
-                                    if (!err)
-                                    {
-                                        t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                        t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-                                    }
-                                    t.currIndex++;
+                                    GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
+                                    newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
+                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
+                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
+                                    newItem.transform.SetParent(t.layoutPanel.transform);
+                                    newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                                    scrollToBottom();
+                                    t.canPrint = false;
                                 }
+                                else
+                                {
+                                    t.canPrint = true;
+                                    t.amountVar = amount;
+                                    t.simulationImages[t.currIndex].transform.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = "$" + amount.ToString();
 
-
+                                }
                             }
-                            catch { }
-                        }
-                        else if (t.currIndex < t.simBlocks.Count)
-                        {
-
-                            //---------------- IDLE -----------------
-                            try
+                            else if (t.simBlocks[t.currIndex].type == SimBlock.CAL)
                             {
+                                //Perform Calculation
+                                if (MeNotSomeOneHas("cash reg.", t))
+                                {
+                                    GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
+                                    newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
+                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
+                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
+                                    newItem.transform.SetParent(t.layoutPanel.transform);
+                                    newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                                    scrollToBottom();
+                                    t.canPrint = false;
+                                }
+                                else
+                                {
+                                    t.canPrint = true;
+                                    float cost = t.CalculateCost();
+                                    t.simulationImages[t.currIndex].transform.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = "+$" + cost.ToString();
 
-                                GameObject newItem = Instantiate(singleSimulationImagePrefab) as GameObject;
-
-                                UnityEngine.Object[] s = Resources.LoadAll("sprites/items/idle", typeof(Sprite));
-
-                                int randomIndex = Random.Range(0, s.Length);
-                                newItem.transform.Find("Icon").GetComponent<Image>().sprite = (Sprite)s[randomIndex];
-                                newItem.transform.Find("ActionText").GetComponent<Text>().text = "busy";
-                                newItem.transform.SetParent(t.layoutPanel.transform);
-                                newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-
+                                }
                             }
-                            catch
+                            else if (t.simBlocks[t.currIndex].type == SimBlock.WRITE)
                             {
+                                //Perform Write
+                                if (MeNotSomeOneHas("cash reg.", t))
+                                {
+                                    GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
+                                    newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                                    newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
+                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
+                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
+                                    newItem.transform.SetParent(t.layoutPanel.transform);
+                                    newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                                    scrollToBottom();
+                                    t.canPrint = false;
+                                }
+                                else
+                                {
+                                    t.canPrint = true;
+                                    amount = t.amountCalculated;
+                                    amountText.text = amount.ToString() + "$";
+                                    t.simulationImages[t.currIndex].transform.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = "$" + amount.ToString();
 
+                                }
                             }
                         }
+                        catch { }
 
 
                         scrollToBottom();
@@ -1096,371 +1054,67 @@ public class ExecuteThreadsLevel : MonoBehaviour
                     {
                         if (t.currIndex < t.simBlocks.Count)
                         {
-                            whileStop = false;
-                            break;
+
+                            if (t.canPrint)
+                            {
+
+                                if (!err)
+                                {
+                                    t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
+                                    t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                                }
+                                t.currIndex++;
+                            }
+
+
                         }
+                        catch { }
                     }
-
-                    if (bar.currentAmount < timeout)
-                    {
-                        bar.currentAmount += 1;
-                        bar.LoadingBar.GetComponent<Image>().fillAmount = bar.currentAmount / timeout;
-
-                    }
-                    else
+                    else if (t.currIndex < t.simBlocks.Count)
                     {
 
-                        LogManager.instance.logger.sendChronologicalLogs("Level03Lost", "", LogManager.instance.UniEndTime().ToString());
-                        manager.gameLost();
-                        GameObject.Find("LostEndMsg").GetComponent<Text>().text = "Time is up! The day is over.";
-                        audioSource.clip = gameoverClip;
-                        audioSource.Play();
-                        //------- logging -----------
-                        GameLogData.isLevelCleared = false;
-                        GameLogData.levelClearedTime = LogManager.instance.EndTimer();
-                        GameLogData.levelClearAmount = bar.currentAmount;
-                        GameLogData.failedReason = "Times up! GameLost";
-                        LogManager.instance.failCount++;
-                        GameLogData.failedAttempts = LogManager.instance.failCount;
-                        LogManager.instance.CreateLogData();
-                        LogManager.instance.isQuitLogNeed = false;
-                        stop = true;
-                        paused = true;
-                        lost = true;
-                        CloseBtn(stopButton);
-                        OpenBtn(playButton);
-
-                        yield return 0;
-                    }
-
-                    if (stop)
-                    {
-                        if (!paused)
+                        //---------------- IDLE -----------------
+                        try
                         {
-                            try
-                            {
-                                disablePanel.SetActive(false);
-                            }
-                            catch
-                            {
-                                Debug.Log("Cannot disable DisablePanel");
-                            }
-                            CloseBtn(stopButton);
-                            OpenBtn(playButton);
+
+                            GameObject newItem = Instantiate(singleSimulationImagePrefab) as GameObject;
+
+                            UnityEngine.Object[] s = Resources.LoadAll("sprites/items/idle", typeof(Sprite));
+
+                            int randomIndex = Random.Range(0, s.Length);
+                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = (Sprite)s[randomIndex];
+                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "busy";
+                            newItem.transform.SetParent(t.layoutPanel.transform);
+                            newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+
                         }
-                        bar.LoadingBar.GetComponent<Image>().fillAmount = 0;
-                        break;
-                    }
-                    else
-                    {
-
-                        stepsIndicator.text = "" + (j + 1);
-
-                        System.Random r = new System.Random();
-                        foreach (int i in exeData.sequence[0])
+                        catch
                         {
-                            
-                            Thread t = threads[i];
-                            bool isIdle = exeData.isIdle[0][0];
-                            exeData.isIdle[0].RemoveAt(0);
 
-                            if (!isIdle)
-                            {
-                                try
-                                {
-                                    //------------ Acquire -------------
-                                    if (t.simBlocks[t.currIndex].type == SimBlock.ACQUIIRE)
-                                    {
-                                        //If t don't have the obj but some other thread has it then it will return true;
-                                        if (MeNotSomeOneHas(t.simBlocks[t.currIndex].name, t))
-                                        {
-                                            GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
-                                            newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
-                                            newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
-                                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
-                                            newItem.transform.SetParent(t.layoutPanel.transform);
-                                            newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-                                            scrollToBottom();
-
-                                            t.canPrint = false;
-                                        }
-                                        else
-                                        {
-                                            int output = acquire(ref t.hasItems, t.simBlocks[t.currIndex].name);
-                                            t.canPrint = true;
-
-                                            if (output < 0)
-                                            {
-                                                resError(acquireErrMsg, t.layoutPanel); // ERROR: You are trying to acquire a resource you already have.";
-                                                t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
-                                                t.audioSource.Play();
-                                            }
-                                        }
-                                    }
-                                    //------------ Return -------------
-                                    else if (t.simBlocks[t.currIndex].type == SimBlock.RETURN)
-                                    {
-                                        int output1 = return_res(ref t.hasItems, t.simBlocks[t.currIndex].name);
-
-                                        if (output1 < 0)
-                                        {
-                                            resError(returnErrMsg, t.layoutPanel);
-                                            t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
-                                            t.audioSource.Play();
-                                        }
-                                    }
-                                    //------------ Work/Action block -------------
-                                    else if (t.simBlocks[t.currIndex].type == SimBlock.WORK)
-                                    {
-                                        if (IHaveAllThings(t.simBlocks[t.currIndex].name, t))
-                                        {
-                                            t.did[t.simBlocks[t.currIndex].name] = true;
-                                            //play music
-                                            try
-                                            {
-                                                t.audioSource.clip = Resources.Load<AudioClip>("audio/" + t.simBlocks[t.currIndex].name);
-                                                t.audioSource.Play();
-                                                StartCoroutine(PauseSound(t.audioSource, 2));
-                                            }
-                                            catch { }
-                                        }
-                                        else
-                                        {
-                                            String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                            t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                            t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                            t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-
-                                            resError("> ERROR: You can't " + t.simBlocks[t.currIndex].name.ToLower() + " without " + RequirementList(t.simBlocks[t.currIndex].name, t), t.layoutPanel);
-                                            t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
-                                            t.audioSource.Play();
-                                            scrollToBottom();
-
-                                        }
-                                    }
-                                    else if (t.simBlocks[t.currIndex].type == SimBlock.CHECKIN)
-                                    {
-
-                                        if (t.isCheckedIn)
-                                        {
-
-                                            String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                            t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                            t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                            t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-
-                                            resError("> ERROR: You are already checked in. You have to check out before attempting to check in a different customer.", t.layoutPanel);
-                                            t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
-                                            t.audioSource.Play();
-                                            scrollToBottom();
-
-                                        }
-                                        else
-                                        {
-
-                                            // perform check-in
-                                            t.isCheckedIn = true;
-                                            t.isCheckedOut = false;
-                                        }
-
-                                    }
-                                    else if (t.simBlocks[t.currIndex].type == SimBlock.CHECKOUT)
-                                    {
-                                        foreach (KeyValuePair<string, bool> k in t.needsTo)
-                                        {
-                                            if (k.Value && !t.did[k.Key])
-                                            {
-                                                String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                                t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                                t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                                t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-                                                scrollToBottom();
-
-                                                resError("> ERROR: Seems like worker 1 didn't fulfill all of the customer's requests. Please try again.", t.layoutPanel);
-                                                t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
-                                                t.audioSource.Play();
-                                                scrollToBottom();
-                                                break;
-                                            }
-                                        }
-                                        if (isRetAllCompulsion)
-                                        {
-                                            foreach (KeyValuePair<string, bool> k in t.hasItems)
-                                            {
-                                                if (k.Value)
-                                                {
-                                                    String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                                    t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                                    t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                                    t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-
-                                                    resError("> ERROR: You need to return all the resources you acquired before checking out.", t.layoutPanel);
-                                                    t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
-                                                    t.audioSource.Play();
-                                                    scrollToBottom();
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        else if (t.isCheckedOut)
-                                        {
-
-                                            String actionText = t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text;
-                                            t.simulationImages[t.currIndex].transform.Find("ActionText").GetComponent<Text>().text = "<color=red>" + actionText + "</color>";
-                                            t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                            t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-
-                                            resError("> ERROR: You have to check in before attempting to check out a customer.", t.layoutPanel);
-                                            t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
-                                            t.audioSource.Play();
-                                            scrollToBottom();
-
-                                        }
-                                        else
-                                        {
-
-                                            // perform check-out
-                                            t.isCheckedIn = false;
-                                            t.isCheckedOut = true;
-                                        }
-                                    }
-                                    else if (t.simBlocks[t.currIndex].type == SimBlock.READ)
-                                    {
-                                        //Perform Read
-                                        if (MeNotSomeOneHas("cash reg.", t))
-                                        {
-                                            GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
-                                            newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
-                                            newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
-                                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
-                                            newItem.transform.SetParent(t.layoutPanel.transform);
-                                            newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-                                            scrollToBottom();
-                                            t.canPrint = false;
-                                        }
-                                        else
-                                        {
-                                            t.canPrint = true;
-                                            t.amountVar = amount;
-                                            t.simulationImages[t.currIndex].transform.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = "$" + amount.ToString();
-
-                                        }
-                                    }
-                                    else if (t.simBlocks[t.currIndex].type == SimBlock.CAL)
-                                    {
-                                        //Perform Calculation
-                                        if (MeNotSomeOneHas("cash reg.", t))
-                                        {
-                                            GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
-                                            newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
-                                            newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
-                                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
-                                            newItem.transform.SetParent(t.layoutPanel.transform);
-                                            newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-                                            scrollToBottom();
-                                            t.canPrint = false;
-                                        }
-                                        else
-                                        {
-                                            t.canPrint = true;
-                                            float cost = t.CalculateCost();
-                                            t.simulationImages[t.currIndex].transform.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = "+$" + cost.ToString();
-
-                                        }
-                                    }
-                                    else if (t.simBlocks[t.currIndex].type == SimBlock.WRITE)
-                                    {
-                                        //Perform Write
-                                        if (MeNotSomeOneHas("cash reg.", t))
-                                        {
-                                            GameObject newItem = Instantiate(actionSimulationImagePrefab) as GameObject;
-                                            newItem.GetComponent<Image>().color = new Color(1, 1, 1, 1);
-                                            newItem.transform.Find("ItemAction").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/actions/waiting");
-                                            newItem.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>("sprites/items/" + t.simBlocks[t.currIndex].name);
-                                            newItem.transform.Find("ActionText").GetComponent<Text>().text = "<color=red>Waiting...</color>";
-                                            newItem.transform.SetParent(t.layoutPanel.transform);
-                                            newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-                                            scrollToBottom();
-                                            t.canPrint = false;
-                                        }
-                                        else
-                                        {
-                                            t.canPrint = true;
-                                            amount = t.amountCalculated;
-                                            amountText.text = amount.ToString() + "$";
-                                            t.simulationImages[t.currIndex].transform.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = "$" + amount.ToString();
-
-                                        }
-                                    }
-                                }
-                                catch { }
-
-                                try
-                                {
-
-                                    if (t.canPrint)
-                                    {
-
-                                        if (!err)
-                                        {
-                                            t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
-                                            t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-                                        }
-                                        t.currIndex++;
-                                    }
-
-
-                                }
-                                catch { }
-                            }
-                            else if (t.currIndex < t.simBlocks.Count)
-                            {
-
-                                //---------------- IDLE -----------------
-                                try
-                                {
-
-                                    GameObject newItem = Instantiate(singleSimulationImagePrefab) as GameObject;
-
-                                    UnityEngine.Object[] s = Resources.LoadAll("sprites/items/idle", typeof(Sprite));
-
-                                    int randomIndex = Random.Range(0, s.Length);
-                                    newItem.transform.Find("Icon").GetComponent<Image>().sprite = (Sprite)s[randomIndex];
-                                    newItem.transform.Find("ActionText").GetComponent<Text>().text = "busy";
-                                    newItem.transform.SetParent(t.layoutPanel.transform);
-                                    newItem.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-
-                                }
-                                catch
-                                {
-
-                                }
-                            }
-
-
-                            scrollToBottom();
                         }
-                        exeData.sequence.RemoveAt(0);
-                        exeData.isIdle.RemoveAt(0);
-
-                        j++; // increment step
-                        yield return new WaitForSeconds(1);
-                        scrollToBottom();
                     }
+
+
+                    scrollToBottom();
                 }
-            }
+                exeData.sequence.RemoveAt(0);
+                exeData.isIdle.RemoveAt(0);
 
+                j++; // increment step
+                yield return new WaitForSeconds(1);
+                scrollToBottom();
+            }
         }
+
+
+
         Debug.Log("FinalAmount" + finalamount);
-        if (isDataRace && !lost && finalamount!=amount)
+        if (isDataRace && !lost && finalamount != amount)
         {
             LogManager.instance.logger.sendChronologicalLogs("Level03Lost", "", LogManager.instance.UniEndTime().ToString());
             manager.gameLost();
             GameObject.Find("LostEndMsg").GetComponent<Text>().text = "Error is Accounting";
-            GameObject.Find("LostEndMsg").GetComponent<Text>().text = "Accuracy: "+(100 * testcase / NoOfTestCase) + "%";
+            GameObject.Find("accuracy").GetComponent<Text>().text = "Accuracy: " + (100 * testcase / NoOfTestCase) + "%";
 
             audioSource.clip = gameoverClip;
             audioSource.Play();
