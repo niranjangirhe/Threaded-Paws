@@ -97,6 +97,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
     private GameObject playButton;
     private GameObject stopButton;
     private GameObject nextButton;
+    private GameObject speedSlider;
 
     bool stop;
     bool err;
@@ -243,7 +244,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         playButton = GameObject.Find("PlayButton");
         stopButton = GameObject.Find("StopButton");
         nextButton = GameObject.Find("NextButton");
-
+        speedSlider = GameObject.Find("SpeedSlider");
 
         //--- Set Audio Vars-------
         audioSource = gameObject.GetComponent<AudioSource>();
@@ -404,6 +405,11 @@ public class ExecuteThreadsLevel : MonoBehaviour
         //Disable SimIcons till execute
         iconPanel.gameObject.SetActive(false);
         
+    }
+
+    private float GetSimSpeed(GameObject slider)
+    {
+        return slider.gameObject.GetComponent<Slider>().value;
     }
 
     public void ExecuteThreads()
@@ -1072,7 +1078,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                 exeData.isIdle.RemoveAt(0);
 
                 j++; // increment step
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSeconds(GetSimSpeed(speedSlider));
                 scrollToBottom();
             }
         }
