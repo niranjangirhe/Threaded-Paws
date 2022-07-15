@@ -97,7 +97,6 @@ public class ExecuteThreadsLevel : MonoBehaviour
     private GameObject playButton;
     private GameObject stopButton;
     private GameObject nextButton;
-    private GameObject speedScroll;
 
     bool stop;
     bool err;
@@ -108,11 +107,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
     string returnErrMsg = "> ERROR: You are trying to return a resource you don't have.";
     string acquireErrMsg = "> ERROR: You are trying to acquire a resource you already have.";
 
-    public float updateSimSpeed(GameObject speedScroll)
-    {
-        return speedScroll.transform.GetComponent<Slider>().value;
-        
-    }
+
 
     public void updateValues(int index)
     {
@@ -248,7 +243,6 @@ public class ExecuteThreadsLevel : MonoBehaviour
         playButton = GameObject.Find("PlayButton");
         stopButton = GameObject.Find("StopButton");
         nextButton = GameObject.Find("NextButton");
-        speedScroll = GameObject.Find("SpeedScroll");
 
 
         //--- Set Audio Vars-------
@@ -1029,30 +1023,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                         }
                         catch { }
 
-
-                        scrollToBottom();
-                    }
-
-
-                    j++; // increment step
-                    yield return new WaitForSeconds(updateSimSpeed(speedScroll));
-
-                    //yield return new WaitForSeconds(n);
-                    scrollToBottom();
-                }
-            }
-        }
-        else
-        {
-            Debug.Log("Recreating timeout Scene");
-            { 
-                while (!whileStop)
-                {
-
-                    whileStop = true;
-                    foreach (Thread t in threads)
-                    {
-                        if (t.currIndex < t.simBlocks.Count)
+                        try
                         {
 
                             if (t.canPrint)
