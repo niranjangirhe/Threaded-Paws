@@ -10,6 +10,7 @@ using TMPro;
 
 public class ExecuteThreadsLevel : MonoBehaviour
 {
+    [SerializeField] private int levelNo;
     public class ExeData
     {
         public List<List<int>> sequence = new List<List<int>>();
@@ -1116,6 +1117,12 @@ public class ExecuteThreadsLevel : MonoBehaviour
         {
             LogManager.instance.logger.sendChronologicalLogs("Level03Won", "", LogManager.instance.UniEndTime().ToString());
             manager.gameWon();
+
+            //report winning
+            PlayerPrefs.SetInt("Won", levelNo);
+            PlayerPrefs.Save();
+
+
             audioSource.clip = wonClip;
             audioSource.Play();
             Debug.Log("Finished in " + j + " steps.");
