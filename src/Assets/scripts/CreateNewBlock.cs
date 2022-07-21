@@ -66,7 +66,7 @@ public class CreateNewBlock : MonoBehaviour {
             {
                 if (gameObject.transform.parent.GetChild(i).GetChild(j).name.Equals(gameObject.transform.parent.GetChild(i).name))
                 {
-                    Destroy(gameObject.transform.parent.GetChild(i).GetChild(j));
+                    Destroy(gameObject.transform.parent.GetChild(i).GetChild(j).gameObject);
                 }
 
             }

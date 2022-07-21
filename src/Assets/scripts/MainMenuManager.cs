@@ -8,6 +8,7 @@ public class MainMenuManager : MonoBehaviour {
 
 	public GameObject volumeOnIcon;
 	public GameObject volumeOffIcon;
+	[SerializeField] private bool DebugRoundOn;
 
 	// Use this for initialization
 	void Start () {
@@ -34,8 +35,10 @@ public class MainMenuManager : MonoBehaviour {
 
 		//GameLogData.chronologicalLogs.Add ("StartGame: " + LogManager.instance.UniEndTime ());
 		LogManager.instance.logger.sendChronologicalMenuLogs("StartGame", LogManager.instance.UniEndTime().ToString());
-
-		SceneManager.LoadScene ("debug");
+		if(DebugRoundOn)
+			SceneManager.LoadScene("debug");
+		else
+			SceneManager.LoadScene("Level 1");
 		// SceneManager.LoadScene ("LevelTemplate");
 	}
 

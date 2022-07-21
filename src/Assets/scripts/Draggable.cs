@@ -297,8 +297,6 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		else
 		{
 
-			LogManager.chronoInputCount++;
-			LogManager.instance.logger.sendChronologicalLogs("Put_" + LogManager.chronoInputCount + this.GetComponentInChildren<Text>().text, "", LogManager.instance.UniEndTime().ToString());
 			//new parent is inside an if statement or a look
 			if (this.transform.parent.name == "DropArea")
 			{

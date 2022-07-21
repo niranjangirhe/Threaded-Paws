@@ -35,12 +35,19 @@ public class LevelInstructionsManager : MonoBehaviour
 
     public void skipInstructions()
     {
-        LogManager.instance.logger.sendChronologicalLogs("StartLevel03", "", LogManager.instance.UniEndTime().ToString());
+        try
+        {
+            LogManager.instance.logger.sendChronologicalLogs("StartLevel03", "", LogManager.instance.UniEndTime().ToString());
+        }
+        catch
+        {
 
+        }
         level3_part1.SetActive(false);
-        level3_part2.SetActive(false);
+            level3_part2.SetActive(false);
 
-        level2_activateAllFunctionality();
+            level2_activateAllFunctionality();
+       
     }
 
     void Start()
