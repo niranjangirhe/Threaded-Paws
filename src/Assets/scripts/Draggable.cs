@@ -96,32 +96,6 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
                 catch { }
 			}
 			
-
-			t.tabDropArea.GetComponent<Image>().color = Color.green;
-			Transform[] threadChildren = new Transform[t.tabDropArea.transform.childCount];
-			for (int i = 0; i < threadChildren.Length; i++)
-			{
-				//threadChildren [i] = this.transform.Find("DropAreaThread").GetChild (i).gameObject;
-				threadChildren[i] = t.tabDropArea.transform.GetChild(i);
-				//Debug.Log ( timer.GetCurrentTime() + " -> " + threadChildren [i]);
-
-				try
-				{
-
-					//Debug.Log (thread1Children [i].name + ", DropZone Type: " + thread1Children [i].GetComponentInChildren<DropZone>().typeOfArea);
-					if ((threadChildren[i].gameObject.GetComponentInChildren<DropZone>().typeOfArea == this.typeOfItem) ||
-						(threadChildren[i].gameObject.GetComponentInChildren<DropZone>().typeOfArea == Type.ALL))
-					{
-
-						string zoneName = threadChildren[i].gameObject.GetComponentInChildren<DropZone>().name;
-						//Debug.Log("Theres a dropzone!: " + zoneName);
-						threadChildren[i].Find(zoneName).GetComponent<Image>().color = Color.green;
-					}
-
-				}
-				catch { }
-
-			}
 		}
 	}
 
@@ -239,25 +213,6 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 		foreach (Thread t in GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>().threads)
 		{
-			t.tabDropArea.GetComponent<Image>().color = Color.green;
-			Transform[] threadChildren = new Transform[t.tabDropArea.transform.childCount];
-			for (int i = 0; i < threadChildren.Length; i++)
-			{
-				try
-				{
-					threadChildren[i] = t.tabDropArea.transform.GetChild(i);
-					if ((threadChildren[i].gameObject.GetComponentInChildren<DropZone>().typeOfArea == this.typeOfItem) ||
-						(threadChildren[i].gameObject.GetComponentInChildren<DropZone>().typeOfArea == Type.ALL))
-					{
-						string zoneName = threadChildren[i].gameObject.GetComponentInChildren<DropZone>().name;
-						//Debug.Log ("De-colouring: " + thread1Children [i].gameObject.GetComponentInChildren<DropZone> ().name);
-
-						threadChildren[i].Find(zoneName).GetComponent<Image>().color = Color.white;
-					}
-
-				}
-				catch { }
-			}
 			t.tabDropArea.transform.GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1);
 		}
 

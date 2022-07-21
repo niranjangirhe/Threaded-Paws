@@ -51,10 +51,12 @@ public class ToolBox : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoint
 	}
 	public void OnPointerEnter()
     {
+		Debug.Log("in");
 		onToolBox = true;
     }
 	public void OnPointerExit()
 	{
+		Debug.Log("out");
 		onToolBox = false;
 	}
 }

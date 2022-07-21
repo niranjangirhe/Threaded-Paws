@@ -50,11 +50,9 @@ public class MainMenuManager : MonoBehaviour {
 		Application.Quit ();
 	}
 
-	public void getInstructions () {
+	public void continueLevel() {
 		//GameLogData.chronologicalLogs.Add ("InstructionBtn: " + LogManager.instance.UniEndTime ());
-		LogManager.instance.logger.sendChronologicalMenuLogs("InstructionBtn", LogManager.instance.UniEndTime().ToString());
-
-		SceneManager.LoadScene ("Instructions");
+		SceneManager.LoadScene ("Level Map");
 	}
 
 	public void getCredits () {
