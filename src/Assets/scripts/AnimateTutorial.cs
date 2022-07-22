@@ -1,24 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AnimateTutorial : MonoBehaviour
 {
-    public Animator animator;
+    [SerializeField] private Animator exeAnimator;
+    [SerializeField] private Animator inAnimator;
+    [SerializeField] private AnimationClip exeAnim;
+    [SerializeField] private AnimationClip inAnim;
+    [SerializeField] private GameObject exeObj;
+    [SerializeField] private GameObject inObj;
+
+
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(Animate("ForeGroundMover", 2f));
+        StartCoroutine(AnimateS1(0f));
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    IEnumerator Animate(string name, float sec)
+   
+    IEnumerator AnimateS1(float sec)
     {
         yield return new WaitForSeconds(sec);
-        animator.Play(name);
+        exeObj.SetActive(true);
+        inObj.SetActive(false);
+        exeAnimator.Play("ForeGroundMover");
+        StartCoroutine(AnimateS2(exeAnim.length));
+    }
+    IEnumerator AnimateS2(float sec)
+    {
+        yield return new WaitForSeconds(sec);
+        inObj.SetActive(true);
+        exeObj.SetActive(false);
+        inAnimator.Play("Interior");
+        StartCoroutine(LoadScene(inAnim.length));
+    }
+    IEnumerator LoadScene(float sec)
+    {
+        yield return new WaitForSeconds(sec);
+        SceneManager.LoadScene("Level 1");
     }
 }

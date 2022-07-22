@@ -38,7 +38,7 @@ public class MainMenuManager : MonoBehaviour {
 		if(DebugRoundOn)
 			SceneManager.LoadScene("debug");
 		else
-			SceneManager.LoadScene("Level 1");
+			SceneManager.LoadScene("Tutorial");
 		// SceneManager.LoadScene ("LevelTemplate");
 	}
 
