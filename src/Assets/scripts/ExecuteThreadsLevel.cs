@@ -342,6 +342,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
             labeltemp.transform.GetChild(0).GetComponent<SwitchTab>().totalCount = threads.Count;
             labeltemp.name = "Label" + count.ToString();
             labeltemp.transform.GetChild(0).GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = t.workerName;
+            labeltemp.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
             labeltemp.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = t.workerSprite;
 
             t.tabDropArea = tabtemp.transform.GetChild(0).GetChild(0).GetChild(1).gameObject;
@@ -401,6 +402,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         GameObject.Find("Label0").transform.GetChild(0).Find("Text (TMP)").gameObject.SetActive(true);
         GameObject.Find("Label0").GetComponent<LayoutElement>().preferredWidth = 1000;
         GameObject.Find("Canvas").transform.Find("AgendaPanel").gameObject.SetActive(false);
+        GameObject.Find("Label0").transform.GetChild(0).Find("Text (TMP)").gameObject.SetActive(true);
 
 
         //Disable SimIcons till execute
