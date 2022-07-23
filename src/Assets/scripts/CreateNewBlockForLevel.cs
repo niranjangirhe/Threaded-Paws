@@ -19,7 +19,10 @@ public class CreateNewBlockForLevel : MonoBehaviour
             int childCount = gameObject.transform.parent.GetChild(i).childCount;
             for (int j = childCount - 1; j >= 0; j--)
             {
-                if (gameObject.transform.parent.GetChild(i).GetChild(j).name.Equals(gameObject.transform.parent.GetChild(i).name))
+                string myName = gameObject.name;
+                string parentName = gameObject.transform.parent.GetChild(i).name;
+                string childName = gameObject.transform.parent.GetChild(i).GetChild(j).name;
+                if (parentName.Equals(childName) && !childName.Equals(myName))
                 {
                     Destroy(gameObject.transform.parent.GetChild(i).GetChild(j).gameObject);
                 }
@@ -30,9 +33,21 @@ public class CreateNewBlockForLevel : MonoBehaviour
     }
     void MakeMyClone()
     {
-        GameObject Temp = Instantiate(clone,gameObject.transform);
-        Temp.name = gameObject.name;
-        Temp.transform.GetChild(0).GetComponent<Text>().text = gameObject.transform.GetChild(0).GetComponent<Text>().text;
-        Temp.transform.SetParent(gameObject.transform);
+        bool shouldCreate = true;
+        int childCount = gameObject.transform.childCount;
+        for(int i=0;i<childCount;i++)
+        {
+            if(gameObject.transform.GetChild(i).name.Equals(gameObject.name))
+            {
+                shouldCreate = false;
+            }
+        }
+        if (shouldCreate)
+        {
+            GameObject Temp = Instantiate(clone, gameObject.transform);
+            Temp.name = gameObject.name;
+            Temp.transform.GetChild(0).GetComponent<Text>().text = gameObject.transform.GetChild(0).GetComponent<Text>().text;
+            Temp.transform.SetParent(gameObject.transform);
+        }
     }
 }
