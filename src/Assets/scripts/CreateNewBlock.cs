@@ -36,12 +36,24 @@ public class CreateNewBlock : MonoBehaviour {
 
 
             DeleteOtherClone();
-            GameObject newActionBox = (GameObject)Instantiate(prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
-            newActionBox.name = this.transform.name;
-            newActionBox.transform.SetParent(this.transform);
-            newActionBox.transform.localScale = Vector3.one;
-            newActionBox.transform.GetChild(0).GetComponentInChildren<Text>().text = this.GetComponentInChildren<Text>().text;
-            newActionBox.transform.localScale = new Vector3(1.05f, 1.05f, 1.05f);
+            bool shouldCreate = true;
+            int childCount = gameObject.transform.childCount;
+            for (int i = 0; i < childCount; i++)
+            {
+                if (gameObject.transform.GetChild(i).name.Equals(gameObject.name))
+                {
+                    shouldCreate = false;
+                }
+            }
+            if (shouldCreate)
+            {
+                GameObject newActionBox = (GameObject)Instantiate(prefab, transform.position, transform.rotation); //typically returns an Object (not GameObject)
+                newActionBox.name = this.transform.name;
+                newActionBox.transform.SetParent(this.transform);
+                newActionBox.transform.localScale = Vector3.one;
+                newActionBox.transform.GetChild(0).GetComponentInChildren<Text>().text = this.GetComponentInChildren<Text>().text;
+                newActionBox.transform.localScale = new Vector3(1.05f, 1.05f, 1.05f);
+            }
         }
         
 
@@ -64,11 +76,13 @@ public class CreateNewBlock : MonoBehaviour {
             int childCount = gameObject.transform.parent.GetChild(i).childCount;
             for (int j = childCount - 1; j >= 0; j--)
             {
-                if (gameObject.transform.parent.GetChild(i).GetChild(j).name.Equals(gameObject.transform.parent.GetChild(i).name))
+                string myName = gameObject.name;
+                string parentName = gameObject.transform.parent.GetChild(i).name;
+                string childName = gameObject.transform.parent.GetChild(i).GetChild(j).name;
+                if (parentName.Equals(childName) && !childName.Equals(myName))
                 {
                     Destroy(gameObject.transform.parent.GetChild(i).GetChild(j).gameObject);
                 }
-
             }
 
         }
