@@ -29,7 +29,7 @@ public class ToolboxManager : MonoBehaviour {
 
 
 	public void getMainMenu () {
-		LogManager.instance.logger.sendChronologicalLogs("MainMenuBtn", "", LogManager.instance.UniEndTime().ToString());
+		//LogManager.instance.logger.sendChronologicalLogs("MainMenuBtn", "", LogManager.instance.UniEndTime().ToString());
 
 		SceneManager.LoadScene ("MainMenu");
 	}
