@@ -52,7 +52,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
     // ---- Simulation ----
     [SerializeField] private int timeout;
     [SerializeField] private int NoOfTestCase;
-  
+
 
 
     // ----- Prefab ------
@@ -63,7 +63,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
 
 
-   
+
 
 
     // ------- Tool box value text object--------
@@ -114,19 +114,19 @@ public class ExecuteThreadsLevel : MonoBehaviour
     public void updateValues(int index)
     {
 
-        txt_checkinLeft_thread.text = "x " + threads[index].toolBoxValues.CheckInBox;
-        txt_cutLeft_thread.text = "x " + threads[index].toolBoxValues.CutBox;
-        txt_washLeft_thread.text = "x " + threads[index].toolBoxValues.WashBox;
-        txt_dryLeft_thread.text = "x " + threads[index].toolBoxValues.DryBox;
-        txt_resourcesLeft_thread.text = "x " + threads[index].toolBoxValues.ResourceBox;
-        txt_checkoutLeft_thread.text = "x " + threads[index].toolBoxValues.CheckOutBox;
-        txt_returnLeft_thread.text = "x " + threads[index].toolBoxValues.ReturnBox;
-        txt_groomLeft_thread.text = "x " + threads[index].toolBoxValues.BrushBox;
+        try { txt_checkinLeft_thread.text = "x " + threads[index].toolBoxValues.CheckInBox; } catch { }
+        try { txt_cutLeft_thread.text = "x " + threads[index].toolBoxValues.CutBox; } catch { }
+        try { txt_washLeft_thread.text = "x " + threads[index].toolBoxValues.WashBox; } catch { }
+        try { txt_dryLeft_thread.text = "x " + threads[index].toolBoxValues.DryBox; } catch { }
+        try { txt_resourcesLeft_thread.text = "x " + threads[index].toolBoxValues.ResourceBox; } catch { }
+        try { txt_checkoutLeft_thread.text = "x " + threads[index].toolBoxValues.CheckOutBox; } catch { }
+        try { txt_returnLeft_thread.text = "x " + threads[index].toolBoxValues.ReturnBox; } catch { }
+        try { txt_groomLeft_thread.text = "x " + threads[index].toolBoxValues.BrushBox; } catch { }
         if (isDataRace)
         {
-            txt_readLeft_thread.text = "x " + threads[index].toolBoxValues.ReadBox;
-            txt_writeLeft_thread.text = "x " + threads[index].toolBoxValues.WriteBox;
-            txt_calculateLeft_thread.text = "x " + threads[index].toolBoxValues.CalculateBox;
+            try { txt_readLeft_thread.text = "x " + threads[index].toolBoxValues.ReadBox; } catch { }
+            try { txt_writeLeft_thread.text = "x " + threads[index].toolBoxValues.WriteBox; } catch { }
+            try { txt_calculateLeft_thread.text = "x " + threads[index].toolBoxValues.CalculateBox; } catch { }
         }
 
         System.Reflection.FieldInfo[] boxList = threads[index].toolBoxValues.GetType().GetFields();
@@ -186,7 +186,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         radialBar = GameObject.Find("RadialProgressBar");
         bar = radialBar.GetComponent<ProgressBar>();
 
-        
+
 
 
 
@@ -226,20 +226,28 @@ public class ExecuteThreadsLevel : MonoBehaviour
     public void Awake()
     {
         //---- Assign Text feilds ----
-        txt_checkinLeft_thread = GameObject.Find("CheckInLeft1").GetComponent<Text>();
-        txt_cutLeft_thread = GameObject.Find("CutLeft1").GetComponent<Text>();
-        txt_dryLeft_thread = GameObject.Find("DryLeft1").GetComponent<Text>();
-        txt_washLeft_thread = GameObject.Find("WashLeft1").GetComponent<Text>();
-        txt_resourcesLeft_thread = GameObject.Find("ResourceLeft1").GetComponent<Text>();
-        txt_checkoutLeft_thread = GameObject.Find("CheckOutLeft1").GetComponent<Text>();
-        txt_returnLeft_thread = GameObject.Find("ReturnLeft1").GetComponent<Text>();
-        txt_groomLeft_thread = GameObject.Find("GroomLeft1").GetComponent<Text>();
-        txt_readLeft_thread = GameObject.Find("ReadLeft1").GetComponent<Text>();
-        txt_writeLeft_thread = GameObject.Find("WriteLeft1").GetComponent<Text>();
-        txt_calculateLeft_thread = GameObject.Find("CalculateLeft1").GetComponent<Text>();
-        stepsIndicator = GameObject.Find("stepsIndicator").GetComponent<Text>();
-        amountText = GameObject.Find("Cash").GetComponent<Text>();
-    
+        try { txt_checkinLeft_thread = GameObject.Find("CheckInLeft1").GetComponent<Text>(); } catch { }
+        try { txt_cutLeft_thread = GameObject.Find("CutLeft1").GetComponent<Text>(); } catch { }
+        try { txt_dryLeft_thread = GameObject.Find("DryLeft1").GetComponent<Text>(); } catch { }
+        try { txt_washLeft_thread = GameObject.Find("WashLeft1").GetComponent<Text>(); } catch { }
+        try { txt_resourcesLeft_thread = GameObject.Find("ResourceLeft1").GetComponent<Text>(); } catch { }
+        try { txt_checkoutLeft_thread = GameObject.Find("CheckOutLeft1").GetComponent<Text>(); } catch { }
+        try { txt_returnLeft_thread = GameObject.Find("ReturnLeft1").GetComponent<Text>(); } catch { }
+        try { txt_groomLeft_thread = GameObject.Find("GroomLeft1").GetComponent<Text>(); } catch { }
+        try { txt_readLeft_thread = GameObject.Find("ReadLeft1").GetComponent<Text>(); } catch { }
+        try { txt_writeLeft_thread = GameObject.Find("WriteLeft1").GetComponent<Text>(); } catch { }
+        try { txt_calculateLeft_thread = GameObject.Find("CalculateLeft1").GetComponent<Text>(); } catch { }
+        try
+        {
+            stepsIndicator = GameObject.Find("stepsIndicator").GetComponent<Text>();
+        }
+        catch { }
+        try
+        {
+            amountText = GameObject.Find("Cash").GetComponent<Text>();
+        }
+        catch { }
+
 
         //---- Assign Buttons ------
         playButton = GameObject.Find("PlayButton");
@@ -307,8 +315,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
         Transform agendaParent = GameObject.Find("AgendaParent").transform;
         Transform agendaTickParent = GameObject.Find("AgendaTickParent").transform;
         Transform boardParent = GameObject.Find("boardParent").transform;
-        
-        
+
+
         iconPanel = GameObject.Find("IconPanel").transform;
         scrollRect = GameObject.Find("Simulation").transform.Find("ScrollRect").gameObject;
 
@@ -392,7 +400,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
             }
 
 
-            
+
 
             count++;
         }
@@ -407,7 +415,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
         //Disable SimIcons till execute
         iconPanel.gameObject.SetActive(false);
-        
+
     }
 
     private float GetSimSpeed(GameObject slider)
@@ -456,14 +464,14 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
         //-------- Reseting previous Sim --------
         //General Variables
-        
+
         ResetThreads();
         foreach (Thread t in threads)
         {
             //Gettings block from FE
             t.blocks = GetActionBlocks(t.tabDropArea);
             t.simBlocks = new List<SimBlock>();
-            t.simulationImages = new List<GameObject>();     
+            t.simulationImages = new List<GameObject>();
         }
 
         //------------- Extract block sequence from FE ---------
@@ -572,7 +580,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
 
                         }
-                        else if(action == "read")
+                        else if (action == "read")
                         {
                             newItem = Instantiate(cashActionsSimPrefab) as GameObject;
                             t.simBlocks.Add(new SimBlock(SimBlock.READ, action));
@@ -1204,7 +1212,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                     bool isIdle = (idleInt < idleMomentPercent) && t.currIndex != 0;
                     idlelist.Add(isIdle);
                     if (!isIdle)
-                    { 
+                    {
                         try
                         {
                             //------------ Acquire -------------
@@ -1327,12 +1335,12 @@ public class ExecuteThreadsLevel : MonoBehaviour
                             {
                                 //Perform Read
                                 if (MeNotSomeOneHas("cash reg.", t))
-                                    t.canPrint=false;
+                                    t.canPrint = false;
                                 else
                                 {
                                     t.canPrint = true;
                                     t.amountVar = amount;
-                                }                                
+                                }
                             }
                             else if (t.simBlocks[t.currIndex].type == SimBlock.CAL)
                             {
@@ -1343,7 +1351,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                 {
                                     t.canPrint = true;
                                     t.CalculateCost();
-                                } 
+                                }
                             }
                             else if (t.simBlocks[t.currIndex].type == SimBlock.WRITE)
                             {
@@ -1368,7 +1376,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                 j++; // increment step
             }
         }
-        if(!lost && isDataRace && amount!=finalamount)
+        if (!lost && isDataRace && amount != finalamount)
         {
             //Send Lost game Posibility
             exeData.timedout = true;

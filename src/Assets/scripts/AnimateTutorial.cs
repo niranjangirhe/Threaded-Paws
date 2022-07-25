@@ -16,6 +16,7 @@ public class AnimateTutorial : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SceneManager.LoadScene("debug 1");
         StartCoroutine(AnimateS1(0f));
     }
 
@@ -26,8 +27,8 @@ public class AnimateTutorial : MonoBehaviour
         exeObj.SetActive(true);
         inObj.SetActive(false);
         exeAnimator.Play("ForeGroundMover");
-        //StartCoroutine(AnimateS2(exeAnim.length));
-        StartCoroutine(LoadScene(exeAnim.length));
+        StartCoroutine(AnimateS2(exeAnim.length));
+        //StartCoroutine(LoadScene(exeAnim.length));
     }
     IEnumerator AnimateS2(float sec)
     {
