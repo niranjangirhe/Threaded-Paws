@@ -11,6 +11,8 @@ using TMPro;
 public class ExecuteThreadsLevel : MonoBehaviour
 {
     [SerializeField] private int levelNo;
+    [SerializeField] private bool isTutorial;
+
     public class ExeData
     {
         public List<List<int>> sequence = new List<List<int>>();
@@ -628,13 +630,13 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
             try
             {
-                if (t.simBlocks[0].type != SimBlock.CHECKIN)
+                if (t.simBlocks[0].type != SimBlock.CHECKIN && !isTutorial)
                 {
                     manager.showError(t.workerName + " has not check-in the customer");
                     terminateSimulation(t.workerName + " has not check-in the customer");
                     return;
                 }
-                if (t.simBlocks[t.simBlocks.Count - 1].type != SimBlock.CHECKOUT)
+                if (t.simBlocks[t.simBlocks.Count - 1].type != SimBlock.CHECKOUT && !isTutorial)
                 {
                     manager.showError(t.workerName + " has not check-out the customer");
                     terminateSimulation(t.workerName + " has not check-out the customer");

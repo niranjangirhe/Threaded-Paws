@@ -16,7 +16,7 @@ public class AnimateTutorial : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SceneManager.LoadScene("debug 1");
+        //SceneManager.LoadScene("debug 1");
         StartCoroutine(AnimateS1(0f));
     }
 
