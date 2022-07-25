@@ -26,8 +26,8 @@ public class AnimateTutorial : MonoBehaviour
         exeObj.SetActive(true);
         inObj.SetActive(false);
         exeAnimator.Play("ForeGroundMover");
-        //StartCoroutine(AnimateS2(exeAnim.length));
-        StartCoroutine(LoadScene(exeAnim.length));
+        StartCoroutine(AnimateS2(exeAnim.length));
+        //StartCoroutine(LoadScene(exeAnim.length));
     }
     IEnumerator AnimateS2(float sec)
     {
