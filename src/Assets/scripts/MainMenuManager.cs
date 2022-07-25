@@ -57,7 +57,7 @@ public class MainMenuManager : MonoBehaviour {
 
 	public void getCredits () {
 		//GameLogData.chronologicalLogs.Add ("CreditBtn: " + LogManager.instance.UniEndTime ());
-		Debug.Log("Testing");
+		//Debug.Log("Testing");
 		LogManager.instance.logger.sendChronologicalMenuLogs("CreditBtn", LogManager.instance.UniEndTime().ToString());
 
 		SceneManager.LoadScene ("Credits");
