@@ -76,10 +76,21 @@ public class ExecuteThreadsLevel : MonoBehaviour
     private Text txt_resourcesLeft_thread;
     private Text txt_checkoutLeft_thread;
     private Text txt_returnLeft_thread;
-    private Text txt_groomLeft_thread;
+    private Text txt_brushLeft_thread;
     private Text txt_readLeft_thread;
     private Text txt_writeLeft_thread;
     private Text txt_calculateLeft_thread;
+    private GameObject CheckInBox;
+    private GameObject CutBox;
+    private GameObject DryBox;
+    private GameObject WashBox;
+    private GameObject ResourceBox;
+    private GameObject CheckOutBox;
+    private GameObject ReturnBox;
+    private GameObject BrushBox;
+    private GameObject ReadBox;
+    private GameObject WriteBox;
+    private GameObject CalculateBox;
 
 
 
@@ -123,13 +134,11 @@ public class ExecuteThreadsLevel : MonoBehaviour
         try { txt_resourcesLeft_thread.text = "x " + threads[index].toolBoxValues.ResourceBox; } catch { }
         try { txt_checkoutLeft_thread.text = "x " + threads[index].toolBoxValues.CheckOutBox; } catch { }
         try { txt_returnLeft_thread.text = "x " + threads[index].toolBoxValues.ReturnBox; } catch { }
-        try { txt_groomLeft_thread.text = "x " + threads[index].toolBoxValues.BrushBox; } catch { }
-        if (isDataRace)
-        {
-            try { txt_readLeft_thread.text = "x " + threads[index].toolBoxValues.ReadBox; } catch { }
-            try { txt_writeLeft_thread.text = "x " + threads[index].toolBoxValues.WriteBox; } catch { }
-            try { txt_calculateLeft_thread.text = "x " + threads[index].toolBoxValues.CalculateBox; } catch { }
-        }
+        try { txt_brushLeft_thread.text = "x " + threads[index].toolBoxValues.BrushBox; } catch { }
+        try { txt_readLeft_thread.text = "x " + threads[index].toolBoxValues.ReadBox; } catch { }
+        try { txt_writeLeft_thread.text = "x " + threads[index].toolBoxValues.WriteBox; } catch { }
+        try { txt_calculateLeft_thread.text = "x " + threads[index].toolBoxValues.CalculateBox; } catch { }
+        
 
         System.Reflection.FieldInfo[] boxList = threads[index].toolBoxValues.GetType().GetFields();
         foreach (System.Reflection.FieldInfo bl in boxList)
@@ -138,14 +147,34 @@ public class ExecuteThreadsLevel : MonoBehaviour
             {
                 if ((int)bl.GetValue(threads[index].toolBoxValues) == 0)
                 {
-                    GameObject.Find(bl.Name).GetComponent<CanvasGroup>().alpha = 0.5f;
+                    DisableBlock(bl.Name, false);
+
+
                 }
                 else
                 {
-                    GameObject.Find(bl.Name).GetComponent<CanvasGroup>().alpha = 1;
+                    DisableBlock(bl.Name, true);
                 }
             }
             catch { }
+        }
+    }
+    void DisableBlock(string name, bool b)
+    {
+        switch (name)
+        {
+           
+            case "CheckInBox": CheckInBox.SetActive(b); txt_checkinLeft_thread.gameObject.SetActive(b); break;
+            case "CutBox": CutBox.SetActive(b); txt_cutLeft_thread.gameObject.SetActive(b); break;
+            case "DryBox": DryBox.SetActive(b); txt_dryLeft_thread.gameObject.SetActive(b); break;
+            case "WashBox": WashBox.SetActive(b); txt_washLeft_thread.gameObject.SetActive(b); break;
+            case "ResourceBox": ResourceBox.SetActive(b); txt_resourcesLeft_thread.gameObject.SetActive(b); break;
+            case "CheckOutBox": CheckOutBox.SetActive(b); txt_checkoutLeft_thread.gameObject.SetActive(b); break;
+            case "ReturnBox": ReturnBox.SetActive(b); txt_returnLeft_thread.gameObject.SetActive(b); break;
+            case "WriteBox": WriteBox.SetActive(b); txt_writeLeft_thread.gameObject.SetActive(b); break;
+            case "ReadBox": ReadBox.SetActive(b); txt_readLeft_thread.gameObject.SetActive(b); break;
+             case "BrushBox": BrushBox.SetActive(b); txt_brushLeft_thread.gameObject.SetActive(b); break;
+            case "CalculateBox": CalculateBox.SetActive(b); txt_calculateLeft_thread.gameObject.SetActive(b); break;
         }
     }
     void Start()
@@ -235,10 +264,21 @@ public class ExecuteThreadsLevel : MonoBehaviour
         try { txt_resourcesLeft_thread = GameObject.Find("ResourceLeft1").GetComponent<Text>(); } catch { }
         try { txt_checkoutLeft_thread = GameObject.Find("CheckOutLeft1").GetComponent<Text>(); } catch { }
         try { txt_returnLeft_thread = GameObject.Find("ReturnLeft1").GetComponent<Text>(); } catch { }
-        try { txt_groomLeft_thread = GameObject.Find("GroomLeft1").GetComponent<Text>(); } catch { }
+        try { txt_brushLeft_thread = GameObject.Find("BrushLeft1").GetComponent<Text>(); } catch { }
         try { txt_readLeft_thread = GameObject.Find("ReadLeft1").GetComponent<Text>(); } catch { }
         try { txt_writeLeft_thread = GameObject.Find("WriteLeft1").GetComponent<Text>(); } catch { }
         try { txt_calculateLeft_thread = GameObject.Find("CalculateLeft1").GetComponent<Text>(); } catch { }
+        try { CheckInBox = GameObject.Find("CheckInBox"); } catch { }
+        try { CutBox = GameObject.Find("CutBox"); } catch { }
+        try { DryBox = GameObject.Find("DryBox"); } catch { }
+        try { WashBox = GameObject.Find("WashBox"); } catch { }
+        try { ResourceBox = GameObject.Find("ResourceBox"); } catch { }
+        try { CheckOutBox = GameObject.Find("CheckOutBox"); } catch { }
+        try { ReturnBox = GameObject.Find("ReturnBox"); } catch { }
+        try { BrushBox = GameObject.Find("BrushBox"); } catch { }
+        try { ReadBox = GameObject.Find("ReadBox"); } catch { }
+        try { WriteBox = GameObject.Find("WriteBox"); } catch { }
+        try { CalculateBox = GameObject.Find("CalculateBox"); } catch { }
         try
         {
             stepsIndicator = GameObject.Find("stepsIndicator").GetComponent<Text>();
