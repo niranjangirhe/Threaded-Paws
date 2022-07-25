@@ -6,11 +6,12 @@ public class ToolBox : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoint
 
     public Draggable.Type typeOfArea = Draggable.Type.INVENTORY;
     public static bool onToolBox;
+    
     //usually only triggered for the mouse pointer only
     public void OnPointerEnter(PointerEventData eventData)
     {
         //Debug.Log ("OnPointerEnter to " + gameObject.name);
-
+        onToolBox = true;
         if (eventData.pointerDrag == null)
             return; //nothing is being dragged
 
@@ -28,7 +29,7 @@ public class ToolBox : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoint
     public void OnPointerExit(PointerEventData eventData)
     {
         //Debug.Log ("OnPointerExit to " + gameObject.name);
-
+        onToolBox = false;
         if (eventData.pointerDrag == null)
             return; //nothing is being dragged
 
@@ -56,15 +57,5 @@ public class ToolBox : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoint
                 d.parentToReturnTo = this.transform;
             }
         }
-    }
-    public void OnPointerEnter()
-    {
-        Debug.Log("in");
-        onToolBox = true;
-    }
-    public void OnPointerExit()
-    {
-        Debug.Log("out");
-        onToolBox = false;
     }
 }

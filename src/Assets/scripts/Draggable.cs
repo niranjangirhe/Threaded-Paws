@@ -15,6 +15,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	// GameObject threadArea;
 	GameObject canvas;
 	GameObject toolbox;
+	[SerializeField] private GameObject bin;
+	private float bin_alpha = 0.5f;
 
 	private AudioSource audioSource;
 	private AudioClip select, drop;
@@ -34,6 +36,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
+		setBin(true);
 		audioSource.clip = select;
 		audioSource.Play();
 		if (isFrom == TOOLBOX)
@@ -182,6 +185,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	public void OnEndDrag(PointerEventData eventData)
 	{
 		//to fix toolbox scrolling
+		setBin(false);
 		for (int i = 0; i < toolValueParentChildCount; i++)
 		{
 			try
@@ -221,7 +225,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 
 
-		if (this.transform.parent.name == "DropAreaTools")
+		if (this.transform.parent.name == "Bin")
 		{
 			Debug.Log("Dropped in the toolbox");
 
@@ -310,8 +314,23 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 		canvas = GameObject.Find("Canvas");
 		toolbox = GameObject.Find("DropAreaTools");
+		bin = GameObject.Find("Bin");
+		setBin(false);
 	}
-
+	void setBin(bool b)
+    {
+		
+		if(b)
+        {
+			bin.transform.SetAsLastSibling();
+			bin.GetComponent<CanvasGroup>().alpha = bin_alpha;
+		}
+		else
+        {
+			bin.transform.SetAsFirstSibling();
+			bin.GetComponent<CanvasGroup>().alpha = 0;
+		}
+    }
 	public void OnPointerExit(PointerEventData eventData)
 	{
 		if (gameObject.name == transform.parent.name)
