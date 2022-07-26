@@ -119,8 +119,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
     bool lost;
 
 
-    string returnErrMsg = "> ERROR: You are trying to return a resource you don't have.";
-    string acquireErrMsg = "> ERROR: You are trying to acquire a resource you already have.";
+    string returnErrMsg = "> ERROR: You are trying to return a tool you don't have.";
+    string acquireErrMsg = "> ERROR: You are trying to acquire a tool you already have.";
 
 
 
@@ -473,7 +473,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         }
 
         //-------- UI Updates and Logging --------
-        LogManager.instance.logger.sendChronologicalLogs("RunLevel03Thread", "", LogManager.instance.UniEndTime().ToString());
+        LogManager.instance.logger.sendChronologicalLogs("RunLevel"+levelNo+" Thread", "", LogManager.instance.UniEndTime().ToString());
         scrollToTop();
         scrollToLeft();
         scrollToRight();
@@ -672,14 +672,14 @@ public class ExecuteThreadsLevel : MonoBehaviour
             {
                 if (t.simBlocks[0].type != SimBlock.CHECKIN && !isTutorial)
                 {
-                    manager.showError(t.workerName + " has not check-in the customer");
-                    terminateSimulation(t.workerName + " has not check-in the customer");
+                    manager.showError(t.workerName + " has not checked in the customer correctly, place check-in block at the first position.");
+                    terminateSimulation(t.workerName + " has not checked in the customer correctly, place check-in block at the first position.");
                     return;
                 }
                 if (t.simBlocks[t.simBlocks.Count - 1].type != SimBlock.CHECKOUT && !isTutorial)
                 {
-                    manager.showError(t.workerName + " has not check-out the customer");
-                    terminateSimulation(t.workerName + " has not check-out the customer");
+                    manager.showError(t.workerName + " has not checked out correctly, place check-out block at the last position.");
+                    terminateSimulation(t.workerName + " has not checked out correctly, place check-out block at the last position.");
                     return;
                 }
             }
@@ -793,7 +793,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
             else
             {
 
-                LogManager.instance.logger.sendChronologicalLogs("Level03Lost", "", LogManager.instance.UniEndTime().ToString());
+                LogManager.instance.logger.sendChronologicalLogs("Level "+levelNo+" Lost", "", LogManager.instance.UniEndTime().ToString());
                 manager.gameLost();
                 GameObject.Find("LostEndMsg").GetComponent<Text>().text = "Time is up! The day is over.";
                 GameObject.Find("accuracy").GetComponent<Text>().text = "Accuracy: " + (100 * testcase / NoOfTestCase) + "%";
@@ -979,7 +979,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                                             t.simulationImages[t.currIndex].transform.SetParent(t.layoutPanel.transform);
                                             t.simulationImages[t.currIndex].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
-                                            resError("> ERROR: You need to return all the resources you acquired before checking out.", t.layoutPanel);
+                                            resError("> ERROR: You need to return all the tools you acquired before checking out.", t.layoutPanel);
                                             t.audioSource.clip = Resources.Load<AudioClip>("audio/error");
                                             t.audioSource.Play();
                                             scrollToBottom();
@@ -1141,9 +1141,9 @@ public class ExecuteThreadsLevel : MonoBehaviour
         Debug.Log("FinalAmount" + finalamount);
         if (isDataRace && !lost && finalamount != amount)
         {
-            LogManager.instance.logger.sendChronologicalLogs("Level03Lost", "", LogManager.instance.UniEndTime().ToString());
+            LogManager.instance.logger.sendChronologicalLogs("Level "+levelNo+" Lost", "", LogManager.instance.UniEndTime().ToString());
             manager.gameLost();
-            GameObject.Find("LostEndMsg").GetComponent<Text>().text = "Error is Accounting";
+            GameObject.Find("LostEndMsg").GetComponent<Text>().text = "There is an accounting error.";
             GameObject.Find("accuracy").GetComponent<Text>().text = "Accuracy: " + (100 * testcase / NoOfTestCase) + "%";
 
             audioSource.clip = gameoverClip;
@@ -1167,7 +1167,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
         if (!lost)
         {
-            LogManager.instance.logger.sendChronologicalLogs("Level03Won", "", LogManager.instance.UniEndTime().ToString());
+            LogManager.instance.logger.sendChronologicalLogs("Level "+ levelNo +" Won", "", LogManager.instance.UniEndTime().ToString());
             manager.gameWon();
 
             //report winning
