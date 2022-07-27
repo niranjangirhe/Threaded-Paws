@@ -73,7 +73,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 		//save old parent
 		//parentToReturnTo = this.transform.parent;
-		parentToReturnTo = toolbox.transform;
+		parentToReturnTo = bin.transform;
 
 		//make sure it defaults to old parent
 		placeholderParent = parentToReturnTo;
@@ -104,6 +104,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 	public void OnDrag(PointerEventData eventData)
 	{
+		
 		//physically move the card
 		this.transform.position = eventData.position;
 
@@ -125,13 +126,6 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 				t.tabDropArea.GetComponent<Image>().color = new Vector4(0.9F, 0.9F, 0.9F, 1);
 			}
 		}
-		else if(!ToolBox.onToolBox)
-        {
-			foreach (Thread t in GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>().threads)
-			{
-				t.tabDropArea.GetComponent<Image>().color = Color.green;
-			}
-		}
 
 
 
@@ -140,6 +134,14 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		// do not shift items in the toolbox
 		if ((parentToReturnTo.transform.name != toolbox.transform.name) && (placeholder.transform.parent.name != toolbox.transform.name) && (placeholderParent.transform.name != toolbox.transform.name))
 		{
+			foreach (Thread t in GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>().threads)
+			{
+				if (placeholderParent!=bin.transform)
+				{
+					t.tabDropArea.GetComponent<Image>().color = Color.green;
+					isFrom = THREAD;
+				}
+			}
 
 			//Debug.Log ("SHIFTING!! \n\ntoolbox.transform.name: " + toolbox.transform.name + "\nparentToReturnTo: " + parentToReturnTo + "\nplaceholder.transform.parent.name:  " + placeholder.transform.parent.name);
 
@@ -184,6 +186,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
+		
 		//to fix toolbox scrolling
 		setBin(false);
 		for (int i = 0; i < toolValueParentChildCount; i++)
@@ -224,10 +227,11 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 
 
-
+		Debug.Log("My Parent:" + this.transform.parent.name + parentToReturnTo.name + placeholderParent + name);
 		if (this.transform.parent.name == "Bin")
 		{
 			Debug.Log("Dropped in the toolbox");
+			isFrom = TOOLBOX;
 
 			int activeTab = Int32.Parse(Regex.Match(GameObject.Find("TabParent").transform.GetChild(GameObject.Find("TabParent").transform.childCount - 1).gameObject.name, @"\d+").Value);
 			ExecuteThreadsLevel exeThread = GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>();
@@ -253,49 +257,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 			this.transform.SetParent(toolbox.transform);
 
 		}
-		else
-		{
 
-			//new parent is inside an if statement or a look
-			if (this.transform.parent.name == "DropArea")
-			{
-				//this.transform.parent.GetComponent<RectTransform> ().sizeDelta = new Vector2 (this.GetComponent<RectTransform> ().sizeDelta.x, this.GetComponent<RectTransform> ().sizeDelta.y + 45);
-
-				//this.transform.GetComponent<RectTransform> ().sizeDelta = new Vector2(75, 25);
-			}
-
-		}
-
-		//if (this.typeOfItem == Type.IFSTAT)
-		//{
-		//	this.GetComponent<Image>().color = new Vector4(0.3F, 0.8F, 0.83F, 1);
-
-		//}
-		//else if (this.typeOfItem == Type.ACTION && (this.GetComponentInChildren<Text>().text == "get"))
-		//{
-		//	//			LogData.chronologicalLogs.Add ("Put-get: " + LogManager.instance.UniEndTime ());
-		//	this.GetComponent<Image>().color = new Vector4(0.94F, 0.28F, 0.94F, 1);
-
-		//}
-		//else if (this.typeOfItem == Type.ACTION && (this.GetComponentInChildren<Text>().text == "ret"))
-		//{
-		//	//			LogData.chronologicalLogs.Add ("Put-ret: " + LogManager.instance.UniEndTime ());
-		//	this.GetComponent<Image>().color = new Vector4(0.56F, 0.82F, 0.44F, 1);
-
-		//}
-		//else if (this.typeOfItem == Type.ACTION)
-		//{
-		//	//	print (this.GetComponentInChildren<Text> ().text);
-		//	//			LogData.chronologicalLogs.Add ("Put-"+this.GetComponentInChildren<Text> ().text+": " + LogManager.instance.UniEndTime ());
-		//	//this.GetComponent<Image>().color = new Vector4(1, 0.76F, 0.24F, 1);
-
-		//}
-		//else if (this.typeOfItem == Type.WHILELOOP)
-		//{
-		//	this.GetComponent<Image>().color = new Vector4(0.77F, 0.71F, 0.6F, 1);
-		//}
-
-		// this.GetComponent<Image> ().color = Color.white;
 
 		Destroy(placeholder);
 
