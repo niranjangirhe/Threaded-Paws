@@ -58,8 +58,8 @@ public class GameManager : MonoBehaviour
                 pauseScreen.SetActive(true);
                 foreach (AudioSource audioS in allAudioSources)
                 {
-                   
-                    audioS.Pause();
+                    if (audioS.isActiveAndEnabled)
+                        audioS.Pause();
                 }
             }
             else
