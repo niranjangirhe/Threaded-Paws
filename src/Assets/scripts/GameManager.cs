@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     private bool isGameActive;
     private bool isGamePaused;
-    public GameObject pauseScreenPrefab;
+    [SerializeField] private GameObject pauseScreenPrefab;
     private GameObject pauseScreen;
     private Transform Canvas;
     private AudioSource[] allAudioSources;
@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
                 pauseScreen.SetActive(true);
                 foreach (AudioSource audioS in allAudioSources)
                 {
+                   
                     audioS.Pause();
                 }
             }
@@ -68,7 +69,9 @@ public class GameManager : MonoBehaviour
                 pauseScreen.SetActive(false);
                 foreach (AudioSource audioS in allAudioSources)
                 {
-                    audioS.Play(0);
+                    
+                    if(audioS.isActiveAndEnabled)
+                        audioS.Play(0);
                 }
             }
         }
