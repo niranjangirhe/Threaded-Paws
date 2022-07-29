@@ -53,7 +53,8 @@ public class GameLogData {
 	}
 
 	public GameLogData (string userid, long sessionid) {
-
+		if (!MainMenuManager.doLoging)
+			return;
 		userID = userid;
 		sessionID = sessionid;
 
@@ -69,6 +70,8 @@ public class GameLogData {
 	}
 
 	public void sendChronologicalLogs(string action, string dropdown, string time){
+		if (!MainMenuManager.doLoging)
+			return;
 		ChronologicalLogData chronoData = new ChronologicalLogData();
 		chronoData.action = action;
 		chronoData.dropdown = dropdown;
@@ -84,6 +87,8 @@ public class GameLogData {
 	}
 
 	public void sendInputWorkerOne(string action, string typeofW, string time){
+		if (!MainMenuManager.doLoging)
+			return;
 		InputLogData inputOne = new InputLogData();
 		inputOne.action = action;
 		inputOne.typeofW = typeofW;
@@ -97,6 +102,8 @@ public class GameLogData {
 	}
 
 	public void sendInputWorkerTwo(string action, string typeofW, string time){
+		if (!MainMenuManager.doLoging)
+			return;
 		InputLogData inputTwo = new InputLogData();
 		inputTwo.action = action;
 		inputTwo.typeofW = typeofW;
@@ -112,7 +119,9 @@ public class GameLogData {
 
 	public void startLoggingData(string levelNo, string isLevelCleared, string failedReason, string levelClearedTime, string levelClearAmount, string failedAttempts
 									,string infoButtonCount, string agendaButtonCount, string startTime, string endTime){
-		
+		if (!MainMenuManager.doLoging)
+			return;
+
 		LevelLogData levelData = new LevelLogData();
 		levelData.levelNo = levelNo;
 		levelData.isLevelCleared = isLevelCleared;
@@ -133,7 +142,8 @@ public class GameLogData {
 
 	public void endLoggingData(string levelNo, string isLevelCleared, string failedReason, string levelClearedTime, string levelClearAmount, string failedAttempts
 									,string infoButtonCount, string agendaButtonCount, string startTime, string endTime){
-		
+		if (!MainMenuManager.doLoging)
+			return;
 		LevelLogData levelData = new LevelLogData();
 		levelData.levelNo = levelNo;
 		levelData.isLevelCleared = isLevelCleared;
@@ -153,6 +163,8 @@ public class GameLogData {
 	}
 
 	public void sendChronologicalMenuLogs(string action, string time){
+		if (!MainMenuManager.doLoging)
+			return;
 		ChronologicalMenuLogData cmData = new ChronologicalMenuLogData();
 		cmData.action = action;
 		cmData.time = time;
@@ -170,7 +182,9 @@ public class GameLogData {
 /// </summary>
 
     public void sendDatatoDB(string url, string jsonObj){
-        LogManager.instance.url = url;
+		if (!MainMenuManager.doLoging)
+			return;
+		LogManager.instance.url = url;
         LogManager.instance.jsonData = jsonObj;
         LogManager.instance.PutToDataBase();
     }
@@ -179,7 +193,9 @@ public class GameLogData {
 /// A method that sends data to DB through POST
 /// </summary>
     public void sendDatatoDBPOST(string url, string jsonObj){
-        LogManager.instance.url = url;
+		if (!MainMenuManager.doLoging)
+			return;
+		LogManager.instance.url = url;
         LogManager.instance.jsonData = jsonObj;
         LogManager.instance.PostToDataBase();
     }
