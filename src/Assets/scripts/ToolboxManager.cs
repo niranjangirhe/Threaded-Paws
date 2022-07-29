@@ -11,7 +11,6 @@ public class ToolboxManager : MonoBehaviour {
     public GameObject lostPanel;
     public GameObject wonPanel;
 	public GameObject errorMsgHolder;
-	public bool isLevel4;
 
     // Use this for initialization
     void Start () {

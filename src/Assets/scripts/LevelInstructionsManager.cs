@@ -8,29 +8,29 @@ using UnityEngine.UI;
 public class LevelInstructionsManager : MonoBehaviour
 {
 
-    public GameObject level3_part1;
-    public GameObject level3_part2;
+    public GameObject level_part1;
+    public GameObject level_part2;
 
-    public GameObject level3_disableFunctionality;
+    public GameObject level_disableFunctionality;
 
-    public void level3_getPanel1()
+    public void level_getPanel1()
     {
 
-        level3_part1.SetActive(true);
-        level3_part2.SetActive(false);
+        level_part1.SetActive(true);
+        level_part2.SetActive(false);
     }
 
-    public void level2_getPanel2()
+    public void level_getPanel2()
     {
 
-        level3_part2.SetActive(true);
-        level3_part1.SetActive(false);
+        level_part2.SetActive(true);
+        level_part1.SetActive(false);
     }
 
-    public void level2_activateAllFunctionality()
+    public void level_activateAllFunctionality()
     {
 
-        level3_disableFunctionality.SetActive(false);
+        level_disableFunctionality.SetActive(false);
     }
 
     public void skipInstructions()
@@ -43,25 +43,22 @@ public class LevelInstructionsManager : MonoBehaviour
         {
 
         }
-        level3_part1.SetActive(false);
-            level3_part2.SetActive(false);
+        level_part1.SetActive(false);
+            level_part2.SetActive(false);
 
-            level2_activateAllFunctionality();
+            level_activateAllFunctionality();
        
     }
 
     void Start()
     {
 
-        level3_part1.SetActive(true);
-        level3_part2.SetActive(false);
+        level_part1.SetActive(true);
+        level_part2.SetActive(false);
 
-        level3_disableFunctionality.SetActive(true);
-       // LogManager.instance.isQuitLogNeed = true;
-        //GameLogData.sessionID = AnalyticsSessionInfo.sessionId;
-        GameLogData.levelNo = 3;
-        //GameLogData.userID = AnalyticsSessionInfo.userId;
-        //LogManager.instance.StartTimer();
-        //LogManager.instance.logger.startLoggingData(GameLogData.levelNo.ToString(), "", "", "", "", "", "", "", System.DateTime.Now.ToString(), "");
+        level_disableFunctionality.SetActive(true);
+       
+        //GameLogData.levelNo = 3;
+        
     }
 }
