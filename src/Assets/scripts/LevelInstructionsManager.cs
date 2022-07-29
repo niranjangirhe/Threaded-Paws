@@ -37,7 +37,7 @@ public class LevelInstructionsManager : MonoBehaviour
     {
         try
         {
-            LogManager.instance.logger.sendChronologicalLogs("StartLevel03", "", LogManager.instance.UniEndTime().ToString());
+            LogManager.instance.logger.sendChronologicalLogs("StartLevel"+gameObject.GetComponent<ExecuteThreadsLevel>().levelNo, "", LogManager.instance.UniEndTime().ToString());
         }
         catch
         {
@@ -52,9 +52,13 @@ public class LevelInstructionsManager : MonoBehaviour
 
     void Start()
     {
-
-        level_part1.SetActive(true);
-        level_part2.SetActive(false);
+        if (gameObject.GetComponent<ExecuteThreadsLevel>().isTutorial)
+            skipInstructions();
+        else
+        {
+            level_part1.SetActive(true);
+            level_part2.SetActive(false);
+        }
 
         level_disableFunctionality.SetActive(true);
        

@@ -10,8 +10,8 @@ using TMPro;
 
 public class ExecuteThreadsLevel : MonoBehaviour
 {
-    [SerializeField] private int levelNo;
-    [SerializeField] private bool isTutorial;
+    public int levelNo;
+    public bool isTutorial;
 
     public class ExeData
     {
