@@ -784,11 +784,12 @@ public class ExecuteThreadsLevel : MonoBehaviour
                 }
             }
 
-            if (bar.currentAmount < timeout)
+            if (bar.currentAmount <= timeout)
             {
                 bar.currentAmount += 1;
                 bar.LoadingBar.GetComponent<Image>().fillAmount = bar.currentAmount / timeout;
-
+                if(bar.currentAmount<=timeout)
+                    stepsIndicator.text = ""+(bar.currentAmount);
             }
             else
             {
@@ -838,7 +839,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
             else
             {
 
-                stepsIndicator.text = "" + (j + 1);
+                
 
                 System.Random r = new System.Random();
                 foreach (int i in exeData.sequence[0])
@@ -1229,7 +1230,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                 }
             }
 
-            if (currentAmount < timeout)
+            if (currentAmount <= timeout)
             {
                 currentAmount += 1;
             }

@@ -18,7 +18,9 @@ public class InitiateLevel : MonoBehaviour {
         bool isDataRace = GameObject.Find("_SCRIPTS_").GetComponent<ExecuteThreadsLevel>().IsDataRace();
         GameObject.Find("Canvas").transform.Find("InstructionsPanel").gameObject.SetActive(true);
         GameObject.Find("CashParent").SetActive(isDataRace);
-        
+        GameObject bin = GameObject.Find("Bin");
+        bin.transform.SetAsFirstSibling();
+        bin.GetComponent<CanvasGroup>().alpha = 0;
 
         GameObject box;
 

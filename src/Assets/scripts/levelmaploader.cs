@@ -9,6 +9,7 @@ public class levelmaploader : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField] private bool AllLevelUnlock = true;
     [SerializeField] private int NoOfLevel;
+    [SerializeField] private int NoOfTutLevel;
     [SerializeField] private Transform parent;
     [SerializeField] private GameObject prefab;
     private GameObject btn;
@@ -22,6 +23,16 @@ public class levelmaploader : MonoBehaviour
             levelCount = PlayerPrefs.GetInt("Won");
         }
         catch { }
+        for (int i = 0; i < NoOfTutLevel; i++)
+        {
+
+            GameObject levelTab = Instantiate(prefab);
+            levelTab.transform.SetParent(parent, false);
+            levelTab.name = "Tut " + (i + 1);
+            levelTab.GetComponent<Image>().color = new Color32(105, 191, 255,255);
+            levelTab.transform.Find("ActionText").GetComponent<Text>().text = "Tutorial " + (i + 1);
+           
+        }
         for (int i = 0; i < NoOfLevel; i++)
         {
            

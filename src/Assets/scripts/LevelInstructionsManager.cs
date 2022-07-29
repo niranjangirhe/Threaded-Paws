@@ -58,9 +58,10 @@ public class LevelInstructionsManager : MonoBehaviour
         {
             level_part1.SetActive(true);
             level_part2.SetActive(false);
+            level_disableFunctionality.SetActive(true);
         }
 
-        level_disableFunctionality.SetActive(true);
+        
        
         //GameLogData.levelNo = 3;
         
