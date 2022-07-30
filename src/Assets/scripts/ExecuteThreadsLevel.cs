@@ -237,7 +237,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         }
     }
 
-    private Transform[] GetActionBlocks(GameObject tabDropArea)
+    public Transform[] GetActionBlocks(GameObject tabDropArea)
     {
 
         //get children in drop area for thread
