@@ -523,7 +523,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
             foreach (Transform child in t.blocks)
             {
 
-                if (child.GetComponent<Draggable>().typeOfItem == Draggable.Type.ACTION)
+                if (isTutorial || child.GetComponent<Draggable>().typeOfItem == Draggable.Type.ACTION)
                 {
 
 

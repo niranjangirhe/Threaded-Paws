@@ -162,6 +162,13 @@ public class InitiateLevel : MonoBehaviour {
 		newActionBox.transform.localScale = Vector3.one;
 		newActionBox.transform.GetChild (0).GetComponentInChildren<Text> ().text = actionName;
 		//newActionBox.transform.Find("Halo").gameObject.SetActive (false);
+        if(gameObject.GetComponent<ExecuteThreadsLevel>().isTutorial)
+        {
+            Destroy(newActionBox.GetComponent<Draggable>());
+            Color32 blockColor = newActionBox.GetComponent<Image>().color;
+            blockColor.a = 100;
+            newActionBox.GetComponent<Image>().color = blockColor;
+        }
 
 		return newActionBox;
 	}
