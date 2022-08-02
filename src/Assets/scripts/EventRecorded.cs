@@ -62,8 +62,72 @@ public class EventRecorded : MonoBehaviour
             }
             else if (state == 3)
             {
-                
-                
+                if(exe.GetActionBlocks(threads[1].tabDropArea)[3].name == "BrushBox")
+                {
+                    state = 4;
+                    animator.Play("Tut3S5");
+                }
+            }
+            else if(state==4)
+            {
+                if (agenda.transform.GetChild(1).GetChild(0).name == "Agenda1")
+                {
+                    state = 5;
+                    animator.Play("Tut2S1");
+                }
+            }
+            else if (state == 5)
+            {
+                if (exe.GetActionBlocks(threads[0].tabDropArea)[1].name == "ResourceBox")
+                {
+                    state = 6;
+                    animator.Play("Tut3S6");
+                }
+            }
+            else if (state == 6)
+            {
+                try
+                {
+                    if (GameObject.Find("Blocker"))
+                    {
+                        state = 7;
+                        animator.Play("Tut3S7");
+                        
+                    }
+                }
+                catch { }
+            }
+            else if (state == 7)
+            {
+                try
+                {
+                    string resource = exe.GetActionBlocks(threads[0].tabDropArea)[1].transform.Find("Dropdown").Find("Label").GetComponent<Text>().text;
+                    if (resource == "dryer")
+                    {
+                        state = 8;
+                        GameObject.Find("Animator").transform.Find("Image").gameObject.SetActive(false);
+                    }
+                    else if(resource!="[null]")
+                    {
+                        try
+                        {
+                            if (GameObject.Find("Blocker")==null)
+                            {
+                                state = 6;
+                                animator.Play("Tut3S6");
+
+                            }
+                        }
+                        catch {
+                            state = 6;
+                            animator.Play("Tut3S6");
+                        }
+                        
+                    }
+                }
+                catch {
+                    
+                }
             }
         }
         catch { }
@@ -78,6 +142,12 @@ public class EventRecorded : MonoBehaviour
             StartCoroutine(Tut3Animations(3));
         else if (state == 4)
             StartCoroutine(Tut3Animations(4));
+        else if (state == 5)
+            StartCoroutine(Tut3Animations(5));
+        else if (state == 6)
+            StartCoroutine(Tut3Animations(6));
+        else if (state == 7)
+            StartCoroutine(Tut3Animations(7));
     }
 
     // Update is called once per frame
