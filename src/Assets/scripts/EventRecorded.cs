@@ -37,7 +37,9 @@ public class EventRecorded : MonoBehaviour
         
         
     }
+
     // Runs after every 0.5 sec
+    [Obsolete]
     IEnumerator Tut3Animations(int state)
     {
         
@@ -51,6 +53,7 @@ public class EventRecorded : MonoBehaviour
                     state = 1;
                     animator.Play("Tut3S2");
                 }
+
             }
             else if (state == 1)
             {
@@ -59,6 +62,12 @@ public class EventRecorded : MonoBehaviour
                     state = 2;
                     animator.Play("Tut3S3");
                 }
+                else if (!agenda.activeSelf)
+                {
+                    state = 0;
+                    animator.Play("Tut3S1");
+                }
+
             }
             else if (state == 2)
             {
@@ -70,14 +79,23 @@ public class EventRecorded : MonoBehaviour
             }
             else if (state == 3)
             {
+                if(agenda.transform.GetChild(1).GetChild(0).name == "Agenda0" && threadBlockCount[1] == 4)
+                {
+                    state = 3;
+                    animator.Play("Tut3S4");
+                }
                 if(BlockAtPlace(1,3,"BrushBox") && threadBlockCount[1]==5)
                 {
                     state = 4;
                     animator.Play("Tut3S5");
                 }
+                else if(agenda.transform.GetChild(1).GetChild(0).name != "Agenda0")
+                {
+                    animator.Play("Tut3S8");
+                }
                 else if(!BlockAtPlace(1, 3, "BrushBox") && threadBlockCount[1] == 5)
                 {
-                    //play shivya here
+                    animator.Play("Tut3S10");
                     Debug.Log("Bad bad");
                 }
             }
@@ -86,38 +104,93 @@ public class EventRecorded : MonoBehaviour
                 if (agenda.transform.GetChild(1).GetChild(0).name == "Agenda1")
                 {
                     state = 5;
-                    animator.Play("Tut2S1");
+                    animator.Play("Tut3S9");
                 }
             }
             else if (state == 5)
             {
-                if (exe.GetActionBlocks(threads[0].tabDropArea)[1].name == "ResourceBox")
+                try
                 {
-                    state = 6;
-                    animator.Play("Tut3S6");
+                    if (GameObject.Find("InformationPanel").active)
+                    {
+                        state = 6;
+                        animator.Play("Tut3S3");
+                    }
+                }
+                catch {
+                    animator.Play("Tut3S9");
                 }
             }
             else if (state == 6)
             {
                 try
                 {
-                    if (GameObject.Find("Blocker"))
+                    if(GameObject.Find("InformationPanel")==null)
+                    {
+                        if (threadBlockCount[0] == 3)
+                        {
+                            state = 7;
+                            animator.Play("Tut2S1");
+                        }
+                        else if(BlockAtPlace(0,1,"ResourceBox"))
+                        {
+                            state = 8;
+                            animator.Play("Tut3S6");
+                        }
+                        else
+                        {
+                            animator.Play("Tut3S10");
+                            Debug.Log("Bad bad");
+                        }
+                    }
+                }
+                catch
+                {
+                    if (threadBlockCount[0] == 3)
                     {
                         state = 7;
+                        animator.Play("Tut2S1");
+                    }
+                    else if (BlockAtPlace(0, 1, "ResourceBox"))
+                    {
+                        state = 8;
+                        animator.Play("Tut3S6");
+                    }
+                    {
+                        animator.Play("Tut3S10");
+                        Debug.Log("Bad bad");
+                    }
+                }
+            }
+            else if (state == 7)
+            {
+                if (exe.GetActionBlocks(threads[0].tabDropArea)[1].name == "ResourceBox")
+                {
+                    state = 8;
+                    animator.Play("Tut3S6");
+                }
+            }
+            else if (state == 8)
+            {
+                try
+                {
+                    if (GameObject.Find("Blocker"))
+                    {
+                        state = 9;
                         animator.Play("Tut3S7");
                         
                     }
                 }
                 catch { }
             }
-            else if (state == 7)
+            else if (state == 9)
             {
                 try
                 {
                     string resource = exe.GetActionBlocks(threads[0].tabDropArea)[1].transform.Find("Dropdown").Find("Label").GetComponent<Text>().text;
                     if (resource == "dryer")
                     {
-                        state = 8;
+                        state = 10;
                         GameObject.Find("Animator").transform.Find("Image").gameObject.SetActive(false);
                     }
                     else if(resource!="[null]")
@@ -126,13 +199,13 @@ public class EventRecorded : MonoBehaviour
                         {
                             if (GameObject.Find("Blocker")==null)
                             {
-                                state = 6;
+                                state = 8;
                                 animator.Play("Tut3S6");
 
                             }
                         }
                         catch {
-                            state = 6;
+                            state = 8;
                             animator.Play("Tut3S6");
                         }
                         
@@ -171,6 +244,10 @@ public class EventRecorded : MonoBehaviour
             StartCoroutine(Tut3Animations(6));
         else if (state == 7)
             StartCoroutine(Tut3Animations(7));
+        else if (state == 8)
+            StartCoroutine(Tut3Animations(8));
+        else if (state == 9)
+            StartCoroutine(Tut3Animations(9));
     }
     bool BlockAtPlace(int thread, int pos, string name)
     {
