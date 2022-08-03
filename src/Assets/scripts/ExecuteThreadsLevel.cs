@@ -409,7 +409,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
             GameObject agendaTicktemp = Instantiate(agendaTick);
             agendaTicktemp.transform.SetParent(agendaTickParent, false);
             agendaTicktemp.name = "AgendaTick" + count.ToString();
-            Color c = Random.ColorHSV(0f, 1f, 0.2f, 0.7f, 0.9f, 1f);
+            Color c = t.workerSprite.texture.GetPixel(10, 175);
+            //Color c = Random.ColorHSV(0f, 1f, 0.2f, 0.7f, 0.9f, 1f);
             agendatemp.transform.GetChild(0).GetComponent<Image>().color = c;
             if (count == 0)
             {
@@ -457,7 +458,6 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
         //Disable SimIcons till execute
         iconPanel.gameObject.SetActive(false);
-
     }
 
     private float GetSimSpeed(GameObject slider)
@@ -670,13 +670,13 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
             try
             {
-                if (t.simBlocks[0].type != SimBlock.CHECKIN && !isTutorial)
+                if (t.simBlocks[0].type != SimBlock.CHECKIN && gameObject.GetComponent<EventRecorded>().TutLevel!=1)
                 {
                     manager.showError(t.workerName + " has not checked in the customer correctly, place check-in block at the first position.");
                     terminateSimulation(t.workerName + " has not checked in the customer correctly, place check-in block at the first position.");
                     return;
                 }
-                if (t.simBlocks[t.simBlocks.Count - 1].type != SimBlock.CHECKOUT && !isTutorial)
+                if (t.simBlocks[t.simBlocks.Count - 1].type != SimBlock.CHECKOUT && gameObject.GetComponent<EventRecorded>().TutLevel != 1)
                 {
                     manager.showError(t.workerName + " has not checked out correctly, place check-out block at the last position.");
                     terminateSimulation(t.workerName + " has not checked out correctly, place check-out block at the last position.");

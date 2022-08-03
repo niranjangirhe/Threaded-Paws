@@ -41,6 +41,6 @@ public class AnimateTutorial : MonoBehaviour
     IEnumerator LoadScene(float sec)
     {
         yield return new WaitForSeconds(sec);
-        SceneManager.LoadScene("Level 1");
+        SceneManager.LoadScene("Tut 1");
     }
 }
