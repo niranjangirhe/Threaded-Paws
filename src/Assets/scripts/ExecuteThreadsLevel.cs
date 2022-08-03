@@ -532,7 +532,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                     if (t.blocks[i].transform.GetComponentInChildren<Text>().text == "get")
                     {
                         string resource = t.blocks[i].transform.Find("Dropdown").Find("Label").GetComponent<Text>().text;
-                        if (resource == "[null]")
+                        if (resource == "???")
                         {
                             terminateSimulation(t.workerName + " has not selected resource in get");
                             manager.showError(t.workerName + " has not selected resource in get");
@@ -564,7 +564,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
                         string resource = t.blocks[i].transform.Find("Dropdown").Find("Label").GetComponent<Text>().text;
 
-                        if (resource == "[null]")
+                        if (resource == "???")
                         {
                             terminateSimulation(t.workerName + " has not selected resource in return");
                             manager.showError(t.workerName + " has not selected resource in return");

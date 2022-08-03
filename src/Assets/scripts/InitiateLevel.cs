@@ -48,7 +48,7 @@ public class InitiateLevel : MonoBehaviour {
                         switch(bi.itemsEnum)
                         {
                             case ItemsEnum.Null:
-                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "[null]";
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "???";
                                 box.gameObject.transform.Find("Label").GetComponent<Text>().color = Color.red;
                                 break;
                             case ItemsEnum.brush:
@@ -93,7 +93,7 @@ public class InitiateLevel : MonoBehaviour {
                         switch (bi.itemsEnum)
                         {
                             case ItemsEnum.Null:
-                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "[null]";
+                                box.gameObject.transform.Find("Dropdown").GetComponent<dropDownManager>().selected = "???";
                                 box.gameObject.transform.Find("Label").GetComponent<Text>().color = Color.red;
                                 break;
                             case ItemsEnum.brush:
