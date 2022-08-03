@@ -130,7 +130,7 @@ public class EventRecorded : MonoBehaviour
                         if (threadBlockCount[0] == 3)
                         {
                             state = 7;
-                            animator.Play("Tut2S1");
+                            animator.Play("Tut3S11");
                         }
                         else if(BlockAtPlace(0,1,"ResourceBox"))
                         {
@@ -149,7 +149,7 @@ public class EventRecorded : MonoBehaviour
                     if (threadBlockCount[0] == 3)
                     {
                         state = 7;
-                        animator.Play("Tut2S1");
+                        animator.Play("Tut3S11");
                     }
                     else if (BlockAtPlace(0, 1, "ResourceBox"))
                     {
@@ -191,6 +191,7 @@ public class EventRecorded : MonoBehaviour
                     if (resource == "dryer")
                     {
                         state = 10;
+                        animator.Play("Tut3S12");
                         GameObject.Find("Animator").transform.Find("Image").gameObject.SetActive(false);
                     }
                     else if(resource!="[null]")
