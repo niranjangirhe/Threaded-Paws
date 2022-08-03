@@ -10,15 +10,23 @@ public class EventRecorded : MonoBehaviour
 
     List<Thread> threads = new List<Thread>();
     ExecuteThreadsLevel exe;
-    [SerializeField] private int TutLevel;
+    public int TutLevel;
     [SerializeField] private Animator animator;
     private GameObject agenda;
-
+    private List<int> threadBlockCount = new List<int> { 0, 0 };
     // Start is called before the first frame update
     void Start()
     {
         exe = gameObject.GetComponent<ExecuteThreadsLevel>();
         threads = exe.threads;
+        if(TutLevel<=3)
+        {
+            Transform tabParent = GameObject.Find("TabParent").transform;
+            for(int i=0;i< tabParent.childCount;i++)
+            {
+                tabParent.GetChild(i).GetChild(0).GetComponent<ScrollRect>().vertical = false;
+            }
+        }
         switch(TutLevel)
         {
             case 1: animator.Play("Tut1S1"); StartCoroutine(Tut1n2Animtions(0)); break;
@@ -29,7 +37,7 @@ public class EventRecorded : MonoBehaviour
         
         
     }
-
+    // Runs after every 0.5 sec
     IEnumerator Tut3Animations(int state)
     {
         
@@ -62,10 +70,15 @@ public class EventRecorded : MonoBehaviour
             }
             else if (state == 3)
             {
-                if(exe.GetActionBlocks(threads[1].tabDropArea)[3].name == "BrushBox")
+                if(BlockAtPlace(1,3,"BrushBox") && threadBlockCount[1]==5)
                 {
                     state = 4;
                     animator.Play("Tut3S5");
+                }
+                else if(!BlockAtPlace(1, 3, "BrushBox") && threadBlockCount[1] == 5)
+                {
+                    //play shivya here
+                    Debug.Log("Bad bad");
                 }
             }
             else if(state==4)
@@ -129,6 +142,16 @@ public class EventRecorded : MonoBehaviour
                     
                 }
             }
+            threadBlockCount = new List<int>();
+            foreach (Thread t in threads)
+            {
+                int count = 0;
+                foreach (Transform child in exe.GetActionBlocks(t.tabDropArea))
+                {
+                    count++;
+                }
+                threadBlockCount.Add(count);
+            }
         }
         catch { }
         yield return new WaitForSeconds(0.5f);
@@ -149,24 +172,45 @@ public class EventRecorded : MonoBehaviour
         else if (state == 7)
             StartCoroutine(Tut3Animations(7));
     }
-
-    // Update is called once per frame
+    bool BlockAtPlace(int thread, int pos, string name)
+    {
+        return exe.GetActionBlocks(threads[thread].tabDropArea)[pos].name == name;
+    }
+    // Runs after every 0.5 sec
 
     IEnumerator Tut1n2Animtions(int i)
     {
+        if(i==0)
+        {
+            if (TutLevel == 1)
+            {
+                animator.Play("Tut1S1");
+            }
+        }
         if(i==1)
         {
-            if(TutLevel==1)
+            if (TutLevel == 1)
             {
                 animator.Play("Tut1S2");
             }
+            else
+                animator.Play("Tut2S1");
         }
         if (i == 2)
         {
             if (TutLevel == 2)
             {
-                if(exe.GetActionBlocks(threads[0].tabDropArea)[1].name=="CheckOutBox")
-                    animator.Play("Tut1S2");
+                try
+                {
+                    if (exe.GetActionBlocks(threads[0].tabDropArea)[1].name == "CheckOutBox")
+                        animator.Play("Tut1S2");
+                    else
+                        animator.Play("Tut2S2");
+                }
+                catch
+                {
+
+                }
             }
         }
         int count = 0;
@@ -178,6 +222,7 @@ public class EventRecorded : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(0.5f);
+        Debug.Log("Run");
         StartCoroutine(Tut1n2Animtions(count));
     }
 }
