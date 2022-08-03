@@ -403,7 +403,8 @@ public class ExecuteThreadsLevel : MonoBehaviour
             agendatemp.name = "Agenda" + count.ToString();
             agendatemp.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = t.dogSprite;
             agendatemp.transform.Find("Name-fillin").GetComponent<Text>().text = t.dogName;
-
+            agendatemp.transform.GetChild(1).GetChild(0).GetComponent<Image>().sprite = t.workerSprite;
+            agendatemp.transform.Find("Name-fillin-stylist").GetComponent<Text>().text = t.workerName;
 
             //------- Add Agenda Tick --------
             GameObject agendaTicktemp = Instantiate(agendaTick);
