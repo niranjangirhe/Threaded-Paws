@@ -675,13 +675,13 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
             try
             {
-                if (t.simBlocks[0].type != SimBlock.CHECKIN && gameObject.GetComponent<EventRecorded>().TutLevel!=1)
+                if (t.simBlocks[0].type != SimBlock.CHECKIN)
                 {
                     manager.showError(t.workerName + " has not checked in the customer correctly, place check-in block at the first position.");
                     terminateSimulation(t.workerName + " has not checked in the customer correctly, place check-in block at the first position.");
                     return;
                 }
-                if (t.simBlocks[t.simBlocks.Count - 1].type != SimBlock.CHECKOUT && gameObject.GetComponent<EventRecorded>().TutLevel != 1)
+                if (t.simBlocks[t.simBlocks.Count - 1].type != SimBlock.CHECKOUT)
                 {
                     manager.showError(t.workerName + " has not checked out correctly, place check-out block at the last position.");
                     terminateSimulation(t.workerName + " has not checked out correctly, place check-out block at the last position.");

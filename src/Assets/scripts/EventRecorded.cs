@@ -14,12 +14,14 @@ public class EventRecorded : MonoBehaviour
     [SerializeField] private Animator animator;
     private GameObject agenda;
     private List<int> threadBlockCount = new List<int> { 0, 0 };
+    private AudioSource[] allAudioSources;
     // Start is called before the first frame update
     void Start()
     {
+        
         exe = gameObject.GetComponent<ExecuteThreadsLevel>();
         threads = exe.threads;
-        if(TutLevel<=3)
+        if(TutLevel<=2)
         {
             Transform tabParent = GameObject.Find("TabParent").transform;
             for(int i=0;i< tabParent.childCount;i++)
@@ -29,20 +31,19 @@ public class EventRecorded : MonoBehaviour
         }
         switch(TutLevel)
         {
-            case 1: animator.Play("Tut1S1"); StartCoroutine(Tut1n2Animtions(0)); break;
-            case 2: animator.Play("Tut2S1"); StartCoroutine(Tut1n2Animtions(0)); break;
-            case 3: animator.Play("Tut3S1"); StartCoroutine(Tut3Animations(0)); 
+            case 1: animator.Play("Tut1S1"); StartCoroutine(Tut1Animtions(0)); break;
+            case 2: animator.Play("Tut3S1"); StartCoroutine(Tut2Animations(0)); 
                 agenda = GameObject.Find("Canvas").transform.Find("AgendaPanel").gameObject; break;
         }
-        
-        
+
+       
     }
 
     // Runs after every 0.5 sec
     [Obsolete]
-    IEnumerator Tut3Animations(int state)
+    IEnumerator Tut2Animations(int state)
     {
-        
+        LockCursor();
         try
         {
             Debug.Log("Checking");
@@ -114,7 +115,7 @@ public class EventRecorded : MonoBehaviour
                     if (GameObject.Find("InformationPanel").active)
                     {
                         state = 6;
-                        animator.Play("Tut3S3");
+                        animator.Play("Tut3S13");
                     }
                 }
                 catch {
@@ -230,25 +231,25 @@ public class EventRecorded : MonoBehaviour
         catch { }
         yield return new WaitForSeconds(0.5f);
         if (state==0)
-            StartCoroutine(Tut3Animations(0));
+            StartCoroutine(Tut2Animations(0));
         else if(state == 1)
-            StartCoroutine(Tut3Animations(1));
+            StartCoroutine(Tut2Animations(1));
         else if(state == 2)
-            StartCoroutine(Tut3Animations(2));
+            StartCoroutine(Tut2Animations(2));
         else if (state == 3)
-            StartCoroutine(Tut3Animations(3));
+            StartCoroutine(Tut2Animations(3));
         else if (state == 4)
-            StartCoroutine(Tut3Animations(4));
+            StartCoroutine(Tut2Animations(4));
         else if (state == 5)
-            StartCoroutine(Tut3Animations(5));
+            StartCoroutine(Tut2Animations(5));
         else if (state == 6)
-            StartCoroutine(Tut3Animations(6));
+            StartCoroutine(Tut2Animations(6));
         else if (state == 7)
-            StartCoroutine(Tut3Animations(7));
+            StartCoroutine(Tut2Animations(7));
         else if (state == 8)
-            StartCoroutine(Tut3Animations(8));
+            StartCoroutine(Tut2Animations(8));
         else if (state == 9)
-            StartCoroutine(Tut3Animations(9));
+            StartCoroutine(Tut2Animations(9));
     }
     bool BlockAtPlace(int thread, int pos, string name)
     {
@@ -256,28 +257,27 @@ public class EventRecorded : MonoBehaviour
     }
     // Runs after every 0.5 sec
 
-    IEnumerator Tut1n2Animtions(int i)
+    IEnumerator Tut1Animtions(int i)
     {
-        if(i==0)
-        {
-            if (TutLevel == 1)
+        LockCursor();
+            if (i == 0)
             {
                 animator.Play("Tut1S1");
             }
-        }
-        if(i==1)
-        {
-            if (TutLevel == 1)
+            if (i == 1)
             {
-                animator.Play("Tut1S2");
+                try
+                {
+                    if (exe.GetActionBlocks(threads[0].tabDropArea)[0].name == "CheckInBox")
+                        animator.Play("Tut2S1");
+                    else
+                        animator.Play("Tut1S1");
+                }
+                catch { }
             }
-            else
-                animator.Play("Tut2S1");
-        }
-        if (i == 2)
-        {
-            if (TutLevel == 2)
+            if (i == 2)
             {
+
                 try
                 {
                     if (exe.GetActionBlocks(threads[0].tabDropArea)[1].name == "CheckOutBox")
@@ -289,8 +289,9 @@ public class EventRecorded : MonoBehaviour
                 {
 
                 }
+
             }
-        }
+        
         int count = 0;
         foreach (Thread t in threads)
         {
@@ -300,7 +301,29 @@ public class EventRecorded : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(0.5f);
-        Debug.Log("Run");
-        StartCoroutine(Tut1n2Animtions(count));
+        StartCoroutine(Tut1Animtions(count));
+    }
+    void LockCursor()
+    {
+        allAudioSources = FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
+        bool isPlaying=false;
+        foreach (AudioSource audioS in allAudioSources)
+        {
+            
+            if (audioS.isActiveAndEnabled && audioS.isPlaying && audioS.transform.name.Contains("Script"))
+            {
+                isPlaying = true;
+                break;
+            }
+
+        }
+        if (isPlaying)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 }
