@@ -115,7 +115,7 @@ public class EventRecorded : MonoBehaviour
                     if (GameObject.Find("InformationPanel").active)
                     {
                         state = 6;
-                        animator.Play("Tut3S3");
+                        animator.Play("Tut3S13");
                     }
                 }
                 catch {
