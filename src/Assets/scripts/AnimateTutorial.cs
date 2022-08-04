@@ -17,6 +17,7 @@ public class AnimateTutorial : MonoBehaviour
     void Start()
     {
         //SceneManager.LoadScene("debug 1");
+        Cursor.lockState = CursorLockMode.Locked;
         StartCoroutine(AnimateS1(0f));
         bgSong = GameObject.Find("Logging").GetComponent<AudioSource>();
     }
@@ -46,6 +47,7 @@ public class AnimateTutorial : MonoBehaviour
     IEnumerator LoadScene(float sec)
     {
         yield return new WaitForSeconds(sec);
+        Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene("Tut 1");
     }
 }

@@ -24,7 +24,7 @@ public class LogManager : MonoBehaviour {
 
 	//custom cursor
 	[SerializeField] private Texture2D[] cursorTexture;
-
+	[HideInInspector] public bool cursorLocked;
 
 	//	private LogData loggingData = new LogData();
 	public string url {get; set;}
@@ -201,13 +201,21 @@ public class LogManager : MonoBehaviour {
     }
     private void Update()
     {
-        if (Input.GetMouseButton(0))
-        {
-            Cursor.SetCursor(cursorTexture[0], cursorHotspot, CursorMode.Auto);
-        }
-        else
-        {
-            Cursor.SetCursor(cursorTexture[1], cursorHotspot, CursorMode.Auto);
-        }
+		if (cursorLocked)
+		{
+			Cursor.SetCursor(cursorTexture[2], cursorHotspot, CursorMode.Auto);
+		}
+		else
+		{
+			if (Input.GetMouseButton(0))
+			{
+				Cursor.SetCursor(cursorTexture[0], cursorHotspot, CursorMode.Auto);
+			}
+			else
+			{
+				Cursor.SetCursor(cursorTexture[1], cursorHotspot, CursorMode.Auto);
+			}
+		}
     }
+
 }

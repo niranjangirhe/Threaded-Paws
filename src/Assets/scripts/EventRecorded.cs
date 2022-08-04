@@ -15,10 +15,13 @@ public class EventRecorded : MonoBehaviour
     private GameObject agenda;
     private List<int> threadBlockCount = new List<int> { 0, 0 };
     private AudioSource[] allAudioSources;
+    private CanvasGroup canvasGroup;
+    private LogManager logManager;
     // Start is called before the first frame update
     void Start()
     {
-        
+        logManager = GameObject.Find("Logging").GetComponent<LogManager>();
+        canvasGroup = GameObject.Find("Canvas").GetComponent<CanvasGroup>();
         exe = gameObject.GetComponent<ExecuteThreadsLevel>();
         threads = exe.threads;
         if(TutLevel<=2)
@@ -319,11 +322,19 @@ public class EventRecorded : MonoBehaviour
         }
         if (isPlaying)
         {
-            Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.lockState = CursorLockMode.Locked;
+            toggleClick(false);
         }
         else
         {
-            Cursor.lockState = CursorLockMode.None;
+            //Cursor.lockState = CursorLockMode.None;
+            toggleClick(true);
         }
+    }
+    void toggleClick(bool b)
+    {
+        logManager.cursorLocked = !b;
+        canvasGroup.interactable = b;
+        canvasGroup.blocksRaycasts = b;
     }
 }

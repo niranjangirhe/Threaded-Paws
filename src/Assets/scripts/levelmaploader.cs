@@ -31,7 +31,7 @@ public class levelmaploader : MonoBehaviour
 
         GameObject tutorialTab = Instantiate(prefab);
         tutorialTab.transform.SetParent(parent, false);
-        tutorialTab.name = "Tutorial";
+        tutorialTab.name = "Tut 1";
         tutorialTab.GetComponent<Image>().color = new Color32(105, 191, 255,255);
         tutorialTab.transform.Find("ActionText").GetComponent<Text>().text = "Tutorial";
            
