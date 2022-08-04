@@ -802,7 +802,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
                 LogManager.instance.logger.sendChronologicalLogs("Level "+levelNo+" Lost", "", LogManager.instance.UniEndTime().ToString());
                 manager.gameLost();
                 GameObject.Find("LostEndMsg").GetComponent<Text>().text = "Time is up! The day is over.";
-                GameObject.Find("accuracy").GetComponent<Text>().text = "Accuracy: " + (100 * testcase / NoOfTestCase) + "%";
+                GameObject.Find("accuracy").GetComponent<Text>().text =  (100 * testcase / NoOfTestCase)>80?"High": (100 * testcase / NoOfTestCase) > 40?"Good":"Low";
                 audioSource.clip = gameoverClip;
                 audioSource.Play();
                 //------- logging -----------
@@ -1150,7 +1150,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
             LogManager.instance.logger.sendChronologicalLogs("Level "+levelNo+" Lost", "", LogManager.instance.UniEndTime().ToString());
             manager.gameLost();
             GameObject.Find("LostEndMsg").GetComponent<Text>().text = "There is an accounting error.";
-            GameObject.Find("accuracy").GetComponent<Text>().text = "Accuracy: " + (100 * testcase / NoOfTestCase) + "%";
+            GameObject.Find("accuracy").GetComponent<Text>().text = (100 * testcase / NoOfTestCase) > 80 ? "High" : (100 * testcase / NoOfTestCase) > 40 ? "Good" : "Low"; ;
 
             audioSource.clip = gameoverClip;
             audioSource.Play();

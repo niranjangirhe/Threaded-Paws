@@ -199,6 +199,8 @@ public class LogManager : MonoBehaviour {
     public void PutToDataBase(){
         StartCoroutine(Put(url, jsonData));
     }
+
+	//For cursor texture changes
     private void Update()
     {
 		if (cursorLocked)
