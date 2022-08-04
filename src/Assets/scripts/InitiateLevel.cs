@@ -12,6 +12,7 @@ public class InitiateLevel : MonoBehaviour {
     public GameObject acquirePrefab;
 	public GameObject returnPrefab;
     public GameObject checkinoutPrefab;
+    AudioSource bgSong;
     // Use this for initialization
     void Start () {
 
@@ -19,6 +20,7 @@ public class InitiateLevel : MonoBehaviour {
         GameObject.Find("Canvas").transform.Find("InstructionsPanel").gameObject.SetActive(true);
         GameObject.Find("CashParent").SetActive(isDataRace);
         GameObject bin = GameObject.Find("Bin");
+        bgSong = GameObject.Find("Logging").GetComponent<AudioSource>();
         bin.transform.SetAsFirstSibling();
         bin.GetComponent<CanvasGroup>().alpha = 0;
 
@@ -172,4 +174,9 @@ public class InitiateLevel : MonoBehaviour {
 
 		return newActionBox;
 	}
+    private void Update()
+    {
+       ExecuteThreadsLevel.ReduceSound(bgSong, 0.1f, 0.5f);
+    }
+
 }

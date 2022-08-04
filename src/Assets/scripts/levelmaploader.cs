@@ -53,10 +53,10 @@ public class levelmaploader : MonoBehaviour
     {
         yield return new WaitForSeconds(0.25f);
 
-        Debug.Log("Hi");
+        
         if (GameObject.Find("DropAreaThread").transform.childCount > 0)
         {
-            Debug.Log("Back");
+            
             string name = GameObject.Find("DropAreaThread").transform.GetChild(0).name;
             description.text = name[0] == 'T' ? TutDescription[Int32.Parse(Regex.Match(name, @"\d+").Value)-1] : LevelDescription[Int32.Parse(Regex.Match(name, @"\d+").Value)-1];
         }

@@ -11,16 +11,21 @@ public class AnimateTutorial : MonoBehaviour
     [SerializeField] private AnimationClip inAnim;
     [SerializeField] private GameObject exeObj;
     [SerializeField] private GameObject inObj;
-
+    AudioSource bgSong;
 
     // Start is called before the first frame update
     void Start()
     {
         //SceneManager.LoadScene("debug 1");
         StartCoroutine(AnimateS1(0f));
+        bgSong = GameObject.Find("Logging").GetComponent<AudioSource>();
     }
 
-   
+    private void Update()
+    {
+       ExecuteThreadsLevel.ReduceSound(bgSong, 0.1f, 0.5f);
+    }
+
     IEnumerator AnimateS1(float sec)
     {
         yield return new WaitForSeconds(sec);

@@ -12,6 +12,7 @@ public class LevelInstructionsManager : MonoBehaviour
     public GameObject level_part2;
 
     public GameObject level_disableFunctionality;
+    AudioSource bgSong;
 
     public void level_getPanel1()
     {
@@ -35,6 +36,8 @@ public class LevelInstructionsManager : MonoBehaviour
 
     public void skipInstructions()
     {
+        bgSong.clip = Resources.Load<AudioClip>("audio/GamePlay");
+        bgSong.Play();
         try
         {
             LogManager.instance.logger.sendChronologicalLogs("StartLevel"+gameObject.GetComponent<ExecuteThreadsLevel>().levelNo, "", LogManager.instance.UniEndTime().ToString());
@@ -44,14 +47,14 @@ public class LevelInstructionsManager : MonoBehaviour
 
         }
         level_part1.SetActive(false);
-            level_part2.SetActive(false);
-
-            level_activateAllFunctionality();
+        level_part2.SetActive(false);
+        level_activateAllFunctionality();
        
     }
 
     void Start()
     {
+        bgSong = GameObject.Find("Logging").GetComponent<AudioSource>();
         if (gameObject.GetComponent<ExecuteThreadsLevel>().isTutorial)
             skipInstructions();
         else

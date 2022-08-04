@@ -13,6 +13,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
     public int levelNo;
     public bool isTutorial;
 
+
     public class ExeData
     {
         public List<List<int>> sequence = new List<List<int>>();
@@ -117,6 +118,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
     bool err;
     bool paused;
     bool lost;
+    AudioSource bgSong;
 
 
     string returnErrMsg = "> ERROR: You are trying to return a tool you don't have.";
@@ -184,6 +186,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         GameObject.Find("InstructionsPanel").transform.Find("Part1").Find("SpeechBox").GetChild(0).GetComponent<Text>().text = bubbleText;
         GameObject.Find("InstructionsPanel").transform.Find("Part1").Find("Level").GetComponent<Text>().text = SceneManager.GetActiveScene().name;
 
+        bgSong = GameObject.Find("Logging").GetComponent<AudioSource>();
 
         // --------Intialize Prefabs -------
         actionSimulationImagePrefab = Resources.Load<GameObject>("prefabs/ActionSim");
@@ -468,6 +471,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
     public void ExecuteThreads()
     {
+        bgSong.pitch = 1.5f;
         if (!isAllowed(playButton))
         {
             return;
@@ -1197,6 +1201,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
 
         Canvas.ForceUpdateCanvases();
         scrollToBottom();
+        bgSong.pitch = 1;
     }
 
     ExeData CheckAllPossibility()
@@ -1483,7 +1488,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
         {
             return;
         }
-
+        bgSong.pitch = 1;
         GameLogData.chronologicalLogs.Add("TerminateLevel3: " + LogManager.instance.UniEndTime());
         LogManager.instance.logger.sendChronologicalLogs("TerminateLevel3", "", LogManager.instance.UniEndTime().ToString());
 
@@ -1737,5 +1742,10 @@ public class ExecuteThreadsLevel : MonoBehaviour
     public bool IsDataRace()
     {
         return isDataRace;
+    }
+    public static void ReduceSound(AudioSource audioSource, float min_sound, float timeMF)
+    {
+        if (audioSource.volume > min_sound)
+            audioSource.volume -= Time.deltaTime * timeMF;
     }
 }
