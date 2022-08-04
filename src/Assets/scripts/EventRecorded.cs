@@ -194,7 +194,7 @@ public class EventRecorded : MonoBehaviour
                         animator.Play("Tut3S12");
                         GameObject.Find("Animator").transform.Find("Image").gameObject.SetActive(false);
                     }
-                    else if(resource!="[null]")
+                    else if(resource!= "???")
                     {
                         try
                         {
