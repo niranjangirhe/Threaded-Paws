@@ -5,6 +5,7 @@ using UnityEngine.Analytics;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class LogManager : MonoBehaviour {
 
@@ -17,9 +18,14 @@ public class LogManager : MonoBehaviour {
 	public int infoCount, agendaCount, failCount;
 	public static int chronoInputCount;
 	public string jsonFilePath;
-
+	Vector2 cursorHotspot;
 	public bool isQuitLogNeed;
 	List<GameLogData> sessionData = new List<GameLogData> ();
+
+	//custom cursor
+	[SerializeField] private Texture2D[] cursorTexture;
+
+
 	//	private LogData loggingData = new LogData();
 	public string url {get; set;}
     public string jsonData {get; set;}
@@ -33,6 +39,8 @@ public class LogManager : MonoBehaviour {
     }
 
 	void Start () {
+
+		cursorHotspot = new Vector2(cursorTexture[0].width / 2, cursorTexture[0].height / 2);
 		uniTimeStart = Time.realtimeSinceStartup;
 		// if(PlayerPrefs.HasKey("sessionID") && PlayerPrefs.HasKey("userID")){
 		// 	logger = new GameLogData(PlayerPrefs.GetString("userID"), Convert.ToInt64( PlayerPrefs.GetString("sessionID")));
@@ -191,5 +199,15 @@ public class LogManager : MonoBehaviour {
     public void PutToDataBase(){
         StartCoroutine(Put(url, jsonData));
     }
-
+    private void Update()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            Cursor.SetCursor(cursorTexture[0], cursorHotspot, CursorMode.Auto);
+        }
+        else
+        {
+            Cursor.SetCursor(cursorTexture[1], cursorHotspot, CursorMode.Auto);
+        }
+    }
 }
