@@ -17,11 +17,13 @@ public class EventRecorded : MonoBehaviour
     private AudioSource[] allAudioSources;
     private CanvasGroup canvasGroup;
     private LogManager logManager;
+    private Text returnText;
     // Start is called before the first frame update
     void Start()
     {
         logManager = GameObject.Find("Logging").GetComponent<LogManager>();
         canvasGroup = GameObject.Find("Canvas").GetComponent<CanvasGroup>();
+        returnText = GameObject.Find("ToolValueParent").transform.Find("ReturnLeft1").GetComponent<Text>();
         exe = gameObject.GetComponent<ExecuteThreadsLevel>();
         threads = exe.threads;
         if(TutLevel<=2)
@@ -37,11 +39,38 @@ public class EventRecorded : MonoBehaviour
             case 1: animator.Play("Tut1S1"); StartCoroutine(Tut1Animtions(0)); break;
             case 2: animator.Play("Tut3S1"); StartCoroutine(Tut2Animations(0)); 
                 agenda = GameObject.Find("Canvas").transform.Find("AgendaPanel").gameObject; break;
+            case 3:
+                animator.Play("Tut4S1"); StartCoroutine(Tut3Animations(0));
+                break;
         }
 
        
     }
+    [Obsolete]
+    IEnumerator Tut3Animations(int state)
+    {
+        LockCursor();
+        if (state == 0)
+        {
+            try
+            {
+                if (returnText.text != "x 1")
+                {
+                    state = 1;
+                    animator.Play("Tut3S12");
+                    GameObject.Find("Animator").transform.Find("Image").gameObject.SetActive(false);
+                }
+            }
+            catch
+            {
+                state = 1;
+            }
+        }
+        yield return new WaitForSeconds(0.5f);
+        if (state == 0)
+            StartCoroutine(Tut3Animations(0));
 
+    }
     // Runs after every 0.5 sec
     [Obsolete]
     IEnumerator Tut2Animations(int state)

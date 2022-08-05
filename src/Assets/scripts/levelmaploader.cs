@@ -14,7 +14,7 @@ public class levelmaploader : MonoBehaviour
     [SerializeField] private Transform parent;
     [SerializeField] private GameObject prefab;
     private GameObject btn;
-    [TextArea(5, 20)] [SerializeField] private string TutDescription;
+    [TextArea(5, 20)] [SerializeField] private List<string> TutDescription = new List<string>();
     [TextArea(5, 20)] [SerializeField] private List<string> LevelDescription = new List<string>();
     [SerializeField] private Text description;
 
@@ -27,14 +27,15 @@ public class levelmaploader : MonoBehaviour
             levelCount = PlayerPrefs.GetInt("Won");
         }
         catch { }
-        
 
-        GameObject tutorialTab = Instantiate(prefab);
-        tutorialTab.transform.SetParent(parent, false);
-        tutorialTab.name = "Tut 1";
-        tutorialTab.GetComponent<Image>().color = new Color32(105, 191, 255,255);
-        tutorialTab.transform.Find("ActionText").GetComponent<Text>().text = "Tutorial";
-           
+        for (int i = 1; i <=TutDescription.Count; i++)
+        {
+            GameObject tutorialTab = Instantiate(prefab);
+            tutorialTab.transform.SetParent(parent, false);
+            tutorialTab.name = "Tut "+i;
+            tutorialTab.GetComponent<Image>().color = new Color32(105, 191, 255, 255);
+            tutorialTab.transform.Find("ActionText").GetComponent<Text>().text = "Tutorial "+i;
+        }
        
         for (int i = 0; i < NoOfLevel; i++)
         {
@@ -55,7 +56,7 @@ public class levelmaploader : MonoBehaviour
         {
             
             string name = GameObject.Find("DropAreaThread").transform.GetChild(0).name;
-            description.text = name[0] == 'T' ? TutDescription : LevelDescription[Int32.Parse(Regex.Match(name, @"\d+").Value)-1];
+            description.text = name[0] == 'T' ? TutDescription[Int32.Parse(Regex.Match(name, @"\d+").Value) - 1] : LevelDescription[Int32.Parse(Regex.Match(name, @"\d+").Value)-1];
         }
         StartCoroutine(LoadDiscription());
     }
