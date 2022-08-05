@@ -12,9 +12,12 @@ public class GameManager : MonoBehaviour
     private AudioSource[] allAudioSources;
 
     private LogManager lm;
+    private bool isCanvasLocked;
+    private CanvasGroup cg;
     // Start is called before the first frame update
     void Start()
     {
+        cg = GameObject.Find("Canvas").GetComponent<CanvasGroup>();
         lm = GameObject.Find("Logging").GetComponent<LogManager>();
         //make instance of pause screen
         pauseScreen = Instantiate(pauseScreenPrefab, new Vector3(0, 0, 0), Quaternion.identity);
@@ -49,12 +52,17 @@ public class GameManager : MonoBehaviour
 
     public void ChangePause()
     {
-
         if (isGameActive)
         {
             //if game is not paused
             if (!isGamePaused)
             {
+                isCanvasLocked = !cg.interactable;
+                if(isCanvasLocked)
+                {
+                    cg.interactable = true;
+                    cg.blocksRaycasts = true;
+                }
                 lm.tempUnlocked = true;
                 Cursor.lockState =  CursorLockMode.None;
                 Time.timeScale = 0.0f;
@@ -68,6 +76,8 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                cg.interactable = isCanvasLocked;
+                cg.blocksRaycasts = isCanvasLocked;
                 lm.tempUnlocked = false;
                 Time.timeScale = 1.0f;
                 isGamePaused = false;
