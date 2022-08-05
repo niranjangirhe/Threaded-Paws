@@ -14,10 +14,13 @@ public class GameManager : MonoBehaviour
     private LogManager lm;
     private bool isCanvasLocked;
     private CanvasGroup cg;
+    private bool noCG = false;
     // Start is called before the first frame update
     void Start()
     {
         cg = GameObject.Find("Canvas").GetComponent<CanvasGroup>();
+        if (cg == null)
+            noCG = true;
         lm = GameObject.Find("Logging").GetComponent<LogManager>();
         //make instance of pause screen
         pauseScreen = Instantiate(pauseScreenPrefab, new Vector3(0, 0, 0), Quaternion.identity);
@@ -31,8 +34,7 @@ public class GameManager : MonoBehaviour
 
         pauseScreen.SetActive(false);
 
-        //get all audio sources
-        allAudioSources = FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
+        
 
         //start game
         isGameActive = true;
@@ -52,18 +54,23 @@ public class GameManager : MonoBehaviour
 
     public void ChangePause()
     {
+        //get all audio sources
+        allAudioSources = FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
         if (isGameActive)
         {
             //if game is not paused
             if (!isGamePaused)
             {
-                isCanvasLocked = !cg.interactable;
-                if(isCanvasLocked)
+                if (!noCG)
                 {
-                    cg.interactable = true;
-                    cg.blocksRaycasts = true;
+                    isCanvasLocked = !cg.interactable;
+                    if (isCanvasLocked)
+                    {
+                        cg.interactable = true;
+                        cg.blocksRaycasts = true;
+                    }
+                    lm.tempUnlocked = true;
                 }
-                lm.tempUnlocked = true;
                 Cursor.lockState =  CursorLockMode.None;
                 Time.timeScale = 0.0f;
                 isGamePaused = true;
@@ -76,9 +83,12 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                cg.interactable = isCanvasLocked;
-                cg.blocksRaycasts = isCanvasLocked;
-                lm.tempUnlocked = false;
+                if (!noCG)
+                {
+                    cg.interactable = isCanvasLocked;
+                    cg.blocksRaycasts = isCanvasLocked;
+                    lm.tempUnlocked = false;
+                }
                 Time.timeScale = 1.0f;
                 isGamePaused = false;
                 pauseScreen.SetActive(false);

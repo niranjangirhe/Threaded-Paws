@@ -204,7 +204,6 @@ public class LogManager : MonoBehaviour {
 	//For cursor texture changes
     private void Update()
     {
-		Debug.Log(cursorLocked + "-" + tempUnlocked);
 		if (cursorLocked && !tempUnlocked)
 		{
 			Cursor.SetCursor(cursorTexture[2], cursorHotspot, CursorMode.Auto);
