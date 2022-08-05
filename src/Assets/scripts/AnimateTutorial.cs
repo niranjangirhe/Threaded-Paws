@@ -12,11 +12,13 @@ public class AnimateTutorial : MonoBehaviour
     [SerializeField] private GameObject exeObj;
     [SerializeField] private GameObject inObj;
     AudioSource bgSong;
+    LogManager lm;
 
     // Start is called before the first frame update
     void Start()
     {
-        //SceneManager.LoadScene("debug 1");
+        lm =  GameObject.Find("Logging").GetComponent<LogManager>();
+        lm.tempUnlocked = false;
         Cursor.lockState = CursorLockMode.Locked;
         StartCoroutine(AnimateS1(0f));
         bgSong = GameObject.Find("Logging").GetComponent<AudioSource>();
@@ -25,6 +27,14 @@ public class AnimateTutorial : MonoBehaviour
     private void Update()
     {
        ExecuteThreadsLevel.ReduceSound(bgSong, 0.1f, 0.5f);
+        if (lm.tempUnlocked)
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 
     IEnumerator AnimateS1(float sec)

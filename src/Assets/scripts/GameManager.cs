@@ -11,9 +11,11 @@ public class GameManager : MonoBehaviour
     private Transform Canvas;
     private AudioSource[] allAudioSources;
 
+    private LogManager lm;
     // Start is called before the first frame update
     void Start()
     {
+        lm = GameObject.Find("Logging").GetComponent<LogManager>();
         //make instance of pause screen
         pauseScreen = Instantiate(pauseScreenPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         
@@ -53,6 +55,8 @@ public class GameManager : MonoBehaviour
             //if game is not paused
             if (!isGamePaused)
             {
+                lm.tempUnlocked = true;
+                Cursor.lockState =  CursorLockMode.None;
                 Time.timeScale = 0.0f;
                 isGamePaused = true;
                 pauseScreen.SetActive(true);
@@ -64,6 +68,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                lm.tempUnlocked = false;
                 Time.timeScale = 1.0f;
                 isGamePaused = false;
                 pauseScreen.SetActive(false);

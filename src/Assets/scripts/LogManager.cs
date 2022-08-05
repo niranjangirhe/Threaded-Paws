@@ -25,6 +25,7 @@ public class LogManager : MonoBehaviour {
 	//custom cursor
 	[SerializeField] private Texture2D[] cursorTexture;
 	[HideInInspector] public bool cursorLocked;
+	[HideInInspector] public bool tempUnlocked = false;
 
 	//	private LogData loggingData = new LogData();
 	public string url {get; set;}
@@ -203,7 +204,7 @@ public class LogManager : MonoBehaviour {
 	//For cursor texture changes
     private void Update()
     {
-		if (cursorLocked)
+		if (cursorLocked && !tempUnlocked)
 		{
 			Cursor.SetCursor(cursorTexture[2], cursorHotspot, CursorMode.Auto);
 		}
