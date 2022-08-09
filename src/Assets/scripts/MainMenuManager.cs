@@ -10,21 +10,24 @@ public class MainMenuManager : MonoBehaviour {
 	public GameObject volumeOffIcon;
 	[SerializeField] private bool DebugRoundOn;
 	public static bool doLoging = false;
+	private AudioSource music;
 
 	// Use this for initialization
 	void Start () {
 		volumeOffIcon.SetActive (false);
+		music = GameObject.Find("Logging").GetComponent<AudioSource>();
 	}
 
 	public void playMusic () {
 		LogManager.instance.logger.sendChronologicalMenuLogs("PlayMusic", LogManager.instance.UniEndTime().ToString());
-
+		music.mute = true;
 		volumeOnIcon.SetActive (false);
 		volumeOffIcon.SetActive (true);
 	}
 
 	public void pauseMusic () {
 		LogManager.instance.logger.sendChronologicalMenuLogs("PauseMusic", LogManager.instance.UniEndTime().ToString());
+		music.mute = false;
 		volumeOnIcon.SetActive (true);
 		volumeOffIcon.SetActive (false);
 	}
