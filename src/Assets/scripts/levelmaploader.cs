@@ -11,6 +11,7 @@ public class levelmaploader : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField] private bool AllLevelUnlock = true;
     private int NoOfLevel;
+    public bool filled = false;
     [SerializeField] private Transform parent;
     [SerializeField] private GameObject prefab;
     private GameObject btn;
@@ -54,9 +55,13 @@ public class levelmaploader : MonoBehaviour
         
         if (GameObject.Find("DropAreaThread").transform.childCount > 0)
         {
-            
+            filled = true;
             string name = GameObject.Find("DropAreaThread").transform.GetChild(0).name;
             description.text = name[0] == 'T' ? TutDescription[Int32.Parse(Regex.Match(name, @"\d+").Value) - 1] : LevelDescription[Int32.Parse(Regex.Match(name, @"\d+").Value)-1];
+        }
+        else
+        {
+            filled = false;
         }
         StartCoroutine(LoadDiscription());
     }

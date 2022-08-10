@@ -13,8 +13,11 @@ public class CreateNewBlockForLevel : MonoBehaviour
     private string description;
     private Text DescriptionBox;
 
+    private levelmaploader lvlmap;
+
     private void Start()
     {
+        lvlmap = (levelmaploader) GameObject.Find("_SCRIPTS_").GetComponent(typeof(levelmaploader));
         tutdesc = GameObject.Find("_SCRIPTS_").GetComponent<levelmaploader>().TutDescription;
         lvldesc = GameObject.Find("_SCRIPTS_").GetComponent<levelmaploader>().LevelDescription;
         DescriptionBox = GameObject.Find("Description").GetComponent<Text>();
@@ -23,9 +26,12 @@ public class CreateNewBlockForLevel : MonoBehaviour
     {
         DeleteAllClone();
         MakeMyClone();
-        DisplayDescription(gameObject.name);
-    }
+        if (!lvlmap.filled)
+        {
+            DisplayDescription(gameObject.name);
 
+        }
+    }
     void DisplayDescription(string nameOfLevel)
     {
         //Debug.Log(tutdesc.Count);
