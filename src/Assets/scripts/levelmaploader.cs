@@ -14,8 +14,8 @@ public class levelmaploader : MonoBehaviour
     [SerializeField] private Transform parent;
     [SerializeField] private GameObject prefab;
     private GameObject btn;
-    [TextArea(5, 20)] [SerializeField] private List<string> TutDescription = new List<string>();
-    [TextArea(5, 20)] [SerializeField] private List<string> LevelDescription = new List<string>();
+    [TextArea(5, 20)] [SerializeField] public List<string> TutDescription = new List<string>();
+    [TextArea(5, 20)] [SerializeField] public List<string> LevelDescription = new List<string>();
     [SerializeField] private Text description;
 
     void Start()

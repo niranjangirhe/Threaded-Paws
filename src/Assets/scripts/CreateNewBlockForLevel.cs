@@ -6,10 +6,43 @@ using UnityEngine.UI;
 public class CreateNewBlockForLevel : MonoBehaviour
 {
     [SerializeField] private GameObject clone;
+    [TextArea(5, 20)][SerializeField] public List<string> tutdesc = new List<string>();
+    [TextArea(5, 20)][SerializeField] public List<string> lvldesc = new List<string>();
+    public string nameOfLevel;
+    private int levelnum;
+    private string description;
+    private Text DescriptionBox;
+
+    private void Start()
+    {
+        tutdesc = GameObject.Find("_SCRIPTS_").GetComponent<levelmaploader>().TutDescription;
+        lvldesc = GameObject.Find("_SCRIPTS_").GetComponent<levelmaploader>().LevelDescription;
+        DescriptionBox = GameObject.Find("Description").GetComponent<Text>();
+    }
     public void OnMouseEnter()
     {
         DeleteAllClone();
         MakeMyClone();
+        DisplayDescription(gameObject.name);
+    }
+
+    void DisplayDescription(string nameOfLevel)
+    {
+        //Debug.Log(tutdesc.Count);
+        Debug.Log(nameOfLevel[nameOfLevel.Length - 1]);
+        levelnum = (int)char.GetNumericValue(nameOfLevel[nameOfLevel.Length - 1]) - 1;
+        
+        if (nameOfLevel[0] == 'L')
+        {
+            description = lvldesc[levelnum];
+        }
+        else
+        {
+            description = tutdesc[levelnum];
+        }
+
+        DescriptionBox.text = description;
+
     }
     void DeleteAllClone()
     {
