@@ -11,6 +11,8 @@ public class EventRecorded : MonoBehaviour
     List<Thread> threads = new List<Thread>();
     ExecuteThreadsLevel exe;
     public int TutLevel;
+    private int blocks;
+    private int blocksInThread;
     [SerializeField] private Animator animator;
     private GameObject agenda;
     private List<int> threadBlockCount = new List<int> { 0, 0 };
@@ -18,7 +20,9 @@ public class EventRecorded : MonoBehaviour
     private CanvasGroup canvasGroup;
     private LogManager logManager;
     private Text returnText;
+    
     // Start is called before the first frame update
+
     void Start()
     {
         logManager = GameObject.Find("Logging").GetComponent<LogManager>();
@@ -26,7 +30,9 @@ public class EventRecorded : MonoBehaviour
         returnText = GameObject.Find("ToolValueParent").transform.Find("ReturnLeft1").GetComponent<Text>();
         exe = gameObject.GetComponent<ExecuteThreadsLevel>();
         threads = exe.threads;
-        if(TutLevel<=2)
+        blocksInThread = GameObject.Find("DropAreaThread").transform.childCount;
+        LockCursor();
+        if (TutLevel<=2)
         {
             Transform tabParent = GameObject.Find("TabParent").transform;
             for(int i=0;i< tabParent.childCount;i++)
@@ -46,33 +52,66 @@ public class EventRecorded : MonoBehaviour
 
        
     }
-    [Obsolete]
+
     IEnumerator Tut3Animations(int state)
     {
         LockCursor();
+
         if (state == 0)
+        {
+            
+            yield return new WaitForSeconds(5f);
+            animator.Play("Tut4S2");
+            state = 1;
+
+        }
+        if (state == 1)
         {
             try
             {
-                if (returnText.text != "x 1")
+                
+                blocksInThread = GameObject.Find("DropAreaThread").transform.childCount;
+                
+                if (blocksInThread > 6)
                 {
-                    state = 1;
-                    animator.Play("Tut3S12");
+                    animator.Play("Tut4S3");
+                    state = 2;
+                    
+                    //GameObject.Find("Animator").transform.Find("Image").gameObject.SetActive(false);
+                }
+            }
+            catch
+            {
+                state = 2;
+            }
+        }
+        if (state == 2)
+        {
+            try
+            {
+                blocks = GameObject.Find("Simulation").transform.GetChild(5).GetChild(1).transform.childCount;
+                if (blocks !=0)
+                {
+                    //state = 3;
+                    //animator.Play("Tut4S3");
                     GameObject.Find("Animator").transform.Find("Image").gameObject.SetActive(false);
                 }
             }
             catch
             {
-                state = 1;
+                //state = 3;
             }
         }
         yield return new WaitForSeconds(0.5f);
         if (state == 0)
             StartCoroutine(Tut3Animations(0));
-
+        if (state == 1)
+            StartCoroutine(Tut3Animations(1));
+        if (state == 2)
+            StartCoroutine(Tut3Animations(2));
     }
     // Runs after every 0.5 sec
-    [Obsolete]
+
     IEnumerator Tut2Animations(int state)
     {
         LockCursor();
