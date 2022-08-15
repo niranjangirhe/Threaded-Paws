@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/scenes/Level 5.unity
+- path: Assets/scenes/Tutorial for cash.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
