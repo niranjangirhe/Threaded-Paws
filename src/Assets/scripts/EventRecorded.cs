@@ -162,6 +162,8 @@ public class EventRecorded : MonoBehaviour
                     
                     LockCursor();
                     animator.Play("Tut4S2");
+                    
+                    
                     state = 1;
 
                 }
@@ -179,7 +181,7 @@ public class EventRecorded : MonoBehaviour
             try
             {
                 
-                blocksInThread = GameObject.Find("DropAreaThread").transform.childCount;
+                //blocksInThread = GameObject.Find("DropAreaThread").transform.childCount;
                 
                 if (BlockAtPlace(0, 4, "ReturnBox") && BlockAtPlace(0, 5, "ReturnBox"))
                 {
@@ -188,6 +190,12 @@ public class EventRecorded : MonoBehaviour
                     
                     //GameObject.Find("Animator").transform.Find("Image").gameObject.SetActive(false);
                 }
+                else if (GameObject.Find("DropAreaThread").transform.childCount > 6 && (!BlockAtPlace(0, 4, "ReturnBox") || !BlockAtPlace(0, 5, "ReturnBox")))
+                {
+                    //error in placement
+                    animator.Play("Tut4S4");
+                }
+                
             }
             catch
             {
