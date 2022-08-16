@@ -31,7 +31,7 @@ public class EventRecorded : MonoBehaviour
         exe = gameObject.GetComponent<ExecuteThreadsLevel>();
         threads = exe.threads;
         blocksInThread = GameObject.Find("DropAreaThread").transform.childCount;
-        LockCursor();
+     
         if (TutLevel<=2)
         {
             Transform tabParent = GameObject.Find("TabParent").transform;
@@ -48,11 +48,106 @@ public class EventRecorded : MonoBehaviour
             case 3:
                 animator.Play("Tut4S1"); StartCoroutine(Tut3Animations(0));
                 break;
+            case 4:
+                animator.Play("Tut5S1"); StartCoroutine(Tut4Animations(0));
+                break;
         }
 
        
     }
+    IEnumerator Tut4Animations(int state)
+    {
+        LockCursor();
+        if (state == 0)
+        {
+            try
+            {
+                
+                if (GameObject.Find("ToolValueParent").transform.Find("ReadLeft1").GetComponent<Text>().text != "x 1")
+                {
+                    animator.Play("Tut5S2");
+                    Debug.Log("State 1");
+                    state = 1;
+                    
+                    //GameObject.Find("Animator").transform.Find("Image").gameObject.SetActive(false);
+                }
+            }
+            catch
+            {
+                state = 1;
+            }
+        }
+        if (state == 1)
+        {
+            try
+            {
 
+
+
+                if (GameObject.Find("ToolValueParent").transform.Find("CalculateLeft1").GetComponent<Text>().text != "x 1")
+                {
+                    animator.Play("Tut5S3");
+                    Debug.Log("State 2");
+                    state = 2;
+
+                    //GameObject.Find("Animator").transform.Find("Image").gameObject.SetActive(false);
+                }
+            }
+            catch
+            {
+                state = 2;
+            }
+        }
+        if (state == 2)
+        {
+            try
+            {
+
+
+
+                if (GameObject.Find("ToolValueParent").transform.Find("WriteLeft1").GetComponent<Text>().text != "x 1")
+                {
+                    animator.Play("Tut5S4");
+                    Debug.Log("State 3");
+                    state = 3;
+
+                    //GameObject.Find("Animator").transform.Find("Image").gameObject.SetActive(false);
+                }
+            }
+            catch
+            {
+                state = 3;
+            }
+        }
+        if (state == 3)
+        {
+            //yield return new WaitForSeconds(5f);
+            try
+            {
+
+
+
+                if (GameObject.Find("ThreadSimPanel(Clone)").transform.childCount != 0)
+                {
+                    Debug.Log("State 4");
+                    GameObject.Find("Animator").transform.Find("Image").gameObject.SetActive(false);
+                }
+            }
+            catch
+            {
+                
+            }
+        }
+        yield return new WaitForSeconds(0.5f);
+        if (state == 0)
+            StartCoroutine(Tut4Animations(0));
+        if (state == 1)
+            StartCoroutine(Tut4Animations(1));
+        if (state == 2)
+            StartCoroutine(Tut4Animations(2));
+        if (state == 3)
+            StartCoroutine(Tut4Animations(3));
+    }
     IEnumerator Tut3Animations(int state)
     {
         LockCursor();

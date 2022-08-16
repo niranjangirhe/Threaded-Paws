@@ -15,11 +15,10 @@ public class AnimateTutorialForCash : MonoBehaviour
 
     private void Update()
     {
+        //check if animation is over
         if (this.transform.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime >1.0f)
         {
-           
-            
-            SceneManager.LoadScene("Level 5");
+            SceneManager.LoadScene("Tut 4 extended");
         }
     }
 }
