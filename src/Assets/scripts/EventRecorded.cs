@@ -154,10 +154,24 @@ public class EventRecorded : MonoBehaviour
 
         if (state == 0)
         {
+            LockCursor();
+            try
+            {
+                if(GameObject.Find("Animator").GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime >10)
+                {
+                    
+                    LockCursor();
+                    animator.Play("Tut4S2");
+                    state = 1;
+
+                }
+            }
+            catch
+            {
+                
+                state = 1;
+            }
             
-            yield return new WaitForSeconds(5f);
-            animator.Play("Tut4S2");
-            state = 1;
 
         }
         if (state == 1)
@@ -167,7 +181,7 @@ public class EventRecorded : MonoBehaviour
                 
                 blocksInThread = GameObject.Find("DropAreaThread").transform.childCount;
                 
-                if (blocksInThread > 6)
+                if (BlockAtPlace(0, 4, "ReturnBox") && BlockAtPlace(0, 5, "ReturnBox"))
                 {
                     animator.Play("Tut4S3");
                     state = 2;
@@ -184,8 +198,8 @@ public class EventRecorded : MonoBehaviour
         {
             try
             {
-                blocks = GameObject.Find("Simulation").transform.GetChild(5).GetChild(1).transform.childCount;
-                if (blocks !=0)
+                
+                if (GameObject.Find("ThreadSimPanel(Clone)").transform.childCount != 0)
                 {
                     //state = 3;
                     //animator.Play("Tut4S3");
