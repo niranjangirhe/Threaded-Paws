@@ -20,10 +20,12 @@ public class EventRecorded : MonoBehaviour
     private CanvasGroup canvasGroup;
     private LogManager logManager;
     private Text returnText;
-    
+    private bool animFinish = false;
+
     // Start is called before the first frame update
 
-    void Start()
+    [Obsolete]
+    private void Start()
     {
         logManager = GameObject.Find("Logging").GetComponent<LogManager>();
         canvasGroup = GameObject.Find("Canvas").GetComponent<CanvasGroup>();
@@ -49,7 +51,9 @@ public class EventRecorded : MonoBehaviour
                 animator.Play("Tut4S1"); StartCoroutine(Tut3Animations(0));
                 break;
             case 4:
-                animator.Play("Tut5S1"); StartCoroutine(Tut4Animations(0));
+                animator.Play("Tut5S0");
+                //yield return new WaitForSeconds(7f);
+                 StartCoroutine(Tut4Animations(-1));
                 break;
         }
 
@@ -58,18 +62,48 @@ public class EventRecorded : MonoBehaviour
     IEnumerator Tut4Animations(int state)
     {
         LockCursor();
+
+        if (state == -1)
+        {
+            LockCursor();
+            try
+            {
+                if (GameObject.Find("Animator").GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 10)
+                {
+
+                    LockCursor();
+                    animator.Play("Tut5S1");
+
+
+                    state = 0;
+
+                }
+            }
+            catch
+            {
+
+                state = 0;
+            }
+
+
+        }
         if (state == 0)
         {
             try
             {
                 
-                if (GameObject.Find("ToolValueParent").transform.Find("ReadLeft1").GetComponent<Text>().text != "x 1")
+                if (GameObject.Find("ToolValueParent").transform.Find("ReadLeft1").GetComponent<Text>().text != "x 1" && BlockAtPlace(0, 5, "ReadBox"))
                 {
                     animator.Play("Tut5S2");
                     Debug.Log("State 1");
                     state = 1;
                     
                     //GameObject.Find("Animator").transform.Find("Image").gameObject.SetActive(false);
+                }
+                else if (!BlockAtPlace(0, 5, "ReadBox") && threadBlockCount[0] == 7)
+                {
+                    animator.Play("Tut5S5");
+                    Debug.Log("Bad bad");
                 }
             }
             catch
@@ -82,15 +116,18 @@ public class EventRecorded : MonoBehaviour
             try
             {
 
-
-
-                if (GameObject.Find("ToolValueParent").transform.Find("CalculateLeft1").GetComponent<Text>().text != "x 1")
+                if (GameObject.Find("ToolValueParent").transform.Find("CalculateLeft1").GetComponent<Text>().text != "x 1" && BlockAtPlace(0,6, "CalculateBox"))
                 {
                     animator.Play("Tut5S3");
                     Debug.Log("State 2");
                     state = 2;
 
                     //GameObject.Find("Animator").transform.Find("Image").gameObject.SetActive(false);
+                }
+                else if (!BlockAtPlace(0, 6, "CalculateBox") && threadBlockCount[0] == 8)
+                {
+                    animator.Play("Tut5S5");
+                    Debug.Log("Bad bad");
                 }
             }
             catch
@@ -105,13 +142,20 @@ public class EventRecorded : MonoBehaviour
 
 
 
-                if (GameObject.Find("ToolValueParent").transform.Find("WriteLeft1").GetComponent<Text>().text != "x 1")
+                if (GameObject.Find("ToolValueParent").transform.Find("WriteLeft1").GetComponent<Text>().text != "x 1" && BlockAtPlace(0, 7, "WriteBox") && !animFinish)
                 {
                     animator.Play("Tut5S4");
+                    animFinish = true;
                     Debug.Log("State 3");
                     state = 3;
 
                     //GameObject.Find("Animator").transform.Find("Image").gameObject.SetActive(false);
+                }
+                else if (!BlockAtPlace(0, 7, "WriteBox") && threadBlockCount[0] == 9)
+                {
+                    animator.Play("Tut5S5");
+                    Debug.Log("Bad bad");
+                    
                 }
             }
             catch
@@ -121,16 +165,14 @@ public class EventRecorded : MonoBehaviour
         }
         if (state == 3)
         {
-            //yield return new WaitForSeconds(5f);
             try
             {
-
-
-
+                
                 if (GameObject.Find("ThreadSimPanel(Clone)").transform.childCount != 0)
                 {
-                    Debug.Log("State 4");
+                    
                     GameObject.Find("Animator").transform.Find("Image").gameObject.SetActive(false);
+                    
                 }
             }
             catch
@@ -139,6 +181,8 @@ public class EventRecorded : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(0.5f);
+        if (state == -1)
+            StartCoroutine(Tut4Animations(-1));
         if (state == 0)
             StartCoroutine(Tut4Animations(0));
         if (state == 1)
@@ -147,6 +191,17 @@ public class EventRecorded : MonoBehaviour
             StartCoroutine(Tut4Animations(2));
         if (state == 3)
             StartCoroutine(Tut4Animations(3));
+
+        threadBlockCount = new List<int>();
+        foreach (Thread t in threads)
+        {
+            int count = 0;
+            foreach (Transform child in exe.GetActionBlocks(t.tabDropArea))
+            {
+                count++;
+            }
+            threadBlockCount.Add(count);
+        }
     }
     IEnumerator Tut3Animations(int state)
     {
@@ -204,6 +259,7 @@ public class EventRecorded : MonoBehaviour
         }
         if (state == 2)
         {
+            
             try
             {
                 
@@ -227,7 +283,9 @@ public class EventRecorded : MonoBehaviour
         if (state == 2)
             StartCoroutine(Tut3Animations(2));
     }
+
     // Runs after every 0.5 sec
+
 
     IEnumerator Tut2Animations(int state)
     {
@@ -300,7 +358,7 @@ public class EventRecorded : MonoBehaviour
             {
                 try
                 {
-                    if (GameObject.Find("InformationPanel").active)
+                    if (GameObject.Find("InformationPanel").activeSelf)
                     {
                         state = 6;
                         animator.Play("Tut3S13");

@@ -1586,7 +1586,7 @@ public class ExecuteThreadsLevel : MonoBehaviour
     }
     private bool isAllowed(GameObject g)
     {
-        return !g.transform.Find("overlay").gameObject.active;
+        return !g.transform.Find("overlay").gameObject.activeSelf;
     }
 
     void resError(String msg, GameObject layout)
